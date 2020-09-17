@@ -1,5 +1,5 @@
 ---
-title: 'Setup a docker in Ubuntu 18.04'
+title: 'Setup docker in Ubuntu 18.04'
 excerpt: 'In this post you will see how to setup docker in Ubuntu 18.04. We will also change the default ssh port and install fail2ban.'
 coverImage: '/assets/blog/preview/cover.jpg'
 date: '2020-09-17T07:35:07.322Z'
