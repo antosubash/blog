@@ -1,11 +1,11 @@
 ---
-title: 'Traefik setup'
-excerpt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Praesent elementum facilisis leo vel fringilla est ullamcorper eget. At imperdiet dui accumsan sit amet nulla facilities morbi tempus.'
+title: 'Traefik setup with docker swarm'
+excerpt: 'In this post you will see how to setup traefik with docker swarm. Along with that we will also setup Portainer and Swarmpit so that it is easy to manage the docker swarm.'
 coverImage: '/assets/blog/preview/cover.jpg'
-date: '2020-10-16T05:35:07.322Z'
+date: '2020-09-17T05:35:07.322Z'
 author:
   name: Anto Subash
-  picture: '/assets/blog/authors/joe.jpeg'
+  picture: '/assets/blog/authors/anto.jpg'
 ogImage:
   url: '/assets/blog/preview/cover.jpg'
 ---
