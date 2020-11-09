@@ -25,3 +25,16 @@ There are a few times when I set the div height to 100% the leaflet map is empty
 ```css
 #map { position: absolute; top: 0; bottom: 0; left: 0; right: 0; }
 ```
+
+## Using CSS calc
+
+Most of the times there will be a Top bar or a Sidebar available in the map during these times the `calc` function in the css will come in handy. lets assume you have side bar which is `100px` and top bar which is `60px` you can use something like below.
+
+```css
+#map {
+  width: calc(100vw - 100px);
+  height: calc(100vh - 60px);
+  margin-top: 60px;
+  margin-left: 100px;
+}
+```
