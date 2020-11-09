@@ -1,6 +1,6 @@
 ---
 title: 'Css for leaflet div element'
-excerpt: 'If you are like me who struggle with anything CSS. This is a quick trick will help you to fill the leaflet map without setting the fixed height'
+excerpt: 'If you are like me who struggle with anything CSS. These are some small css that will help you to fill the leaflet map without setting the fixed height'
 coverImage: '/assets/blog/preview/cover.jpg'
 date: '2020-09-21'
 author:
