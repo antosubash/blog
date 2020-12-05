@@ -57,3 +57,9 @@ Set-Theme Paradox
 ```
 
 This will be executed before you open the powershell. we are importing the powershell modules and setting a theme for our powershell.
+
+[scoop]: https://scoop.sh/
+[scoop-extras]: https://github.com/lukesampson/scoop/wiki/Buckets
+[windowsterminal]: https://github.com/microsoft/terminal
+[winget]: https://github.com/microsoft/winget-cli/
+[chocolatey]: https://chocolatey.org/
