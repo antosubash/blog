@@ -58,6 +58,23 @@ Set-Theme Paradox
 
 This will be executed before you open the powershell. we are importing the powershell modules and setting a theme for our powershell.
 
+Now we have to install the font [Cascadia Code PL](https://github.com/microsoft/cascadia-code/releases). You can get it from here https://github.com/microsoft/cascadia-code/releases
+
+Once the font is installed you can set the font in the [profile settings](https://docs.microsoft.com/en-us/windows/terminal/customize-settings/profile-settings).
+
+here is the sample
+
+```json
+{
+    // Make changes here to the powershell.exe profile.
+    "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+    "name": "Windows PowerShell",
+    "commandline": "powershell.exe",
+    "fontFace": "Cascadia Code PL",
+    "hidden": false
+},
+```
+
 [scoop]: https://scoop.sh/
 [scoop-extras]: https://github.com/lukesampson/scoop/wiki/Buckets
 [windowsterminal]: https://github.com/microsoft/terminal
