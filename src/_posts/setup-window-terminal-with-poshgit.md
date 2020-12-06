@@ -12,6 +12,10 @@ ogImage:
 
 ## Set up Windows Terminal with PoshGit, oh-my-posh and Cascadia Code PLi
 
+You can watch a videos of how to setup or continue with the post.
+
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/cJ7oINPF2mo/0.jpg)](https://www.youtube.com/watch?v=cJ7oINPF2mo)
+
 There are few ways to install the window terminal. The easy way is to install from the [windows store](https://aka.ms/terminal). There are few other ways available.
 
 Via [WinGet][winget] (official package manager for Windows):
