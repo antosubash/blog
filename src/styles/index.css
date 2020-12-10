@@ -16,3 +16,9 @@
 article a {
     color: blue;
 }
+
+code {
+    background-color: #444;
+    color: white;
+    padding: 0.5em;
+}
