@@ -47,10 +47,6 @@ echo $SHELL // Expected result: /bin/zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ```
 
-### Install plugins
-
-Enable a plugin by adding its name to the plugins array in your `~/.zshrc` file. By default `git` is enabled. you can find the [list of plugins here](https://github.com/ohmyzsh/ohmyzsh/wiki/Plugins).
-
 ## Install zsh-autosuggestions and zsh-syntax-highlighting
 
 ### Set up zsh-syntax-highlighting
