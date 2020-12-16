@@ -11,6 +11,7 @@ import Head from 'next/head'
 import { CMS_NAME } from '../../lib/constants'
 import markdownToHtml from '../../lib/markdownToHtml'
 import PostType from '../../types/post'
+import { Utterances } from '../../components/utterances'
 
 type Props = {
   post: PostType
@@ -46,6 +47,7 @@ const Post = ({ post, morePosts, preview }: Props) => {
               />
               <PostBody content={post.content} />
             </article>
+          <Utterances/>
           </>
         )}
       </Container>
