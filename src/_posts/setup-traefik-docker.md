@@ -30,6 +30,31 @@ docker run --rm httpd:2.4-alpine htpasswd -nbB admin <password> | cut -d ":" -f 
 
 Escape the $ sign in the password by adding one more $
 
+## Create folders
+
+### for Traefik
+
+create a folder and set 600 as permission.
+
+```bash
+mkdir /home/docker-login/data/traefik
+touch /home/docker-login/data/traefik/acme.json
+chmod 600 /home/docker-login/data/traefik/acme.json 
+```
+
+### for Swarmpit
+
+```bash
+mkdir /home/docker-login/data/db-data
+mkdir /home/docker-login/data/influx-data
+```
+
+### for Portainer
+
+```bash
+mkdir /mnt/volume2/portainer
+```
+
 ## Traefik docker compose yml
 
 Sample yml
@@ -53,6 +78,7 @@ services:
       - --certificatesresolvers.leresolver.acme.caserver=https://acme-v02.api.letsencrypt.org/directory
       # update your email here
       - --certificatesresolvers.leresolver.acme.email=youremail@test.com
+      # Make sure the this file is available and permission is set correctly
       - --certificatesresolvers.leresolver.acme.storage=/le/acme.json
       - --certificatesresolvers.leresolver.acme.tlschallenge=true
     ports:
@@ -62,18 +88,21 @@ services:
       - traefik-public
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      # Make sure the volume folder is created
       - "/home/docker-login/data/traefik/acme.json:/le/acme.json"
     deploy:  
       labels:
         # Dashboard
         - "traefik.enable=true"
+        # Change the host url here
         - "traefik.http.routers.traefik.rule=Host(`traefik.example.com`)"
         - "traefik.http.routers.traefik.service=api@internal"
         - "traefik.http.services.traefik.loadbalancer.server.port=8080"
         - "traefik.http.routers.traefik.tls.certresolver=leresolver"
         - "traefik.http.routers.traefik.entrypoints=websecure"
         - "traefik.http.routers.traefik.middlewares=authtraefik"
-        - "traefik.http.middlewares.authtraefik.basicauth.users=admin:$$2y$$05$$2obrys8R1qnhi8uGpvGoS.xcMU6.YJXxXTZnV4emwtYlh/rjWAWa2" # user/password
+        # Change the auth password here
+        - "traefik.http.middlewares.authtraefik.basicauth.users=admin:yournewpassword" # user/password
 
         # global redirect to https
         - "traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)"
@@ -92,13 +121,15 @@ services:
     deploy:
       labels:
         - "traefik.enable=true"
+        # Change the host url here
         - "traefik.http.routers.my-app.rule=Host(`whoami.example.com`)"
         - "traefik.http.services.my-app.loadbalancer.server.port=8082"
         - "traefik.http.routers.my-app.middlewares=auth"
         - "traefik.http.routers.my-app.entrypoints=websecure"
         - "traefik.http.routers.my-app.tls=true"
         - "traefik.http.routers.my-app.tls.certresolver=leresolver"
-        - "traefik.http.middlewares.auth.basicauth.users=admin:$$2y$$05$$2obrys8R1qnhi8uGpvGoS.xcMU6.YJXxXTZnV4emwtYlh/rjWAWa2" # user/password
+        # Change the password here
+        - "traefik.http.middlewares.auth.basicauth.users=admin:changeme" # user/password
 
 networks:
   traefik-public:
@@ -125,6 +156,7 @@ services:
     deploy:
       labels:
         - "traefik.enable=true"
+        # change the host name here
         - "traefik.http.routers.app.rule=Host(`swarm.example.com`)"
         - "traefik.http.services.app.loadbalancer.server.port=8080"
         - "traefik.http.routers.app.tls=true"
@@ -144,6 +176,7 @@ services:
   db:
     image: couchdb:2.3.0
     volumes:
+    # make sure the folder is available 
       - /home/docker-login/data/db-data:/opt/couchdb/data
     networks:
       - traefik-public
@@ -159,6 +192,7 @@ services:
   influxdb:
     image: influxdb:1.7
     volumes:
+    # make sure the folder is available
       - /home/docker-login/data/influx-data:/var/lib/influxdb
     networks:
       - traefik-public
@@ -219,12 +253,14 @@ services:
     command: -H tcp://tasks.agent:9001 --tlsskipverify
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      # make sure the folder is available
       - /mnt/volume2/portainer:/data
     networks:
       - traefik-public
     deploy:
       labels:
         - "traefik.enable=true"
+        # change the host here
         - "traefik.http.routers.portainer.rule=Host(`admin.example.com`)"
         - "traefik.http.services.portainer.loadbalancer.server.port=9000"
         - "traefik.http.routers.portainer.entrypoints=websecure"
