@@ -1,5 +1,5 @@
 ---
-title: "ABP Getting Started With .Net Core and EF Core. Part 1"
+title: "ABP Getting Started With .Net Core and EF Core. ABP Part 1"
 excerpt: "This is an introduction to the ABP Application framework with .Net core and EF core. I have created a Todo App with a CRUD function."
 coverImage: "/assets/blog/preview/cover.jpg"
 date: "2021-03-05"
@@ -142,3 +142,5 @@ public class TodoAppService : YourProjectAppService
 ```
 
 Once you created the Application configuration ABP can automatically configure your service as API controllers by conventions.
+
+## Github Repo Link : <https://github.com/antosubash/Todos>
