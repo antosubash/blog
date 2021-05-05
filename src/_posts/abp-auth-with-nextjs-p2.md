@@ -68,7 +68,7 @@ yarn create next-app
 yarn add next-auth
 ```
 
-## 4. Add .evn file
+## 4. Add .env file
 
 ```bash
 NEXTAUTH_URL=http://localhost:3000
