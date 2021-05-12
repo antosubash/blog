@@ -25,7 +25,7 @@
     "@types/jest": "^26.0.18",
     "@types/node": "^14.14.12",
     "@types/react": "^17.0.0",
-    "postcss": "^8.2.1",
+    "postcss": "^8.2.10",
     "@types/react-dom": "^17.0.0",
     "postcss-preset-env": "^6.7.0",
     "autoprefixer": "^10.1.0",
