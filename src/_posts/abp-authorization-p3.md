@@ -1,5 +1,5 @@
 ---
-title: "Authorization in dotnet core with ABP and IdentityServer4. ABP Part 3"
+title: "Authorization in dotnet core with ABP. Part 3"
 excerpt: "In this post we will implement the Authorization in ABP with IdentityServer"
 coverImage: "/assets/blog/preview/cover.jpg"
 date: "2021-05-16"
