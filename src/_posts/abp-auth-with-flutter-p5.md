@@ -1,5 +1,5 @@
 ---
-title: "Flutter Authentication using ABP and IdentityServer4. ABP Part 5"
+title: "Flutter Authentication using OpenID, ABP and IdentityServer4. ABP Part 5"
 excerpt: "In this post we will implement the OAuth for the Flutter app."
 coverImage: "/assets/blog/preview/cover.jpg"
 date: "2021-05-29"
@@ -87,6 +87,19 @@ flutter run
 dependencies:
   openid_client: ^0.4.1
   url_launcher: ^6.0.4
+```
+
+### 4.1 Update the Android Manifest
+
+Update the android app to use the `usesCleartextTraffic`
+
+you can find the android manifest in `mytodoapp\android\app\src\main`
+
+```xml
+   <application
+        android:usesCleartextTraffic="true"
+        android:label="mytodos"
+        android:icon="@mipmap/ic_launcher">
 ```
 
 ## 5. Create flutter page to login and logout
