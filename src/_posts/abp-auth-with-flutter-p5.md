@@ -89,6 +89,19 @@ dependencies:
   url_launcher: ^6.0.4
 ```
 
+### 4.1 Update the Android Manifest
+
+Update the android app to use the `usesCleartextTraffic`
+
+you can find the android manifest in `mytodoapp\android\app\src\main`
+
+```xml
+   <application
+        android:usesCleartextTraffic="true"
+        android:label="mytodos"
+        android:icon="@mipmap/ic_launcher">
+```
+
 ## 5. Create flutter page to login and logout
 
 ```dart
