@@ -24,6 +24,8 @@ abp new FileUpload
 
 Create the container in `Domain` project.
 
+Install `Volo.Abp.BlobStoring` NuGet package to your `Domain` project
+
 ```cs
     [BlobContainerName("document")]
     public class DocumentContainer
@@ -107,7 +109,7 @@ dotnet ef database update
 
 ## Configure Minio
 
-Install `Volo.Abp.BlobStoring` NuGet package to your project and add `[DependsOn(typeof(AbpBlobStoringMinioModule))]` to the `Web` Module
+Install `Volo.Abp.BlobStoring.Minio` NuGet package to your `Web` and add `[DependsOn(typeof(AbpBlobStoringMinioModule))]` to the `Web` Module
 
 Configuration is done in the `ConfigureServices` method of your module class
 
@@ -134,9 +136,9 @@ The app service will have 2 methods one is to upload the files and another one i
 ```cs
     public class DocumentAppService : FileUploadAppService
     {
-        private readonly IBlobContainer<FilesContainer> _blobContainer;
+        private readonly IBlobContainer<DocumentContainer> _blobContainer;
         private readonly IRepository<Document, Guid> _repository;
-        public DocumentAppService(IRepository<Document, Guid> repository, IBlobContainer<FilesContainer> blobContainer)
+        public DocumentAppService(IRepository<Document, Guid> repository, IBlobContainer<DocumentContainer> blobContainer)
         {
             _repository = repository;
             _blobContainer = blobContainer;
