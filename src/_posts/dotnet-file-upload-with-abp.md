@@ -2,7 +2,7 @@
 title: "dotnet file upload with ABP Blob store and Minio"
 excerpt: "In this post we will implement file upload using the ABP blob store and Minio"
 coverImage: "/assets/blog/preview/cover.jpg"
-date: "2021-05-29"
+date: "2021-07-10"
 author:
   name: Anto Subash
   picture: "/assets/blog/authors/anto.jpg"
@@ -84,6 +84,14 @@ CreateMap<Document, DocumentDto>().ReverseMap();
 ```
 
 ## Add entity to the DBContext
+
+Add DbSet
+
+```cs
+public DbSet<Document> Documents { get; set; }
+```
+
+Configure Ef core
 
 ```cs
             builder.Entity<Document>(b =>
