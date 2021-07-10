@@ -1,0 +1,176 @@
+---
+title: "dotnet file upload with ABP Blob store and Minio"
+excerpt: "In this post we will implement file upload using the ABP blob store and Minio"
+coverImage: "/assets/blog/preview/cover.jpg"
+date: "2021-05-29"
+author:
+  name: Anto Subash
+  picture: "/assets/blog/authors/anto.jpg"
+ogImage:
+  url: "/assets/blog/preview/cover.jpg"
+---
+
+## Intro
+
+In this post we will implement file upload using the ABP blob store and Minio
+
+## Create a new project
+
+```bash
+abp new FileUpload
+```
+
+## Create a container
+
+Create the container in `Domain` project.
+
+Install `Volo.Abp.BlobStoring` NuGet package to your `Domain` project
+
+```cs
+    [BlobContainerName("document")]
+    public class DocumentContainer
+    {
+    }
+```
+
+## Create the Entity and Entity Dto
+
+Create the Entity in `Domain` project.
+
+```cs
+    public class Document : FullAuditedAggregateRoot<Guid>, IMultiTenant
+    {
+        public long FileSize { get; set; }
+
+        public string MimeType { get; set; }
+
+        public Guid? TenantId { get; set; }
+
+        protected Document()
+        {
+        }
+
+        public Document(
+            Guid id,
+            long fileSize,
+            string mimeType,
+            Guid? tenantId
+        ) : base(id)
+        {
+            FileSize = fileSize;
+            MimeType = mimeType;
+            TenantId = tenantId;
+        }
+    }
+```
+
+Create EntityDto in `Contracts` project
+
+```cs
+    public class DocumentDto : EntityDto<Guid>
+    {
+        public long FileSize { get; set; }
+
+        public string FileUrl { get; set; }
+
+        public string MimeType { get; set; }
+    }
+```
+
+Add mapping for the Entity and Dto in the `ApplicationAutoMapperProfile` class in the `Application` project
+
+```cs
+CreateMap<Document, DocumentDto>().ReverseMap();
+```
+
+## Add entity to the DBContext
+
+```cs
+            builder.Entity<Document>(b =>
+            {
+                b.ToTable(FileUploadConsts.DbTablePrefix + "Document", FileUploadConsts.DbSchema);
+                b.ConfigureByConvention(); 
+            });
+```
+
+## Add migration and update the database
+
+To create ef migration
+
+```bash
+dotnet ef migrations add "added_documents"
+```
+
+To update the database
+
+```bash
+dotnet ef database update
+```
+
+## Configure Minio
+
+Install `Volo.Abp.BlobStoring.Minio` NuGet package to your `Web` and add `[DependsOn(typeof(AbpBlobStoringMinioModule))]` to the `Web` Module
+
+Configuration is done in the `ConfigureServices` method of your module class
+
+```cs
+Configure<AbpBlobStoringOptions>(options =>
+{
+    options.Containers.ConfigureDefault(container =>
+    {
+        container.UseMinio(minio =>
+        {
+            minio.EndPoint = "localhost:9900"; // your minio endPoint
+            minio.AccessKey = "AKIAIOSFODNN7EXAMPLE"; // your minio accessKey
+            minio.SecretKey = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"; // your minio secretKey
+            minio.BucketName = "test1"; // your minio bucketName
+        });
+    });
+});
+```
+
+## Create Document AppService
+
+The app service will have 2 methods one is to upload the files and another one is to view the files.
+
+```cs
+    public class DocumentAppService : FileUploadAppService
+    {
+        private readonly IBlobContainer<DocumentContainer> _blobContainer;
+        private readonly IRepository<Document, Guid> _repository;
+        public DocumentAppService(IRepository<Document, Guid> repository, IBlobContainer<DocumentContainer> blobContainer)
+        {
+            _repository = repository;
+            _blobContainer = blobContainer;
+        }
+
+        public async Task<List<DocumentDto>> Upload([FromForm] List<IFormFile> files)
+        {
+            var output = new List<DocumentDto>();
+            foreach (var file in files)
+            {
+                using var memoryStream = new MemoryStream();
+                await file.CopyToAsync(memoryStream).ConfigureAwait(false);
+                var id = Guid.NewGuid();
+                var newFile = new Document(id, file.Length, file.ContentType, CurrentTenant.Id);
+                var created = await _repository.InsertAsync(newFile);
+                await _blobContainer.SaveAsync(id.ToString(), memoryStream.ToArray()).ConfigureAwait(false);
+                output.Add(ObjectMapper.Map<Document, DocumentDto>(newFile));
+            }
+
+            return output;
+        }
+
+        public async Task<FileResult> Get(Guid id)
+        {
+            var currentFile = _repository.FirstOrDefault(x => x.Id == id);
+            if (currentFile != null)
+            {
+                var myfile = await _blobContainer.GetAllBytesOrNullAsync(id.ToString());
+                return new FileContentResult(myfile, currentFile.MimeType);
+            }
+
+            throw new FileNotFoundException();
+        }
+    }
+```
