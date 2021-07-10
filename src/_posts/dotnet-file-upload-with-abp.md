@@ -97,7 +97,7 @@ Configure Ef core
             builder.Entity<Document>(b =>
             {
                 b.ToTable(FileUploadConsts.DbTablePrefix + "Document", FileUploadConsts.DbSchema);
-                b.ConfigureByConvention(); 
+                b.ConfigureByConvention();
             });
 ```
 
@@ -182,3 +182,5 @@ The app service will have 2 methods one is to upload the files and another one i
         }
     }
 ```
+
+Repo Link : <https://github.com/antosubash/FileUpload>
