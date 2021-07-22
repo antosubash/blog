@@ -1,12 +1,7 @@
 ---
 title: "dotnet file upload with ABP Blob store and Minio"
 excerpt: "In this post we will implement file upload using the ABP blob store and Minio"
-<<<<<<< Updated upstream
-coverImage: "/assets/blog/preview/cover.jpg"
-date: "2021-05-29"
-=======
 date: "2021-07-10"
->>>>>>> Stashed changes
 author:
   name: Anto Subash
   picture: "/assets/blog/authors/anto.jpg"
@@ -92,7 +87,7 @@ CreateMap<Document, DocumentDto>().ReverseMap();
             builder.Entity<Document>(b =>
             {
                 b.ToTable(FileUploadConsts.DbTablePrefix + "Document", FileUploadConsts.DbSchema);
-                b.ConfigureByConvention(); 
+                b.ConfigureByConvention();
             });
 ```
 
