@@ -1,0 +1,11 @@
+---
+title: "dotnet core large file upload with resume using tus and react/nextjs"
+excerpt: "In this post you will see how to upload large files with resume using tus. We will use dotnet core for the backend and nextjs for the frontend"
+date: "2021-07-22"
+author:
+  name: Anto Subash
+  picture: "/assets/blog/authors/anto.jpg"
+  url: "https://antosubash.com"
+---
+
+## Large file upload

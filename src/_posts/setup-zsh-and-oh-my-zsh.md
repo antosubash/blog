@@ -1,13 +1,11 @@
 ---
-title: 'Set up Wsl with zsh and oh-my-zsh'
-excerpt: 'In this post we will see how to setup zsh shell in the wsl and use oh-my-zsh.'
-coverImage: '/assets/blog/preview/cover.jpg'
-date: '2020-12-12'
+title: "Set up Wsl with zsh and oh-my-zsh"
+excerpt: "In this post we will see how to setup zsh shell in the wsl and use oh-my-zsh."
+date: "2020-12-12"
 author:
   name: Anto Subash
-  picture: '/assets/blog/authors/anto.jpg'
-ogImage:
-  url: '/assets/blog/preview/cover.jpg'
+  picture: "/assets/blog/authors/anto.jpg"
+  url: "https://antosubash.com"
 ---
 
 In this post we will see how can we install and setup up zsh shell and use oh-my-posh with it in wsl ubuntu.
@@ -53,17 +51,17 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 
 1. Clone this repository into `$ZSH_CUSTOM/plugins` (by default `~/.oh-my-zsh/custom/plugins`):
 
-    ```zsh
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-    ```
+   ```zsh
+   git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+   ```
 
 ### Set up zsh-autosuggestions
 
 1. Clone this repository into `$ZSH_CUSTOM/plugins` (by default `~/.oh-my-zsh/custom/plugins`)
 
-    ```sh
-    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-    ```
+   ```sh
+   git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+   ```
 
 ### Plugins
 

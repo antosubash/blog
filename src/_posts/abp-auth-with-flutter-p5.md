@@ -1,13 +1,11 @@
 ---
 title: "Flutter Authentication using OpenID, ABP and IdentityServer4. Part 5"
 excerpt: "In this post we will implement the OAuth for the Flutter app."
-coverImage: "/assets/blog/preview/cover.jpg"
 date: "2021-05-29"
 author:
   name: Anto Subash
   picture: "/assets/blog/authors/anto.jpg"
-ogImage:
-  url: "/assets/blog/preview/cover.jpg"
+  url: "https://antosubash.com"
 ---
 
 ## Intro
