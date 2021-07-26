@@ -8,4 +8,14 @@ author:
   url: "https://antosubash.com"
 ---
 
-## Large file upload
+## Large file upload with dotnet and react with tus
+
+In this post we will see how to do large file upload in chunks with resume capabilities in dotnet core as a backend and react/nextjs as frontend.
+
+## Dotnet project
+
+Create the .net project using this following command.
+
+```bash
+dotnet new webapp
+```
