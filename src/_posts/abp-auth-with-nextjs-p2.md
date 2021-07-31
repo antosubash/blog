@@ -1,13 +1,11 @@
 ---
 title: "SPA Authentication using Next.js, ABP and IdentityServer4. Part 2"
 excerpt: "In this post we will implement the SPA authentication for the Nexjs.js app as the frontend and ABP with IdentityServer as Backend"
-coverImage: "/assets/blog/preview/cover.jpg"
 date: "2021-03-06"
 author:
   name: Anto Subash
   picture: "/assets/blog/authors/anto.jpg"
-ogImage:
-  url: "/assets/blog/preview/cover.jpg"
+  url: "https://antosubash.com"
 ---
 
 ## Intro

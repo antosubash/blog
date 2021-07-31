@@ -1,13 +1,11 @@
 ---
 title: "Application features with dotnet core and ABP. Part 4"
 excerpt: "ABP Feature system is used to enable, disable or change the behavior of the application features on runtime."
-coverImage: "/assets/blog/preview/cover.jpg"
 date: "2021-05-17"
 author:
   name: Anto Subash
   picture: "/assets/blog/authors/anto.jpg"
-ogImage:
-  url: "/assets/blog/preview/cover.jpg"
+  url: "https://antosubash.com"
 ---
 
 ## Intro

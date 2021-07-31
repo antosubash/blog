@@ -1,13 +1,11 @@
 ---
-title: 'Set up Windows Terminal with PoshGit, oh-my-posh and Cascadia Code PL'
-excerpt: 'In this post we will see how to setup windows terminal with PoshGit and oh-my-posh to make the terminal more productive'
-coverImage: '/assets/blog/preview/cover.jpg'
-date: '2020-12-05'
+title: "Set up Windows Terminal with PoshGit, oh-my-posh and Cascadia Code PL"
+excerpt: "In this post we will see how to setup windows terminal with PoshGit and oh-my-posh to make the terminal more productive"
+date: "2020-12-05"
 author:
   name: Anto Subash
-  picture: '/assets/blog/authors/anto.jpg'
-ogImage:
-  url: '/assets/blog/preview/cover.jpg'
+  picture: "/assets/blog/authors/anto.jpg"
+  url: "https://antosubash.com"
 ---
 
 ## Set up Windows Terminal with PoshGit, oh-my-posh and Cascadia Code PLi
@@ -34,7 +32,7 @@ Via [Scoop][scoop]:
 
 ```powershell
 scoop install windows-terminal
-````
+```
 
 Once the terminal is installed then you have to install 2 important powershell modules they are `posh-git` and `oh-my-posh`. **Make sure you open the terminal as Administrator**
 

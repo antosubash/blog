@@ -1,15 +1,20 @@
-type Props = {
-  name: string
-  picture: string
-}
+import link from "next/link";
 
-const Avatar = ({ name, picture }: Props) => {
+type Props = {
+  name: string;
+  picture: string;
+  link: string;
+};
+
+const Avatar = ({ name, picture, link }: Props) => {
   return (
     <div className="flex items-center">
       <img src={picture} className="w-12 h-12 rounded-full mr-4" alt={name} />
-      <div className="text-xl font-bold">{name}</div>
+      <a href={link}>
+        <div className="text-xl font-bold">{name}</div>
+      </a>
     </div>
-  )
-}
+  );
+};
 
-export default Avatar
+export default Avatar;

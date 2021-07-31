@@ -1,13 +1,11 @@
 ---
 title: "Setting up oh-my-posh in PowerShell"
 excerpt: "In this post we will see how to setup the oh-my-posh with PowerShell."
-coverImage: "/assets/blog/preview/cover.jpg"
 date: "2021-06-30"
 author:
   name: Anto Subash
   picture: "/assets/blog/authors/anto.jpg"
-ogImage:
-  url: "/assets/blog/preview/cover.jpg"
+  url: "https://antosubash.com"
 ---
 
 ## [Oh My Posh](https://ohmyposh.dev)
@@ -32,9 +30,9 @@ Update-Module -Name oh-my-posh
 
 To uninstall
 
-````bash
+```bash
 UnInstall-Module -Name oh-my-posh
-````
+```
 
 ### Install fonts
 
@@ -48,13 +46,11 @@ Once the font is installed set the font as a default font in Windows Terminal.
 
 ```json
 {
-    "profiles":
-    {
-        "defaults":
-        {
-            "fontFace": "MesloLGM NF"
-        }
+  "profiles": {
+    "defaults": {
+      "fontFace": "MesloLGM NF"
     }
+  }
 }
 ```
 
