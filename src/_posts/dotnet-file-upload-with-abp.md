@@ -83,6 +83,14 @@ CreateMap<Document, DocumentDto>().ReverseMap();
 
 ## Add entity to the DBContext
 
+Add DbSet
+
+```cs
+public DbSet<Document> Documents { get; set; }
+```
+
+Configure Ef core
+
 ```cs
             builder.Entity<Document>(b =>
             {
@@ -172,3 +180,5 @@ The app service will have 2 methods one is to upload the files and another one i
         }
     }
 ```
+
+Repo Link : <https://github.com/antosubash/FileUpload>
