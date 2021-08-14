@@ -1,4 +1,4 @@
-import Document, { Html, Head, Main, NextScript } from 'next/document'
+import Document, { Html, Head, Main, NextScript } from "next/document";
 const GA_TRACKING_ID = "UA-28730591-2";
 export default class MyDocument extends Document {
   render() {
@@ -22,6 +22,8 @@ export default class MyDocument extends Document {
           `,
             }}
           />
+          <meta name="msapplication-TileColor" content="#000000" />
+          <meta name="theme-color" content="#000000" />
         </Head>
         <body>
           <Main />
