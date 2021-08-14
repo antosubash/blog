@@ -6,7 +6,7 @@ import Header from "../../components/header";
 import PostHeader from "../../components/post-header";
 import Layout from "../../components/layout";
 import { getPostBySlug, getAllPosts } from "../../lib/api";
-import PostTitle from "../../components/post-title";
+import PageTitle from "../../components/page-title";
 import Head from "next/head";
 import { CMS_NAME } from "../../lib/constants";
 import markdownToHtml from "../../lib/markdownToHtml";
@@ -28,21 +28,19 @@ const Post = ({ post, morePosts, preview }: Props) => {
     <Layout>
       <Container>
         {router.isFallback ? (
-          <PostTitle>Loading…</PostTitle>
+          <PageTitle>Loading…</PageTitle>
         ) : (
           <>
-            <article className="mb-32">
-              <Head>
-                <title>{post.title} | Anto Subash</title>
-              </Head>
-              <PostHeader
-                title={post.title}
-                coverImage={post.coverImage}
-                date={post.date}
-                author={post.author}
-              />
-              <PostBody content={post.content} />
-            </article>
+            <Head>
+              <title>{post.title} | Anto Subash</title>
+            </Head>
+            <PostHeader
+              title={post.title}
+              coverImage={post.coverImage}
+              date={post.date}
+              author={post.author}
+            />
+            <PostBody content={post.content} />
             <Utterances />
           </>
         )}

@@ -1,6 +1,6 @@
 import SectionContainer from "./section-container";
 import ThemeSwitch from "./theme-switch";
-import PostTitle from "./post-title";
+import PageTitle from "./page-title";
 const LayoutWrapper = ({ children }: any) => {
   return (
     <SectionContainer>
@@ -8,10 +8,10 @@ const LayoutWrapper = ({ children }: any) => {
         <header className="flex items-center justify-between py-10">
           <div>
             <a href="/" aria-label="Blog">
-              <div className="flex items-center justify-between">
-                <div className="mr-3"></div>
-              </div>
-              <PostTitle>Anto Subash.</PostTitle>
+              <PageTitle>Anto Subash.</PageTitle>
+              <p className="text-lg leading-7 px-5 text-center text-gray-500 dark:text-gray-400">
+                A personal blog from a lazy programmer.
+              </p>
             </a>
           </div>
           <div className="flex items-center text-base leading-5">

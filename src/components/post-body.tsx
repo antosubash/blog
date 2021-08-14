@@ -1,18 +1,15 @@
-import markdownStyles from './markdown-styles.module.css'
-
 type Props = {
-  content: string
-}
+  content: string;
+};
 
 const PostBody = ({ content }: Props) => {
   return (
-    <div className="mx-auto">
-      <div
-        className={markdownStyles['markdown']}
-        dangerouslySetInnerHTML={{ __html: content }}
-      />
+    <div className="divide-y divide-gray-200 dark:divide-gray-700 xl:pb-0 xl:col-span-3 xl:row-span-2">
+      <div className="pt-10 pb-8 prose dark:prose-dark max-w-none">
+        <div dangerouslySetInnerHTML={{ __html: content }} />
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default PostBody
+export default PostBody;
