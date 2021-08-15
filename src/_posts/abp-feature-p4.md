@@ -15,43 +15,43 @@ ABP Feature system is used to enable, disable or change the behavior of the appl
 ## Create feature constant
 
 ```cs
-    public static class TodoFeatures
-    {
-        public const string Todo = "Todo";
-        public const string MaxTodoPerUser = "MaxTodoPerUser";
-    }
+public static class TodoFeatures
+{
+    public const string Todo = "Todo";
+    public const string MaxTodoPerUser = "MaxTodoPerUser";
+}
 ```
 
 ## Create feature definition provider
 
 ```cs
-    public class TodoFeatureDefinitionProvider : FeatureDefinitionProvider
+public class TodoFeatureDefinitionProvider : FeatureDefinitionProvider
+{
+    public override void Define(IFeatureDefinitionContext context)
     {
-        public override void Define(IFeatureDefinitionContext context)
-        {
-            var myGroup = context.AddGroup("MyTodoApp");
+        var myGroup = context.AddGroup("MyTodoApp");
 
-            myGroup.AddFeature(
-                TodoFeatures.Todo,
-                defaultValue: "false",
-                displayName: L("Todo"),
-                valueType: new ToggleStringValueType()
-            );
+        myGroup.AddFeature(
+            TodoFeatures.Todo,
+            defaultValue: "false",
+            displayName: L("Todo"),
+            valueType: new ToggleStringValueType()
+        );
 
-            myGroup.AddFeature(
-                TodoFeatures.MaxTodoPerUser,
-                defaultValue: "10",
-                displayName: L("MaxTodoPerUser"),
-                valueType: new FreeTextStringValueType(
-                               new NumericValueValidator(0, 1000000))
-            );
-        }
-
-        private static LocalizableString L(string name)
-        {
-            return LocalizableString.Create<TodosResource>(name);
-        }
+        myGroup.AddFeature(
+            TodoFeatures.MaxTodoPerUser,
+            defaultValue: "10",
+            displayName: L("MaxTodoPerUser"),
+            valueType: new FreeTextStringValueType(
+                            new NumericValueValidator(0, 1000000))
+        );
     }
+
+    private static LocalizableString L(string name)
+    {
+        return LocalizableString.Create<TodosResource>(name);
+    }
+}
 ```
 
 ## Expose api base on feature

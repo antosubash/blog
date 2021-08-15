@@ -19,10 +19,10 @@ first step is to create a new client for the nextjs application. list of client 
 ### 1.1 Add the new json entry
 
 ```json
-      "Todos_Flutter_2": {
-        "ClientId": "Todos_Flutter_2",
-        "RedirectUri": "http://localhost:3000/"
-      },
+"Todos_Flutter_2": {
+  "ClientId": "Todos_Flutter_2",
+  "RedirectUri": "http://localhost:3000/"
+},
 ```
 
 ### 1.2 Update the CreateClientsAsync method
@@ -30,19 +30,19 @@ first step is to create a new client for the nextjs application. list of client 
 In the `Domain` project there is a `IdentityServerDataSeedContributor` class which has the `CreateClientsAsync` method. This method creates the Identity server clients during the migrations. so we will update this method to include the new json entry.
 
 ```cs
-            // Flutter2 Client
-            var flutter2Client = configurationSection["Todos_Flutter_2:ClientId"];
-            if (!flutter2Client.IsNullOrWhiteSpace())
-            {
-                var redirectUrl = configurationSection["Todos_Flutter_2:RedirectUri"];
-                await CreateClientAsync(
-                    name: flutter2Client,
-                    scopes: commonScopes,
-                    grantTypes: new[] { "authorization_code" },
-                    requireClientSecret: false,
-                    redirectUri: redirectUrl
-                );
-            }
+// Flutter2 Client
+var flutter2Client = configurationSection["Todos_Flutter_2:ClientId"];
+if (!flutter2Client.IsNullOrWhiteSpace())
+{
+    var redirectUrl = configurationSection["Todos_Flutter_2:RedirectUri"];
+    await CreateClientAsync(
+        name: flutter2Client,
+        scopes: commonScopes,
+        grantTypes: new[] { "authorization_code" },
+        requireClientSecret: false,
+        redirectUri: redirectUrl
+    );
+}
 ```
 
 ### 1.3 Run the migration
@@ -94,10 +94,10 @@ Update the android app to use the `usesCleartextTraffic`
 you can find the android manifest in `mytodoapp\android\app\src\main`
 
 ```xml
-   <application
-        android:usesCleartextTraffic="true"
-        android:label="mytodos"
-        android:icon="@mipmap/ic_launcher">
+<application
+    android:usesCleartextTraffic="true"
+    android:label="mytodos"
+    android:icon="@mipmap/ic_launcher">
 ```
 
 ## 5. Create flutter page to login and logout
