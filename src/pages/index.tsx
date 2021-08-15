@@ -1,13 +1,10 @@
 import Container from "../components/container";
-import MoreStories from "../components/more-stories";
-import HeroPost from "../components/hero-post";
-import Intro from "../components/intro";
 import Layout from "../components/layout";
 import { getAllPosts } from "../lib/api";
 import Head from "next/head";
 import Post from "../types/post";
 import PostItem from "../components/post-item";
-
+import { AnimatePresence, motion } from "framer-motion";
 type Props = {
   allPosts: Post[];
 };
@@ -27,18 +24,28 @@ const Index = ({ allPosts }: Props) => {
               </h1>
             </div>
             <ul className="divide-y">
-              {!allPosts.length && "No posts found."}
-              {allPosts.map((post) => {
-                const { slug, date, title, excerpt } = post;
-                return (
-                  <PostItem
-                    slug={slug}
-                    date={date}
-                    title={title}
-                    summary={excerpt}
-                  ></PostItem>
-                );
-              })}
+              <AnimatePresence>
+                {!allPosts.length && "No posts found."}
+                {allPosts.map((post) => {
+                  const { slug, date, title, excerpt } = post;
+                  return (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      whileHover={{ scale: 1.1 }}
+                      key={slug}
+                    >
+                      <PostItem
+                        slug={slug}
+                        date={date}
+                        title={title}
+                        summary={excerpt}
+                      ></PostItem>
+                    </motion.div>
+                  );
+                })}
+              </AnimatePresence>
             </ul>
           </div>
         </Container>
