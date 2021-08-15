@@ -17,13 +17,13 @@ In this post we are going to setup the authorization for the dotnet core ABP app
 In the ABP application the permission are available in the `Contracts` project. Find the Permissions class and add your custom permission.
 
 ```cs
-        public static class Todo
-        {
-            public const string Default = GroupName + ".Todo";
-            public const string Create = Default + ".Create";
-            public const string Update = Default + ".Update";
-            public const string Delete = Default + ".Delete";
-        }
+public static class Todo
+{
+    public const string Default = GroupName + ".Todo";
+    public const string Create = Default + ".Create";
+    public const string Update = Default + ".Update";
+    public const string Delete = Default + ".Delete";
+}
 ```
 
 ## Define permission
@@ -31,12 +31,12 @@ In the ABP application the permission are available in the `Contracts` project. 
 `PermissionDefinitionProvider` is where you have to define the permissions.
 
 ```cs
-            var myGroup = context.AddGroup(TodosPermissions.GroupName);
+var myGroup = context.AddGroup(TodosPermissions.GroupName);
 
-            var todoPermission = myGroup.AddPermission(TodosPermissions.Todo.Default, L("Permission:Default"));
-            todoPermission.AddChild(TodosPermissions.Todo.Create, L("Permission:Create"));
-            todoPermission.AddChild(TodosPermissions.Todo.Update, L("Permission:Update"));
-            todoPermission.AddChild(TodosPermissions.Todo.Delete, L("Permission:Delete"));
+var todoPermission = myGroup.AddPermission(TodosPermissions.Todo.Default, L("Permission:Default"));
+todoPermission.AddChild(TodosPermissions.Todo.Create, L("Permission:Create"));
+todoPermission.AddChild(TodosPermissions.Todo.Update, L("Permission:Update"));
+todoPermission.AddChild(TodosPermissions.Todo.Delete, L("Permission:Delete"));
 ```
 
 ## Protecting api endpoint based on permission
@@ -44,11 +44,11 @@ In the ABP application the permission are available in the `Contracts` project. 
 Once the permission is defined now we can create use the `Authorize` attribute to enforce the permission
 
 ```cs
-        [Authorize(TodosPermissions.Todo.Default)]
-        public async Task<List<TodoDto>> GetAll()
-        {
-            return ObjectMapper.Map<List<Todo>, List<TodoDto>>(await todoRepository.GetListAsync());
-        }
+[Authorize(TodosPermissions.Todo.Default)]
+public async Task<List<TodoDto>> GetAll()
+{
+    return ObjectMapper.Map<List<Todo>, List<TodoDto>>(await todoRepository.GetListAsync());
+}
 ```
 
 In the above code we have added the default permission to the getAll api call.
@@ -58,14 +58,13 @@ In the above code we have added the default permission to the getAll api call.
 ASP.NET Core provides the `IAuthorizationService` that can be used to check for authorization. Once you inject, you can use it in your code to conditionally control the authorization.
 
 ```cs
-
-    var result = await AuthorizationService
-        .AuthorizeAsync(TodosPermissions.Todo.Default);
-    if (result.Succeeded == false)
-    {
-        //throw exception
-        throw new AbpAuthorizationException("...");
-    }
+var result = await AuthorizationService
+    .AuthorizeAsync(TodosPermissions.Todo.Default);
+if (result.Succeeded == false)
+{
+    //throw exception
+    throw new AbpAuthorizationException("...");
+}
 ```
 
 or

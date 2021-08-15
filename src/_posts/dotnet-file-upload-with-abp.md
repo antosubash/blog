@@ -25,10 +25,10 @@ Create the container in `Domain` project.
 Install `Volo.Abp.BlobStoring` NuGet package to your `Domain` project
 
 ```cs
-    [BlobContainerName("document")]
-    public class DocumentContainer
-    {
-    }
+[BlobContainerName("document")]
+public class DocumentContainer
+{
+}
 ```
 
 ## Create the Entity and Entity Dto
@@ -36,43 +36,43 @@ Install `Volo.Abp.BlobStoring` NuGet package to your `Domain` project
 Create the Entity in `Domain` project.
 
 ```cs
-    public class Document : FullAuditedAggregateRoot<Guid>, IMultiTenant
+public class Document : FullAuditedAggregateRoot<Guid>, IMultiTenant
+{
+    public long FileSize { get; set; }
+
+    public string MimeType { get; set; }
+
+    public Guid? TenantId { get; set; }
+
+    protected Document()
     {
-        public long FileSize { get; set; }
-
-        public string MimeType { get; set; }
-
-        public Guid? TenantId { get; set; }
-
-        protected Document()
-        {
-        }
-
-        public Document(
-            Guid id,
-            long fileSize,
-            string mimeType,
-            Guid? tenantId
-        ) : base(id)
-        {
-            FileSize = fileSize;
-            MimeType = mimeType;
-            TenantId = tenantId;
-        }
     }
+
+    public Document(
+        Guid id,
+        long fileSize,
+        string mimeType,
+        Guid? tenantId
+    ) : base(id)
+    {
+        FileSize = fileSize;
+        MimeType = mimeType;
+        TenantId = tenantId;
+    }
+}
 ```
 
 Create EntityDto in `Contracts` project
 
 ```cs
-    public class DocumentDto : EntityDto<Guid>
-    {
-        public long FileSize { get; set; }
+public class DocumentDto : EntityDto<Guid>
+{
+    public long FileSize { get; set; }
 
-        public string FileUrl { get; set; }
+    public string FileUrl { get; set; }
 
-        public string MimeType { get; set; }
-    }
+    public string MimeType { get; set; }
+}
 ```
 
 Add mapping for the Entity and Dto in the `ApplicationAutoMapperProfile` class in the `Application` project
@@ -92,11 +92,11 @@ public DbSet<Document> Documents { get; set; }
 Configure Ef core
 
 ```cs
-            builder.Entity<Document>(b =>
-            {
-                b.ToTable(FileUploadConsts.DbTablePrefix + "Document", FileUploadConsts.DbSchema);
-                b.ConfigureByConvention();
-            });
+builder.Entity<Document>(b =>
+{
+    b.ToTable(FileUploadConsts.DbTablePrefix + "Document", FileUploadConsts.DbSchema);
+    b.ConfigureByConvention();
+});
 ```
 
 ## Add migration and update the database
@@ -140,45 +140,45 @@ Configure<AbpBlobStoringOptions>(options =>
 The app service will have 2 methods one is to upload the files and another one is to view the files.
 
 ```cs
-    public class DocumentAppService : FileUploadAppService
+public class DocumentAppService : FileUploadAppService
+{
+    private readonly IBlobContainer<DocumentContainer> _blobContainer;
+    private readonly IRepository<Document, Guid> _repository;
+    public DocumentAppService(IRepository<Document, Guid> repository, IBlobContainer<DocumentContainer> blobContainer)
     {
-        private readonly IBlobContainer<DocumentContainer> _blobContainer;
-        private readonly IRepository<Document, Guid> _repository;
-        public DocumentAppService(IRepository<Document, Guid> repository, IBlobContainer<DocumentContainer> blobContainer)
-        {
-            _repository = repository;
-            _blobContainer = blobContainer;
-        }
-
-        public async Task<List<DocumentDto>> Upload([FromForm] List<IFormFile> files)
-        {
-            var output = new List<DocumentDto>();
-            foreach (var file in files)
-            {
-                using var memoryStream = new MemoryStream();
-                await file.CopyToAsync(memoryStream).ConfigureAwait(false);
-                var id = Guid.NewGuid();
-                var newFile = new Document(id, file.Length, file.ContentType, CurrentTenant.Id);
-                var created = await _repository.InsertAsync(newFile);
-                await _blobContainer.SaveAsync(id.ToString(), memoryStream.ToArray()).ConfigureAwait(false);
-                output.Add(ObjectMapper.Map<Document, DocumentDto>(newFile));
-            }
-
-            return output;
-        }
-
-        public async Task<FileResult> Get(Guid id)
-        {
-            var currentFile = _repository.FirstOrDefault(x => x.Id == id);
-            if (currentFile != null)
-            {
-                var myfile = await _blobContainer.GetAllBytesOrNullAsync(id.ToString());
-                return new FileContentResult(myfile, currentFile.MimeType);
-            }
-
-            throw new FileNotFoundException();
-        }
+        _repository = repository;
+        _blobContainer = blobContainer;
     }
+
+    public async Task<List<DocumentDto>> Upload([FromForm] List<IFormFile> files)
+    {
+        var output = new List<DocumentDto>();
+        foreach (var file in files)
+        {
+            using var memoryStream = new MemoryStream();
+            await file.CopyToAsync(memoryStream).ConfigureAwait(false);
+            var id = Guid.NewGuid();
+            var newFile = new Document(id, file.Length, file.ContentType, CurrentTenant.Id);
+            var created = await _repository.InsertAsync(newFile);
+            await _blobContainer.SaveAsync(id.ToString(), memoryStream.ToArray()).ConfigureAwait(false);
+            output.Add(ObjectMapper.Map<Document, DocumentDto>(newFile));
+        }
+
+        return output;
+    }
+
+    public async Task<FileResult> Get(Guid id)
+    {
+        var currentFile = _repository.FirstOrDefault(x => x.Id == id);
+        if (currentFile != null)
+        {
+            var myfile = await _blobContainer.GetAllBytesOrNullAsync(id.ToString());
+            return new FileContentResult(myfile, currentFile.MimeType);
+        }
+
+        throw new FileNotFoundException();
+    }
+}
 ```
 
 Repo Link : <https://github.com/antosubash/FileUpload>
