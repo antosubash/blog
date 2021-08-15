@@ -173,6 +173,4 @@ public class ProfilePictureAppService : ProfilePictureSampleAppService
 }
 ```
 
-## Repo
-
-<https://github.com/antosubash/AbpProfilePictureSample>
+## Repo [Link](https://github.com/antosubash/AbpProfilePictureSample)
