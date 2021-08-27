@@ -2,13 +2,11 @@ import { useRouter } from "next/router";
 import ErrorPage from "next/error";
 import Container from "../../components/container";
 import PostBody from "../../components/post-body";
-import Header from "../../components/header";
 import PostHeader from "../../components/post-header";
 import Layout from "../../components/layout";
 import { getPostBySlug, getAllPosts } from "../../lib/api";
 import PageTitle from "../../components/page-title";
 import Head from "next/head";
-import { CMS_NAME } from "../../lib/constants";
 import markdownToHtml from "../../lib/markdownToHtml";
 import PostType from "../../types/post";
 import { Utterances } from "../../components/utterances";
@@ -40,7 +38,7 @@ const Post = ({ post, morePosts, preview }: Props) => {
               date={post.date}
               author={post.author}
             />
-            <PostBody content={post.content} />
+            <PostBody videoId={post.videoId} content={post.content} />
             <Utterances />
           </>
         )}
@@ -66,6 +64,7 @@ export async function getStaticProps({ params }: Params) {
     "content",
     "ogImage",
     "coverImage",
+    "videoId",
   ]);
   const content = await markdownToHtml(post.content || "");
 
