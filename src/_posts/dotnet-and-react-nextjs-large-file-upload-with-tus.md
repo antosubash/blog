@@ -2,6 +2,7 @@
 title: "dotnet core large file upload with resume using tus and react/nextjs"
 excerpt: "In this post you will see how to upload large files with resume using tus. We will use dotnet core for the backend and nextjs for the frontend"
 date: "2021-07-22"
+videoId: 9IQfy1l6kLg
 author:
   name: Anto Subash
   picture: "/assets/blog/authors/anto.jpg"
@@ -14,7 +15,7 @@ In this post we will see how to do large file upload in chunks with resume capab
 
 ## dotnet project
 
-### Create the .net project using this following command.
+### Create the .net project using this following command
 
 ```bash
 dotnet new webapp -n FileUpload -o .

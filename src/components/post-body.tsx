@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import YouTube from "react-youtube";
+import ReactPlayer from "react-player";
 
 type Props = {
   content: string;
@@ -7,28 +7,11 @@ type Props = {
 };
 
 const PostBody = ({ content, videoId }: Props) => {
-  const [width, setWidth] = useState<number>();
-  const [height, setHeight] = useState<number>();
-  const updateDimensions = () => {
-    setWidth(window.innerWidth);
-    setHeight(window.innerHeight);
-  };
-  useEffect(() => {
-    window.addEventListener("resize", updateDimensions);
-    return () => window.removeEventListener("resize", updateDimensions);
-  }, []);
-
+  var url = "https://www.youtube.com/watch?v=" + videoId;
   return (
     <div className="divide-y divide-gray-200 dark:divide-gray-700 xl:pb-0 xl:col-span-3 xl:row-span-2">
       {videoId ? (
-        <YouTube
-          className="pt-10 pb-8 prose dark:prose-dark max-w-none"
-          opts={{
-            height: height?.toString(),
-            width: width?.toString(),
-          }}
-          videoId={videoId}
-        />
+        <ReactPlayer url={url} width="100%" height="500px" controls={true} />
       ) : (
         ""
       )}
