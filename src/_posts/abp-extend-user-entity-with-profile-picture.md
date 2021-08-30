@@ -2,6 +2,7 @@
 title: "Add profile picture to User Entity in ABP app using BlobStore and Minio. Part 6"
 excerpt: "In this post we will implement the profile picture upload for the ABP app using BlobStore and Minio."
 date: "2021-08-15"
+videoId: R2Y7wHBxERg
 author:
   name: Anto Subash
   picture: "/assets/blog/authors/anto.jpg"
