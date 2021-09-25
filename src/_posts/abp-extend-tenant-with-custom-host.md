@@ -1,6 +1,6 @@
 ---
 title: "Extend Tenant management and add custom host to your ABP App. Part 7"
-excerpt: "ABP Feature system is used to enable, disable or change the behavior of the application features on runtime."
+excerpt: "In this post we will see how to extent the tenant entity and Add a custom tenant resolver for your ABP app."
 date: "2021-09-25"
 author:
   name: Anto Subash
@@ -10,7 +10,7 @@ author:
 
 ## Intro
 
-In this video we will see you to extent the tenant entity and Add a custom tenant resolver for your ABP app.
+In this post we will see how to extent the tenant entity and Add a custom tenant resolver for your ABP app.
 
 ## Add test domain in the host file
 
