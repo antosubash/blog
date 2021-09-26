@@ -1,0 +1,72 @@
+---
+title: "Centralized logging for .net core ABP microservices app using Seq. Part 8"
+excerpt: "In this post we will see how to implement a central logging system for your ABP app using Seq."
+date: "2021-09-26"
+videoId:
+author:
+  name: Anto Subash
+  picture: "/assets/blog/authors/anto.jpg"
+  url: "https://antosubash.com"
+---
+
+## Intro
+
+In this post we will see how to implement a central logging system for your ABP app using Seq.
+
+## Deploy the Seq dockers container
+
+### Enable swarm mode
+
+```bash
+docker swarm init
+```
+
+Create the docker-compose file `seq_stack.yaml`
+
+```yaml
+version: "3.2"
+
+services:
+  seq:
+    image: datalust/seq
+    ports:
+      - 8003:80
+      - 5341:5341
+    volumes:
+      - D:\docker\data\seq:/data
+    environment:
+      ACCEPT_EULA: "Y
+```
+
+### To deploy the stack
+
+```bash
+docker stack deploy -c seq_stack.yaml seq
+```
+
+This will deploy the seq docker container.
+
+## Create ABP Tired application
+
+```bash
+abp new SeqWithAbp -t app -u mvc --tiered
+```
+
+Once the app is created run the `DbMigration` project to setup the migrations and database seeding.
+
+## Install Seq Sink in the projects
+
+Install the `Serilog.Sinks.Seq` nuget package to the following projects.
+
+- SeqWithAbp.HttpApi.Host
+- SeqWithAbp.IdentityServer
+- SeqWithAbp.Web
+
+Update the `LoggerConfiguration` in the `Program.cs` with the seq endpoint in all the projects.
+
+```cs
+.WriteTo.Async(c => c.File("Logs/logs.txt"))
+.WriteTo.Seq("http://localhost:5341")
+```
+
+This will post all the logs to the seq.
