@@ -35,7 +35,7 @@ services:
     volumes:
       - D:\docker\data\seq:/data
     environment:
-      ACCEPT_EULA: "Y
+      ACCEPT_EULA: "Y"
 ```
 
 ### To deploy the stack
