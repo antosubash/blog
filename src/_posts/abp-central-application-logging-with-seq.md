@@ -70,3 +70,5 @@ Update the `LoggerConfiguration` in the `Program.cs` with the seq endpoint in al
 ```
 
 This will post all the logs to the seq.
+
+Sample Repo : <https://github.com/antosubash/SeqWithAbp>
