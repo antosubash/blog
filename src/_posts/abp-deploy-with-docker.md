@@ -2,7 +2,7 @@
 title: "Deploy ABP Framework dotnet core tiered app to docker swarm. Part 9"
 excerpt: "In this post we will see how to deploy your dotnet core app with docker container."
 date: "2021-09-28"
-videoId:
+videoId: L2GeLy_VWRQ
 author:
   name: Anto Subash
   picture: "/assets/blog/authors/anto.jpg"
