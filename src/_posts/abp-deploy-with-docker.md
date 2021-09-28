@@ -1,0 +1,282 @@
+---
+title: "Deploy ABP Framework dotnet core tiered app to docker swarm. Part 10"
+excerpt: "In this post we will see how to deploy your dotnet core app with docker container."
+date: "2021-09-26"
+videoId:
+author:
+  name: Anto Subash
+  picture: "/assets/blog/authors/anto.jpg"
+  url: "https://antosubash.com"
+---
+
+## Intro
+
+In this post we will see how to deploy your dotnet core app with docker container.
+
+## Create ABP Tired application
+
+```bash
+abp new AbpDocker -t app -u mvc --tiered -dbms PostgreSQL
+```
+
+**Once the app is created update the connection string in all the project and run the `DbMigration` project to setup the migrations and database seeding.**
+
+## Create a same site cookies extension
+
+you can find the code for that here: <https://community.abp.io/articles/patch-for-chrome-login-issue-identityserver4-samesite-cookie-problem-weypwp3n>
+
+Here is the code
+
+```cs
+public static class SameSiteCookiesServiceCollectionExtensions
+{
+    public static IServiceCollection AddSameSiteCookiePolicy(this IServiceCollection services)
+    {
+        services.Configure<CookiePolicyOptions>(options =>
+        {
+            options.MinimumSameSitePolicy = SameSiteMode.Lax;
+            options.OnAppendCookie = cookieContext =>
+                CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
+            options.OnDeleteCookie = cookieContext =>
+                CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
+        });
+
+        return services;
+    }
+
+    private static void CheckSameSite(HttpContext httpContext, CookieOptions options)
+    {
+        if (options.SameSite == SameSiteMode.None)
+        {
+            var userAgent = httpContext.Request.Headers["User-Agent"].ToString();
+            if (!httpContext.Request.IsHttps || DisallowsSameSiteNone(userAgent))
+            {
+                // For .NET Core < 3.1 set SameSite = (SameSiteMode)(-1)
+                options.SameSite = SameSiteMode.Lax;
+            }
+        }
+    }
+
+    private static bool DisallowsSameSiteNone(string userAgent)
+    {
+        // Cover all iOS based browsers here. This includes:
+        // - Safari on iOS 12 for iPhone, iPod Touch, iPad
+        // - WkWebview on iOS 12 for iPhone, iPod Touch, iPad
+        // - Chrome on iOS 12 for iPhone, iPod Touch, iPad
+        // All of which are broken by SameSite=None, because they use the iOS networking stack
+        if (userAgent.Contains("CPU iPhone OS 12") || userAgent.Contains("iPad; CPU OS 12"))
+        {
+            return true;
+        }
+
+        // Cover Mac OS X based browsers that use the Mac OS networking stack. This includes:
+        // - Safari on Mac OS X.
+        // This does not include:
+        // - Chrome on Mac OS X
+        // Because they do not use the Mac OS networking stack.
+        if (userAgent.Contains("Macintosh; Intel Mac OS X 10_14") &&
+            userAgent.Contains("Version/") && userAgent.Contains("Safari"))
+        {
+            return true;
+        }
+
+        // Cover Chrome 50-69, because some versions are broken by SameSite=None,
+        // and none in this range require it.
+        // Note: this covers some pre-Chromium Edge versions,
+        // but pre-Chromium Edge does not require SameSite=None.
+        if (userAgent.Contains("Chrome/5") || userAgent.Contains("Chrome/6"))
+        {
+            return true;
+        }
+
+        return false;
+    }
+}
+```
+
+Add the following line to `ConfigureServices()` method in all 3 projects.
+
+```cs
+context.Services.AddSameSiteCookiePolicy();
+```
+
+Go to `OnApplicationInitialization()` method in AcmeBookStoreWebModule.cs add `app.UseCookiePolicy();` in all 3 projects.
+
+```cs
+app.UseCookiePolicy(); // added this, Before UseAuthentication or anything else that writes cookies.
+```
+
+## Create a new client for the production app
+
+Update the `appsettings.json` from the `DbMigrator` to add the new client.
+
+```json
+"AbpDocker_Web_Docker": {
+  "ClientId": "AbpDocker_Web_Docker",
+  "ClientSecret": "1q2w3e*",
+  "RootUrl": "http://host.docker.internal:9005"
+},
+```
+
+Update the `IdentityServerDataSeedContributor` in the `Domain` project and add the new client to the identity server.
+
+```cs
+//webDockerClient Client
+var webDockerClientId = configurationSection["AbpDocker_Web_Docker:ClientId"];
+if (!webClientId.IsNullOrWhiteSpace())
+{
+    var webClientRootUrl = configurationSection["AbpDocker_Web_Docker:RootUrl"].EnsureEndsWith('/');
+
+    await CreateClientAsync(
+        name: webDockerClientId,
+        scopes: commonScopes,
+        grantTypes: new[] { "hybrid" },
+        secret: (configurationSection["AbpDocker_Web_Docker:ClientSecret"] ?? "1q2w3e*").Sha256(),
+        redirectUri: $"{webClientRootUrl}signin-oidc",
+        postLogoutRedirectUri: $"{webClientRootUrl}signout-callback-oidc",
+        frontChannelLogoutUri: $"{webClientRootUrl}Account/FrontChannelLogout",
+        corsOrigins: new[] { webClientRootUrl.RemovePostFix("/") }
+    );
+}
+```
+
+Run the `DbMigrator` project again to see the new client.
+
+## Create production config
+
+Create the `appsettings.Production.json` in all the three projects.
+
+### HttpApi.Host
+
+```json
+{
+  "App": {
+    "CorsOrigins": "https://*.AbpDocker.com"
+  },
+  "ConnectionStrings": {
+    "Default": "Host=host.docker.internal;Port=5432;Database=AbpDocker;User ID=postgres;Password=postgres;"
+  },
+  "Redis": {
+    "Configuration": "host.docker.internal"
+  },
+  "AuthServer": {
+    "Authority": "http://host.docker.internal:9006",
+    "RequireHttpsMetadata": "false",
+    "SwaggerClientId": "AbpDocker_Swagger",
+    "SwaggerClientSecret": "1q2w3e*"
+  },
+  "StringEncryption": {
+    "DefaultPassPhrase": "WBN0szwYr7wL8Dou"
+  }
+}
+```
+
+### IdentityServer
+
+```json
+{
+  "App": {
+    "SelfUrl": "http://host.docker.internal:9006",
+    "ClientUrl": "http://localhost:4200",
+    "CorsOrigins": "https://*.AbpDocker.com,http://localhost:4200,https://localhost:44307,https://localhost:44375,http://host.docker.internal:9006,http://host.docker.internal:9005,http://host.docker.internal:9007",
+    "RedirectAllowedUrls": "http://localhost:4200,https://localhost:44307,http://host.docker.internal:9006,http://host.docker.internal:9005,http://host.docker.internal:9007"
+  },
+  "ConnectionStrings": {
+    "Default": "Host=host.docker.internal;Port=5432;Database=AbpDocker;User ID=postgres;Password=postgres;"
+  },
+  "Redis": {
+    "Configuration": "host.docker.internal"
+  }
+}
+```
+
+### Web
+
+```json
+{
+  "App": {
+    "SelfUrl": "http://host.docker.internal:9005"
+  },
+  "RemoteServices": {
+    "Default": {
+      "BaseUrl": "http://host.docker.internal:9007/"
+    }
+  },
+  "Redis": {
+    "Configuration": "host.docker.internal"
+  },
+  "AuthServer": {
+    "Authority": "http://host.docker.internal:9006",
+    "RequireHttpsMetadata": "false",
+    "ClientId": "AbpDocker_Web_Docker",
+    "ClientSecret": "1q2w3e*"
+  }
+}
+```
+
+## Add docker support
+
+Do the following in all 3 projects.
+
+- `Right Click -> Add -> Docker Support`
+
+  This will add `Docker` file into the project.
+
+- `Right Click -> Add -> Container Orchestrator Support`
+
+  This will add the docker file to the `docker-compose.yml`
+
+Add port mapping to the services to the expose the services.
+
+Final `docker-compose.yml` will look like this.
+
+```yml
+version: "3.4"
+
+services:
+  web:
+    image: abpdockerweb
+    ports:
+      - 9005:80
+    build:
+      context: .
+      dockerfile: src/AbpDocker.Web/Dockerfile
+
+  identityserver:
+    image: abpdockeridentityserver
+    ports:
+      - 9006:80
+    build:
+      context: .
+      dockerfile: src/AbpDocker.IdentityServer/Dockerfile
+
+  httpapi:
+    image: abpdockerhttpapihost
+    ports:
+      - 9007:80
+    build:
+      context: .
+      dockerfile: src/AbpDocker.HttpApi.Host/Dockerfile
+```
+
+## Build docker containers
+
+Navigate to the directory where the `docker-compose.yml` file is present and then run the following command.
+
+```bash
+docker-compose build
+```
+
+## Deploy the docker stack
+
+```bash
+docker stack deploy -c .\docker-compose.yml abpdocker
+```
+
+## Run the app
+
+Visit the web app in <http://host.docker.internal:9005/>
+
+Visit the identity server in <http://host.docker.internal:9006/>
+
+Visit the api in <http://host.docker.internal:9007/>
