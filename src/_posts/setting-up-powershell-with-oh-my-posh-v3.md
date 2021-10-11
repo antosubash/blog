@@ -1,6 +1,6 @@
 ---
-title: "Setting up oh-my-posh in PowerShell"
-excerpt: "In this post we will see how to setup the oh-my-posh with PowerShell."
+title: "Setting up oh-my-posh and PSReadLine in PowerShell"
+excerpt: "In this post we will see how to setup the oh-my-posh and PSReadLine with PowerShell."
 date: "2021-06-30"
 author:
   name: Anto Subash
