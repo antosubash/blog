@@ -82,3 +82,56 @@ Set-PoshPrompt powerlevel10k_rainbow
 ```
 
 This will import the Oh My Posh and set the theme.
+
+## Install PSReadLine and PowerShellGet
+
+Before updating PowerShellGet, you should always install the latest NuGet provider. From an elevated PowerShell session, run the following command.
+
+```bash
+Install-PackageProvider -Name NuGet -Force
+```
+
+### Install or update the PowerShellGet
+
+To install
+
+```bash
+Install-Module -Name PowerShellGet -Force
+```
+
+To update
+
+```bash
+Update-Module -Name PowerShellGet
+```
+
+### Install PSReadLine
+
+To install
+
+```bash
+Install-Module -Name PSReadLine -AllowPrerelease
+```
+
+### Import and configure PSReadLine
+
+Open the powershell profile
+
+```bash
+notepad $profile
+```
+
+Add the PSReadLine config
+
+```bash
+Import-Module PSReadLine
+Set-PSReadLineOption -EditMode Windows
+Set-PSReadLineOption -PredictionSource History
+Set-PSReadLineOption -PredictionViewStyle ListView
+Set-PSReadLineOption -PredictionViewStyle InlineView
+Set-PSReadLineKeyHandler -Key Tab -Function Complete
+Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
+Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
+```
+
+For more config look [here](https://github.com/PowerShell/PSReadLine/blob/master/PSReadLine/SamplePSReadLineProfile.ps1)
