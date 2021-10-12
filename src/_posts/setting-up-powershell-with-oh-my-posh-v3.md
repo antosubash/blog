@@ -148,7 +148,7 @@ Open the powershell profile
 notepad $profile
 ```
 
-Add the PSReadLine config
+Import the terminal font
 
 ```bash
 Import-Module -Name Terminal-Icons
