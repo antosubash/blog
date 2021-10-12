@@ -133,3 +133,29 @@ Set-PSReadLineOption -PredictionViewStyle InlineView
 ```
 
 For more config look [here](https://github.com/PowerShell/PSReadLine/blob/master/PSReadLine/SamplePSReadLineProfile.ps1)
+
+### Install Terminal-Icons
+
+To install the module from the PowerShell Gallery:
+
+```bash
+Install-Module -Name Terminal-Icons -Repository PSGallery
+```
+
+Open the powershell profile
+
+```bash
+notepad $profile
+```
+
+Add the PSReadLine config
+
+```bash
+Import-Module -Name Terminal-Icons
+```
+
+Open a new prompt and verify if you the icons with the following command
+
+```bash
+Get-ChildItem -Path . -Force
+```
