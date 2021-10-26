@@ -87,7 +87,7 @@ We are going to change the `Account.cshtml` layout. Take a backup of that file.
 
 Here is the updated cshtml. Based on the sample from this [Signin Page](https://github.com/creativetimofficial/material-kit/blob/master/pages/sign-in.html)
 
-```cshtml
+```html
 @using Microsoft.Extensions.Localization
 @using Microsoft.Extensions.Options
 @using Volo.Abp.AspNetCore.MultiTenancy
