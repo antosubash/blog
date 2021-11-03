@@ -1,10 +1,7 @@
 import { GetServerSideProps } from "next";
 import { getAllPosts } from "../../lib/api";
 import React from "react";
-import Post from "../../types/post";
-type Props = {
-  allPosts: Post[];
-};
+
 const Sitemap: React.FC = () => null;
 const getDate = new Date().toISOString();
 export const getServerSideProps: GetServerSideProps = async ({ res }) => {
@@ -39,11 +36,10 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
       ${postListSitemap}
     </urlset>
   `;
-  if (res) {
-    res.setHeader('Content-Type', 'text/xml')
-    res.write(generatedSitemap);
-    res.end()
-  }
+  res.setHeader("Cache-Control", "s-maxage=30, stale-while-revalidate");
+  res.setHeader("Content-Type", "text/xml");
+  res.write(generatedSitemap);
+  res.end();
   return {
     props: {},
   }
