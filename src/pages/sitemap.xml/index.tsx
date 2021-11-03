@@ -1,7 +1,7 @@
 import { GetServerSideProps } from "next";
-import { getAllPosts } from "../lib/api";
+import { getAllPosts } from "../../lib/api";
 import React from "react";
-import Post from "../types/post";
+import Post from "../../types/post";
 type Props = {
   allPosts: Post[];
 };
