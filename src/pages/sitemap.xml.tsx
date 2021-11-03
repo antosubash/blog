@@ -39,7 +39,6 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
       ${postListSitemap}
     </urlset>
   `;
-  console.log(generatedSitemap);
   if (res) {
     res.setHeader('Content-Type', 'text/xml')
     res.write(generatedSitemap);
