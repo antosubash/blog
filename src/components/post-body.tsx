@@ -12,7 +12,7 @@ const PostBody = ({ content, videoId }: Props) => {
   return (
     <div className="divide-y divide-gray-200 dark:divide-gray-700 xl:pb-0 xl:col-span-3 xl:row-span-2">
       {videoId ? (
-        <ReactPlayer url={url} width="100%" height="500px" controls={true} />
+        <ReactPlayer url={url} width="100%" height="700px" controls={true} />
       ) : (
         ""
       )}

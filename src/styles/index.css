@@ -47,7 +47,7 @@ html {
 }
 
 .prose > * {
-  @apply text-gray-900 dark:text-gray-50 text-xl; 
+  @apply text-gray-800 dark:text-gray-200 text-xl; 
 }
 
 .prose code {
