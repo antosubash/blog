@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
+import Markdown from './markdown';
 
 type Props = {
   content: string;
@@ -11,13 +12,11 @@ const PostBody = ({ content, videoId }: Props) => {
   return (
     <div className="divide-y divide-gray-200 dark:divide-gray-700 xl:pb-0 xl:col-span-3 xl:row-span-2">
       {videoId ? (
-        <ReactPlayer url={url} width="100%" height="500px" controls={true} />
+        <ReactPlayer url={url} width="100%" height="700px" controls={true} />
       ) : (
         ""
       )}
-      <div className="pt-10 pb-8 prose dark:prose-dark max-w-none">
-        <div dangerouslySetInnerHTML={{ __html: content }} />
-      </div>
+      <Markdown content={content} />
     </div>
   );
 };
