@@ -53,3 +53,7 @@ html {
 .prose code {
   @apply bg-transparent;
 }
+
+.prose a, .prose code {
+  word-wrap: break-word;
+}
