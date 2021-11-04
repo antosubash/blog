@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
+import Markdown from './markdown';
 
 type Props = {
   content: string;
@@ -15,9 +16,8 @@ const PostBody = ({ content, videoId }: Props) => {
       ) : (
         ""
       )}
-      <div className="pt-10 pb-8 prose dark:prose-dark max-w-none">
-        <div dangerouslySetInnerHTML={{ __html: content }} />
-      </div>
+      <Markdown content={content} />
+      
     </div>
   );
 };
