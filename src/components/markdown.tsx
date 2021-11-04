@@ -1,5 +1,5 @@
 import ReactMarkdown from "react-markdown";
-import { vsDark, dracula } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { FunctionComponent } from "react";
 import remarkMath from "remark-math";
@@ -33,8 +33,9 @@ const Markdown: FunctionComponent<IProps> = ({ content }) => {
   };
 
   return (
-    <div className="markdown-body">
+    <div className="pt-8">
       <ReactMarkdown
+        className="prose max-w-full"
         components={components}
         children={content}
         remarkPlugins={[html, remarkToc, remarkMath]}

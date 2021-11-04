@@ -17,7 +17,6 @@ const PostBody = ({ content, videoId }: Props) => {
         ""
       )}
       <Markdown content={content} />
-      
     </div>
   );
 };
