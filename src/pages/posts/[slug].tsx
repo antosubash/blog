@@ -7,17 +7,16 @@ import Layout from "../../components/layout";
 import { getPostBySlug, getAllPosts } from "../../lib/api";
 import PageTitle from "../../components/page-title";
 import Head from "next/head";
-import markdownToHtml from "../../lib/markdownToHtml";
 import PostType from "../../types/post";
 import { Utterances } from "../../components/utterances";
 
 type Props = {
   post: PostType;
-  morePosts: PostType[];
+  morePosts?: PostType[];
   preview?: boolean;
 };
 
-const Post = ({ post, morePosts, preview }: Props) => {
+const Post = ({ post }: Props) => {
   const router = useRouter();
   if (!router.isFallback && !post?.slug) {
     return <ErrorPage statusCode={404} />;
@@ -66,14 +65,9 @@ export async function getStaticProps({ params }: Params) {
     "coverImage",
     "videoId",
   ]);
-  const content = await markdownToHtml(post.content || "");
-
   return {
     props: {
-      post: {
-        ...post,
-        content,
-      },
+      post: post,
     },
   };
 }
