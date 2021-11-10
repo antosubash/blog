@@ -1,29 +1,70 @@
 import ReactMarkdown from "react-markdown";
 import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { FunctionComponent } from "react";
+import React, { FunctionComponent, useState } from "react";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
 import html from "remark-html";
 import remarkToc from "remark-toc";
-import "katex/dist/katex.min.css"; 
+import CopyToClipboard from "react-copy-to-clipboard";
+import "katex/dist/katex.min.css";
 interface IProps {
   content: string;
 }
 
 const Markdown: FunctionComponent<IProps> = ({ content }) => {
   const components: any = {
-    code({ node, inline, className, children, ...props } : any) {
+    code({ node, inline, className, children, ...props }: any) {
       const match = /language-(\w+)/.exec(className || "");
-
+      const [isCopied, setIsCopied] = useState(false);
       return !inline && match ? (
-        <SyntaxHighlighter
-          style={dracula}
-          language={match[1]}
-          children={String(children).replace(/\n$/, "")}
-          {...props}
-        />
+        <div className="relative">
+          <div className="absolute right-0">
+            <CopyToClipboard onCopy={() => setIsCopied(true)} text={children}>
+              <button type="button" aria-label="Copy to Clipboard Button">
+                {isCopied ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-10 w-10 p-2"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-10 w-10 p-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"
+                    />
+                  </svg>
+                )}
+              </button>
+            </CopyToClipboard>
+          </div>
+          <div className="container">
+            <SyntaxHighlighter
+              style={dracula}
+              showLineNumbers={true}
+              language={match[1]}
+              children={String(children).replace(/\n$/, "")}
+              {...props}
+            />
+          </div>
+        </div>
       ) : (
         <code className={className ? className : ""} {...props}>
           {children}
