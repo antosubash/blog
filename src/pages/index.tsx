@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import Container from "../components/container";
 import Layout from "../components/layout";
 import { getAllPosts } from "../lib/api";

@@ -1,3 +1,4 @@
+/* eslint-disable react/no-children-prop */
 import ReactMarkdown from "react-markdown";
 import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -14,10 +15,10 @@ interface IProps {
 }
 
 const Markdown: FunctionComponent<IProps> = ({ content }) => {
+  const [isCopied, setIsCopied] = useState(false);
   const components: any = {
     code({ node, inline, className, children, ...props }: any) {
       const match = /language-(\w+)/.exec(className || "");
-      const [isCopied, setIsCopied] = useState(false);
       return !inline && match ? (
         <div className="relative">
           <div className="absolute right-0">
@@ -31,9 +32,9 @@ const Markdown: FunctionComponent<IProps> = ({ content }) => {
                     fill="currentColor"
                   >
                     <path
-                      fill-rule="evenodd"
+                      fillRule="evenodd"
                       d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clip-rule="evenodd"
+                      clipRule="evenodd"
                     />
                   </svg>
                 ) : (
@@ -45,9 +46,9 @@ const Markdown: FunctionComponent<IProps> = ({ content }) => {
                     stroke="currentColor"
                   >
                     <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"
                     />
                   </svg>
