@@ -1,17 +1,29 @@
 import fs from "fs";
-import { join } from "path";
+import { join, basename } from "path";
 import matter from "gray-matter";
+import getAllFilesRecursively from './utils/files';
 
 const postsDirectory = join(process.cwd(), "_posts");
 
-export function getPostSlugs() {
-  return fs.readdirSync(postsDirectory);
+export function getPostFiles() {
+  return getAllFilesRecursively(postsDirectory);
+}
+
+export function getAllSlugs() {
+  return getPostFiles().map((filePath: string) => {
+    const slug = basename(filePath, ".md");
+    return slug;
+  });
+}
+
+export function getFileBySlug(slug: string) {
+  var filePath = getPostFiles().find((filePath: string) => basename(filePath, ".md") === slug);
+  return filePath;
 }
 
 export function getPostBySlug(slug: string, fields: string[] = []) {
-  const realSlug = slug.replace(/\.md$/, "");
-  const fullPath = join(postsDirectory, `${realSlug}.md`);
-  const fileContents = fs.readFileSync(fullPath, "utf8");
+  var file = getFileBySlug(slug);
+  const fileContents = fs.readFileSync(file, "utf8");
   const { data, content } = matter(fileContents);
 
   type Items = {
@@ -23,7 +35,7 @@ export function getPostBySlug(slug: string, fields: string[] = []) {
   // Ensure only the minimal needed data is exposed
   fields.forEach((field) => {
     if (field === "slug") {
-      items[field] = realSlug;
+      items[field] = slug!;
     }
     if (field === "content") {
       items[field] = content;
@@ -33,15 +45,14 @@ export function getPostBySlug(slug: string, fields: string[] = []) {
       items[field] = data[field];
     }
   });
-
   return items;
 }
 
 export function getAllPosts(fields: string[] = []) {
-  const slugs = getPostSlugs();
+  const slugs = getAllSlugs();
   const posts = slugs
-    .map((slug) => getPostBySlug(slug, fields))
+    .map((slug: any) => getPostBySlug(slug, fields))
     // sort posts by date in descending order
-    .sort((post1, post2) => (post1.date > post2.date ? -1 : 1));
+    .sort((post1: any, post2: any) => (post1.date > post2.date ? -1 : 1));
   return posts;
 }
