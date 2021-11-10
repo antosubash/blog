@@ -31,8 +31,7 @@
     "remark-highlight.js": "^6.0.0",
     "remark-html": "13.0.1",
     "remark-math": "^5.1.0",
-    "remark-toc": "^8.0.1",
-    "typescript": "^4.2.4"
+    "remark-toc": "^8.0.1"
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",
