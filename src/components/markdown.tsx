@@ -15,9 +15,9 @@ interface IProps {
 }
 
 const Markdown: FunctionComponent<IProps> = ({ content }) => {
-  const [isCopied, setIsCopied] = useState(false);
   const components: any = {
     code({ node, inline, className, children, ...props }: any) {
+      const [isCopied, setIsCopied] = useState(false);
       const match = /language-(\w+)/.exec(className || "");
       return !inline && match ? (
         <div className="relative">
