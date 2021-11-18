@@ -1,5 +1,5 @@
 ---
-title: "Orchard core. Getting started. Part 1"
+title: "Orchard core. Getting started - Part 1"
 excerpt: "In this post we will see how to get started with the orchard core."
 date: "2021-11-01"
 videoId: ItfKWbKxPAw
