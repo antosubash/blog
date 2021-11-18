@@ -49,6 +49,22 @@ Click Save
 
 Create a new policy to and set is as default. All credentials and any origin, headers and methods.
 
+Update the CORS in CMS `Startup.cs` file under `ConfigureServices` function.
+
+```cs
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddCors(o => o.AddDefaultPolicy(builder =>
+    {
+        builder
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    }));
+    services.AddOrchardCms();
+}
+```
+
 ## Create a NextJS App
 
 ```bash
