@@ -254,6 +254,4 @@ yarn // To install the npm packages
 yarn dev // To run the app
 ```
 
-Next js Repo : <https://github.com/antosubash/Anto.OrchardCore.NextJs>
-
-Orchard Core CMS Repo :  <https://github.com/antosubash/Anto.OrchardCore.CMS>
+Repo : <https://github.com/antosubash/OrchardCoreReactAuth>
