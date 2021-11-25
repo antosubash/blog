@@ -1,5 +1,5 @@
 import { siteMetadata } from "../data/siteMetadata";
-import PostType from "../types/post";
+import PostType from "@blog/types/postType";
 
 const generateRssItem = (post: PostType) => `
   <item>

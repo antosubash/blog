@@ -2,7 +2,7 @@ import { AppProps } from "next/app";
 import "../styles/index.css";
 import "../node_modules/highlight.js/styles/dark.css";
 import { ThemeProvider } from "next-themes";
-import LayoutWrapper from "../components/layout-wrapper";
+import LayoutWrapper from "@components/layout-wrapper";
 import { AnimateSharedLayout, motion } from "framer-motion";
 export default function MyApp({ Component, pageProps, router }: AppProps) {
   const spring = {

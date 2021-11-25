@@ -1,10 +1,10 @@
 /* eslint-disable react/no-unescaped-entities */
-import Container from "../components/container";
-import Layout from "../components/layout";
-import { getAllPosts } from "../lib/api";
+import Container from "@components/container";
+import Layout from "@components/layout";
+import { getAllPosts } from "@lib/api";
 import Head from "next/head";
-import Post from "../types/post";
-import PostItem from "../components/post-item";
+import Post from "@blog/types/postType";
+import PostItem from "@components/post-item";
 import { AnimatePresence, motion } from "framer-motion";
 type Props = {
   allPosts: Post[];

@@ -1,4 +1,4 @@
-import Author from "./author";
+import Author from "@blog/types/author";
 
 type PostType = {
   slug: string;
