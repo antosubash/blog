@@ -3,6 +3,7 @@ title: "dotnet file upload with ABP Blob store and Minio"
 excerpt: "In this post we will implement file upload using the ABP blob store and Minio"
 date: "2021-07-10"
 videoId: YUIHVbOhg_Q
+tags: [ "dotnet", "abp" ]
 author:
   name: Anto Subash
   picture: "/assets/blog/authors/anto.jpg"

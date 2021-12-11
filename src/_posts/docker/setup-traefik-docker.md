@@ -2,6 +2,7 @@
 title: "Traefik setup with docker swarm"
 excerpt: "In this post you will see how to setup traefik with docker swarm. Along with that we will also setup Portainer and Swarmpit so that it is easy to manage the docker swarm."
 date: "2020-09-17T05:35:07.322Z"
+tags: [ "docker", "traefik" ]
 author:
   name: Anto Subash
   picture: "/assets/blog/authors/anto.jpg"

@@ -28,7 +28,7 @@ const Index = ({ allPosts }: Props) => {
               <AnimatePresence>
                 {!allPosts.length && "No posts found."}
                 {allPosts.map((post) => {
-                  const { slug, date, title, excerpt } = post;
+                  const { slug, date, title, excerpt, tags } = post;
                   return (
                     <motion.div
                       initial={{ opacity: 0 }}
@@ -42,6 +42,7 @@ const Index = ({ allPosts }: Props) => {
                         date={date}
                         title={title}
                         summary={excerpt}
+                        tags={tags}
                       ></PostItem>
                     </motion.div>
                   );
@@ -65,6 +66,7 @@ export const getStaticProps = async () => {
     "author",
     "coverImage",
     "excerpt",
+    "tags"
   ]);
 
   return {

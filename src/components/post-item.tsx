@@ -1,12 +1,14 @@
 import Link from "next/link";
 import React from "react";
 import formatDate from "../lib/utils/formatDate";
+import Tag from "./tag";
 
 interface PostItemProps {
   slug: string;
   date: string;
   title: string;
   summary: string;
+  tags: string[];
 }
 
 const PostItem = (props: PostItemProps) => {
@@ -40,6 +42,9 @@ const PostItem = (props: PostItemProps) => {
               >
                 Read more &rarr;
               </a>
+            </div>
+            <div>
+              {props.tags.map((tag) => <Tag text={tag}/>)}
             </div>
           </div>
         </div>

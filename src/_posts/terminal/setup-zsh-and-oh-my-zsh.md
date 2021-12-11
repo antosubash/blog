@@ -2,6 +2,7 @@
 title: "Set up Wsl with zsh and oh-my-zsh"
 excerpt: "In this post we will see how to setup zsh shell in the wsl and use oh-my-zsh."
 date: "2020-12-12"
+tags: [ "terminal" ]
 author:
   name: Anto Subash
   picture: "/assets/blog/authors/anto.jpg"

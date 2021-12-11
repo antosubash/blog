@@ -3,6 +3,7 @@ title: "Add a new Module to the ABP App"
 excerpt: "In this post we will see how to develop a modular abp application. We will add a new module to default abp app and then use the same database to store the modules data and the identity data."
 date: "2021-11-02"
 videoId: z7Nej3q9t80
+tags: [ "abp", "module" ]
 author:
   name: Anto Subash
   picture: "/assets/blog/authors/anto.jpg"

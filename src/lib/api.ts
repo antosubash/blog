@@ -11,7 +11,32 @@ export function getPostFiles() {
 }
 
 export function getAllTags() {
-  return getDirectories(postsDirectory);
+  var allPosts = getAllPosts(["tags"]);
+  var allTags: any[] = [];
+  allPosts.forEach((post: { tags: any[] }) => {
+    post.tags.forEach((tag) => {
+      if (!allTags.includes(tag)) {
+        allTags.push(tag);
+      }
+    });
+  });
+  return allTags;
+}
+
+export function getPostByTag(tag: string) {
+  const allPosts = getAllPosts([
+    "title",
+    "date",
+    "slug",
+    "author",
+    "coverImage",
+    "excerpt",
+    "tags",
+  ]);
+  const posts = allPosts.filter((post: any) => {
+    return post.tags.includes(tag);
+  });
+  return posts;
 }
 
 export function getAllSlugs() {
@@ -52,6 +77,7 @@ export function getPostBySlug(slug: string, fields: string[] = []) {
       items[field] = data[field];
     }
   });
+
   return items;
 }
 

@@ -1,5 +1,6 @@
 import Container from "@components/container";
 import Layout from "@components/layout";
+import Tag from "@components/tag";
 import { getAllTags } from "@lib/api";
 
 type Props = {
@@ -9,7 +10,13 @@ type Props = {
 const Index = ({ tags }: Props) => {
   return (
     <Layout>
-      <Container>{tags.map((tag) => tag)}</Container>
+      <Container>
+        <div className="grid lg:grid-cols-6 md:grid-cols-3 gap-4">
+          {tags.map((tag) => (
+            <Tag text={tag} />
+          ))}
+        </div>
+      </Container>
     </Layout>
   );
 };

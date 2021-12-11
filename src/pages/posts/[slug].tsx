@@ -64,6 +64,7 @@ export async function getStaticProps({ params }: Params) {
     "ogImage",
     "coverImage",
     "videoId",
+    "tags"
   ]);
   return {
     props: {
