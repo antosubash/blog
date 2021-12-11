@@ -11,7 +11,7 @@ const Index = ({ tags }: Props) => {
   return (
     <Layout>
       <Container>
-        <div className="grid lg:grid-cols-6 md:grid-cols-3 gap-4">
+        <div className="grid lg:grid-cols-5 md:grid-cols-3 gap-4">
           {tags.map((tag) => (
             <Tag text={tag} />
           ))}
