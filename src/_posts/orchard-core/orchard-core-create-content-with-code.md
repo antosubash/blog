@@ -1,0 +1,140 @@
+---
+title: "Create content with code in Orchard Core - Part 3"
+excerpt: "In this post we will see how to create content types using the code in Orchard Core."
+date: "2021-11-27"
+videoId: bYk3JCFcf94 
+author:
+  name: Anto Subash
+  picture: "/assets/blog/authors/anto.jpg"
+  url: "https://antosubash.com"
+---
+
+## Intro
+
+In this post we will see how to create content types using the code in Orchard Core.
+
+## Create a CMS
+
+```bash
+dotnet new occms -n MyCms
+```
+
+## Add a module to the cms with part
+
+```bash
+dotnet new ocmodulecms --name MyCms.Projects
+```
+
+## Create a solution and add the projects
+
+To create a solution
+
+```bash
+dotnet new sln -n ContentWithCode
+```
+
+To add projects to the solution.
+
+```bash
+dotnet sln add .\MyCms\MyCms.csproj
+dotnet sln add .\MyCms.Projects\MyCms.Projects.csproj
+```
+
+To add Module as a reference to the project
+
+```bash
+dotnet add .\MyCms\MyCms.csproj reference .\MyCms.Projects\MyCms.Projects.csproj
+```
+
+## Add migration
+
+Create the migrations class `Migrations.cs` file in our module `MyCms.Projects`
+
+```cs
+using OrchardCore.ContentManagement.Metadata;
+using OrchardCore.ContentManagement.Metadata.Settings;
+using OrchardCore.Data.Migration;
+
+namespace MyCms.Projects
+{
+    public class Migrations : DataMigration
+    {
+        IContentDefinitionManager _contentDefinitionManager;
+
+        public Migrations(IContentDefinitionManager contentDefinitionManager)
+        {
+            _contentDefinitionManager = contentDefinitionManager;
+        }
+
+        public int Create()
+        {
+            _contentDefinitionManager.AlterTypeDefinition("Project", type => type
+                .Draftable()
+                .Versionable()
+                .Creatable()
+                .Securable()
+                .Listable()
+                .WithPart("Project")
+            );
+
+            _contentDefinitionManager.AlterPartDefinition("Project", part => part
+                .WithField("Name", field => field
+                    .OfType("TextField")
+                    .WithDisplayName("Name")
+                )
+                .WithField("StartDate", field => field
+                    .OfType("DateField")
+                    .WithDisplayName("Start date")
+                )
+                .WithField("Image", field => field
+                    .OfType("MediaField")
+                    .WithDisplayName("Main image")
+                )
+                .WithField("Cost", field => field
+                    .OfType("NumericField")
+                    .WithDisplayName("Cost")
+                )
+            );
+
+            return 1;
+        }
+    }
+}
+```
+
+Update the start up file to add the migration.
+
+```cs
+services.AddScoped<IDataMigration,Migrations>();
+```
+
+## Create a Headless Orchard CMS
+
+Run the `MyCms` project.
+
+```cs
+dotnet run
+```
+
+You will see a Setup screen in the `Recipe` dropdown choose the `Headless Site`
+
+![Setup](/assets/posts/orchard/part3/orchardcore3.1.png)
+
+Once the setup is complete then enable the `MyCms.Projects` module.
+
+![Features](/assets/posts/orchard/part3/orchardcore3.2.png)
+
+Go to Features and you will see the list of all the features. Search for "MyCms.Projects" and enable it.
+
+![Enable](/assets/posts/orchard/part3/orchardcore3.3.png)
+
+Once the module is enabled then we can start creating our content.
+
+Go to `Content Items` page you will see a `New Projects` menu now.
+
+![New Projects](/assets/posts/orchard/part3/orchardcore3.4.png)
+
+You will be able to create a new project now.
+
+![Create Projects](/assets/posts/orchard/part3/orchardcore3.6.png)
+
