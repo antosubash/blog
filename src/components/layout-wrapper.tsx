@@ -9,12 +9,16 @@ const LayoutWrapper = ({ children }: any) => {
           <div>
             <a href="/" aria-label="Blog">
               <PageTitle>Anto Subash.</PageTitle>
-              <p className="text-lg leading-7 px-5 text-center text-gray-500 dark:text-gray-400">
+              <p className="hidden md:block text-lg leading-7 px-5 text-center text-gray-500 dark:text-gray-400">
                 A personal blog from a lazy programmer.
               </p>
             </a>
           </div>
+
           <div className="flex items-center text-base leading-5">
+            <a href="/" className="font-bold text-xl px-5" >Home</a>
+            <a href="/tags" className="font-bold text-xl px-5" >Tags</a>
+            <a href="https://antosubash.com" className="font-bold text-xl px-5" >About</a>
             <ThemeSwitch />
           </div>
         </header>

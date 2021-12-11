@@ -1,12 +1,42 @@
 import fs from "fs";
 import { join, basename } from "path";
 import matter from "gray-matter";
-import getAllFilesRecursively from './utils/files';
+import getAllFilesRecursively from "./utils/files";
+import getDirectories from "./utils/directories";
 
 const postsDirectory = join(process.cwd(), "_posts");
 
 export function getPostFiles() {
   return getAllFilesRecursively(postsDirectory);
+}
+
+export function getAllTags() {
+  var allPosts = getAllPosts(["tags"]);
+  var allTags: any[] = [];
+  allPosts.forEach((post: { tags: any[] }) => {
+    post.tags.forEach((tag) => {
+      if (!allTags.includes(tag)) {
+        allTags.push(tag);
+      }
+    });
+  });
+  return allTags;
+}
+
+export function getPostByTag(tag: string) {
+  const allPosts = getAllPosts([
+    "title",
+    "date",
+    "slug",
+    "author",
+    "coverImage",
+    "excerpt",
+    "tags",
+  ]);
+  const posts = allPosts.filter((post: any) => {
+    return post.tags.includes(tag);
+  });
+  return posts;
 }
 
 export function getAllSlugs() {
@@ -17,7 +47,9 @@ export function getAllSlugs() {
 }
 
 export function getFileBySlug(slug: string) {
-  var filePath = getPostFiles().find((filePath: string) => basename(filePath, ".md") === slug);
+  var filePath = getPostFiles().find(
+    (filePath: string) => basename(filePath, ".md") === slug
+  );
   return filePath;
 }
 
@@ -45,6 +77,7 @@ export function getPostBySlug(slug: string, fields: string[] = []) {
       items[field] = data[field];
     }
   });
+
   return items;
 }
 

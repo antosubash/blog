@@ -3,6 +3,7 @@ title: "Setting up oh-my-posh and PSReadLine in PowerShell"
 excerpt: "In this post we will see how to setup the oh-my-posh and PSReadLine with PowerShell."
 date: "2021-06-30"
 videoId: Cy73CoOx8z8
+tags: [ "terminal" ]
 author:
   name: Anto Subash
   picture: "/assets/blog/authors/anto.jpg"

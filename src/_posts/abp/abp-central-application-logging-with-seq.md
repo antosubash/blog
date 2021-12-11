@@ -3,6 +3,7 @@ title: "Centralized logging for .net core ABP microservices app using Seq. Part 
 excerpt: "In this post we will see how to implement a central logging system for your ABP app using Seq."
 date: "2021-09-26"
 videoId: B-NXJvZ77i8
+tags: [ "abp", "seq", "dotnet" ]
 author:
   name: Anto Subash
   picture: "/assets/blog/authors/anto.jpg"
