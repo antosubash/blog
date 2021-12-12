@@ -58,10 +58,10 @@ const LayoutWrapper = ({ children }: any) => {
           <Transition
             as={Fragment}
             show={isShowing}
-            enter="transform transition duration-[400ms]"
+            enter="transform transition duration-[900ms]"
             enterFrom="opacity-0"
             enterTo="opacity-100"
-            leave="transform duration-200 transition ease-in-out"
+            leave="transform duration-[900ms] transition ease-in-out"
             leaveFrom="opacity-100"
             leaveTo="opacity-0 scale-95 "
           >
