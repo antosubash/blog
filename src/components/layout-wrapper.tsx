@@ -1,7 +1,10 @@
 import SectionContainer from "./section-container";
 import ThemeSwitch from "./theme-switch";
 import PageTitle from "./page-title";
+import { Transition } from "@headlessui/react";
+import { Fragment, useState } from "react";
 const LayoutWrapper = ({ children }: any) => {
+  let [isShowing, setIsShowing] = useState(false);
   return (
     <SectionContainer>
       <div className="flex flex-col justify-between h-screen">
@@ -14,7 +17,6 @@ const LayoutWrapper = ({ children }: any) => {
               </p>
             </a>
           </div>
-
           <div className="flex items-center text-base leading-5">
             <div className="hidden md:block">
               <a href="/" className="font-bold px-5">
@@ -29,8 +31,11 @@ const LayoutWrapper = ({ children }: any) => {
             </div>
 
             <ThemeSwitch />
-            <div className="hidden">
-              <button className="w-8 h-8 p-1 ml-1 mr-1 rounded sm:ml-4">
+            <div className="md:hidden">
+              <button
+                onClick={() => setIsShowing(!isShowing)}
+                className="w-8 h-8 p-1 ml-1 mr-1 rounded sm:ml-4"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-6 w-6"
@@ -49,6 +54,45 @@ const LayoutWrapper = ({ children }: any) => {
             </div>
           </div>
         </header>
+        <div className="md:hidden">
+          <Transition
+            as={Fragment}
+            show={isShowing}
+            enter="transform transition duration-[400ms]"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="transform duration-200 transition ease-in-out"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0 scale-95 "
+          >
+            <ul className="border-b-2 border-t-2 border-gray-500">
+              <li className="active">
+                <a
+                  href="/"
+                  className="block text-xl text-center px-2 py-4 hover:bg-gray-400 dark:hover:bg-gray-700 font-bold"
+                >
+                  Home
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/tags"
+                  className="block text-xl text-center px-2 py-4 hover:bg-gray-400 dark:hover:bg-gray-700 font-bold"
+                >
+                  Tags
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://antosubash.com"
+                  className="block text-xl text-center px-2 py-4 hover:bg-gray-400 dark:hover:bg-gray-700 font-bold"
+                >
+                  About
+                </a>
+              </li>
+            </ul>
+          </Transition>
+        </div>
         <main className="mb-auto">{children}</main>
       </div>
     </SectionContainer>
