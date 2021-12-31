@@ -90,6 +90,11 @@ This db context will configure the entity and also seed the database with one da
 ## Create the minimal module
 
 ```cs
+[DependsOn(
+    typeof(AbpAspNetCoreMvcModule),
+    typeof(AbpAutofacModule),
+    typeof(AbpEntityFrameworkCoreSqliteModule)
+)]
 public class MinimalModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
