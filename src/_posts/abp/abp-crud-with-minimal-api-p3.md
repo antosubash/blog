@@ -1,5 +1,5 @@
 ---
-title: "Minimal Api with ABP - CRUD - Part 3"
+title: "Minimal Api with ABP - swagger and CRUD - Part 3"
 excerpt: "In this post we will see how to use minimal api with the ABP application to create a CRUD app."
 date: "2021-12-31"
 videoId: 
