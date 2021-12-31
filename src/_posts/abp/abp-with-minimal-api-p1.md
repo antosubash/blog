@@ -1,5 +1,5 @@
 ---
-title: "Minimal Api with ABP - Part 1"
+title: "Minimal Api with ABP - Hello World - Part 1"
 excerpt: "In this post we will see how to use minimal api with the ABP application."
 date: "2021-12-30"
 videoId: 
