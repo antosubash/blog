@@ -30,8 +30,6 @@ To add the required packages use the `dotnet add package` command.
 
 ```bash
 dotnet add package Volo.Abp.Autofac
-dotnet add package Volo.Abp.Core
-dotnet add package Volo.Abp.AspNetCore
 dotnet add package Volo.Abp.AspNetCore.Mvc
 dotnet add package Volo.Abp.EntityFrameworkCore.Sqlite
 dotnet add package Microsoft.EntityFrameworkCore.Design
