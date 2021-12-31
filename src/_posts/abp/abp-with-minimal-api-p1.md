@@ -2,7 +2,7 @@
 title: "Minimal Api with ABP - Part 1"
 excerpt: "In this post we will see how to use minimal api with the ABP application."
 date: "2021-12-30"
-videoId: 
+videoId: 1xgKy7ucXoE
 tags: [ "dotnet", "abp" ]
 author:
   name: Anto Subash
