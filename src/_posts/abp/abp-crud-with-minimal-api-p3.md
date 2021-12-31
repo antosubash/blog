@@ -1,9 +1,9 @@
 ---
-title: "Minimal Api with ABP - EF Core - Part 2"
-excerpt: "In this post we will see how to use minimal api with the ABP application and configure EF core."
-date: "2021-12-30"
+title: "Minimal Api with ABP - CRUD - Part 3"
+excerpt: "In this post we will see how to use minimal api with the ABP application to create a CRUD app."
+date: "2021-12-31"
 videoId: 
-tags: [ "dotnet", "abp" ]
+tags: [ "dotnet", "abp", "CRUD" ]
 author:
   name: Anto Subash
   picture: "/assets/blog/authors/anto.jpg"
@@ -12,18 +12,17 @@ author:
 
 ## Intro
 
-In this we will continue with the last one and add Ef core to our Minimal ABP module.
+In this we will continue with the last one and add create a CRUD API with Minimal API.
 
-This is a continuation of [Part 1](https://blog.antosubash.com/posts/abp-with-minimal-api-p1)
-
+This is a continuation of [Part 2](https://blog.antosubash.com/posts/abp-with-minimal-api-p2)
 
 ## Create the project
 
 ```bash
-dotnet new web -n MinimalEFWithAbp
+dotnet new web -n MinimalAbpCRUD
 ```
 
-Navigate to the `MinimalEFWithAbp` folder and add the required packages.
+Navigate to the `MinimalAbpCRUD` folder and add the required packages.
 
 ## Add required packages
 
@@ -90,10 +89,17 @@ This db context will configure the entity and also seed the database with one da
 ## Create the minimal module
 
 ```cs
+[DependsOn(
+    typeof(AbpAspNetCoreMvcModule),
+    typeof(AbpAutofacModule),
+    typeof(AbpEntityFrameworkCoreSqliteModule)
+)]
 public class MinimalModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
-    {     
+    {  
+        context.Services.AddEndpointsApiExplorer();
+        context.Services.AddSwaggerGen();   
         context.Services.AddAbpDbContext<MyDbContext>(options =>
         {
             options.AddDefaultRepositories(includeAllEntities: true);
@@ -103,6 +109,18 @@ public class MinimalModule : AbpModule
             options.UseSqlite();
         });
     }
+
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    {
+        var app = context.GetApplicationBuilder();
+        var env = context.GetEnvironment();
+        if (env.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
+        app.UseHttpsRedirection();
+    }
 }
 ```
 
@@ -110,8 +128,7 @@ public class MinimalModule : AbpModule
 
 ```cs
 var builder = WebApplication.CreateBuilder(args);
-builder.Host.AddAppSettingsSecretsJson()
-    .UseAutofac();
+builder.Host.AddAppSettingsSecretsJson().UseAutofac();
 builder.Services.ReplaceConfiguration(builder.Configuration);
 builder.Services.AddApplication<MinimalModule>();
 var app = builder.Build();
@@ -121,11 +138,28 @@ app.MapGet("/book", async ([FromServices] IRepository<Book, Guid> repository) =>
     return await repository.GetListAsync();
 });
 
+app.MapPost("/book", async (string name, [FromServices] IRepository<Book, Guid> repository) =>
+{
+    var newBook = await repository.InsertAsync(new Book(Guid.NewGuid(),name));
+    return Results.Created($"/book/{newBook.Id}", newBook);
+});
+
+app.MapPut("/book/{id}", async (Guid id, string name, [FromServices] IRepository<Book, Guid> repository) =>
+{
+    var book = await repository.GetAsync(id);
+    book.Name = name;
+    return await repository.UpdateAsync(book);
+});
+
+app.MapDelete("/book/{id}", async (Guid id, [FromServices] IRepository<Book, Guid> repository) =>
+{
+    var book = await repository.GetAsync(id);
+    await repository.DeleteAsync(id);
+});
+
 app.InitializeApplication();
 app.Run();
 ```
-
-We have one `GET` request which will return the data from the db.
 
 ## Create migration
 
@@ -134,7 +168,6 @@ Now our app is ready lets create migrations for the DBcontext.
 ```bash
 dotnet ef migrations add init
 ```
-
 
 ## Apply migrations to DB
 
@@ -150,6 +183,6 @@ dotnet run
 
 ## View the Book
 
-Once the application is launched navigate to `/book` you will see the seeded book as a json response.
+Once the application is launched navigate to `/swagger` you will see swagger UI.
 
-Repo : <https://github.com/antosubash/AbpMinimalApiWithEFCore>
+Repo : <https://github.com/antosubash/AbpMinimalApiCRUD>
