@@ -2,7 +2,7 @@
 title: "Minimal Api with ABP - EF Core - Part 2"
 excerpt: "In this post we will see how to use minimal api with the ABP application and configure EF core."
 date: "2021-12-30"
-videoId: 
+videoId: IW_3Y9eMa4o
 tags: [ "dotnet", "abp" ]
 author:
   name: Anto Subash
