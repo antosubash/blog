@@ -28,8 +28,6 @@ Let add the abp packages.
 
 ```bash
 dotnet add package Volo.Abp.Autofac
-dotnet add package Volo.Abp.Core
-dotnet add package Volo.Abp.AspNetCore
 dotnet add package Volo.Abp.AspNetCore.Mvc
 ```
 
@@ -44,10 +42,6 @@ lets create a very simple module.
 )]
 public class MinimalModule : AbpModule
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-        context.Services.AddAssemblyOf<MinimalModule>();
-    }
 }
 ```
 
