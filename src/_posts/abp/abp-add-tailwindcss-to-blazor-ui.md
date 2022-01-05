@@ -102,6 +102,13 @@ We need to create 2 `css` files
 - `/Style/tailwind.css` // This is the input
 - `/wwwroot/tailwind.css` // This is the output
 
+Update the input file with the `imports`
+
+```css
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+```
+
 ### Update the package.json
 
 We will update the scripts section of the `package.json`
