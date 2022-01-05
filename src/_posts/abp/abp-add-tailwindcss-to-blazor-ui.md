@@ -12,7 +12,7 @@ author:
 
 ## Intro
 
-In this post we will explore how to add TailWind CSS to your ABP Blazor application.
+In this post we will explore how to add TailWind CSS to your ABP Blazor application. We will configure tailwind in a way that it will not conflict with your current bootstrap theme. Tailwind comes with the JIT mode. so you will only use the css need not the whole library. This will result in smaller css file compared to another framework.
 
 ## Prerequisites
 
