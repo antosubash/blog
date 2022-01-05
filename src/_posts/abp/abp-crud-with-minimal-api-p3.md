@@ -2,7 +2,7 @@
 title: "Minimal Api with ABP - Swagger and CRUD - Part 3"
 excerpt: "In this post we will see how to use minimal api with the ABP application to create a CRUD app."
 date: "2021-12-31"
-videoId: 
+videoId: H_GYXKJuCTA
 tags: [ "dotnet", "abp", "CRUD" ]
 author:
   name: Anto Subash
@@ -12,7 +12,7 @@ author:
 
 ## Intro
 
-In this we will continue with the last one and add create a CRUD API with Minimal API.
+In this we will continue with the last one and create a CRUD API with Minimal API.
 
 This is a continuation of [Part 2](https://blog.antosubash.com/posts/abp-with-minimal-api-p2)
 
