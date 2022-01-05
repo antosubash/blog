@@ -2,7 +2,7 @@
 title: "Add tailwindcss to your ABP Blazor UI"
 excerpt: "In this post we will see how to add tailwind css to your ABP Blazor UI."
 date: "2022-01-05"
-videoId: 
+videoId: _3kK8qWGD2w
 tags: [ "abp", "blazor", "tailwind" ]
 author:
   name: Anto Subash
