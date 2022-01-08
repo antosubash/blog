@@ -14,12 +14,6 @@ author:
 
 In this post we will see how to use NSwag to generate typescript client with ABP.
 
-## Install NSwag
-
-```bash
-npm install nswag -g
-```
-
 ## Create an abp App and Run Migrations
 
 ### Create the App
@@ -115,6 +109,12 @@ this will fix the generic list problem and simplify the name in the swagger ui.
 
 Now we are ready to generate the typescript client.
 
+## Install NSwag
+
+```bash
+npm install nswag -g
+```
+
 ## Generate typescript client
 
 ```bash
@@ -122,3 +122,21 @@ nswag openapi2tsclient /input:https://localhost:44392/swagger/v1/swagger.json /o
 ```
 
 This will generate the `Axios` client for you to use.
+
+## Other generators
+
+Other options is to use the `openapi-typescript-codegen` package. Install the package globally.
+
+```bash
+npm install openapi-typescript-codegen -g
+```
+
+create the local copy of swagger json from here <https://localhost:44392/swagger/v1/swagger.json> now we can use this json file to generate type script client.
+
+```bash
+openapi -i swagger.json -o api -c axios
+```
+
+this will generate axios client with proper structure.
+
+Repo : <https://github.com/antosubash/AbpNSwag>
