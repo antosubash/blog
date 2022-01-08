@@ -97,12 +97,13 @@ namespace AbpNSwag
 
 This file is copied from the here <https://github.com/domaindrivendev/Swashbuckle.WebApi/blob/master/Swashbuckle.Core/Swagger/TypeExtensions.cs>
 
-### Change the custom schema id
+### Change the custom schema id and operation id
 
 Update `AddAbpSwaggerGenWithOAuth` method call in your web project.
 
 ```cs
 options.CustomSchemaIds(type => type.FriendlyId().Replace("[", "Of").Replace("]", ""));
+options.CustomOperationIds(options => $"{options.ActionDescriptor.RouteValues["controller"]}{options.ActionDescriptor.RouteValues["action"]}");
 ```
 
 this will fix the generic list problem and simplify the name in the swagger ui.
