@@ -1,7 +1,7 @@
 ---
 title: "Using NSwag to generate typescript client with ABP"
 excerpt: "In this post we will see how to use how to use the NSwag to generate a typescript client with ABP"
-date: "2021-01-08"
+date: "2022-01-08"
 videoId: 
 tags: [ "dotnet", "abp", "react" ]
 author:
