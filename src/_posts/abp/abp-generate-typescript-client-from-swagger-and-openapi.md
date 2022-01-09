@@ -1,5 +1,5 @@
 ---
-title: "Using NSwag to generate typescript client with ABP"
+title: "Generate typescript client from swagger / OpenApi"
 excerpt: "In this post we will see how to use how to use the NSwag to generate a typescript client with ABP"
 date: "2022-01-08"
 videoId: 
@@ -12,7 +12,7 @@ author:
 
 ## Intro
 
-In this post we will see how to use NSwag to generate typescript client with ABP.
+In this post we will see how to use NSwag to generate typescript client from swagger and open api. We will use abp as a sample app and generate typescript client.
 
 ## Create an abp App and Run Migrations
 
