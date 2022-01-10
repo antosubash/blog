@@ -2,7 +2,7 @@
 title: "Generate typescript client from swagger / OpenApi"
 excerpt: "In this post we will see how to use how to use the NSwag to generate a typescript client with ABP"
 date: "2022-01-08"
-videoId: 
+videoId: fOEt_YI-Oww 
 tags: [ "dotnet", "abp", "react" ]
 author:
   name: Anto Subash
