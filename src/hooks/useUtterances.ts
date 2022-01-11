@@ -2,7 +2,7 @@ import React from "react";
 import { useTheme } from "next-themes";
 
 // username/repo format
-const REPO_NAME = "antosubash/blog";
+const REPO_NAME = "antosubash/blog-comments";
 
 export const useUtterances = (commentNodeId: string) => {
   const { theme } = useTheme();
