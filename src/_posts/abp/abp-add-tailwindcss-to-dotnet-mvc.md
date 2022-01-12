@@ -2,7 +2,7 @@
 title: "Add tailwindcss to your ABP MVC UI"
 excerpt: "In this post we will see how to add tailwind css to your ABP MVC UI."
 date: "2022-01-11"
-videoId:
+videoId: bD7h4jiJXts
 tags: [ "abp", "dotnet", "tailwind" ]
 author:
   name: Anto Subash
