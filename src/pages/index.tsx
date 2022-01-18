@@ -8,13 +8,11 @@ import PostItem from "@components/post-item";
 import Link from "@components/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-import { POSTS_PER_PAGE } from "@lib/constants";
 
 type Props = {
   allPosts: Post[];
-  initialDisplayPosts: Post[];
 };
-const Index = ({ initialDisplayPosts, allPosts }: Props) => {
+const Index = ({ allPosts }: Props) => {
   const [searchValue, setSearchValue] = useState("");
   const filteredBlogPosts = allPosts.filter((frontMatter) => {
     const searchContent =
@@ -27,8 +25,8 @@ const Index = ({ initialDisplayPosts, allPosts }: Props) => {
 
   // If initialDisplayPosts exist, display it if no searchValue is specified
   const displayPosts =
-    initialDisplayPosts.length > 0 && !searchValue
-      ? initialDisplayPosts
+    allPosts.length > 0 && !searchValue
+      ? allPosts
       : filteredBlogPosts;
 
   return (
@@ -92,15 +90,6 @@ const Index = ({ initialDisplayPosts, allPosts }: Props) => {
             </ul>
           </div>
         </Container>
-        <div className="flex justify-end text-base font-medium leading-6 p-8">
-          <Link
-            href="/page/1"
-            className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-            aria-label="all posts"
-          >
-            All Posts &rarr;
-          </Link>
-        </div>
       </Layout>
     </>
   );
@@ -118,9 +107,8 @@ export const getStaticProps = async () => {
     "excerpt",
     "tags",
   ]);
-  const initialDisplayPosts = allPosts.slice(0, POSTS_PER_PAGE);
   
   return {
-    props: { initialDisplayPosts, allPosts },
+    props: { allPosts },
   };
 };
