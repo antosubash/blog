@@ -27,7 +27,7 @@ const Markdown: FunctionComponent<IProps> = ({ content }) => {
                 {isCopied ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-10 w-10 p-2"
+                    className="h-10 w-10 p-2 bg-gray-200 dark:bg-gray-700"
                     viewBox="0 0 20 20"
                     fill="currentColor"
                   >
@@ -40,7 +40,7 @@ const Markdown: FunctionComponent<IProps> = ({ content }) => {
                 ) : (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-10 w-10 p-2"
+                    className="h-10 w-10 p-2 bg-gray-200 dark:bg-gray-700"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -80,8 +80,7 @@ const Markdown: FunctionComponent<IProps> = ({ content }) => {
         className="prose max-w-full"
         components={components}
         children={content}
-        remarkPlugins={[html, remarkToc, remarkMath]}
-        rehypePlugins={[rehypeKatex, rehypeRaw]}
+
       />
     </div>
   );

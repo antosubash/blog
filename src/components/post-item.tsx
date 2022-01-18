@@ -44,7 +44,7 @@ const PostItem = (props: PostItemProps) => {
               </a>
             </div>
             <div>
-              {props.tags.map((tag) => <Tag text={tag}/>)}
+              {props.tags.map((tag) => <span id={tag}><Tag text={tag}/></span>)}
             </div>
           </div>
         </div>

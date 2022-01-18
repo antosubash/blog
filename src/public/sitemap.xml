@@ -116,6 +116,12 @@
 
   <url>
     <loc
+      >https://blog.antosubash.com/posts/dotnet-and-react-nextjs-large-file-upload-with-tus</loc
+    >
+  </url>
+
+  <url>
+    <loc
       >https://blog.antosubash.com/posts/orchard-core-create-content-with-code</loc
     >
   </url>
@@ -126,12 +132,6 @@
 
   <url>
     <loc>https://blog.antosubash.com/posts/orchard-core-openid-nextjs</loc>
-  </url>
-
-  <url>
-    <loc
-      >https://blog.antosubash.com/posts/dotnet-and-react-nextjs-large-file-upload-with-tus</loc
-    >
   </url>
 
   <url>

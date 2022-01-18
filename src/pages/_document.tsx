@@ -25,7 +25,7 @@ export default class MyDocument extends Document {
           <meta name="msapplication-TileColor" content="#000000" />
           <meta name="theme-color" content="#000000" />
         </Head>
-        <body className="bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200">
+        <body className="bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-200">
           <Main />
           <NextScript />
         </body>
