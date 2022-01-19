@@ -5,9 +5,9 @@ import { getAllPosts } from "@lib/api";
 import Head from "next/head";
 import Post from "@blog/types/postType";
 import PostItem from "@components/post-item";
-import Link from "@components/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
+import { siteMetadata } from "data/siteMetadata";
 
 type Props = {
   allPosts: Post[];
@@ -25,9 +25,7 @@ const Index = ({ allPosts }: Props) => {
 
   // If initialDisplayPosts exist, display it if no searchValue is specified
   const displayPosts =
-    allPosts.length > 0 && !searchValue
-      ? allPosts
-      : filteredBlogPosts;
+    allPosts.length > 0 && !searchValue ? allPosts : filteredBlogPosts;
 
   return (
     <>
@@ -62,7 +60,13 @@ const Index = ({ allPosts }: Props) => {
                 </svg>
               </div>
             </div>
-
+            {!searchValue && (
+              <div className="pt-6 pb-8 space-y-2 md:space-y-5">
+                <h1 className="text-xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100">
+                  Latest
+                </h1>
+              </div>
+            )}
             <ul className="divide-y">
               <AnimatePresence>
                 {!displayPosts.length && "No posts found."}
@@ -107,7 +111,7 @@ export const getStaticProps = async () => {
     "excerpt",
     "tags",
   ]);
-  
+
   return {
     props: { allPosts },
   };
