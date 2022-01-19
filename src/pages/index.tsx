@@ -7,7 +7,6 @@ import Post from "@blog/types/postType";
 import PostItem from "@components/post-item";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-import { siteMetadata } from "data/siteMetadata";
 
 type Props = {
   allPosts: Post[];
