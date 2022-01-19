@@ -23,7 +23,7 @@ const Index = ({ tags }: Props) => {
             {tags.map((t) => {
               return (
                 <div key={t} className="mt-2 mb-2">
-                  <Tag text={t} />
+                  <Tag key={t} text={t} />
                 </div>
               );
             })}
