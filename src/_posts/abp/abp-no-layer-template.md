@@ -27,7 +27,7 @@ dotnet tool update -g Volo.Abp.Cli
 To create the no layers app run the following command.
 
 ```bash
-abp new Acme.BookStore -t no-layers
+abp new Acme.BookStore -t app-nolayers
 ```
 
 This will create the Bookstore app as a single project application.

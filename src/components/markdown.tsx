@@ -3,11 +3,6 @@ import ReactMarkdown from "react-markdown";
 import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import React, { FunctionComponent, useState } from "react";
-import remarkMath from "remark-math";
-import rehypeKatex from "rehype-katex";
-import rehypeRaw from "rehype-raw";
-import html from "remark-html";
-import remarkToc from "remark-toc";
 import CopyToClipboard from "react-copy-to-clipboard";
 import "katex/dist/katex.min.css";
 interface IProps {
@@ -80,7 +75,6 @@ const Markdown: FunctionComponent<IProps> = ({ content }) => {
         className="prose max-w-full"
         components={components}
         children={content}
-
       />
     </div>
   );
