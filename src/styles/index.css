@@ -14,7 +14,6 @@
 
 /* Your own custom utilities */
 
-
 html {
   scroll-behavior: smooth;
 }
@@ -23,12 +22,8 @@ html {
   @apply m-0 p-0 border-0 text-xl rounded-none overflow-auto bg-transparent;
 }
 
-.prose > * {
-  @apply text-gray-800 dark:text-gray-200 text-xl;
-}
-
-.prose code {
-  @apply bg-transparent;
+.prose {
+  @apply text-xl;
 }
 
 .prose a,

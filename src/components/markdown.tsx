@@ -22,7 +22,7 @@ const Markdown: FunctionComponent<IProps> = ({ content }) => {
                 {isCopied ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-10 w-10 p-2 bg-gray-200 dark:bg-gray-700"
+                    className="h-10 w-10 p-2 "
                     viewBox="0 0 20 20"
                     fill="currentColor"
                   >
@@ -35,7 +35,7 @@ const Markdown: FunctionComponent<IProps> = ({ content }) => {
                 ) : (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-10 w-10 p-2 bg-gray-200 dark:bg-gray-700"
+                    className="h-10 w-10 p-2 "
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -72,7 +72,7 @@ const Markdown: FunctionComponent<IProps> = ({ content }) => {
   return (
     <div className="pt-8">
       <ReactMarkdown
-        className="prose max-w-full"
+        className="prose max-w-full text-gray-900 dark:text-gray-50 prose-headings:text-gray-900 dark:prose-headings:text-gray-50"
         components={components}
         children={content}
       />
