@@ -1,0 +1,11 @@
+---
+title: "Removing IdentityServer from ABP No Layer Template"
+excerpt: "In this post we will see how to remove identity server from the No Layer ABP template"
+date: "2022-01-30"
+tags: [ "abp", "dotnet", "no-layers" ]
+videoId: yYqqupOw8uI 
+author:
+  name: Anto Subash
+  picture: "/assets/blog/authors/anto.jpg"
+  url: "https://antosubash.com"
+---

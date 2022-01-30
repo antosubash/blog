@@ -3,7 +3,7 @@ title: "Introduction to ABP No Layer Template"
 excerpt: "In this post we will explore the new experimental no layer template from the ABP framework"
 date: "2022-01-29"
 tags: [ "abp", "dotnet", "no-layers" ]
-videoId: 
+videoId: af4BqBhgftY 
 author:
   name: Anto Subash
   picture: "/assets/blog/authors/anto.jpg"
