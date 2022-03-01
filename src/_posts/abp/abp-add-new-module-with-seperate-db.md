@@ -10,6 +10,8 @@ author:
   url: "https://antosubash.com"
 ---
 
+## Table of contents
+
 ## Add a new Module to the Tiered ABP App with separate database for the module
 
 In this post we will see how to develop a modular with tiered abp application. We will add a new module to tiered abp app and then use the separate database to store the modules data and the identity data.

@@ -8,6 +8,7 @@ author:
   picture: "/assets/blog/authors/anto.jpg"
   url: "https://antosubash.com"
 ---
+## Table of contents
 
 Most of the stack used here are available in my github [repo](https://github.com/antosubash/docker_stack).
 

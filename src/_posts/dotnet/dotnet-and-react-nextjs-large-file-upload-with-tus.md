@@ -9,6 +9,7 @@ author:
   picture: "/assets/blog/authors/anto.jpg"
   url: "https://antosubash.com"
 ---
+## Table of contents
 
 ## Large file upload with dotnet and react with tus
 

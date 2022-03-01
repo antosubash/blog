@@ -5,6 +5,11 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import React, { FunctionComponent, useState } from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
 import "katex/dist/katex.min.css";
+import rehypeKatex from 'rehype-katex';
+import remarkToc from 'remark-toc';
+import remarkGfm from 'remark-gfm';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+import rehypeSlug from 'rehype-slug'
 interface IProps {
   content: string;
 }
@@ -75,6 +80,8 @@ const Markdown: FunctionComponent<IProps> = ({ content }) => {
         className="prose max-w-full text-gray-900 dark:text-gray-50 prose-headings:text-gray-900 dark:prose-headings:text-gray-50 prose-code:bg-transparent text-xl"
         components={components}
         children={content}
+        remarkPlugins={[remarkToc, remarkGfm]}
+        rehypePlugins={[rehypeKatex,rehypeSlug, rehypeAutolinkHeadings]}
       />
     </div>
   );

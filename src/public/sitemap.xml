@@ -87,6 +87,16 @@
   </url>
 
   <url>
+    <loc>https://blog.antosubash.com/posts/abp-no-layer-template</loc>
+  </url>
+
+  <url>
+    <loc
+      >https://blog.antosubash.com/posts/abp-remove-identity-server-from-abp-no-layers-app</loc
+    >
+  </url>
+
+  <url>
     <loc>https://blog.antosubash.com/posts/abp-with-minimal-api-p1</loc>
   </url>
 
@@ -103,12 +113,6 @@
   </url>
 
   <url>
-    <loc
-      >https://blog.antosubash.com/posts/dotnet-and-react-nextjs-large-file-upload-with-tus</loc
-    >
-  </url>
-
-  <url>
     <loc>https://blog.antosubash.com/posts/docker-swarm-localhost</loc>
   </url>
 
@@ -118,6 +122,26 @@
 
   <url>
     <loc>https://blog.antosubash.com/posts/setup-traefik-docker</loc>
+  </url>
+
+  <url>
+    <loc
+      >https://blog.antosubash.com/posts/orchard-core-create-content-with-code</loc
+    >
+  </url>
+
+  <url>
+    <loc>https://blog.antosubash.com/posts/orchard-core-getting-started-p1</loc>
+  </url>
+
+  <url>
+    <loc>https://blog.antosubash.com/posts/orchard-core-openid-nextjs</loc>
+  </url>
+
+  <url>
+    <loc
+      >https://blog.antosubash.com/posts/dotnet-and-react-nextjs-large-file-upload-with-tus</loc
+    >
   </url>
 
   <url>
@@ -134,19 +158,5 @@
 
   <url>
     <loc>https://blog.antosubash.com/posts/setup-zsh-and-oh-my-zsh</loc>
-  </url>
-
-  <url>
-    <loc
-      >https://blog.antosubash.com/posts/orchard-core-create-content-with-code</loc
-    >
-  </url>
-
-  <url>
-    <loc>https://blog.antosubash.com/posts/orchard-core-getting-started-p1</loc>
-  </url>
-
-  <url>
-    <loc>https://blog.antosubash.com/posts/orchard-core-openid-nextjs</loc>
   </url>
 </urlset>
