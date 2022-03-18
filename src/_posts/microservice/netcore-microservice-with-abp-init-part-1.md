@@ -1,5 +1,5 @@
 ---
-title: ".net core microservice application with ABP - Initial setup - Part 1"
+title: ".Net Core microservice application with ABP - Initial setup - Part 1"
 excerpt: "In this post we will see how to do the initial setup for a abp microservice application."
 date: "2022-03-18"
 videoId:  
