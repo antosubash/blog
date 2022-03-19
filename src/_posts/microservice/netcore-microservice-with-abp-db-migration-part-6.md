@@ -24,23 +24,10 @@ For migrations we need to first add contracts and EF core projects as a referenc
         <ProjectReference Include="..\..\services\identity\src\Tasky.IdentityService.EntityFrameworkCore\Tasky.IdentityService.EntityFrameworkCore.csproj"/>
         <ProjectReference Include="..\..\services\SaaSService\src\Tasky.SaaSService.Application.Contracts\Tasky.SaaSService.Application.Contracts.csproj"/>
         <ProjectReference Include="..\..\services\SaaSService\src\Tasky.SaaSService.EntityFrameworkCore\Tasky.SaaSService.EntityFrameworkCore.csproj"/>
-        <ProjectReference Include="..\Tasky.Microservice.Shared\Tasky.Microservice.Shared.csproj"/>
     </ItemGroup>
 ```
 
 We are adding `EntityFrameworkCore` and `Contracts` projects to the DbMigrations project.
-
-## Update the packages
-
-```xml
-    <ItemGroup>
-        <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1"/>
-        <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0"/>
-        <PackageReference Include="Serilog.Sinks.File" Version="5.0.0"/>
-        <PackageReference Include="Serilog.Sinks.Console" Version="4.0.0"/>
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0"/>
-    </ItemGroup>
-```
 
 ## Create `DbMigrationService`
 
@@ -642,6 +629,17 @@ public class IdentityServerDataSeeder : ITransientDependency
         return await _clientRepository.UpdateAsync(client);
     }
 }
+```
+
+## Update the `TaskyDbMigratorModule`
+
+```cs
+typeof(AdministrationServiceEntityFrameworkCoreModule),
+typeof(AdministrationServiceApplicationContractsModule),
+typeof(IdentityServiceEntityFrameworkCoreModule),
+typeof(IdentityServiceApplicationContractsModule),
+typeof(SaaSServiceEntityFrameworkCoreModule),
+typeof(SaaSServiceApplicationContractsModule)
 ```
 
 Repo: <https://github.com/antosubash/AbpMicroservice>
