@@ -134,3 +134,5 @@ public class TaskyHostingModule : AbpModule
 ```
 
 This is the first setup of our microservice application. the package and the modules in this project will become the base of all the services.
+
+Repo: <https://github.com/antosubash/AbpMicroservice>
