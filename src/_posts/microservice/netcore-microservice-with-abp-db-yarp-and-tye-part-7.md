@@ -33,21 +33,6 @@ This will generate a `tye.yaml` file.
 ```yaml
 name: tasky
 services:
-- name: tasky-administration-httpapi-host
-  project: services/administration/host/Tasky.Administration.HttpApi.Host/Tasky.Administration.HttpApi.Host.csproj
-  bindings:
-    - protocol: https
-      port: 7001
-- name: tasky-identityservice-httpapi-host
-  project: services/identity/host/Tasky.IdentityService.HttpApi.Host/Tasky.IdentityService.HttpApi.Host.csproj
-  bindings:
-    - protocol: https
-      port: 7002
-- name: tasky-saas-httpapi-host
-  project: services/saas/host/Tasky.SaaS.HttpApi.Host/Tasky.SaaS.HttpApi.Host.csproj
-  bindings:
-    - protocol: https
-      port: 7003
 - name: tasky-identityserver
   project: apps/Tasky.IdentityServer/Tasky.IdentityServer.csproj
   bindings:
@@ -58,6 +43,21 @@ services:
   bindings:
     - protocol: https
       port: 7500
+- name: tasky-administrationservice-httpapi-host
+  project: services/administration/host/Tasky.AdministrationService.HttpApi.Host/Tasky.AdministrationService.HttpApi.Host.csproj
+  bindings:
+    - protocol: https
+      port: 7001
+- name: tasky-identityservice-httpapi-host
+  project: services/identity/host/Tasky.IdentityService.HttpApi.Host/Tasky.IdentityService.HttpApi.Host.csproj
+  bindings:
+    - protocol: https
+      port: 7002
+- name: tasky-saasservice-httpapi-host
+  project: services/saas/host/Tasky.SaaSService.HttpApi.Host/Tasky.SaaSService.HttpApi.Host.csproj
+  bindings:
+    - protocol: https
+      port: 7003
 ```
 
 ### Run Tye
