@@ -2,7 +2,7 @@
 title: ".Net Core microservice application with ABP - Shared Project - Part 2"
 excerpt: "In this post we will see how to do the create a Shared project which will be used by all services"
 date: "2022-03-19"
-videoId:  
+videoId: qGYeWNj_DI0 
 tags: [ "dotnet", "abp", "microservice", "netcore6" ]
 author:
   name: Anto Subash
