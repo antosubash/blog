@@ -9,6 +9,7 @@ author:
   picture: "/assets/blog/authors/anto.jpg"
   url: "https://antosubash.com"
 ---
+
 ## Table of contents
 
 ## Setup Administration service
@@ -82,22 +83,36 @@ public class AdministrationServiceDbContextFactory : IDesignTimeDbContextFactory
 }
 ```
 
-## Update the `AdministrationDbContext`
+## Update the `AdministrationServiceDbContext`
 
 ```cs
-[ConnectionStringName(AdministrationDbProperties.ConnectionStringName)]
-public class AdministrationDbContext : AbpDbContext<AdministrationDbContext>,
+using Microsoft.EntityFrameworkCore;
+using Volo.Abp.Data;
+using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.AuditLogging.EntityFrameworkCore;
+using Volo.Abp.FeatureManagement.EntityFrameworkCore;
+using Volo.Abp.PermissionManagement.EntityFrameworkCore;
+using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.AuditLogging;
+using Volo.Abp.FeatureManagement;
+using Volo.Abp.PermissionManagement;
+using Volo.Abp.SettingManagement;
+
+namespace Tasky.AdministrationService.EntityFrameworkCore;
+
+[ConnectionStringName(AdministrationServiceDbProperties.ConnectionStringName)]
+public class AdministrationServiceDbContext : AbpDbContext<AdministrationServiceDbContext>,
     IPermissionManagementDbContext,
     ISettingManagementDbContext,
     IFeatureManagementDbContext,
     IAuditLoggingDbContext,
-    IAdministrationDbContext
+    IAdministrationServiceDbContext
 {
     /* Add DbSet for each Aggregate Root here. Example:
      * public DbSet<Question> Questions { get; set; }
      */
 
-    public AdministrationDbContext(DbContextOptions<AdministrationDbContext> options)
+    public AdministrationServiceDbContext(DbContextOptions<AdministrationServiceDbContext> options)
         : base(options)
     {
     }
@@ -111,13 +126,69 @@ public class AdministrationDbContext : AbpDbContext<AdministrationDbContext>,
     {
         base.OnModelCreating(builder);
 
-        builder.ConfigureAdministration();
+        builder.ConfigureAdministrationService();
         builder.ConfigurePermissionManagement();
         builder.ConfigureSettingManagement();
         builder.ConfigureAuditLogging();
         builder.ConfigureFeatureManagement();
     }
 }
+```
+
+## Update the `AdministrationServiceEntityFrameworkCoreModule`
+
+```cs
+using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.Modularity;
+using Volo.Abp.AuditLogging.EntityFrameworkCore;
+using Volo.Abp.FeatureManagement.EntityFrameworkCore;
+using Volo.Abp.PermissionManagement.EntityFrameworkCore;
+using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using System;
+
+namespace Tasky.AdministrationService.EntityFrameworkCore;
+
+[DependsOn(
+    typeof(AdministrationServiceDomainModule),
+    typeof(AbpEntityFrameworkCoreModule)
+)]
+[DependsOn(typeof(AbpAuditLoggingEntityFrameworkCoreModule))]
+[DependsOn(typeof(AbpFeatureManagementEntityFrameworkCoreModule))]
+[DependsOn(typeof(AbpPermissionManagementEntityFrameworkCoreModule))]
+[DependsOn(typeof(AbpSettingManagementEntityFrameworkCoreModule))]
+public class AdministrationServiceEntityFrameworkCoreModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpDbContextOptions>(options =>
+        {
+            options.UseNpgsql();
+        });
+        
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        context.Services.AddAbpDbContext<AdministrationServiceDbContext>(options =>
+        {
+            options.ReplaceDbContext<IPermissionManagementDbContext>();
+            options.ReplaceDbContext<ISettingManagementDbContext>();
+            options.ReplaceDbContext<IFeatureManagementDbContext>();
+            options.ReplaceDbContext<IAuditLoggingDbContext>();
+
+            options.AddDefaultRepositories(true);
+        });
+    }
+}
+```
+
+## Prepare for the migration
+
+Add the ef core design nuget for the migrations.
+
+```xml
+<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.1">
+    <PrivateAssets>all</PrivateAssets>
+    <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+</PackageReference>
 ```
 
 Once this is created delete `EntityFrameworkCore` folder can be created from the host project.
