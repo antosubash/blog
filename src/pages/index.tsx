@@ -37,6 +37,7 @@ const Index = ({ allPosts }: Props) => {
         <Container>
           <DefaultSeo
             openGraph={{
+              title: "Anto Subash's blog",
               type: "website",
               locale: "en",
               url: "https://blog.antosubash.com/",
