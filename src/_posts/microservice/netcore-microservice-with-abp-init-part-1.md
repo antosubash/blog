@@ -19,7 +19,7 @@ Most of the architecture is based on the EShopOnAbp Sample microservice applicat
 
 ## Startup script
 
-To simplify the project creation I have created a powershell script which will create the required projects and folders for use. You can copy and run this file to just create your base projects.
+To simplify the project creation I have created a powershell script which will create the required projects and folders for use. You can copy and run this file to just create your base projects. The main reason to create this powershell script is the get started quickly. Setting up a microservice solution is a time consuming process 
 
 You can find the startup script here <https://github.com/antosubash/abp-setup/blob/main/init.ps1>
 
@@ -81,4 +81,4 @@ This will trigger the scripts and the project creation will start. Wait until th
 
 If you want to know more about what the script is doing please checkout the video above which will have an explanations of what the script is doing.
 
-Repo: <https://github.com/antosubash/AbpMicroservice>
+Here is the sample repo with the working version of this solution: <https://github.com/antosubash/AbpMicroservice>
