@@ -9,7 +9,7 @@ import PageTitle from "@components/page-title";
 import Head from "next/head";
 import { Utterances } from "@components/utterances";
 import PostType from "@blog/types/postType";
-import { NextSeo } from "next-seo";
+import { ArticleJsonLd } from "next-seo";
 
 type Props = {
   post: PostType;
@@ -32,12 +32,13 @@ const Post = ({ post }: Props) => {
             <Head>
               <title>{post.title} | Anto Subash</title>
             </Head>
-            <NextSeo
+            <ArticleJsonLd
               title={post.title ? post.title : ""}
               description={post.excerpt ? post.excerpt : ""}
-              twitter={{
-                handle: "@antosubash",
-              }}
+              url={`https://blog.antosubash.com${router.asPath}`}
+              images={[]}
+              datePublished={post.date}
+              authorName={post.author.name}
             />
             <PostHeader
               title={post.title}
