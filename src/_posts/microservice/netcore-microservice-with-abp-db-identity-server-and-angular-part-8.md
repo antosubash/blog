@@ -24,7 +24,7 @@ Even thought we already have the Identity service. it only provides the API endp
 
 During the code generation by default Identity server will have the reference for the `EFCore` project. But after moving the Identity server this reference will be wrong. So the first step is to remove all the project reference in the `csproj` file of the identity server.
 
-## Add new reference
+### Add new reference
 
 Once the old references are removed we need to add the new reference to the identity server project. The Identity server should know about all 3 base services `identity`, `administration` and `saas`. So we need to add the reference for the `EFCore` projects of all the 3 services. Along with we also need to add the reference for the Shared project so that we can reuse some code.
 
