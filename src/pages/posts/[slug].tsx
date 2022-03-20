@@ -33,8 +33,8 @@ const Post = ({ post }: Props) => {
               <title>{post.title} | Anto Subash</title>
             </Head>
             <NextSeo
-              title={post.title}
-              description={post.excerpt}
+              title={post.title ? post.title : ""}
+              description={post.excerpt ? post.excerpt : ""}
               twitter={{
                 handle: "@antosubash",
               }}
