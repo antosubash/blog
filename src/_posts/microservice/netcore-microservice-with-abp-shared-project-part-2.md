@@ -17,7 +17,7 @@ We need the shared project so that we can share some start up code. This part is
 
 ## Install nuget
 
-The setup script in the part 1 of this series has created a empty class library project called `Tasky.Shared.Hosting`. we will add the following nuget packages to that project.
+The setup script in the part 1 of this series has created a empty class library project called `Tasky.Shared.Hosting`. we will add the following nuget packages to that project. These nuget packages are essential for all the microservice we are going to create. So we will install these in a shared project and add this shared project as a reference in all the services. This will we can save some time.
 
 ```xml
 <PackageReference Include="Volo.Abp.Autofac" Version="5.1.4"/>
