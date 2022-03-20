@@ -9,6 +9,7 @@ import PageTitle from "@components/page-title";
 import Head from "next/head";
 import { Utterances } from "@components/utterances";
 import PostType from "@blog/types/postType";
+import { NextSeo } from "next-seo";
 
 type Props = {
   post: PostType;
@@ -31,6 +32,13 @@ const Post = ({ post }: Props) => {
             <Head>
               <title>{post.title} | Anto Subash</title>
             </Head>
+            <NextSeo
+              title={post.title}
+              description={post.excerpt}
+              twitter={{
+                handle: "@antosubash",
+              }}
+            />
             <PostHeader
               title={post.title}
               coverImage={post.coverImage}
@@ -64,7 +72,7 @@ export async function getStaticProps({ params }: Params) {
     "ogImage",
     "coverImage",
     "videoId",
-    "tags"
+    "tags",
   ]);
   return {
     props: {

@@ -7,6 +7,7 @@ import Post from "@blog/types/postType";
 import PostItem from "@components/post-item";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
+import { DefaultSeo } from "next-seo";
 
 type Props = {
   allPosts: Post[];
@@ -32,7 +33,21 @@ const Index = ({ allPosts }: Props) => {
         <Head>
           <title>Anto's blog</title>
         </Head>
+
         <Container>
+          <DefaultSeo
+            openGraph={{
+              type: "website",
+              locale: "en",
+              url: "https://blog.antosubash.com/",
+              site_name: "Anto Subash Blog",
+            }}
+            twitter={{
+              handle: "@antosubash",
+              site: "@antosubash",
+              cardType: "summary_large_image",
+            }}
+          />
           <div className="divide-y">
             <div className="pt-6 pb-8 space-y-2 md:space-y-5">
               <div className="relative">
