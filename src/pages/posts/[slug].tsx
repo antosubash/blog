@@ -10,6 +10,7 @@ import Head from "next/head";
 import { Utterances } from "@components/utterances";
 import PostType from "@blog/types/postType";
 import { ArticleJsonLd } from "next-seo";
+import { generateOgImage } from "@lib/generateOgImage";
 
 type Props = {
   post: PostType;
@@ -75,6 +76,9 @@ export async function getStaticProps({ params }: Params) {
     "videoId",
     "tags",
   ]);
+
+  await generateOgImage({ slug : params.slug, title: post.title });
+
   return {
     props: {
       post: post,
