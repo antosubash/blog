@@ -2,12 +2,13 @@
 import Container from "@components/container";
 import Layout from "@components/layout";
 import { getAllPosts } from "@lib/api";
-import Head from "next/head";
 import Post from "@blog/types/postType";
 import PostItem from "@components/post-item";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { DefaultSeo } from "next-seo";
+import Meta from "@components/meta";
+import { generateOgImage } from "@lib/generateOgImage";
 
 type Props = {
   allPosts: Post[];
@@ -30,25 +31,8 @@ const Index = ({ allPosts }: Props) => {
   return (
     <>
       <Layout>
-        <Head>
-          <title>Anto's blog</title>
-        </Head>
-
+        <Meta title="Anto's blog" description="My personal blog" url="http://blog.antosubash.com" image="/og/home.png" />
         <Container>
-          <DefaultSeo
-            openGraph={{
-              title: "Anto Subash's blog",
-              type: "website",
-              locale: "en",
-              url: "https://blog.antosubash.com/",
-              site_name: "Anto Subash Blog",
-            }}
-            twitter={{
-              handle: "@antosubash",
-              site: "@antosubash",
-              cardType: "summary_large_image",
-            }}
-          />
           <div className="divide-y">
             <div className="pt-6 pb-8 space-y-2 md:space-y-5">
               <div className="relative">
@@ -126,7 +110,7 @@ export const getStaticProps = async () => {
     "excerpt",
     "tags",
   ]);
-
+  await generateOgImage({ slug: "home", title: "Anto Subash's blog" });
   return {
     props: { allPosts },
   };

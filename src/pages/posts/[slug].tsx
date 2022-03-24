@@ -6,10 +6,10 @@ import PostHeader from "@components/post-header";
 import Layout from "@components/layout";
 import { getPostBySlug, getAllPosts } from "@lib/api";
 import PageTitle from "@components/page-title";
-import Head from "next/head";
 import { Utterances } from "@components/utterances";
 import PostType from "@blog/types/postType";
-import { ArticleJsonLd } from "next-seo";
+import { generateOgImage } from "@lib/generateOgImage";
+import Meta from "@components/meta";
 
 type Props = {
   post: PostType;
@@ -29,16 +29,13 @@ const Post = ({ post }: Props) => {
           <PageTitle>Loading…</PageTitle>
         ) : (
           <>
-            <Head>
-              <title>{post.title} | Anto Subash</title>
-            </Head>
-            <ArticleJsonLd
-              title={post.title ? post.title : ""}
-              description={post.excerpt ? post.excerpt : ""}
-              url={`https://blog.antosubash.com${router.asPath}`}
-              images={[]}
-              datePublished={post.date}
-              authorName={post.author.name}
+            <Meta 
+              title={post.title}
+              description={post.excerpt}
+              url={`/posts/${post.slug}`}
+              image={`/og/${post.slug}.png`}
+              keywords={post.tags}
+              date={post.date}
             />
             <PostHeader
               title={post.title}
@@ -75,6 +72,9 @@ export async function getStaticProps({ params }: Params) {
     "videoId",
     "tags",
   ]);
+
+  await generateOgImage({ slug: params.slug, title: post.title });
+
   return {
     props: {
       post: post,
