@@ -9,7 +9,7 @@ import PageTitle from "@components/page-title";
 import Head from "next/head";
 import { Utterances } from "@components/utterances";
 import PostType from "@blog/types/postType";
-import { ArticleJsonLd } from "next-seo";
+import { ArticleJsonLd, NextSeo } from "next-seo";
 import { generateOgImage } from "@lib/generateOgImage";
 
 type Props = {
@@ -33,6 +33,35 @@ const Post = ({ post }: Props) => {
             <Head>
               <title>{post.title} | Anto Subash</title>
             </Head>
+            <NextSeo
+              title={post.title}
+              description={post.excerpt}
+              canonical={`https://blog.antosubash.com${router.asPath}`}
+              openGraph={{
+                title: post.title,
+                description: post.excerpt,
+                url: `https://blog.antosubash.com${router.asPath}`,
+                type: "article",
+                site_name: "Anto Subash",
+                images: [
+                  {
+                    url: `https://blog.antosubash.com/og/${post.slug}.png`,
+                    width: 800,
+                    height: 600,
+                    alt: post.title,
+                    type: "image/png",
+                  },
+                ],
+                article: {
+                  publishedTime: post.date,
+                },
+              }}
+              twitter={{
+                handle: "@antosubash",
+                site: "@antosubash",
+                cardType: "summary_large_image",
+              }}
+            />
             <ArticleJsonLd
               title={post.title ? post.title : ""}
               description={post.excerpt ? post.excerpt : ""}
@@ -77,7 +106,7 @@ export async function getStaticProps({ params }: Params) {
     "tags",
   ]);
 
-  await generateOgImage({ slug : params.slug, title: post.title });
+  await generateOgImage({ slug: params.slug, title: post.title });
 
   return {
     props: {

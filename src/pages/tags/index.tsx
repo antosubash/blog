@@ -2,7 +2,6 @@ import Container from "@components/container";
 import Layout from "@components/layout";
 import Tag from "@components/tag";
 import { getAllTags } from "@lib/api";
-import kebabCase from "@lib/utils/kebabCase";
 
 type Props = {
   tags: string[];
