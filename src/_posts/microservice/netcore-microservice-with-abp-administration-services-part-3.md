@@ -14,9 +14,11 @@ author:
 
 ## Setup Administration service
 
-Adminstration service is where we uses Audit log, feature, settings and permission management modules
+Adminstration service is where we uses Audit log, feature, settings and permission management modules. We will use a separate database to store everything in the administration service.
 
 ## Add the shared project as a reference to the host
+
+We need to add shared project as the reference to the Administration service. once this is added we can do some cleanup in the host module of the administration.
 
 ```xml
 <ProjectReference Include="..\..\..\..\shared\Tasky.Shared.Hosting\Tasky.Shared.Hosting.csproj" />
@@ -28,7 +30,7 @@ Adminstration service is where we uses Audit log, feature, settings and permissi
 
 ## Update the `AdministrationServiceHttpApiHostModule`
 
-Update the depends on.
+Update the depends on with the shared module. Once the shared module is added then we can removed most of the modules in the host module. Below is how the final depends on looks like.
 
 ```cs
 [DependsOn(
@@ -42,6 +44,8 @@ Update the depends on.
 Remove the things which are configured in the shared project.
 
 ## Create the `DbContextFactory` in the EntityFrameworkCore project
+
+We need to create a `Factory` class for the `DbContext` so that we can create migration in the `EfCore` project. this is necessary to build the configuration form the host project.
 
 ```cs
 using System.IO;
@@ -84,6 +88,8 @@ public class AdministrationServiceDbContextFactory : IDesignTimeDbContextFactory
 ```
 
 ## Update the `AdministrationServiceDbContext`
+
+In the `DbContext` we need to updated it with the DbContext of the modules. We have added 4 modules in the administration service and all modules have a db context. So we have to inherit from the db context of the modules. this is add the `DBSet` of the modules to the administration module.
 
 ```cs
 using Microsoft.EntityFrameworkCore;
@@ -136,6 +142,8 @@ public class AdministrationServiceDbContext : AbpDbContext<AdministrationService
 ```
 
 ## Update the `AdministrationServiceEntityFrameworkCoreModule`
+
+This is the final setup before creating the migration. we have to inform the ef core that we are using `postgres` as database. we can do that configuring `AbpDbContextOptions` and replace the db context of the modules with the administration db context.
 
 ```cs
 using Microsoft.Extensions.DependencyInjection;
