@@ -6,6 +6,7 @@ import PostType from "@blog/types/postType";
 import Container from "@components/container";
 import PostItem from "@components/post-item";
 import { AnimatePresence, motion } from "framer-motion";
+import { generateOgImage } from "@lib/generateOgImage";
 interface Props {
   posts: PostType[];
 }
@@ -62,8 +63,9 @@ type Params = {
   };
 };
 
-export const getStaticProps = ({ params }: Params) => {
+export const getStaticProps = async ({ params }: Params) => {
   var posts = getPostByTag(params.tag);
+  await generateOgImage({ slug: params.tag, title: params.tag + " tag" });
   return {
     props: { posts },
   };

@@ -2,6 +2,7 @@ import Container from "@components/container";
 import Layout from "@components/layout";
 import Tag from "@components/tag";
 import { getAllTags } from "@lib/api";
+import { generateOgImage } from "@lib/generateOgImage";
 
 type Props = {
   tags: string[];
@@ -35,8 +36,9 @@ const Index = ({ tags }: Props) => {
 
 export default Index;
 
-export const getStaticProps = () => {
+export const getStaticProps = async () => {
   var tags = getAllTags();
+  await generateOgImage({ slug: "tags", title: "Tags" });
   return {
     props: { tags },
   };
