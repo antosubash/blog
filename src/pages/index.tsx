@@ -41,7 +41,7 @@ const Index = ({ allPosts }: Props) => {
               type: "website",
               locale: "en",
               url: "https://blog.antosubash.com/",
-              site_name: "Anto Subash Blog",
+              site_name: "Anto Subash's blog",
             }}
             twitter={{
               handle: "@antosubash",
