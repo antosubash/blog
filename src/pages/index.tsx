@@ -2,12 +2,12 @@
 import Container from "@components/container";
 import Layout from "@components/layout";
 import { getAllPosts } from "@lib/api";
-import Head from "next/head";
 import Post from "@blog/types/postType";
 import PostItem from "@components/post-item";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { DefaultSeo } from "next-seo";
+import Meta from "@components/meta";
 
 type Props = {
   allPosts: Post[];
@@ -30,10 +30,7 @@ const Index = ({ allPosts }: Props) => {
   return (
     <>
       <Layout>
-        <Head>
-          <title>Anto's blog</title>
-        </Head>
-
+        <Meta title="Anto's blog" description="My personal blog" url="http://blog.antosubash.com" />
         <Container>
           <DefaultSeo
             openGraph={{

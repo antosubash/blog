@@ -11,6 +11,8 @@ import { Utterances } from "@components/utterances";
 import PostType from "@blog/types/postType";
 import { ArticleJsonLd, NextSeo } from "next-seo";
 import { generateOgImage } from "@lib/generateOgImage";
+import Meta from "@components/meta";
+import { isAsyncFunction } from "util/types";
 
 type Props = {
   post: PostType;
@@ -30,45 +32,13 @@ const Post = ({ post }: Props) => {
           <PageTitle>Loading…</PageTitle>
         ) : (
           <>
-            <Head>
-              <title>{post.title} | Anto Subash</title>
-            </Head>
-            <NextSeo
+            <Meta 
               title={post.title}
               description={post.excerpt}
-              canonical={`https://blog.antosubash.com${router.asPath}`}
-              openGraph={{
-                title: post.title,
-                description: post.excerpt,
-                url: `https://blog.antosubash.com${router.asPath}`,
-                type: "article",
-                site_name: "Anto Subash",
-                images: [
-                  {
-                    url: `https://blog.antosubash.com/og/${post.slug}.png`,
-                    width: 800,
-                    height: 600,
-                    alt: post.title,
-                    type: "image/png",
-                  },
-                ],
-                article: {
-                  publishedTime: post.date,
-                },
-              }}
-              twitter={{
-                handle: "@antosubash",
-                site: "@antosubash",
-                cardType: "summary_large_image",
-              }}
-            />
-            <ArticleJsonLd
-              title={post.title ? post.title : ""}
-              description={post.excerpt ? post.excerpt : ""}
-              url={`https://blog.antosubash.com${router.asPath}`}
-              images={[]}
-              datePublished={post.date}
-              authorName={post.author.name}
+              url={`https://blog.antosubash.com/posts/${post.slug}`}
+              image={`https://blog.antosubash.com/og/${post.slug}.png`}
+              keywords={post.tags}
+              date={post.date}
             />
             <PostHeader
               title={post.title}
