@@ -6,7 +6,6 @@ import Post from "@blog/types/postType";
 import PostItem from "@components/post-item";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-import { DefaultSeo } from "next-seo";
 import Meta from "@components/meta";
 import { generateOgImage } from "@lib/generateOgImage";
 
