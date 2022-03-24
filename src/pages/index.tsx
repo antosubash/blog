@@ -31,7 +31,7 @@ const Index = ({ allPosts }: Props) => {
   return (
     <>
       <Layout>
-        <Meta title="Anto's blog" description="My personal blog" url="http://blog.antosubash.com/og/home.png" />
+        <Meta title="Anto's blog" description="My personal blog" url="http://blog.antosubash.com" image="/og/home.png" />
         <Container>
           <div className="divide-y">
             <div className="pt-6 pb-8 space-y-2 md:space-y-5">
