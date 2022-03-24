@@ -109,6 +109,18 @@
   </url>
 
   <url>
+    <loc>https://blog.antosubash.com/posts/docker-swarm-localhost</loc>
+  </url>
+
+  <url>
+    <loc>https://blog.antosubash.com/posts/setup-docker-node-hetzner</loc>
+  </url>
+
+  <url>
+    <loc>https://blog.antosubash.com/posts/setup-traefik-docker</loc>
+  </url>
+
+  <url>
     <loc>https://blog.antosubash.com/posts/css-for-leaflet-div-element</loc>
   </url>
 
@@ -119,15 +131,17 @@
   </url>
 
   <url>
-    <loc>https://blog.antosubash.com/posts/docker-swarm-localhost</loc>
+    <loc
+      >https://blog.antosubash.com/posts/orchard-core-create-content-with-code</loc
+    >
   </url>
 
   <url>
-    <loc>https://blog.antosubash.com/posts/setup-docker-node-hetzner</loc>
+    <loc>https://blog.antosubash.com/posts/orchard-core-getting-started-p1</loc>
   </url>
 
   <url>
-    <loc>https://blog.antosubash.com/posts/setup-traefik-docker</loc>
+    <loc>https://blog.antosubash.com/posts/orchard-core-openid-nextjs</loc>
   </url>
 
   <url>
@@ -176,20 +190,6 @@
     <loc
       >https://blog.antosubash.com/posts/netcore-microservice-with-abp-shared-project-part-2</loc
     >
-  </url>
-
-  <url>
-    <loc
-      >https://blog.antosubash.com/posts/orchard-core-create-content-with-code</loc
-    >
-  </url>
-
-  <url>
-    <loc>https://blog.antosubash.com/posts/orchard-core-getting-started-p1</loc>
-  </url>
-
-  <url>
-    <loc>https://blog.antosubash.com/posts/orchard-core-openid-nextjs</loc>
   </url>
 
   <url>
