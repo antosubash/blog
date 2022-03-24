@@ -1,5 +1,6 @@
 import Container from "@components/container";
 import Layout from "@components/layout";
+import Meta from "@components/meta";
 import Tag from "@components/tag";
 import { getAllTags } from "@lib/api";
 import { generateOgImage } from "@lib/generateOgImage";
@@ -11,6 +12,7 @@ type Props = {
 const Index = ({ tags }: Props) => {
   return (
     <Layout>
+      <Meta title="Anto's blog Tags" description="Tags page" url="/tags" image="/og/tags.png" />
       <Container>
         <div className="flex flex-col items-start justify-start divide-y divide-gray-200 dark:divide-gray-700 md:justify-center md:items-center md:divide-y-0 md:flex-row md:space-x-6 md:mt-24">
           <div className="pt-6 pb-8 space-x-2 md:space-y-5">

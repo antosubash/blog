@@ -6,13 +6,10 @@ import PostHeader from "@components/post-header";
 import Layout from "@components/layout";
 import { getPostBySlug, getAllPosts } from "@lib/api";
 import PageTitle from "@components/page-title";
-import Head from "next/head";
 import { Utterances } from "@components/utterances";
 import PostType from "@blog/types/postType";
-import { ArticleJsonLd, NextSeo } from "next-seo";
 import { generateOgImage } from "@lib/generateOgImage";
 import Meta from "@components/meta";
-import { isAsyncFunction } from "util/types";
 
 type Props = {
   post: PostType;
@@ -35,8 +32,8 @@ const Post = ({ post }: Props) => {
             <Meta 
               title={post.title}
               description={post.excerpt}
-              url={`https://blog.antosubash.com/posts/${post.slug}`}
-              image={`https://blog.antosubash.com/og/${post.slug}.png`}
+              url={`/posts/${post.slug}`}
+              image={`/og/${post.slug}.png`}
               keywords={post.tags}
               date={post.date}
             />
