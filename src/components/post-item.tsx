@@ -1,4 +1,3 @@
-import Link from "next/link";
 import React from "react";
 import formatDate from "../lib/utils/formatDate";
 import Tag from "./tag";
