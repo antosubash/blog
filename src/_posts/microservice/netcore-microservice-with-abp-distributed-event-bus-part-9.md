@@ -239,4 +239,4 @@ tye run
 
 ## Test
 
-To test the event bus. login to the angular app in `http://localhost:4200` as admin and create a new tenant. once the tenant is created logout and try to login to the tenant you just created. if the event bus working you will the user and permission created for you.
+To test the event bus. login to the angular app in `http://localhost:4200` as admin and create a new tenant. once the tenant is created logout and try to login to the tenant you just created. if the event bus is working then you can login with default username and password for the newly created tenant.
