@@ -12,7 +12,13 @@ author:
 
 ## Table of contents
 
+## Intro
+
+In this post we will see how to configure Identity Service. In the identity service we have already add 2 modules Identity and IdentityServer. we need to configure the Identity service to use these modules.
+
 ## Add the shared project as a reference to the host
+
+We need to do the same thing we did in the admin service. Add the shared project as a reference and clean up host module.
 
 ```xml
 <ProjectReference Include="..\..\..\..\shared\Tasky.Shared.Hosting\Tasky.Shared.Hosting.csproj" />
@@ -24,7 +30,7 @@ author:
 
 ## Update the `IdentityServiceHttpApiHostModule`
 
-Update the depends on.
+Update the depends on with the shared hosting module.
 
 ```cs
 [DependsOn(
@@ -149,7 +155,7 @@ public class IdentityServiceDbContext : AbpDbContext<IdentityServiceDbContext>, 
 
 ## Update the `Tasky.IdentityService.EntityFrameworkCore` project
 
-Update the nuget packages
+Update the nuget packages with ef core packages. we will replace the module db context and configure the DbContext options in this module.
 
 ```xml
 <PackageReference Include="Volo.Abp.EntityFrameworkCore" Version="5.1.4"/>
