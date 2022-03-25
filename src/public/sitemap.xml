@@ -138,19 +138,19 @@
 
   <url>
     <loc
-      >https://blog.antosubash.com/posts/netcore-microservice-with-abp-db-identity-server-and-angular-part-8</loc
-    >
-  </url>
-
-  <url>
-    <loc
       >https://blog.antosubash.com/posts/netcore-microservice-with-abp-db-migration-part-6</loc
     >
   </url>
 
   <url>
     <loc
-      >https://blog.antosubash.com/posts/netcore-microservice-with-abp-db-yarp-and-tye-part-7</loc
+      >https://blog.antosubash.com/posts/netcore-microservice-with-abp-distributed-event-bus-part-9</loc
+    >
+  </url>
+
+  <url>
+    <loc
+      >https://blog.antosubash.com/posts/netcore-microservice-with-abp-identity-server-and-angular-part-8</loc
     >
   </url>
 
@@ -175,6 +175,12 @@
   <url>
     <loc
       >https://blog.antosubash.com/posts/netcore-microservice-with-abp-shared-project-part-2</loc
+    >
+  </url>
+
+  <url>
+    <loc
+      >https://blog.antosubash.com/posts/netcore-microservice-with-abp-yarp-and-tye-part-7</loc
     >
   </url>
 
