@@ -42,22 +42,26 @@ Once the old references are removed we need to add the new reference to the iden
 Once we added the reference to the `EFCore` projects we need to add the connection string for the services in the `appsettings.json` file so that the Identity server can find the database.
 
 ```xml
-  "ConnectionStrings": {
-    "SaaS": "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=SaasService;Pooling=false;",
-    "IdentityService": "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=IdentityService;Pooling=false;",
-    "Administration": "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=AdministrationService;Pooling=false;"
-  },
+"ConnectionStrings": {
+  "SaaSService": "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=TaskySaaSService;Pooling=false;",
+  "IdentityService": "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=TaskyIdentityService;Pooling=false;",
+  "AdministrationService": "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=TaskyAdministrationService;Pooling=false;"
+},
 ```
 
 ### Update the module dependency
 
 Identity server project should have a `IdentityServerModule` in the root of the project directory. In that module we need update the module dependency so that the `EFCore` modules will be loaded correctly. We also should add the shared module.
 
-```xml
-    typeof(AdministrationEntityFrameworkCoreModule),
-    typeof(SaaSEntityFrameworkCoreModule),
-    typeof(IdentityServiceEntityFrameworkCoreModule),
-    typeof(TaskyHostingModule)
+```cs
+typeof(AbpAccountWebIdentityServerModule),
+typeof(AbpAccountApplicationModule),
+typeof(AbpAccountHttpApiModule),
+typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+typeof(AdministrationServiceEntityFrameworkCoreModule),
+typeof(SaaSServiceEntityFrameworkCoreModule),
+typeof(IdentityServiceEntityFrameworkCoreModule),
+typeof(TaskyHostingModule)
 ```
 
 Once this is done. our identity server is ready for our use. launch the identity server and see if you can login as a super admin.
@@ -98,18 +102,14 @@ export const environment = {
     default: {
       url: 'https://localhost:7500',
       rootNamespace: 'Tasky',
-    },
-    Tasky: {
-      url: 'https://localhost:44350',
-      rootNamespace: 'Tasky',
-    },
+    }
   },
 } as Environment;
 ```
 
 ### Run
 
-Once you have updated the `environment.ts` make sure the packages are installed for your angular app. 
+Once you have updated the `environment.ts` make sure the packages are installed for your angular app.
 
 #### To install packages
 
