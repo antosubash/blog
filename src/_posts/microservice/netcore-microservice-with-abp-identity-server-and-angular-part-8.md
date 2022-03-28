@@ -57,6 +57,14 @@ All the services and apps need to contact the Identity server to validate the to
 "CorsOrigins": "http://localhost:4200,https://localhost:7001,https://localhost:7002,https://localhost:7003",
 ```
 
+### Update the Authority URL
+
+All the service has `Authority` url in the `appsettings.json` file. we have to change that file to point to the identity server.
+
+```json
+"Authority": "https://localhost:7000/",
+```
+
 ### Update the module dependency
 
 Identity server project should have a `IdentityServerModule` in the root of the project directory. In that module we need update the module dependency so that the `EFCore` modules will be loaded correctly. We also should add the shared module.
