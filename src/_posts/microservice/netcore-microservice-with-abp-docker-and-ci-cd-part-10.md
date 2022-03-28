@@ -36,6 +36,8 @@ The final docker file will look like this. Here is the location of this sample f
 
 ![Docker file](/assets/posts/microservice/part10/docker3.png)
 
+We have to do this to all the services.
+
 ## CI/CD
 
 Here is the sample github action file.

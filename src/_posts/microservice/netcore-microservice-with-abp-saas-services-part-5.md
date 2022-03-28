@@ -2,7 +2,7 @@
 title: ".Net Core microservice application with ABP - SaaS Services - Part 5"
 excerpt: "In this post we will see how to do the create SaaS Service for our microservice application"
 date: "2022-03-19T03:00:00.000Z"
-videoId:  
+videoId: h0yWwQ_2mzs 
 tags: [ "dotnet", "abp", "microservice", "netcore6" ]
 author:
   name: Anto Subash
