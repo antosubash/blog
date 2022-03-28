@@ -76,7 +76,7 @@ This should launch the identity server and it should be running in the port `700
 
 ## Angular App
 
-angular app in abp is a self contained app. there is not dependency to any other abp project. so to run the we just have to point the angular app in the correct direction and it should work. We need to change 2 things in the angular app. one is the `OAuthConfig` so that it know where is the identity server is running and the `API` endpoint which is the reverse proxy in our case which has all the endpoints. you will be able to find the `environment.ts` file in `apps\angular\projects\dev-app\src`.
+angular app in abp is a self contained app. there is not dependency to any other abp project. so to run the we just have to point the angular app in the correct direction and it should work. We need to change 2 things in the angular app. one is the `OAuthConfig` so that it know where is the identity server is running and the `API` endpoint which is the reverse proxy in our case which has all the endpoints. you will be able to find the `environment.ts` file in `apps\angular\src\environments`.
 
 ```ts
 import { Environment } from '@abp/ng.core';
