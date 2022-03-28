@@ -170,22 +170,22 @@ public class TaskyDbMigrationService : ITransientDependency
 
 The appsettings has a different structure form the normal structure you will usually see in the abp projects. We use this as a data source to seed the `ApiScope`, `ApiResource` and `Identity server clients`.
 
-```xml
+```json
 {
   "ConnectionStrings": {
-    "SaaSService": "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=TaskySaaSServiceService;Pooling=false;",
+    "SaaSService": "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=TaskySaaSService;Pooling=false;",
     "IdentityService": "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=TaskyIdentityService;Pooling=false;",
     "AdministrationService": "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=TaskyAdministrationService;Pooling=false;"
   },
   "ApiScope": [
     "AuthServer",
-    "SaaSServiceService",
+    "SaaSService",
     "IdentityService",
     "AdministrationService"
   ],
   "ApiResource": [
     "AuthServer",
-    "SaaSServiceService",
+    "SaaSService",
     "IdentityService",
     "AdministrationService"
   ],
@@ -197,7 +197,7 @@ The appsettings has a different structure form the normal structure you will usu
         "https://localhost:7004"
       ],
       "Scopes": [
-        "SaaSServiceService",
+        "SaaSService",
         "IdentityService",
         "AdministrationService"
       ],
@@ -222,7 +222,7 @@ The appsettings has a different structure form the normal structure you will usu
       ],
       "Scopes": [
         "AuthServer",
-        "SaaSServiceService",
+        "SaaSService",
         "IdentityService",
         "AdministrationService"
       ],
@@ -230,7 +230,7 @@ The appsettings has a different structure form the normal structure you will usu
         "authorization_code"
       ],
       "RedirectUris": [
-        "https://localhost:4200"
+        "http://localhost:4200"
       ],
       "PostLogoutRedirectUris": [
         "http://localhost:4200"
@@ -246,7 +246,7 @@ The appsettings has a different structure form the normal structure you will usu
         "https://localhost:7001"
       ],
       "Scopes": [
-        "SaaSServiceService",
+        "SaaSService",
         "IdentityService",
         "AdministrationService"
       ],
@@ -270,7 +270,7 @@ The appsettings has a different structure form the normal structure you will usu
         "https://localhost:7002"
       ],
       "Scopes": [
-        "SaaSServiceService",
+        "SaaSService",
         "IdentityService",
         "AdministrationService"
       ],
@@ -294,7 +294,7 @@ The appsettings has a different structure form the normal structure you will usu
         "https://localhost:7003"
       ],
       "Scopes": [
-        "SaaSServiceService",
+        "SaaSService",
         "IdentityService",
         "AdministrationService"
       ],
