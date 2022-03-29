@@ -77,7 +77,7 @@ export async function getStaticPaths() {
   var tags = getAllTags();
 
   return {
-    paths: tags.map((tag: string) => {
+    paths: Object.keys(tags).map((tag: string) => {
       return {
         params: {
           tag: tag,

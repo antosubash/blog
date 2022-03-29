@@ -22,10 +22,10 @@ const Index = ({ tags }: Props) => {
           </div>
           <div className="flex flex-wrap max-w-lg">
             {Object.keys(tags).length === 0 && "No tags found."}
-            {tags.map((t) => {
+            {Object.keys(tags).map((t) => {
               return (
                 <div key={t} className="mt-2 mb-2">
-                  <Tag key={t} text={t} />
+                  <Tag key={t} text={t} count={tags[t as any]} />
                 </div>
               );
             })}
