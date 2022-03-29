@@ -4,8 +4,8 @@ const Footer = () => {
   return (
     <footer className="border-accent-2">
       <Container>
-        <div className="py-28 flex flex-col lg:flex-row items-center">
-          <h3 className="text-4xl lg:text-5xl font-bold tracking-tighter leading-tight text-center lg:text-left mb-10 lg:mb-0 lg:pr-4 lg:w-1/2">
+        <div className="py-20 flex flex-col lg:flex-row items-center justify-center">
+          <h3 className="text-xl font-bold text-center">
             &copy; Anto Subash
           </h3>
         </div>
