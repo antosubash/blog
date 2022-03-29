@@ -72,7 +72,7 @@ const PostMain = ({ allPosts, initialDisplayPosts, pagination }: Props) => {
             {!searchValue && (
               <div className="pt-6 pb-8 space-y-2 md:space-y-5">
                 <h1 className="text-xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100">
-                  Latest
+                  All Posts
                 </h1>
               </div>
             )}
