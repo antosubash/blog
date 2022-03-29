@@ -23,7 +23,7 @@ const Pagination = (props: Props) => {
           <Link
             href={
               props.currentPage - 1 === 1
-                ? `/`
+                ? `/page`
                 : `/page/${props.currentPage - 1}`
             }
           >

@@ -3,6 +3,7 @@ import { join, basename } from "path";
 import matter from "gray-matter";
 import getAllFilesRecursively from "./utils/files";
 import getDirectories from "./utils/directories";
+import { MAX_DISPLAY } from "./constants";
 
 const postsDirectory = join(process.cwd(), "_posts");
 
@@ -87,5 +88,14 @@ export function getAllPosts(fields: string[] = []) {
     .map((slug: any) => getPostBySlug(slug, fields))
     // sort posts by date in descending order
     .sort((post1: any, post2: any) => (post1.date > post2.date ? -1 : 1));
+  return posts;
+}
+
+export function getLatestPosts(fields: string[] = [], limit: number = MAX_DISPLAY) {
+  const slugs = getAllSlugs();
+  const posts = slugs
+    .map((slug: any) => getPostBySlug(slug, fields))
+    // sort posts by date in descending order
+    .sort((post1: any, post2: any) => (post1.date > post2.date ? -1 : 1)).slice(0, limit);
   return posts;
 }

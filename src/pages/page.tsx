@@ -1,20 +1,22 @@
 /* eslint-disable react/no-unescaped-entities */
 import Container from "@components/container";
 import Layout from "@components/layout";
-import { getAllPosts, getLatestPosts } from "@lib/api";
+import { getAllPosts } from "@lib/api";
 import Post from "@blog/types/postType";
 import PostItem from "@components/post-item";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import Meta from "@components/meta";
 import { generateOgImage } from "@lib/generateOgImage";
-import { MAX_DISPLAY } from "@lib/constants";
-import Link from "next/link";
+import { POSTS_PER_PAGE } from "@lib/constants";
+import Pagination from "@components/pagination";
 
 type Props = {
   allPosts: Post[];
+  initialDisplayPosts: Post[];
+  pagination: any;
 };
-const Index = ({ allPosts }: Props) => {
+const PostMain = ({ allPosts, initialDisplayPosts, pagination }: Props) => {
   const [searchValue, setSearchValue] = useState("");
   const filteredBlogPosts = allPosts.filter((frontMatter) => {
     const searchContent =
@@ -27,7 +29,9 @@ const Index = ({ allPosts }: Props) => {
 
   // If initialDisplayPosts exist, display it if no searchValue is specified
   const displayPosts =
-    allPosts.length > 0 && !searchValue ? allPosts : filteredBlogPosts;
+    initialDisplayPosts.length > 0 && !searchValue
+      ? initialDisplayPosts
+      : filteredBlogPosts;
 
   return (
     <>
@@ -97,14 +101,12 @@ const Index = ({ allPosts }: Props) => {
                 })}
               </AnimatePresence>
             </ul>
-            <div className="flex justify-end text-base font-medium leading-6">
-                <Link
-                  href="/page"
-                  aria-label="all posts"
-                >
-                  <div className="text-primary-500 cursor-pointer hover:text-primary-600 dark:hover:text-primary-400">All Posts &rarr;</div>
-                </Link>
-              </div>
+            {pagination && pagination.totalPages > 1 && !searchValue && (
+              <Pagination
+                currentPage={pagination.currentPage}
+                totalPages={pagination.totalPages}
+              />
+            )}
           </div>
         </Container>
       </Layout>
@@ -112,10 +114,10 @@ const Index = ({ allPosts }: Props) => {
   );
 };
 
-export default Index;
+export default PostMain;
 
 export const getStaticProps = async ({ params }: any) => {
-  const allPosts = getLatestPosts([
+  const allPosts = getAllPosts([
     "title",
     "date",
     "slug",
@@ -124,9 +126,16 @@ export const getStaticProps = async ({ params }: any) => {
     "excerpt",
     "tags",
   ]);
+  
+  const initialDisplayPosts = allPosts.slice(0, POSTS_PER_PAGE);
+
+  const pagination = {
+    currentPage: 1,
+    totalPages: Math.ceil(allPosts.length / POSTS_PER_PAGE),
+  };
 
   await generateOgImage({ slug: "home", title: "Anto Subash's blog" });
   return {
-    props: { allPosts },
+    props: { allPosts, initialDisplayPosts, pagination },
   };
 };
