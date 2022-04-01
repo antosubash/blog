@@ -9,7 +9,7 @@ import { useState } from "react";
 import Meta from "@components/meta";
 import { generateOgImage } from "@lib/generateOgImage";
 import { POSTS_PER_PAGE } from "@lib/constants";
-import Pagination from "@components/pagination";
+import Pagination from "@components/pagination-item";
 
 type Props = {
   allPosts: Post[];
