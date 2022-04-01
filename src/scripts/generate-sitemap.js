@@ -21,7 +21,6 @@ const path = require('path')
                 //var url = `https://blog.antosubash.com/posts/${fileName}`;
                 var fileName = parse(page).name;
                 var route = fileName === 'index' ? '' : `/posts/${fileName}`;
-                console.log(route);
                 return `
                         <url>
                             <loc>https://blog.antosubash.com${route}</loc>

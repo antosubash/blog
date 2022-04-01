@@ -29,7 +29,6 @@ export function getAllTags() {
 }
 
 export function getPostByTag(tag: string) {
-  console.log(tag)
   const allPosts = getAllPosts([
     "title",
     "date",
@@ -42,7 +41,6 @@ export function getPostByTag(tag: string) {
   const posts = allPosts.filter((post: any) => {
     return post.tags.includes(tag);
   });
-  console.log(posts)
   return posts;
 }
 
