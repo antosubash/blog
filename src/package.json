@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "next",
-    "build": "next build && node ./scripts/generate-sitemap",
+    "build": "next build",
+    "postbuild": "next-sitemap --config next-sitemap.config.js",
     "start": "next start",
     "typecheck": "tsc"
   },
@@ -49,6 +50,7 @@
     "@types/react-syntax-highlighter": "^13.5.2",
     "autoprefixer": "^10.4.4",
     "globby": "11.0.3",
+    "next-sitemap": "^2.5.17",
     "postcss": "^8.4.12",
     "postcss-preset-env": "^7.4.3",
     "prettier": "^2.6.0",

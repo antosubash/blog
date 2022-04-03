@@ -24,6 +24,8 @@ const path = require('path')
                 return `
                         <url>
                             <loc>https://blog.antosubash.com${route}</loc>
+                            <lastmod>${new Date().toISOString()}</lastmod>
+                            <priority>0.80</priority>
                         </url>
                     `
             })
