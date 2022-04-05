@@ -13,30 +13,6 @@
 /* Stop purging. */
 
 /* Your own custom utilities */
-.remark-code-title {
-  @apply px-5 py-3 font-mono text-sm font-bold text-gray-200 bg-gray-700 rounded-t;
-}
-
-.remark-code-title + div > pre {
-  @apply mt-0 rounded-t-none;
-}
-
-.task-list-item:before {
-  @apply hidden;
-}
-
-.code-line {
-  @apply pl-4 -mx-4 border-l-4 border-gray-800;
-}
-
-.highlight-line {
-  @apply -mx-4 bg-gray-700 bg-opacity-50 border-l-4 border-primary-500;
-}
-
-.line-number::before {
-  @apply pr-4 -ml-2 text-gray-400;
-  content: attr(line);
-}
 
 html {
   scroll-behavior: smooth;
@@ -46,15 +22,17 @@ html {
   @apply m-0 p-0 border-0 text-xl rounded-none overflow-auto bg-transparent;
 }
 
-.prose > * {
-  @apply text-gray-800 dark:text-gray-200 text-xl;
-}
 
-.prose code {
-  @apply bg-transparent;
-}
 
 .prose a,
 .prose code {
   word-wrap: break-word;
+}
+
+.remark-code-title {
+  @apply rounded-t bg-gray-700 px-5 py-3 font-mono text-sm font-bold text-gray-200;
+}
+
+.remark-code-title + div > pre {
+  @apply mt-0 rounded-t-none;
 }

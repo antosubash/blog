@@ -3,13 +3,13 @@ import ReactMarkdown from "react-markdown";
 import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import React, { FunctionComponent, useState } from "react";
-import remarkMath from "remark-math";
-import rehypeKatex from "rehype-katex";
-import rehypeRaw from "rehype-raw";
-import html from "remark-html";
-import remarkToc from "remark-toc";
 import CopyToClipboard from "react-copy-to-clipboard";
 import "katex/dist/katex.min.css";
+import rehypeKatex from 'rehype-katex';
+import remarkToc from 'remark-toc';
+import remarkGfm from 'remark-gfm';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+import rehypeSlug from 'rehype-slug'
 interface IProps {
   content: string;
 }
@@ -27,7 +27,7 @@ const Markdown: FunctionComponent<IProps> = ({ content }) => {
                 {isCopied ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-10 w-10 p-2"
+                    className="h-10 w-10 p-2 "
                     viewBox="0 0 20 20"
                     fill="currentColor"
                   >
@@ -40,7 +40,7 @@ const Markdown: FunctionComponent<IProps> = ({ content }) => {
                 ) : (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-10 w-10 p-2"
+                    className="h-10 w-10 p-2 "
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -77,11 +77,11 @@ const Markdown: FunctionComponent<IProps> = ({ content }) => {
   return (
     <div className="pt-8">
       <ReactMarkdown
-        className="prose max-w-full"
+        className="prose max-w-full text-gray-900 dark:text-gray-50 prose-headings:text-gray-900 dark:prose-headings:text-gray-50 prose-code:bg-transparent text-xl"
         components={components}
         children={content}
-        remarkPlugins={[html, remarkToc, remarkMath]}
-        rehypePlugins={[rehypeKatex, rehypeRaw]}
+        remarkPlugins={[remarkToc, remarkGfm]}
+        rehypePlugins={[rehypeKatex,rehypeSlug, rehypeAutolinkHeadings]}
       />
     </div>
   );

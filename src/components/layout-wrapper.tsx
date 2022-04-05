@@ -22,6 +22,9 @@ const LayoutWrapper = ({ children }: any) => {
               <a href="/" className="font-bold px-5">
                 Home
               </a>
+              <a href="/page" className="font-bold px-5">
+                Articles
+              </a>
               <a href="/tags" className="font-bold px-5">
                 Tags
               </a>

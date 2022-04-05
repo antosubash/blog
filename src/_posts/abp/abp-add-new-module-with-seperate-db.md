@@ -10,11 +10,13 @@ author:
   url: "https://antosubash.com"
 ---
 
-## Add a new Module to the Tiered ABP App with separate database for the module
+## Table of contents
 
-In this post we will see how to develop a modular with tiered abp application. We will add a new module to tiered abp app and then use the separate database to store the modules data and the identity data.
+## Add a new Module to the Tiered ABP App with a separate database for the module
 
-## Creating the abp application and run migrations
+In this post, we will see how to develop a modular with a tiered ABP application. We will add a new module to the tiered ABP app and then use the separate database to store the module's data and identity data.
+
+## Creating the ABP application and running migrations
 
 ```bash
 abp new MainApp -t app -u mvc --tiered 
@@ -28,7 +30,7 @@ Change directory to src/MainApp.DbMigrator and run the migration project
 dotnet run
 ```
 
-This will apply the migrations to the db and we can run the `MainApp.Web` project. This will host the UI and API..
+This will apply the migrations to the DB and we can run the `MainApp.Web` project. This will host the UI and API..
 
 ## Add a new Module
 
@@ -40,15 +42,15 @@ abp add-module ModuleA --new --add-to-solution-file
 
 This command will create a new module and add the new module to the solution.
 
-Now you can run all there host and see the Api and UI available in the app.
+Now you can run all their host and see the API and UI available in the app.
 
-## Add new Entity to the ModuleA
+## Add a new Entity to the ModuleA
 
-We will create a new Entity inside the `MainApp.ModuleA.Domain` called `TodoOne`.
+We will create a new Entity inside the `MainApp.ModuleA.Domain` called `TodoOne`
 
 ## 1. Create an [Entity](https://docs.abp.io/en/abp/latest/Entities)
 
-First step is to create an Entity. Create the Entity in the `MainApp.ModuleA.Domain` project.
+The first step is to create an Entity. Create the Entity in the `MainApp.ModuleA.Domain` project.
 
 ```cs
 public class TodoOne : Entity<Guid>
@@ -60,7 +62,7 @@ public class TodoOne : Entity<Guid>
 
 ## 2. Add Entity to [ef core](https://docs.abp.io/en/abp/latest/Entity-Framework-Core)
 
-Next is to add Entity to the EF Core. you will find the DbContext in the `MainApp.ModuleA.EntityFrameworkCore` project. Add the DbSet to the DbContext
+Next is to add Entity to the EF Core. we will find the DbContext in the `MainApp.ModuleA.EntityFrameworkCore` project. Add the DbSet to the DbContext
 
 ```cs
 public DbSet<TodoOne> TodoOnes { get; set; }
@@ -80,7 +82,7 @@ builder.Entity<TodoOne>(b =>
 
 ## 4. Adding Migrations for the ModuleA
 
-Now the Entity is configured we can add the migrations.
+Now that the Entity is configured we can add the migrations.
 
 Create `EntityFrameworkCore\ModuleA` folder in the `MainApp.HttpApi.Host` project.
 
@@ -150,7 +152,7 @@ To update the database run this command
 dotnet ef database update --context ModuleAHttpApiHostMigrationsDbContext
 ```
 
-## 5. Create a Entity Dto
+## 5. Create an Entity Dto
 
 Dto are placed in `MainApp.ModuleA.Application.Contracts` project
 
@@ -173,7 +175,7 @@ CreateMap<TodoOneDto, TodoOne>();
 
 ## 7. Create an [Application Services](https://docs.abp.io/en/abp/latest/Application-Services)
 
-Application service are created in the `MainApp.ModuleA.Application` project
+Application services are created in the `MainApp.ModuleA.Application` project
 
 ```cs
 public class TodoOneAppService : ModuleAAppService

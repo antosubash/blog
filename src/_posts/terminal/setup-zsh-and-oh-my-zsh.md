@@ -8,6 +8,7 @@ author:
   picture: "/assets/blog/authors/anto.jpg"
   url: "https://antosubash.com"
 ---
+## Table of contents
 
 In this post we will see how can we install and setup up zsh shell and use oh-my-posh with it in wsl ubuntu.
 

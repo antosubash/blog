@@ -3,12 +3,13 @@ title: "Create content with code in Orchard Core - Part 3"
 excerpt: "In this post we will see how to create content types using the code in Orchard Core."
 date: "2021-11-27"
 videoId: bYk3JCFcf94 
-tags: [ "orchard core", "cms" ]
+tags: [ "orchard-core", "cms" ]
 author:
   name: Anto Subash
   picture: "/assets/blog/authors/anto.jpg"
   url: "https://antosubash.com"
 ---
+## Table of contents
 
 ## Intro
 

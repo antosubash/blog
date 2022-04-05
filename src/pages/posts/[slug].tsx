@@ -6,9 +6,10 @@ import PostHeader from "@components/post-header";
 import Layout from "@components/layout";
 import { getPostBySlug, getAllPosts } from "@lib/api";
 import PageTitle from "@components/page-title";
-import Head from "next/head";
 import { Utterances } from "@components/utterances";
 import PostType from "@blog/types/postType";
+import { generateOgImage } from "@lib/generateOgImage";
+import Meta from "@components/meta";
 
 type Props = {
   post: PostType;
@@ -28,9 +29,14 @@ const Post = ({ post }: Props) => {
           <PageTitle>Loading…</PageTitle>
         ) : (
           <>
-            <Head>
-              <title>{post.title} | Anto Subash</title>
-            </Head>
+            <Meta 
+              title={post.title}
+              description={post.excerpt}
+              url={`/posts/${post.slug}`}
+              image={`/og/${post.slug}.png`}
+              keywords={post.tags}
+              date={post.date}
+            />
             <PostHeader
               title={post.title}
               coverImage={post.coverImage}
@@ -64,8 +70,11 @@ export async function getStaticProps({ params }: Params) {
     "ogImage",
     "coverImage",
     "videoId",
-    "tags"
+    "tags",
   ]);
+
+  await generateOgImage({ slug: params.slug, title: post.title });
+
   return {
     props: {
       post: post,

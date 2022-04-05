@@ -8,6 +8,7 @@ author:
   picture: "/assets/blog/authors/anto.jpg"
   url: "https://antosubash.com"
 ---
+## Table of contents
 
 ## Set up Windows Terminal with PoshGit, oh-my-posh and Cascadia Code PLi
 

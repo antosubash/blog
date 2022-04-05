@@ -2,12 +2,13 @@
 title: "Docker swarm setup for localhost"
 excerpt: "In this post we will see how to setup docker swarm for localhost."
 date: "2020-12-26"
-tags: [ "docker", "docker swarm" ]
+tags: [ "docker", "docker-swarm" ]
 author:
   name: Anto Subash
   picture: "/assets/blog/authors/anto.jpg"
   url: "https://antosubash.com"
 ---
+## Table of contents
 
 Most of the stack used here are available in my github [repo](https://github.com/antosubash/docker_stack).
 

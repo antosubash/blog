@@ -9,6 +9,7 @@ author:
   picture: "/assets/blog/authors/anto.jpg"
   url: "https://antosubash.com"
 ---
+## Table of contents
 
 ## [Oh My Posh](https://ohmyposh.dev)
 
