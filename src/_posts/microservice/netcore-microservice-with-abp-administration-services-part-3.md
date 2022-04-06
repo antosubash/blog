@@ -14,7 +14,7 @@ author:
 
 ## Setup Administration service
 
-Adminstration service is where we uses Audit log, feature, settings and permission management modules. We will use a separate database to store everything in the administration service.
+Administration service is where we uses Audit log, feature, settings and permission management modules. We will use a separate database to store everything in the administration service.
 
 ## Add the shared project as a reference to the host
 
