@@ -2,7 +2,7 @@
 title: ".Net Core microservice application with ABP - Distributed Event Bus - Part 9"
 excerpt: "In this post we will see how to get the RabbitMQ working for service to service communication"
 date: "2022-03-25T00:00:00.000Z"
-videoId:  
+videoId: gCBZUXbyOJo 
 tags: [ "dotnet", "abp", "microservice", "rabbitmq" ]
 author:
   name: Anto Subash
