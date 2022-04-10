@@ -14,7 +14,7 @@ author:
 
 ## Intro
 
-In this post we will see how to setup service to service communication. We will use rabbitmq as event bus. Each service will have RabbitMQ configuration and abp comes with the inbuilt support to use the RabbitMQ for events. The packages is already available in the shared project we created in part 2 and we just have to add the configuration in the appsettings and implement the events.
+In this post, we will see how to set up service-to-service communication. We will use RabbitMQ as an event bus. Each service will have a RabbitMQ configuration. ABP comes with the inbuilt support to use the RabbitMQ for events. The packages are already available in the shared project we created in part 2. We just have to add the configuration in the appsettings and implement the events.
 
 ## Update appsettings.json
 
@@ -84,7 +84,7 @@ In this post we will see how to setup service to service communication. We will 
 
 ## Tenant Created Event handlers for Administration Service
 
-When the tenant is created in the SaaS service, administration service need to know about the newly created tenant so that we can add permission for the new tenant. These permission are give to the admin role. so that when the user is created with the admin role then he can login to the newly created tenant. The tenant management module triggers a tenant created event every time a tenant is created. we don't have to do anything extra in our code. we just have to handle the created event. following is how you can handle the tenant created event.
+When the tenant is created in the SaaS service, the administration service needs to know about the newly created tenant so that we can add permission for the new tenant. This permission is given to the admin role. So that when the user is created with the admin role then he can log in to the newly created tenant. The tenant management module triggers a tenant-created event every time a tenant is created. We don't have to do anything extra in our code. We just have to handle the created event. Following is how you can manage the tenant-created event.
 
 ```cs
 using System;
@@ -231,7 +231,7 @@ public class TenantCreatedEventHandler : IDistributedEventHandler<TenantCreatedE
 
 ## Run
 
-use tye to run all the services. when the service starts it will created the queue in the rabbit mq. so make sure you have rabbitmq running.
+Use tye to run all the services. When the service starts it will create the queue in the RabbitMQ. So make sure you have RabbitMQ running.
 
 ```bash
 tye run
@@ -239,4 +239,4 @@ tye run
 
 ## Test
 
-To test the event bus. login to the angular app in `http://localhost:4200` as admin and create a new tenant. once the tenant is created logout and try to login to the tenant you just created. if the event bus is working then you can login with default username and password for the newly created tenant.
+To test the event bus. Login to the angular app in `http://localhost:4200` as admin and create a new tenant. Once the tenant is created logout and try to login to the tenant you just created. if the event bus is working then you can login with default username and password for the newly created tenant.
