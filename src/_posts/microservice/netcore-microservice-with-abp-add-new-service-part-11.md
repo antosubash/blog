@@ -38,9 +38,9 @@ dotnet sln ".\$name.sln" add (Get-ChildItem -Path "services\$folder" -Recurse -I
 
 ## Run the script
 
-´´´bash
+```bash
 newservice.ps1 project
-´´´
+```
 
 This script will create a new service and do some cleanup and add the project to solution.
 
