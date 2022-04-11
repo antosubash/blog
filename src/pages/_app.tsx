@@ -4,6 +4,7 @@ import "../node_modules/highlight.js/styles/dark.css";
 import { ThemeProvider } from "next-themes";
 import LayoutWrapper from "@components/layout-wrapper";
 import { AnimateSharedLayout, motion } from "framer-motion";
+import 'remixicon/fonts/remixicon.css'
 export default function MyApp({ Component, pageProps, router }: AppProps) {
   const spring = {
     type: "spring",

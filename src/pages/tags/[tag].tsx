@@ -4,10 +4,10 @@ import ErrorPage from "next/error";
 import { getAllTags, getPostByTag } from "@lib/api";
 import PostType from "@blog/types/postType";
 import Container from "@components/container";
-import PostItem from "@components/post-item";
 import { AnimatePresence, motion } from "framer-motion";
 import { generateOgImage } from "@lib/generateOgImage";
 import Meta from "@components/meta";
+import PostItemSmall from "@components/post-item-small";
 interface Props {
   posts: PostType[];
 }
@@ -40,13 +40,13 @@ const TagList = ({ posts }: Props) => {
                   whileHover={{ scale: 1.1 }}
                   key={slug}
                 >
-                  <PostItem
+                  <PostItemSmall
                     slug={slug}
                     date={date}
                     title={title}
                     summary={excerpt}
                     tags={tags}
-                  ></PostItem>
+                  ></PostItemSmall>
                 </motion.div>
               );
             })}

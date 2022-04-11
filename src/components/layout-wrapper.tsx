@@ -3,6 +3,8 @@ import ThemeSwitch from "./theme-switch";
 import PageTitle from "./page-title";
 import { Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
+import CommandBar from "./command-bar";
+import ShortcutHome from "./shortcut-home";
 const LayoutWrapper = ({ children }: any) => {
   let [isShowing, setIsShowing] = useState(false);
   return (
@@ -19,18 +21,31 @@ const LayoutWrapper = ({ children }: any) => {
           </div>
           <div className="flex items-center text-base leading-5">
             <div className="hidden md:block">
-              <a href="/" className="font-bold px-5">
-                Home
-              </a>
-              <a href="/page" className="font-bold px-5">
-                Articles
-              </a>
-              <a href="/tags" className="font-bold px-5">
-                Tags
-              </a>
-              <a href="https://antosubash.com" className="font-bold px-5">
-                About
-              </a>
+              <div className="flex">
+                <div className="flex justify-center items-center font-bold px-5 cursor-pointer">
+                  <CommandBar>
+                    <ShortcutHome />
+                  </CommandBar>
+                </div>
+                <div className="font-bold px-5">
+                  <a href="/">Home</a>
+                </div>
+                <div>
+                  <a href="/page" className="font-bold px-5">
+                    Articles
+                  </a>
+                </div>
+                <div>
+                  <a href="/tags" className="font-bold px-5">
+                    Tags
+                  </a>
+                </div>
+                <div>
+                  <a href="https://antosubash.com" className="font-bold px-5">
+                    About
+                  </a>
+                </div>
+              </div>
             </div>
 
             <ThemeSwitch />
@@ -70,6 +85,9 @@ const LayoutWrapper = ({ children }: any) => {
           >
             <ul className="border-b-2 border-t-2 border-gray-500">
               <li className="active">
+                <i className="ri-command-line"></i>
+              </li>
+              <li>
                 <a
                   href="/"
                   className="block text-xl text-center px-2 py-4 hover:bg-gray-400 dark:hover:bg-gray-700 font-bold"

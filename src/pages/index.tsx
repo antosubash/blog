@@ -8,27 +8,13 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import Meta from "@components/meta";
 import { generateOgImage } from "@lib/generateOgImage";
-import { MAX_DISPLAY } from "@lib/constants";
 import Link from "next/link";
-
+import ShortcutHome from "@components/shortcut-home";
+import CommandBar from "@components/command-bar";
 type Props = {
   allPosts: Post[];
 };
 const Index = ({ allPosts }: Props) => {
-  const [searchValue, setSearchValue] = useState("");
-  const filteredBlogPosts = allPosts.filter((frontMatter) => {
-    const searchContent =
-      frontMatter.title +
-      frontMatter.excerpt +
-      frontMatter.content +
-      frontMatter.tags.join(" ");
-    return searchContent.toLowerCase().includes(searchValue.toLowerCase());
-  });
-
-  // If initialDisplayPosts exist, display it if no searchValue is specified
-  const displayPosts =
-    allPosts.length > 0 && !searchValue ? allPosts : filteredBlogPosts;
-
   return (
     <>
       <Layout>
@@ -47,8 +33,7 @@ const Index = ({ allPosts }: Props) => {
             </div>
             <ul className="divide-y">
               <AnimatePresence>
-                {!displayPosts.length && "No posts found."}
-                {displayPosts.map((post) => {
+                {allPosts.map((post) => {
                   const { slug, date, title, excerpt, tags } = post;
                   return (
                     <motion.div

@@ -10,6 +10,7 @@ import Meta from "@components/meta";
 import { generateOgImage } from "@lib/generateOgImage";
 import { POSTS_PER_PAGE } from "@lib/constants";
 import Pagination from "@components/pagination-item";
+import PostItemSmall from "@components/post-item-small";
 
 type Props = {
   allPosts: Post[];
@@ -89,13 +90,13 @@ const PostMain = ({ allPosts, initialDisplayPosts, pagination }: Props) => {
                       whileHover={{ scale: 1.1 }}
                       key={slug}
                     >
-                      <PostItem
+                      <PostItemSmall
                         slug={slug}
                         date={date}
                         title={title}
                         summary={excerpt}
                         tags={tags}
-                      ></PostItem>
+                      ></PostItemSmall>
                     </motion.div>
                   );
                 })}
