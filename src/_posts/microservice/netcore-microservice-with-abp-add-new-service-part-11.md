@@ -2,9 +2,9 @@
 title: ".Net Core microservice application with ABP - Add New Service - Part 11"
 excerpt: "In this post we will see how to add docker support and create a CI/CD with github actions"
 date: "2022-04-07T00:00:00.000Z"
-videoId:  
+videoId: i_MwyAYOknk
 tags: [ "dotnet", "abp", "microservice" ]
-author:
+author: 
   name: Anto Subash
   picture: "/assets/blog/authors/anto.jpg"
   url: "https://antosubash.com"
@@ -39,7 +39,7 @@ dotnet sln ".\$name.sln" add (Get-ChildItem -Path "services\$folder" -Recurse -I
 ## Run the script
 
 ```bash
-newservice.ps1 project
+.\newservice.ps1 project
 ```
 
 This script will create a new service and do some cleanup and add the project to solution.
