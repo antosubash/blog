@@ -79,6 +79,14 @@ const LayoutWrapper = ({ children }: any) => {
               </li>
               <li>
                 <a
+                  href="/page"
+                  className="block text-xl text-center px-2 py-4 hover:bg-gray-400 dark:hover:bg-gray-700 font-bold"
+                >
+                  Articles
+                </a>
+              </li>
+              <li>
+                <a
                   href="/tags"
                   className="block text-xl text-center px-2 py-4 hover:bg-gray-400 dark:hover:bg-gray-700 font-bold"
                 >
