@@ -19,15 +19,6 @@ const CommandBar = (props: Props) => {
 
   const actions = [
     {
-      id: "copy",
-      name: "Copy URL",
-      shortcut: ["u"],
-      keywords: "copy-url",
-      section: "General",
-      perform: () => navigator.clipboard.writeText(window.location.href),
-      icon: <i className="ri-file-copy-line" style={iconStyle}/>,
-    },
-    {
       id: "email",
       name: "Send Email",
       shortcut: ["e"],
