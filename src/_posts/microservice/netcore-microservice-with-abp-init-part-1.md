@@ -19,6 +19,8 @@ You can find more info here: <https://github.com/abpframework/abp>
 
 You can find the documentation here: <https://docs.abp.io/en/abp/latest>
 
+Here is the [Quick Start Guide](https://docs.abp.io/en/abp/latest/Tutorials/Todo/Index?UI=MVC&DB=EF)
+
 ## Why Microservice with ABP?
 
 One of the major goals of the ABP framework is to provide a convenient infrastructure to create microservice solutions. To make this possible,
