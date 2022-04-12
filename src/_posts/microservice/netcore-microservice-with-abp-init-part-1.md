@@ -11,12 +11,6 @@ author:
 ---
 ## Table of contents
 
-## Initial Setup
-
-This is the first step in creating your ABP microservice application. We will create the projects structure and the required projects for your microservice setup.
-
-Most of the architecture is based on the EShopOnAbp Sample microservice application here <https://github.com/abpframework/eShopOnAbp>.
-
 ## What is ABP?
 
 ABP framework is a complete infrastructure to create modern web applications by following the best practices and conventions of software development. ABP offers a complete, modular and layered software architecture based on Domain Driven Design principles and patterns. There are a lot of features provided by the ABP Framework to achieve real world scenarios easier, like Event Bus, Background Job System, Audit Logging, BLOB Storing, Data Seeding, Data Filtering, etc. ABP also simplifies (and even automates wherever possible) cross cutting concerns and common non-functional requirements like Exception Handling, Validation, Authorization, Localization, Caching, Dependency Injection, Setting Management, etc.
@@ -40,6 +34,12 @@ One of the major goals of the ABP framework is to provide a convenient infrastru
 ## Purpose
 
 By default when you create a ABP application it will be a monolith. There is no definitive guide on how to create a microservice application with all the modules. The purpose of this blog series is to have a base solution of the ABP running as a microservice application. We will have a SaaS service for Tenant Management and Identity Service for Identity and IdentityServer and Admin Service for features, permissions, settings and audit logs. this will be great base solution for your microservice and you will see how to setup the microservice from the scratch.
+
+## Initial Setup
+
+This is the first step in creating your ABP microservice application. We will create the projects structure and the required projects for your microservice setup.
+
+Most of the architecture is based on the EShopOnAbp Sample microservice application here <https://github.com/abpframework/eShopOnAbp>.
 
 ## Startup script
 
