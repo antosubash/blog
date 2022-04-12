@@ -33,7 +33,7 @@ One of the major goals of the ABP framework is to provide a convenient infrastru
 
 ## Purpose
 
-By default when you create a ABP application it will be a monolith. There is no definitive guide on how to create a microservice application with all the modules. The purpose of this blog series is to have a base solution of the ABP running as a microservice application. We will have a SaaS service for Tenant Management and Identity Service for Identity and IdentityServer and Admin Service for features, permissions, settings and audit logs. this will be great base solution for your microservice and you will see how to setup the microservice from the scratch.
+By default when you create a ABP application it will be a monolith. There is no definitive guide on how to create a microservice application with all the modules. The purpose of this blog series is to have a base solution of the ABP running as a microservice application. We will have a SaaS service for Tenant Management and Identity Service for Identity and IdentityServer and Admin Service for features, permissions, settings and audit logs. this will be a great base solution for your microservice and you will see how to setup the microservice from the scratch.
 
 ## Initial Setup
 
