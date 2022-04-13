@@ -84,6 +84,7 @@ const Meta = ({
         name="twitter:card"
         content="summary_large_image"
       />
+      <meta key="twitter:site" name="twitter:site" content="@antosubash" />
       <meta key="twitter:creator" name="twitter:creator" content="@antosubash" />
       <meta
         key="twitter:title"
@@ -126,7 +127,7 @@ const Meta = ({
         href="/favicon-16x16.png"
       />
 
-      <link key="manifest" rel="manifest" href="/site.webmanifest" />
+      <link key="manifest" rel="manifest" href="/favicon/manifest.json" />
       <link
         key="mask-icon"
         rel="mask-icon"
@@ -142,8 +143,8 @@ const Meta = ({
 
       <title key="pageTitle">
         {title
-          ? `${title} | Anto | Anto Subash`
-          : "Anto | Anto Subash"}{" "}
+          ? `${title}`
+          : "Anto Subash"}
       </title>
     </Head>
   );
