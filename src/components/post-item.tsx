@@ -36,7 +36,7 @@ const PostItem = (props: PostItemProps) => {
             <div className="text-base font-medium leading-6">
               <a
                 href={`/posts/${slug}`}
-                className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                className="text-primary-800 dark:text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
                 aria-label={`Read "${title}"`}
               >
                 Read more &rarr;
