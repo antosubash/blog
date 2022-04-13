@@ -29,7 +29,7 @@ const Post = ({ post }: Props) => {
           <PageTitle>Loading…</PageTitle>
         ) : (
           <>
-            <Meta 
+            <Meta
               title={post.title}
               description={post.excerpt}
               url={`/posts/${post.slug}`}
@@ -71,6 +71,7 @@ export async function getStaticProps({ params }: Params) {
     "coverImage",
     "videoId",
     "tags",
+    "excerpt",
   ]);
 
   await generateOgImage({ slug: params.slug, title: post.title });

@@ -6,7 +6,6 @@ type Props = {};
 const ShortcutHome = (props: Props) => {
   const { query } = useKBar();
   const [mounted, setMounted] = useState(false);
-  console.log(query);
   useEffect(() => {
     if (!query) return;
     setMounted(true);

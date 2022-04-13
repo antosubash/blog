@@ -1,5 +1,5 @@
 export const siteMetadata = {
-  title: "Blog",
+  title: "Anto's blog",
   author: "Anto Subash",
   headerTitle: "Blog",
   description: "A personal blog from a lazy programmer",
@@ -11,4 +11,5 @@ export const siteMetadata = {
   socialBanner: "/static/images/twitter-card.png",
   email: "antosubash@live.com",
   locale: "en-US",
+  keywords: ["blog", "personal", "programmer", "antosubash"],
 };

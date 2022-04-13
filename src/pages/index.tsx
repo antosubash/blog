@@ -9,8 +9,6 @@ import { useState } from "react";
 import Meta from "@components/meta";
 import { generateOgImage } from "@lib/generateOgImage";
 import Link from "next/link";
-import ShortcutHome from "@components/shortcut-home";
-import CommandBar from "@components/command-bar";
 type Props = {
   allPosts: Post[];
 };
@@ -21,7 +19,8 @@ const Index = ({ allPosts }: Props) => {
         <Meta
           title="Anto's blog"
           description="My personal blog"
-          url="http://blog.antosubash.com"
+          keywords="anto blog"
+          date={allPosts[0].date}
           image="/og/home.png"
         />
         <Container>

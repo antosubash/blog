@@ -1,3 +1,4 @@
+import { siteMetadata } from "data/siteMetadata";
 import Head from "next/head";
 
 const Meta = ({
@@ -8,6 +9,33 @@ const Meta = ({
   date,
   image,
 }: any) => {
+  if(image) {
+    image = siteMetadata.siteUrl + image;
+  }
+
+  if(url) {
+    url = siteMetadata.siteUrl + url;
+  }
+
+  if(!url) {
+    url = siteMetadata.siteUrl;
+  }
+
+  if(!title) {
+    title = siteMetadata.title;
+  }
+
+  if(!description) {
+    description = siteMetadata.description;
+  }
+
+  if(!keywords) {
+    keywords = siteMetadata.keywords;
+  }
+
+  if(!date) {
+    date = new Date().toISOString();
+  }
   return (
     <Head>
       <meta key="charSet" charSet="UTF-8" />

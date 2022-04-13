@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json.schemastore.org/web-manifest-combined.json",
+  "name": "Anto Subash",
+  "short_name": "Anto Subash",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#fff",
+  "description": "Anto's personal blog."
+}

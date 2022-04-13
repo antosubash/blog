@@ -40,7 +40,9 @@ const PostMain = ({ allPosts, initialDisplayPosts, pagination }: Props) => {
         <Meta
           title="Anto's blog"
           description="My personal blog"
-          url="http://blog.antosubash.com"
+          keywords="anto blog"
+          date={allPosts[0].date}
+          url="/page"
           image="/og/home.png"
         />
         <Container>
@@ -127,7 +129,7 @@ export const getStaticProps = async ({ params }: any) => {
     "excerpt",
     "tags",
   ]);
-  
+
   const initialDisplayPosts = allPosts.slice(0, POSTS_PER_PAGE);
 
   const pagination = {
