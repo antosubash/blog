@@ -62,10 +62,5 @@ export const createImage = async ({ title }: Pick<OgImagePayload, "title">) => {
     context.fillText(line, 40, 100 + i * 60);
   });
 
-  context.font = "700 30px Arial";
-  context.fillStyle = "#fff";
-  context.fillText("Anto Subash", 170, 370);
-  context.fillText("github.com/antosubash", 170, 410);
-
   return canvas.toBuffer("image/png");
 };
