@@ -4,10 +4,6 @@ excerpt: "In this post we will see how to create a modular abp application and c
 date: "2021-11-27"
 tags: [ "abp", "module", "microservice" ]
 videoId: qQGbpfVTt_w
-author:
-  name: Anto Subash
-  picture: "/assets/blog/authors/anto.jpg"
-  url: "https://antosubash.com"
 ---
 ## Table of contents
 

@@ -4,10 +4,6 @@ excerpt: "In this post we will see how to add docker support and create a CI/CD 
 date: "2022-04-07T00:00:00.000Z"
 videoId: i_MwyAYOknk
 tags: [ "dotnet", "abp", "microservice" ]
-author: 
-  name: Anto Subash
-  picture: "/assets/blog/authors/anto.jpg"
-  url: "https://antosubash.com"
 ---
 
 ## Table of contents

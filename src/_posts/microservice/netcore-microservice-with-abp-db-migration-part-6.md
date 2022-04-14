@@ -4,10 +4,6 @@ excerpt: "In this post we will see how to create migration project for our micro
 date: "2022-03-19T04:00:00.000Z"
 videoId: vtv8gzSbjCY 
 tags: [ "dotnet", "abp", "microservice", "netcore6" ]
-author:
-  name: Anto Subash
-  picture: "/assets/blog/authors/anto.jpg"
-  url: "https://antosubash.com"
 ---
 
 ## Table of contents

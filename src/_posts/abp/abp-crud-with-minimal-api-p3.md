@@ -4,10 +4,6 @@ excerpt: "In this post we will see how to use minimal api with the ABP applicati
 date: "2021-12-31"
 videoId: H_GYXKJuCTA
 tags: [ "dotnet", "abp", "crud" ]
-author:
-  name: Anto Subash
-  picture: "/assets/blog/authors/anto.jpg"
-  url: "https://antosubash.com"
 ---
 ## Table of contents
 

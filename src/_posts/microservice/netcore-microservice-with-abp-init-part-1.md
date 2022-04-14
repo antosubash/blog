@@ -4,10 +4,6 @@ excerpt: "In this post we will see how to do the initial setup for a abp microse
 date: "2022-03-18"
 videoId: e95p53tDPis 
 tags: [ "dotnet", "abp", "microservice", "netcore6" ]
-author:
-  name: Anto Subash
-  picture: "/assets/blog/authors/anto.jpg"
-  url: "https://antosubash.com"
 ---
 ## Table of contents
 

@@ -4,10 +4,6 @@ excerpt: "In this post we will see how to develop a modular abp application. We 
 date: "2021-11-02"
 videoId: z7Nej3q9t80
 tags: [ "abp", "module" ]
-author:
-  name: Anto Subash
-  picture: "/assets/blog/authors/anto.jpg"
-  url: "https://antosubash.com"
 ---
 ## Table of contents
 

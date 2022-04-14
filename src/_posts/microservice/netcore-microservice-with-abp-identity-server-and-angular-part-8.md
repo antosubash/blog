@@ -4,10 +4,6 @@ excerpt: "In this post we will see how to get the IdentityServer and the Angular
 date: "2022-03-20T00:00:00.000Z"
 videoId: w2dZokfRxe0 
 tags: [ "dotnet", "abp", "microservice", "netcore6", "identity-server", "angular" ]
-author:
-  name: Anto Subash
-  picture: "/assets/blog/authors/anto.jpg"
-  url: "https://antosubash.com"
 ---
 
 ## Table of contents

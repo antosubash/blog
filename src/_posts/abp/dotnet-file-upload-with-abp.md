@@ -4,10 +4,6 @@ excerpt: "In this post we will implement file upload using the ABP blob store an
 date: "2021-07-10"
 videoId: YUIHVbOhg_Q
 tags: [ "dotnet", "abp" ]
-author:
-  name: Anto Subash
-  picture: "/assets/blog/authors/anto.jpg"
-  url: "https://antosubash.com"
 ---
 ## Table of contents
 

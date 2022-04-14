@@ -3,10 +3,6 @@ title: "Css for leaflet div element"
 excerpt: "If you are like me who struggle with anything CSS. These are some small css that will help you to fill the leaflet map without setting the fixed height"
 date: "2020-09-21"
 tags: [ "css", "leaflet" ]
-author:
-  name: Anto Subash
-  picture: "/assets/blog/authors/anto.jpg"
-  url: "https://antosubash.com"
 ---
 
 ## Css for the leaflet div

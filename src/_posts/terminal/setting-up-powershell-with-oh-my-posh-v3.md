@@ -4,10 +4,6 @@ excerpt: "In this post we will see how to setup the oh-my-posh and PSReadLine wi
 date: "2021-06-30"
 videoId: Cy73CoOx8z8
 tags: [ "terminal" ]
-author:
-  name: Anto Subash
-  picture: "/assets/blog/authors/anto.jpg"
-  url: "https://antosubash.com"
 ---
 ## Table of contents
 

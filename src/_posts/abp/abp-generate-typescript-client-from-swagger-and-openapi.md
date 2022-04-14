@@ -4,10 +4,6 @@ excerpt: "In this post we will see how to use how to use the NSwag to generate a
 date: "2022-01-08"
 videoId: fOEt_YI-Oww 
 tags: [ "dotnet", "abp", "react" ]
-author:
-  name: Anto Subash
-  picture: "/assets/blog/authors/anto.jpg"
-  url: "https://antosubash.com"
 ---
 ## Table of contents
 

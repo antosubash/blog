@@ -4,10 +4,6 @@ excerpt: "In this post we will see how to create a reverse proxy with Yarp and i
 date: "2022-03-19T05:00:00.000Z"
 videoId: ICd7dpaCrDo
 tags: [ "dotnet", "abp", "microservice", "netcore6", "yarp", "tye" ]
-author:
-  name: Anto Subash
-  picture: "/assets/blog/authors/anto.jpg"
-  url: "https://antosubash.com"
 ---
 
 ## Table of contents

@@ -4,10 +4,6 @@ excerpt: "This is an introduction to the ABP Application framework with .Net cor
 date: "2021-03-05"
 videoId: m8pjAtmpmBI
 tags: [ "abp" ]
-author:
-  name: Anto Subash
-  picture: "/assets/blog/authors/anto.jpg"
-  url: "https://antosubash.com"
 ---
 ## Table of contents
 

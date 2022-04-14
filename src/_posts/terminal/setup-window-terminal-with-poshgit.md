@@ -3,10 +3,6 @@ title: "Set up Windows Terminal with PoshGit, oh-my-posh and Cascadia Code PL"
 excerpt: "In this post we will see how to setup windows terminal with PoshGit and oh-my-posh to make the terminal more productive"
 date: "2020-12-05"
 tags: [ "terminal" ]
-author:
-  name: Anto Subash
-  picture: "/assets/blog/authors/anto.jpg"
-  url: "https://antosubash.com"
 ---
 ## Table of contents
 

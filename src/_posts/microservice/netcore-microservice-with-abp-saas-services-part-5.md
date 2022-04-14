@@ -4,10 +4,6 @@ excerpt: "In this post we will see how to do the create SaaS Service for our mic
 date: "2022-03-19T03:00:00.000Z"
 videoId: h0yWwQ_2mzs 
 tags: [ "dotnet", "abp", "microservice", "netcore6" ]
-author:
-  name: Anto Subash
-  picture: "/assets/blog/authors/anto.jpg"
-  url: "https://antosubash.com"
 ---
 
 ## Table of contents

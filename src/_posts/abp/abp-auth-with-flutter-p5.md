@@ -4,10 +4,6 @@ excerpt: "In this post we will implement the OAuth for the Flutter app."
 date: "2021-05-29"
 videoId: lQEVvKzX6P8
 tags: [ "abp", "flutter", "openid", "identity-server" ]
-author:
-  name: Anto Subash
-  picture: "/assets/blog/authors/anto.jpg"
-  url: "https://antosubash.com"
 ---
 ## Table of contents
 

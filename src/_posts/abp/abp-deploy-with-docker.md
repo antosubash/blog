@@ -4,10 +4,6 @@ excerpt: "In this post we will see how to deploy your dotnet core app with docke
 date: "2021-09-28"
 videoId: L2GeLy_VWRQ
 tags: [ "abp", "docker", "deployment" ]
-author:
-  name: Anto Subash
-  picture: "/assets/blog/authors/anto.jpg"
-  url: "https://antosubash.com"
 ---
 ## Table of contents
 

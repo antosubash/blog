@@ -3,10 +3,6 @@ title: "Setup docker in Ubuntu 18.04"
 excerpt: "In this post you will see how to setup docker in Ubuntu 18.04. We will also change the default ssh port and install fail2ban."
 date: "2020-09-17T07:35:07.322Z"
 tags: [ "docker", "ubuntu" ]
-author:
-  name: Anto Subash
-  picture: "/assets/blog/authors/anto.jpg"
-  url: "https://antosubash.com"
 ---
 ## Table of contents
 

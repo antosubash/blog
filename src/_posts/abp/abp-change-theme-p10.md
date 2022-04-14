@@ -4,10 +4,6 @@ excerpt: "In this post we will explore how to change the theme for your ABP appl
 date: "2021-10-26"
 videoId: tj_n6UJ_guU
 tags: [ "abp", "bootstrap", "theme" ]
-author:
-  name: Anto Subash
-  picture: "/assets/blog/authors/anto.jpg"
-  url: "https://antosubash.com"
 ---
 ## Table of contents
 

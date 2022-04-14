@@ -4,10 +4,6 @@ excerpt: "In this post we will see how to do the create Administration service f
 date: "2022-03-19T01:00:00.000Z"
 videoId: Pwnz_t7IK80
 tags: [ "dotnet", "abp", "microservice", "netcore6" ]
-author:
-  name: Anto Subash
-  picture: "/assets/blog/authors/anto.jpg"
-  url: "https://antosubash.com"
 ---
 
 ## Table of contents

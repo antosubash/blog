@@ -4,10 +4,6 @@ excerpt: "In this post we will see how to do authentication using OpenId for a R
 date: "2021-11-18"
 videoId: UldaX-QXdqE
 tags: [ "orchard-core", "openid", "nextjs", "auth" ]
-author:
-  name: Anto Subash
-  picture: "/assets/blog/authors/anto.jpg"
-  url: "https://antosubash.com"
 ---
 ## Table of contents
 

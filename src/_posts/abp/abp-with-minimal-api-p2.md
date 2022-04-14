@@ -4,10 +4,6 @@ excerpt: "In this post we will see how to use minimal api with the ABP applicati
 date: "2021-12-30"
 videoId: IW_3Y9eMa4o
 tags: [ "dotnet", "abp" ]
-author:
-  name: Anto Subash
-  picture: "/assets/blog/authors/anto.jpg"
-  url: "https://antosubash.com"
 ---
 ## Table of contents
 
@@ -16,7 +12,6 @@ author:
 In this we will continue with the last one and add Ef core to our Minimal ABP module.
 
 This is a continuation of [Part 1](https://blog.antosubash.com/posts/abp-with-minimal-api-p1)
-
 
 ## Create the project
 

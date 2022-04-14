@@ -4,10 +4,6 @@ excerpt: "ABP Feature system is used to enable, disable or change the behavior o
 date: "2021-05-17"
 videoId: xn7cfannWE0
 tags: [ "abp", "feature" ]
-author:
-  name: Anto Subash
-  picture: "/assets/blog/authors/anto.jpg"
-  url: "https://antosubash.com"
 ---
 ## Table of contents
 

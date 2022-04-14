@@ -4,10 +4,6 @@ excerpt: "In this post we will see how to do the create a Shared project which w
 date: "2022-03-19"
 videoId: qGYeWNj_DI0 
 tags: [ "dotnet", "abp", "microservice", "netcore6" ]
-author:
-  name: Anto Subash
-  picture: "/assets/blog/authors/anto.jpg"
-  url: "https://antosubash.com"
 ---
 ## Table of contents
 

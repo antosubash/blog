@@ -4,10 +4,6 @@ excerpt: "In this post we will see how to extent the tenant entity and Add a cus
 date: "2021-09-25"
 videoId: pdAJcxsCo8sy
 tags: [ "abp", "deployment" ]
-author:
-  name: Anto Subash
-  picture: "/assets/blog/authors/anto.jpg"
-  url: "https://antosubash.com"
 ---
 ## Table of contents
 

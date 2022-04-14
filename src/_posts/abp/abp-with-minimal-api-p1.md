@@ -4,10 +4,6 @@ excerpt: "In this post we will see how to use minimal api with the ABP applicati
 date: "2021-12-29"
 videoId: 1xgKy7ucXoE
 tags: [ "dotnet", "abp" ]
-author:
-  name: Anto Subash
-  picture: "/assets/blog/authors/anto.jpg"
-  url: "https://antosubash.com"
 ---
 ## Table of contents
 

@@ -4,10 +4,6 @@ excerpt: "In this post we will see how to develop a modular with tiered abp appl
 date: "2021-11-03"
 videoId: y2O8Hr3ioSE
 tags: [ "abp", "module" ]
-author:
-  name: Anto Subash
-  picture: "/assets/blog/authors/anto.jpg"
-  url: "https://antosubash.com"
 ---
 
 ## Table of contents

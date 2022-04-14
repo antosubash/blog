@@ -4,10 +4,6 @@ excerpt: "In this post you will see how to upload large files with resume using 
 date: "2021-07-22"
 videoId: 9IQfy1l6kLg
 tags: [ "dotnet", "nextjs", "react", "tus" ]
-author:
-  name: Anto Subash
-  picture: "/assets/blog/authors/anto.jpg"
-  url: "https://antosubash.com"
 ---
 ## Table of contents
 

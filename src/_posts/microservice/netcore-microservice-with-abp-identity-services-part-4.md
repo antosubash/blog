@@ -4,10 +4,6 @@ excerpt: "In this post we will see how to do the create Identity service for our
 date: "2022-03-19T02:00:00.000Z"
 videoId: Qsi7AFflmdk 
 tags: [ "dotnet", "abp", "microservice", "netcore6" ]
-author:
-  name: Anto Subash
-  picture: "/assets/blog/authors/anto.jpg"
-  url: "https://antosubash.com"
 ---
 
 ## Table of contents

@@ -4,10 +4,6 @@ excerpt: "In this post we will explore the new experimental no layer template fr
 date: "2022-01-29"
 tags: [ "abp", "dotnet", "no-layers" ]
 videoId: af4BqBhgftY 
-author:
-  name: Anto Subash
-  picture: "/assets/blog/authors/anto.jpg"
-  url: "https://antosubash.com"
 ---
 ## Table of contents
 

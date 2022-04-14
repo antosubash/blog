@@ -4,10 +4,6 @@ excerpt: "In this post we will implement the Authorization in ABP with IdentityS
 date: "2021-05-16"
 videoId: 0_5634MuEvU
 tags: [ "abp", "authorization" , "identity-server" ]
-author:
-  name: Anto Subash
-  picture: "/assets/blog/authors/anto.jpg"
-  url: "https://antosubash.com"
 ---
 ## Table of contents
 

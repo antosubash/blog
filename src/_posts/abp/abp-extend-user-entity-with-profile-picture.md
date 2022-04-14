@@ -4,10 +4,6 @@ excerpt: "In this post we will implement the profile picture upload for the ABP 
 date: "2021-08-15"
 videoId: R2Y7wHBxERg
 tags: [ "abp", "minio", "blob-store", "upload" ]
-author:
-  name: Anto Subash
-  picture: "/assets/blog/authors/anto.jpg"
-  url: "https://antosubash.com"
 ---
 ## Table of contents
 

@@ -4,10 +4,6 @@ excerpt: "In this post we will see how to get started with the orchard core."
 date: "2021-11-01"
 videoId: ItfKWbKxPAw
 tags: [ "orchard-core" ]
-author:
-  name: Anto Subash
-  picture: "/assets/blog/authors/anto.jpg"
-  url: "https://antosubash.com"
 ---
 ## Table of contents
 
