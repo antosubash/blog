@@ -20,6 +20,8 @@ Seq is the intelligent search, analysis, and alerting server built specifically 
 
 Application logs are the most useful data available for detecting and solving a wide range of production issues and outages. Seq makes it easier to pinpoint the events and patterns in application behavior that show your system is working correctly — or why it isn't.
 
+More info here : <https://docs.datalust.co/docs/using-serilog>
+
 ## Purpose
 
 In our microservice application, there are four services and one Identity server, and one gateway. This count will keep growing. We use serilog to log the data. But the logs are only available inside the application. This creates a problem. To solve this problem we will use seq. Seq will store all the logs in a central location so that it will make it easy for us to view the application logs and analyze them.
