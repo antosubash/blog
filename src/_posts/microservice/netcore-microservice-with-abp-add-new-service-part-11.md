@@ -34,6 +34,8 @@ dotnet sln ".\$name.sln" add (Get-ChildItem -Path "services\$folder" -Recurse -I
 
 ## Run the script
 
+Please make sure to run this command in the root of your project where the solution file is located.
+
 ```bash
 .\newservice.ps1 project
 ```
