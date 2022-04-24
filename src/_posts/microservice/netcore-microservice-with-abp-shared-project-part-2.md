@@ -5,6 +5,35 @@ date: "2022-03-19"
 videoId: qGYeWNj_DI0 
 tags: [ "dotnet", "abp", "microservice", "netcore6" ]
 ---
+
+This is second post of the series: [.Net Microservice with ABP](https://blog.antosubash.com/posts/abp-microservice-series)
+
+## Posts in the Series
+
+[Part 1. Initial Setup](https://blog.antosubash.com/posts/netcore-microservice-with-abp-init-part-1)
+
+Part 2. Shared Project (this post)
+
+[Part 3. Administration Service](https://blog.antosubash.com/posts/netcore-microservice-with-abp-administration-services-part-3)
+
+[Part 4. Identity Service](https://blog.antosubash.com/posts/netcore-microservice-with-abp-identity-services-part-4)
+
+[Part 5. SaaS Service](https://blog.antosubash.com/posts/netcore-microservice-with-abp-saas-services-part-5)
+
+[Part 6. DB Migration](https://blog.antosubash.com/posts/netcore-microservice-with-abp-db-migration-part-6)
+
+[Part 7. Yarp and Tye](https://blog.antosubash.com/posts/netcore-microservice-with-abp-yarp-and-tye-part-7)
+
+[Part 8. Identity server and Angular App](https://blog.antosubash.com/posts/netcore-microservice-with-abp-identity-server-and-angular-part-8)
+
+[Part 9. Distributed event bus](https://blog.antosubash.com/posts/netcore-microservice-with-abp-distributed-event-bus-part-9)
+
+[Part 10. Docker and CI/CD](https://blog.antosubash.com/posts/netcore-microservice-with-abp-docker-and-ci-cd-part-10)
+
+[Part 11. Add a New service](https://blog.antosubash.com/posts/netcore-microservice-with-abp-add-new-service-part-11)
+
+[Part 12. Central Logging](https://blog.antosubash.com/posts/netcore-microservice-with-abp-add-central-logging-part-12)
+
 ## Table of contents
 
 ## Setup Shared project
