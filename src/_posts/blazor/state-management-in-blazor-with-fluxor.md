@@ -22,7 +22,7 @@ Docs: <https://github.com/mrpmorris/Fluxor/blob/master/Docs/README.md>
 - Every reducer that processes the dispatched action type will create new state to reflect the old state combined with the changes expected for the action.
 - The UI then uses the new state to render its display.
 
-## Core Concepts
+## Core Concepts (State, Actions, and Reducers)
 
 Imagine your app’s state is described as a plain object. For example, the state of a todo app might look like this:
 
