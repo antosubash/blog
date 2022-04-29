@@ -1,5 +1,5 @@
 ---
-title: ".Net Core microservice application with ABP - Logging with Seq - Part 12"
+title: ".Net Microservice application with ABP - Logging with Seq - Part 12"
 excerpt: "In this post, we will see how to add centralized logging to our microservice application"
 date: "2022-04-13T00:00:00.000Z"
 videoId: ma0P3jo9uGE 

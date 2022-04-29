@@ -1,5 +1,5 @@
 ---
-title: ".Net Core microservice application with ABP - Administration Services - Part 3"
+title: ".Net Microservice application with ABP - Administration Services - Part 3"
 excerpt: "In this post we will see how to do the create Administration service for our microservice application"
 date: "2022-03-19T01:00:00.000Z"
 videoId: Pwnz_t7IK80

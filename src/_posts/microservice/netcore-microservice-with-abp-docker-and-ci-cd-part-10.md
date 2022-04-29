@@ -1,5 +1,5 @@
 ---
-title: ".Net Core microservice application with ABP - Docker and CI/CD - Part 10"
+title: ".Net Microservice application with ABP - Docker and CI/CD - Part 10"
 excerpt: "In this post we will see how to add docker support and create a CI/CD with github actions"
 date: "2022-03-26T00:00:00.000Z"
 videoId: zUD2xPpvTVg 

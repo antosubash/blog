@@ -1,5 +1,5 @@
 ---
-title: ".Net Core microservice application with ABP - IdentityServer and Angular - Part 8"
+title: ".Net Microservice application with ABP - IdentityServer and Angular - Part 8"
 excerpt: "In this post we will see how to get the IdentityServer and the Angular App working with other services"
 date: "2022-03-20T00:00:00.000Z"
 videoId: w2dZokfRxe0 
