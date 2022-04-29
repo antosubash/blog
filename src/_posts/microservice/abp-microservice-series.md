@@ -1,5 +1,5 @@
 ---
-title: "Series: .net microservice with ABP"
+title: ".Net microservice with ABP - Full Series"
 excerpt: "This post contains all the parts of the microservice development with ABP"
 date: "2022-04-23T00:00:00.000Z"
 videoId:  
