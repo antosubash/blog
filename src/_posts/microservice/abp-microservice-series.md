@@ -2,9 +2,35 @@
 title: ".Net microservice with ABP - Full Series"
 excerpt: "This post contains all the parts of the microservice development with ABP"
 date: "2022-04-23T00:00:00.000Z"
-videoId:  
+videoId: PFFNHQUn74A 
 tags: [ "dotnet", "abp", "microservice", "series"]
 ---
+
+## Posts in the Series
+
+[Part 1. Initial Setup](https://blog.antosubash.com/posts/netcore-microservice-with-abp-init-part-1)
+
+[Part 2. Shared Project](https://blog.antosubash.com/posts/netcore-microservice-with-abp-shared-project-part-2)
+
+[Part 3. Administration Service](https://blog.antosubash.com/posts/netcore-microservice-with-abp-administration-services-part-3)
+
+[Part 4. Identity Service](https://blog.antosubash.com/posts/netcore-microservice-with-abp-identity-services-part-4)
+
+[Part 5. SaaS Service](https://blog.antosubash.com/posts/netcore-microservice-with-abp-saas-services-part-5)
+
+[Part 6. DB Migration](https://blog.antosubash.com/posts/netcore-microservice-with-abp-db-migration-part-6)
+
+[Part 7. Yarp and Tye](https://blog.antosubash.com/posts/netcore-microservice-with-abp-yarp-and-tye-part-7)
+
+[Part 8. Identity server and Angular App](https://blog.antosubash.com/posts/netcore-microservice-with-abp-identity-server-and-angular-part-8)
+
+[Part 9. Distributed event bus](https://blog.antosubash.com/posts/netcore-microservice-with-abp-distributed-event-bus-part-9)
+
+[Part 10. Docker and CI/CD](https://blog.antosubash.com/posts/netcore-microservice-with-abp-docker-and-ci-cd-part-10)
+
+[Part 11. Add a New service](https://blog.antosubash.com/posts/netcore-microservice-with-abp-add-new-service-part-11)
+
+[Part 12. Central Logging](https://blog.antosubash.com/posts/netcore-microservice-with-abp-add-central-logging-part-12)
 
 ## Table of contents
 
@@ -38,28 +64,4 @@ One of the major goals of the ABP framework is to provide a convenient infrastru
 
 By default when you create a ABP application it will be a monolith. There is no definitive guide on how to create a microservice application with all the modules. The purpose of this blog series is to have a base solution of the ABP running as a microservice application. We will have a SaaS service for Tenant Management and Identity Service for Identity and IdentityServer and Admin Service for features, permissions, settings and audit logs. this will be a great base solution for your microservice and you will see how to setup the microservice from the scratch.
 
-## Posts in the Series
 
-[Part 1. Initial Setup](https://blog.antosubash.com/posts/netcore-microservice-with-abp-init-part-1)
-
-[Part 2. Shared Project](https://blog.antosubash.com/posts/netcore-microservice-with-abp-shared-project-part-2)
-
-[Part 3. Administration Service](https://blog.antosubash.com/posts/netcore-microservice-with-abp-administration-services-part-3)
-
-[Part 4. Identity Service](https://blog.antosubash.com/posts/netcore-microservice-with-abp-identity-services-part-4)
-
-[Part 5. SaaS Service](https://blog.antosubash.com/posts/netcore-microservice-with-abp-saas-services-part-5)
-
-[Part 6. DB Migration](https://blog.antosubash.com/posts/netcore-microservice-with-abp-db-migration-part-6)
-
-[Part 7. Yarp and Tye](https://blog.antosubash.com/posts/netcore-microservice-with-abp-yarp-and-tye-part-7)
-
-[Part 8. Identity server and Angular App](https://blog.antosubash.com/posts/netcore-microservice-with-abp-identity-server-and-angular-part-8)
-
-[Part 9. Distributed event bus](https://blog.antosubash.com/posts/netcore-microservice-with-abp-distributed-event-bus-part-9)
-
-[Part 10. Docker and CI/CD](https://blog.antosubash.com/posts/netcore-microservice-with-abp-docker-and-ci-cd-part-10)
-
-[Part 11. Add a New service](https://blog.antosubash.com/posts/netcore-microservice-with-abp-add-new-service-part-11)
-
-[Part 12. Central Logging](https://blog.antosubash.com/posts/netcore-microservice-with-abp-add-central-logging-part-12)
