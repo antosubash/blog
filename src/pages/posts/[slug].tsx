@@ -43,7 +43,7 @@ const Post = ({ post }: Props) => {
               date={post.date}
               author={post.author}
             />
-            <PostBody videoId={post.videoId} content={post.content} />
+            <PostBody videoId={post.videoId} content={post.content} title={post.title} />
             <Utterances />
           </>
         )}
