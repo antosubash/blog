@@ -1,12 +1,12 @@
 ---
-title: ".Net Microservice application with ABP - Distributed Event Bus - Part 9"
+title: "Distributed Event Bus - .NET Microservice with ABP - Part 9"
 excerpt: "In this post we will see how to get the RabbitMQ working for service to service communication"
 date: "2022-03-25T00:00:00.000Z"
 videoId: gCBZUXbyOJo 
 tags: [ "dotnet", "abp", "microservice", "rabbitmq" ]
 ---
 
-This is the part 9 of the series: [.Net Microservice with ABP](https://blog.antosubash.com/posts/abp-microservice-series)
+This is the part 9 of the series: [.NET Microservice with ABP](https://blog.antosubash.com/posts/abp-microservice-series)
 
 ## Posts in the Series
 

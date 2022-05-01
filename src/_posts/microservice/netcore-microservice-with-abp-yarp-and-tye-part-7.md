@@ -1,12 +1,12 @@
 ---
-title: ".Net Microservice application with ABP - Yarp and Tye - Part 7"
+title: "Yarp and Tye - .NET Microservice with ABP - Part 7"
 excerpt: "In this post we will see how to create a reverse proxy with Yarp and integrate Tye for our microservice application"
 date: "2022-03-19T05:00:00.000Z"
 videoId: ICd7dpaCrDo
 tags: [ "dotnet", "abp", "microservice", "netcore6", "yarp", "tye" ]
 ---
 
-This is seventh post of the series: [.Net Microservice with ABP](https://blog.antosubash.com/posts/abp-microservice-series)
+This is seventh post of the series: [.NET Microservice with ABP](https://blog.antosubash.com/posts/abp-microservice-series)
 
 ## Posts in the Series
 

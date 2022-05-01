@@ -1,12 +1,12 @@
 ---
-title: ".Net Microservice application with ABP - DbMigration - Part 6"
+title: "DbMigration - .NET Microservice with ABP - Part 6"
 excerpt: "In this post we will see how to create migration project for our microservice application"
 date: "2022-03-19T04:00:00.000Z"
 videoId: vtv8gzSbjCY 
 tags: [ "dotnet", "abp", "microservice", "netcore6" ]
 ---
 
-This is sixth post of the series: [.Net Microservice with ABP](https://blog.antosubash.com/posts/abp-microservice-series)
+This is sixth post of the series: [.NET Microservice with ABP](https://blog.antosubash.com/posts/abp-microservice-series)
 
 ## Posts in the Series
 

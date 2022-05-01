@@ -1,12 +1,12 @@
 ---
-title: ".Net Microservice application with ABP - IdentityServer and Angular - Part 8"
+title: "IdentityServer and Angular - .NET Microservice with ABP - Part 8"
 excerpt: "In this post we will see how to get the IdentityServer and the Angular App working with other services"
 date: "2022-03-20T00:00:00.000Z"
 videoId: w2dZokfRxe0 
 tags: [ "dotnet", "abp", "microservice", "netcore6", "identity-server", "angular" ]
 ---
 
-This is eight post of the series: [.Net Microservice with ABP](https://blog.antosubash.com/posts/abp-microservice-series)
+This is eight post of the series: [.NET Microservice with ABP](https://blog.antosubash.com/posts/abp-microservice-series)
 
 ## Posts in the Series
 
