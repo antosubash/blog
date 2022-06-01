@@ -32,24 +32,24 @@ const Index = ({ allPosts }: Props) => {
             </div>
             <ul className="divide-y">
               <AnimatePresence>
-                {allPosts.map((post) => {
+                {allPosts.map((post, index) => {
                   const { slug, date, title, excerpt, tags } = post;
                   return (
-                    <motion.div
+                    <motion.li
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                       whileHover={{ scale: 1.1 }}
-                      key={slug}
                     >
                       <PostItem
+                        key={index}
                         slug={slug}
                         date={date}
                         title={title}
                         summary={excerpt}
                         tags={tags}
                       ></PostItem>
-                    </motion.div>
+                    </motion.li>
                   );
                 })}
               </AnimatePresence>

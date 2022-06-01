@@ -3,6 +3,7 @@ import formatDate from "../lib/utils/formatDate";
 import Tag from "./tag";
 
 interface PostItemProps {
+  key: any
   slug: string;
   date: string;
   title: string;
@@ -13,7 +14,7 @@ interface PostItemProps {
 const PostItem = (props: PostItemProps) => {
   const { slug, date, title, summary } = props;
   return (
-    <li key={slug} className="py-12">
+    <div className="py-12">
       <article>
         <div className="space-y-2 xl:grid xl:grid-cols-4 xl:space-y-0 xl:items-baseline">
           <dl>
@@ -48,7 +49,7 @@ const PostItem = (props: PostItemProps) => {
           </div>
         </div>
       </article>
-    </li>
+    </div>
   );
 };
 
