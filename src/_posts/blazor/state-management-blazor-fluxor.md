@@ -137,4 +137,154 @@ To use the state management we will update the `counter` page which comes with t
 
 In the `IncrementCount` method we are dispatching an action and the current count is displayed buy injecting the state.
 
+## Effects
+
+Flux state is supposed to be immutable, and that state replaced only by pure functions, which should only take input from their parameters. With this in mind, we need something that will enable us to access other sources of data such as web services, and then reduce the results into our state. That is where the effects comes in. Effect handlers cannot (and should not) affect state directly. They are triggered when the action they are interested in is dispatched through the store, and as a response they can dispatch new actions.
+
+## Fetch data with effects
+
+We will update the fetch data sample provided in the default blazor application with Effects.
+
+### Fetch data action
+
+Lets create a action which will initiate the action. this will the be a empty action which will be used to trigger the effect.
+
+```cs
+public class FetchDataAction
+{
+}
+```
+
+### Fetch data result action
+
+Once the data is received from the server we need a action to update the state. we will use the ´FetchDataResultAction´ for that. It will have a the list of Weather forecast available.
+
+```cs
+public class FetchDataResultAction
+{
+    public IEnumerable<WeatherForecast> Forecasts { get; }
+
+    public FetchDataResultAction(IEnumerable<WeatherForecast> forecasts)
+    {
+        Forecasts = forecasts;
+    }
+}
+```
+
+## Weather state
+
+Weather state will the two property ´Forecasts´ and ´IsLoading´.
+
+```cs
+[FeatureState]
+public class WeatherState
+{
+  public bool IsLoading { get; }
+  public IEnumerable<WeatherForecast> Forecasts { get; }
+
+  private WeatherState() { }
+  public WeatherState(bool isLoading, IEnumerable<WeatherForecast> forecasts)
+  {
+    IsLoading = isLoading;
+    Forecasts = forecasts ?? Array.Empty<WeatherForecast>();
+  }
+}
+```
+
+## Weather Reducers
+
+In the reducer we need to manage 2 action which are created by us. One is to trigger the data fetch and the next one is to handle the data result.
+
+```cs
+public static class Reducers
+{
+  [ReducerMethod]
+  public static WeatherState ReduceFetchDataAction(WeatherState state, FetchDataAction action) =>
+    new(isLoading: true, forecasts: null);
+
+  [ReducerMethod]
+  public static WeatherState ReduceFetchDataResultAction(WeatherState state, FetchDataResultAction action) =>
+    new(isLoading: false, forecasts: action.Forecasts);
+}
+```
+
+## Weather effects
+
+Effects is where we will make our ´http´ call. We will inject the ´HttpClient´ and use that in the effect method. once the call is successful we will dispatch an action with the data result.
+
+```cs
+public class Effects
+{
+    private readonly HttpClient Http;
+
+    public Effects(HttpClient http)
+    {
+        Http = http;
+    }
+
+    [EffectMethod]
+    public async Task HandleFetchDataAction(FetchDataAction action, IDispatcher dispatcher)
+    {
+        var forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("sample-data/weather.json");
+        if(forecasts is not null)
+        {
+            dispatcher.Dispatch(new FetchDataResultAction(forecasts: forecasts!));
+        }
+    }
+}
+```
+
+### Update the fetch data page
+
+We need to update the fetch data page to use the weather state.
+
+```html
+@page "/fetchdata"
+@inject IDispatcher dispatcher
+@inject IState<WeatherState> weather
+<PageTitle>Weather forecast</PageTitle>
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+@if (weather.Value.IsLoading)
+{
+	<p><em>Loading...</em></p>
+}
+else
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Date</th>
+				<th>Temp. (C)</th>
+				<th>Temp. (F)</th>
+				<th>Summary</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var forecast in weather.Value.Forecasts)
+			{
+			<tr>
+				<td>@forecast.Date.ToShortDateString()</td>
+				<td>@forecast.TemperatureC</td>
+				<td>@forecast.TemperatureF</td>
+				<td>@forecast.Summary</td>
+			</tr>
+			}
+		</tbody>
+	</table>
+}
+
+@code {
+
+	protected override void OnInitialized()
+	{
+		base.OnInitialized();
+		dispatcher.Dispatch(new FetchDataAction());
+	}
+}
+```
+
 Repo : <https://github.com/antosubash/blazor-state-management-with-fluxor>
