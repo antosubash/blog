@@ -242,6 +242,7 @@ We need to update the fetch data page to use the weather state.
 @page "/fetchdata"
 @inject IDispatcher dispatcher
 @inject IState<WeatherState> weather
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
 <PageTitle>Weather forecast</PageTitle>
 
 <h1>Weather forecast</h1>
