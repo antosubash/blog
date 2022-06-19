@@ -82,7 +82,6 @@ const PostPage = ({ allPosts, initialDisplayPosts, pagination }: Props) => {
                 {displayPosts.map((post) => {
                   
                   const { slug, date, title, excerpt, tags, series, part } = post;
-                  console.log(tags);
                   return (
                     <motion.div
                       initial={{ opacity: 0 }}
@@ -132,7 +131,6 @@ export const getStaticProps = async ({ params }: any) => {
     "series",
     "part",
   ]);
-  console.log(allPosts);
   const pageNumber = parseInt(params.page);
   const initialDisplayPosts = allPosts.slice(
     POSTS_PER_PAGE * (pageNumber - 1),
@@ -162,7 +160,6 @@ export const getStaticPaths = async () => {
     "series",
     "part",
   ]);
-  console.log(allPosts);
   const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
   const paths = Array.from({ length: totalPages }, (_, i) => ({
     params: { page: (i + 1).toString() },
