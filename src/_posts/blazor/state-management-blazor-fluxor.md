@@ -2,6 +2,7 @@
 title: "Blazor state management with Fluxor"
 excerpt: "In this post we will see how to setup fluxor in Blazor Wasm App"
 date: "2022-06-01"
+videoId: yM9F8rxo8L8
 tags: [ "blazor", "fluxor" ]
 ---
 ## Table of contents
