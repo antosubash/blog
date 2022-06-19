@@ -83,7 +83,7 @@ const PostMain = ({ allPosts, initialDisplayPosts, pagination }: Props) => {
               <AnimatePresence>
                 {!displayPosts.length && "No posts found."}
                 {displayPosts.map((post) => {
-                  const { slug, date, title, excerpt, tags } = post;
+                  const { slug, date, title, excerpt, tags, series, part } = post;
                   return (
                     <motion.div
                       initial={{ opacity: 0 }}
@@ -98,6 +98,8 @@ const PostMain = ({ allPosts, initialDisplayPosts, pagination }: Props) => {
                         title={title}
                         summary={excerpt}
                         tags={tags}
+                        series={series}
+                        part={part}
                       ></PostItemSmall>
                     </motion.div>
                   );
@@ -128,6 +130,8 @@ export const getStaticProps = async ({ params }: any) => {
     "coverImage",
     "excerpt",
     "tags",
+    "series",
+    "part",
   ]);
 
   const initialDisplayPosts = allPosts.slice(0, POSTS_PER_PAGE);

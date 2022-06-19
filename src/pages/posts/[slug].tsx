@@ -39,9 +39,10 @@ const Post = ({ post }: Props) => {
             />
             <PostHeader
               title={post.title}
-              coverImage={post.coverImage}
               date={post.date}
-              author={post.author}
+              series={post.series}
+              tags={post.tags}
+              part={post.part}
             />
             <PostBody
               videoId={post.videoId}

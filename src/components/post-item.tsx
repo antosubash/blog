@@ -1,5 +1,4 @@
 import React from "react";
-import internal from "stream";
 import formatDate from "../lib/utils/formatDate";
 import Tag from "./tag";
 
@@ -21,20 +20,17 @@ const PostItem = (props: PostItemProps) => {
       <article>
         <div className="space-y-2 xl:grid xl:grid-cols-4 xl:space-y-0 xl:items-baseline">
           <dl>
-            <dt className="sr-only">Published on</dt>
-            <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
+            <dd className="text-base font-medium leading-6 ">
               <time dateTime={date}>{formatDate(date)}</time>
             </dd>
             {props.series && (
-              <div className="pt-2">
-                <dd className="text-base font-bold leading-6">
-                  Series : {props.series}
-                </dd>
-                <div className="pt-2">
-                  <dt className="text-base font-bold leading-6">
+              <div className="pt-4">
+                <dd className="text-xl font-bold leading-6">
+                  {props.series}
+                  <span className="pt-4 px-4 lg:block lg:px-0 text-xl font-bold leading-6">
                     Part : {props.part}
-                  </dt>
-                </div>
+                  </span>
+                </dd>
               </div>
             )}
           </dl>
@@ -45,9 +41,7 @@ const PostItem = (props: PostItemProps) => {
                   <a href={`/posts/${slug}`}>{title}</a>
                 </h2>
               </div>
-              <div className="prose text-gray-500 max-w-none dark:text-gray-400">
-                {summary}
-              </div>
+              <div>{summary}</div>
             </div>
             <div className="text-base font-medium leading-6">
               <a
