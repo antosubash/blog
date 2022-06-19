@@ -43,7 +43,11 @@ const Post = ({ post }: Props) => {
               date={post.date}
               author={post.author}
             />
-            <PostBody videoId={post.videoId} content={post.content} title={post.title} />
+            <PostBody
+              videoId={post.videoId}
+              content={post.content}
+              title={post.title}
+            />
             <Utterances />
           </>
         )}
@@ -72,6 +76,8 @@ export async function getStaticProps({ params }: Params) {
     "videoId",
     "tags",
     "excerpt",
+    "series",
+    "part",
   ]);
 
   await generateOgImage({ slug: params.slug, title: post.title });

@@ -48,6 +48,8 @@ const Index = ({ allPosts }: Props) => {
                         title={title}
                         summary={excerpt}
                         tags={tags}
+                        series={post.series}
+                        part={post.part}
                       ></PostItem>
                     </motion.li>
                   );
@@ -79,6 +81,8 @@ export const getStaticProps = async ({ params }: any) => {
     "coverImage",
     "excerpt",
     "tags",
+    "series",
+    "part",
   ]);
 
   await generateOgImage({ slug: "home", title: "Anto Subash's blog" });

@@ -13,6 +13,8 @@ type PostType = {
   };
   content: string;
   tags: string[];
+  series: string;
+  part: number;
 };
 
 export default PostType;

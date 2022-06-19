@@ -1,14 +1,17 @@
 import React from "react";
+import internal from "stream";
 import formatDate from "../lib/utils/formatDate";
 import Tag from "./tag";
 
 interface PostItemProps {
-  key: any
+  key: any;
   slug: string;
   date: string;
   title: string;
   summary: string;
   tags: string[];
+  series: string;
+  part: number;
 }
 
 const PostItem = (props: PostItemProps) => {
@@ -22,6 +25,18 @@ const PostItem = (props: PostItemProps) => {
             <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
               <time dateTime={date}>{formatDate(date)}</time>
             </dd>
+            {props.series && (
+              <div className="pt-2">
+                <dd className="text-base font-bold leading-6">
+                  Series : {props.series}
+                </dd>
+                <div className="pt-2">
+                  <dt className="text-base font-bold leading-6">
+                    Part : {props.part}
+                  </dt>
+                </div>
+              </div>
+            )}
           </dl>
           <div className="space-y-5 xl:col-span-3">
             <div className="space-y-6">
@@ -44,7 +59,11 @@ const PostItem = (props: PostItemProps) => {
               </a>
             </div>
             <div className="flex flex-row flex-wrap">
-              {props.tags.map((tag) => <div className="mt-3" id={tag}><Tag text={tag}/></div>)}
+              {props.tags.map((tag) => (
+                <div className="mt-3" id={tag}>
+                  <Tag text={tag} />
+                </div>
+              ))}
             </div>
           </div>
         </div>

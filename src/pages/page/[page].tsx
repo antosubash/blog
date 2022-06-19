@@ -125,6 +125,8 @@ export const getStaticProps = async ({ params }: any) => {
     "coverImage",
     "excerpt",
     "tags",
+    "series",
+    "part",
   ]);
   const pageNumber = parseInt(params.page);
   const initialDisplayPosts = allPosts.slice(
@@ -152,6 +154,8 @@ export const getStaticPaths = async () => {
     "coverImage",
     "excerpt",
     "tags",
+    "series",
+    "part",
   ]);
   const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
   const paths = Array.from({ length: totalPages }, (_, i) => ({
