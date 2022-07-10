@@ -6,6 +6,17 @@ part: 1
 series: "Docker Deployment"
 tags: [ "docker", "ubuntu", "hetzner"]
 ---
+
+## Posts in the Series
+
+Part 1. Setting up Ubuntu Server with docker in Hetzner (this post)
+
+[Part 2. Setting up docker swarm with traefik and portainer](/posts/part-2-setup-docker-swarm-with-traefik-and-portainer)
+
+[Part 3. Deploy redis, rabbitmq, seq, registry and postgres in docker swarm](/posts/part-3-deploy-redis-rabitmq-postgresql-in-docker)
+
+[Part 4. Deploy the microservice in docker swarm](/posts/part-4-deploy-microservice-in-docker)
+
 ## Table of contents
 
 ## Intro
@@ -73,3 +84,29 @@ For this we will the hetzner apps. Hetzner provides machine with docker CE. this
 ### IP address of our machine
 
 ![IP address](/assets/posts/docker-deployment/hetzner17.png)
+
+## Add DNS entry
+
+Now you have to add a DNS entry for your newly created machine. you can fine the the IP address of the machine in the Hetzner server page.
+
+We need to add `A` record and a `CNAME` record.
+
+```bash
+A XX.XX.XX.XX yourdomain.com
+CNAME * yourdomain.com
+```
+
+This might take some time to reflect so wait for a while to verify it.
+
+## Verify DNS entry
+
+To verify dns entry we will use a tool called dig.
+
+you can find it here <https://toolbox.googleapps.com/apps/dig/#A/>
+
+Make sure your domain is pointing to your ip and your subdomain is pointing to your domain
+
+yourdomain.com -> XX.XX.XX.XX
+subdomain.yourdomain.com -> XX.XX.XX.XX
+
+So both your domain and subdomain should point to the same IP Which is the IP of the machine we just created.

@@ -1,13 +1,190 @@
 ---
-title: "Deploy redis, rabbitmq, registry and postgres in docker swarm"
-excerpt: "In this post we will see how to create a docker swarm and deploy traefik and portainer in our ubuntu server"
+title: "Deploy redis, rabbitmq, seq, registry and postgres in docker swarm"
+excerpt: "In this post we will see how to deploy redis, rabbitmq, postgres and registry."
 date: "2022-06-21"
-part: 2
+part: 3
 series: "Docker Deployment"
-tags: [ "docker", "redis", "rabbitmq", "postgres", "registry"]
+tags: [ "docker", "redis", "rabbitmq", "postgres", "registry", "seq"]
 ---
+
+## Posts in the Series
+
+[Part 1. Setting up Ubuntu Server with docker in Hetzner](/posts/part-1-setup-docker-with-ubuntu-server-in-hetzner)
+
+[Part 2. Setting up docker swarm with traefik and portainer](/posts/part-2-setup-docker-swarm-with-traefik-and-portainer)
+
+Part 3. Deploy redis, rabbitmq, seq, registry and postgres in docker swarm (this post)
+
+[Part 4. Deploy the microservice in docker swarm](/posts/part-4-deploy-microservice-in-docker)
+
 ## Table of contents
 
 ## Intro
 
-In this post we will see how to setup a ubuntu server for our docker deployment.
+In this post we will see how to deploy redis, rabbitmq, postgres and registry.
+
+## Deploy docker registry
+
+We will deploy a docker registry
+
+### Create folder for registry deployment
+
+```bash
+mkdir /mnt/auth
+mkdir /mnt/registry
+```
+
+Auth folder is for storing the password and registry folder is for storing the images.
+
+### Create password for registry
+
+```bash
+docker run --entrypoint htpasswd httpd:2 -Bbn testuser testpassword
+```
+
+Copy the output to `/mnt/auth/registry.password`
+
+### Registry docker compose
+
+```yml
+version: '3'
+
+services:
+  registry:
+    image: registry:2
+    networks:
+      - traefik-public
+    environment:
+      VIRTUAL_HOST: registry.yourdomain.com
+      REGISTRY_AUTH: htpasswd
+      REGISTRY_AUTH_HTPASSWD_REALM: Registry Realm
+      REGISTRY_AUTH_HTPASSWD_PATH: /auth/registry.password
+    volumes:
+      - /mnt/auth:/auth
+      - /mnt/registry:/var/lib/registry
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.registry.rule=Host(`registry.yourdomain.com`)"
+        - "traefik.http.services.registry.loadbalancer.server.port=5000"
+        - "traefik.http.routers.registry.entrypoints=websecure"
+        - "traefik.http.routers.registry.tls=true"
+        - "traefik.http.routers.registry.tls.certresolver=leresolver"
+        
+networks:
+  traefik-public:
+    external: true
+```
+
+## Deploy redis
+
+Redis is an in-memory data structure store, used as a distributed, in-memory key–value database, cache and message broker, with optional durability. Redis supports different kinds of abstract data structures, such as strings, lists, maps, sets, sorted sets, HyperLogLogs, bitmaps, streams, and spatial indices.
+
+### Create folder for redis deployment
+
+```bash
+mkdir /mnt/redis
+```
+
+### Redis docker compose
+
+```yml
+version: "3"
+  
+services:
+  redis-master:
+    image: "bitnami/redis:latest"
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_REPLICATION_MODE=master
+      - REDIS_PASSWORD=my_master_password
+    volumes:
+      - '/mnt/redis:/bitnami'
+```
+
+## Deploy postgres
+
+PostgreSQL, also known as Postgres, is a free and open-source relational database management system emphasizing extensibility and SQL compliance.
+
+### Create folder for postgres deployment
+
+```bash
+mkdir /mnt/postgres
+```
+
+### Postgres docker compose
+
+```yml
+version: "3.2"
+
+services:
+  postgres:
+    image: kartoza/postgis:12.0
+    ports:
+      - 5432:5432
+    volumes:
+      - /mnt/postgres:/var/lib/postgresql
+    environment:
+      POSTGRES_DB: test
+      POSTGRES_USER: postgres
+      POSTGRES_PASS: my_postgres_password
+      --auth: "md5"
+      POSTGRES_MULTIPLE_EXTENSIONS: postgis,hstore,postgis_topology
+```
+
+## Deploy rabbitmq
+
+RabbitMQ is an open-source message-broker Software that originally implemented the Advanced Message Queuing Protocol and has since been extended with a plug-in architecture to support Streaming Text Oriented Messaging Protocol, MQ Telemetry Transport, and other protocols.
+
+### rabbitmq docker compose
+
+```yml
+version: '3.7'
+
+services:
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:management-alpine
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+```
+
+## Deploy seq
+
+Seq is the intelligent search, Analysis, and alerting server built specifically for modern structured log data.
+
+### Create folder for seq deployment
+
+```bash
+mkdir /mnt/seq
+```
+
+### seq docker compose
+
+```yml
+version: '3'
+
+services:
+  seq:
+    image: datalust/seq
+    networks:
+      - traefik-public
+    environment:
+      ACCEPT_EULA: "Y"
+    volumes:
+      - /mnt/seq:/data
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.seq.rule=Host(`seq.yourdomain.com`)"
+        - "traefik.http.services.seq.loadbalancer.server.port=80"
+        - "traefik.http.routers.seq.entrypoints=websecure"
+        - "traefik.http.routers.seq.tls=true"
+        - "traefik.http.routers.seq.tls.certresolver=leresolver"
+        
+networks:
+  traefik-public:
+    external: true
+```
