@@ -35,10 +35,15 @@ const PostHeader = ({ title, date, tags, series, part }: Props) => {
             {series && (
               <div className="pt-4">
                 <dd className="text-2xl font-bold leading-6">
-                  {series} <span>-</span>
-                  <span className="pt-4 px-2 text-2xl font-bold leading-6">
-                    Part : {part}
-                  </span>
+                  {series} {" "}
+                  {part ? (
+                    <>
+                      <span>-</span>
+                      <span className="pt-4 px-2 text-2xl font-bold leading-6">
+                        Part : {part}
+                      </span>
+                    </>
+                  ): null}
                 </dd>
               </div>
             )}

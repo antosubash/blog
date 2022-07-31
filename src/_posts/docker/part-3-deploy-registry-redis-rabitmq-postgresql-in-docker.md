@@ -15,7 +15,7 @@ tags: [ "docker", "redis", "rabbitmq", "postgres", "registry", "seq"]
 
 Part 3. Deploy redis, rabbitmq, seq, registry and postgres in docker swarm (this post)
 
-[Part 4. Deploy the microservice in docker swarm](/posts/part-4-deploy-microservice-in-docker)
+[Part 4. Deploy the microservice in docker swarm](/posts/part-4-prepare-and-deploy-microservice-in-docker)
 
 ## Table of contents
 

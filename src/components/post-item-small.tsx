@@ -24,10 +24,14 @@ const PostItemSmall = (props: Props) => {
           {series && (
             <div className="pt-2">
               <dd className="text-base font-medium leading-6">
-                {series}
-                <span className="lg:pt-2 lg:block lg:px-0 px-3 text-base font-medium leading-6">
-                  Part : {part}
-                </span>
+                {series}{" "}
+                {part ? (
+                  <span className="lg:pt-2 lg:block lg:px-0 px-3 text-base font-medium leading-6">
+                    Part : {part}
+                  </span>
+                ) : (
+                  ""
+                )}
               </dd>
             </div>
           )}

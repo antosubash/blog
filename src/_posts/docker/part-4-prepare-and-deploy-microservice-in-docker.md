@@ -1,5 +1,5 @@
 ---
-title: "Prepare and deploy the microservice for deployment"
+title: "Prepare and deploy the microservice"
 excerpt: "In this post we will see how to deploy the microservice solution to the our server."
 date: "2022-07-30"
 part: 4
@@ -13,7 +13,7 @@ tags: [ "docker", "docker-compose" ]
 
 [Part 2. Setting up docker swarm with traefik and portainer](/posts/part-2-setup-docker-swarm-with-traefik-and-portainer)
 
-[Part 3. Deploy redis, rabbitmq, seq, registry and postgres in docker swarm](/posts/part-3-deploy-redis-rabitmq-postgresql-in-docker)
+[Part 3. Deploy redis, rabbitmq, seq, registry and postgres in docker swarm](/posts/part-3-deploy-registry-redis-rabitmq-postgresql-in-docker)
 
 Part 4. Prepare and deploy the microservice for deployment (this post)
 

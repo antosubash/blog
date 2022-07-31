@@ -35,6 +35,6 @@ The goals are as follows
 
 [Part 2. Setting up docker swarm with traefik and portainer](/posts/part-2-setup-docker-swarm-with-traefik-and-portainer)
 
-[Part 3. Deploy redis, rabbitmq, seq, registry and postgres in docker swarm](/posts/part-3-deploy-redis-rabitmq-postgresql-in-docker)
+[Part 3. Deploy redis, rabbitmq, seq, registry and postgres in docker swarm](/posts/part-3-deploy-registry-redis-rabitmq-postgresql-in-docker)
 
-[Part 4. Deploy the microservice in docker swarm](/posts/part-4-deploy-microservice-in-docker)
+[Part 4. Deploy the microservice in docker swarm](/posts/part-4-prepare-and-deploy-microservice-in-docker)
