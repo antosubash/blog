@@ -2,7 +2,6 @@
 title: "Docker Deployment using docker swarm"
 excerpt: "In this post we will see how to setup docker swarm for your development environment."
 date: "2022-07-31"
-part: 0
 series: "Docker Deployment"
 tags: [ "docker", "docker-swarm" ]
 ---
