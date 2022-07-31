@@ -80,7 +80,8 @@ const PostPage = ({ allPosts, initialDisplayPosts, pagination }: Props) => {
               <AnimatePresence>
                 {!displayPosts.length && "No posts found."}
                 {displayPosts.map((post) => {
-                  const { slug, date, title, excerpt, tags } = post;
+                  
+                  const { slug, date, title, excerpt, tags, series, part } = post;
                   return (
                     <motion.div
                       initial={{ opacity: 0 }}
@@ -95,6 +96,8 @@ const PostPage = ({ allPosts, initialDisplayPosts, pagination }: Props) => {
                         title={title}
                         summary={excerpt}
                         tags={tags}
+                        series={series}
+                        part={part}
                       ></PostItemSmall>
                     </motion.div>
                   );
@@ -125,6 +128,8 @@ export const getStaticProps = async ({ params }: any) => {
     "coverImage",
     "excerpt",
     "tags",
+    "series",
+    "part",
   ]);
   const pageNumber = parseInt(params.page);
   const initialDisplayPosts = allPosts.slice(
@@ -152,6 +157,8 @@ export const getStaticPaths = async () => {
     "coverImage",
     "excerpt",
     "tags",
+    "series",
+    "part",
   ]);
   const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
   const paths = Array.from({ length: totalPages }, (_, i) => ({

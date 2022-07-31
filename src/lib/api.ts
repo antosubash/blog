@@ -2,7 +2,6 @@ import fs from "fs";
 import { join, basename } from "path";
 import matter from "gray-matter";
 import getAllFilesRecursively from "./utils/files";
-import getDirectories from "./utils/directories";
 import { MAX_DISPLAY } from "./constants";
 import kebabCase from "./utils/kebabCase";
 
@@ -37,6 +36,8 @@ export function getPostByTag(tag: string) {
     "coverImage",
     "excerpt",
     "tags",
+    "series",
+    "part"
   ]);
   const posts = allPosts.filter((post: any) => {
     return post.tags.includes(tag);

@@ -1,17 +1,15 @@
-import Avatar from "./avatar";
 import DateFormatter from "./date-formatter";
-import CoverImage from "./cover-image";
-import PageTitle from "./page-title";
-import Author from "../types/author";
+import Tag from "./tag";
 
 type Props = {
   title: string;
-  coverImage: string;
   date: string;
-  author: Author;
+  tags: string[];
+  series: string;
+  part: number;
 };
 
-const PostHeader = ({ title, coverImage, date, author }: Props) => {
+const PostHeader = ({ title, date, tags, series, part }: Props) => {
   return (
     <article>
       <div className="xl:divide-y xl:divide-gray-200 xl:dark:divide-gray-700">
@@ -19,7 +17,6 @@ const PostHeader = ({ title, coverImage, date, author }: Props) => {
           <div className="space-y-1 text-center">
             <dl className="space-y-10">
               <div>
-                <dt className="sr-only">Published on</dt>
                 <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
                   <time dateTime={date}>
                     <DateFormatter dateString={date} />
@@ -27,6 +24,29 @@ const PostHeader = ({ title, coverImage, date, author }: Props) => {
                 </dd>
               </div>
             </dl>
+            <div className="flex flex-row flex-wrap justify-center pb-2">
+              {tags.map((tag) => (
+                <div className="mt-3" id={tag}>
+                  <Tag text={tag} />
+                </div>
+              ))}
+            </div>
+
+            {series && (
+              <div className="pt-4">
+                <dd className="text-2xl font-bold leading-6">
+                  {series} {" "}
+                  {part ? (
+                    <>
+                      <span>-</span>
+                      <span className="pt-4 px-2 text-2xl font-bold leading-6">
+                        Part : {part}
+                      </span>
+                    </>
+                  ): null}
+                </dd>
+              </div>
+            )}
             <div>
               <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-5xl md:leading-14">
                 {title}

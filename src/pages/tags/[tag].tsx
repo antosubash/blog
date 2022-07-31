@@ -31,7 +31,7 @@ const TagList = ({ posts }: Props) => {
           <AnimatePresence>
             {!posts.length && "No posts found."}
             {posts.map((post) => {
-              const { slug, date, title, excerpt, tags } = post;
+              const { slug, date, title, excerpt, tags, series, part } = post;
               return (
                 <motion.div
                   initial={{ opacity: 0 }}
@@ -46,6 +46,8 @@ const TagList = ({ posts }: Props) => {
                     title={title}
                     summary={excerpt}
                     tags={tags}
+                    series={series}
+                    part={part}
                   ></PostItemSmall>
                 </motion.div>
               );

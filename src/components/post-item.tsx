@@ -3,12 +3,14 @@ import formatDate from "../lib/utils/formatDate";
 import Tag from "./tag";
 
 interface PostItemProps {
-  key: any
+  key: any;
   slug: string;
   date: string;
   title: string;
   summary: string;
   tags: string[];
+  series: string;
+  part: number;
 }
 
 const PostItem = (props: PostItemProps) => {
@@ -18,10 +20,21 @@ const PostItem = (props: PostItemProps) => {
       <article>
         <div className="space-y-2 xl:grid xl:grid-cols-4 xl:space-y-0 xl:items-baseline">
           <dl>
-            <dt className="sr-only">Published on</dt>
-            <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
+            <dd className="text-base font-medium leading-6 ">
               <time dateTime={date}>{formatDate(date)}</time>
             </dd>
+            {props.series && (
+              <div className="pt-4">
+                <dd className="text-xl font-bold leading-6">
+                  {props.series}{" "}
+                  {props.part ? (
+                    <span className="pt-4 px-4 lg:block lg:px-0 text-xl font-bold leading-6">
+                      Part : {props.part}
+                    </span>
+                  ) : null}
+                </dd>
+              </div>
+            )}
           </dl>
           <div className="space-y-5 xl:col-span-3">
             <div className="space-y-6">
@@ -30,9 +43,7 @@ const PostItem = (props: PostItemProps) => {
                   <a href={`/posts/${slug}`}>{title}</a>
                 </h2>
               </div>
-              <div className="prose text-gray-500 max-w-none dark:text-gray-400">
-                {summary}
-              </div>
+              <div>{summary}</div>
             </div>
             <div className="text-base font-medium leading-6">
               <a
@@ -44,7 +55,11 @@ const PostItem = (props: PostItemProps) => {
               </a>
             </div>
             <div className="flex flex-row flex-wrap">
-              {props.tags.map((tag) => <div className="mt-3" id={tag}><Tag text={tag}/></div>)}
+              {props.tags.map((tag) => (
+                <div className="mt-3" id={tag}>
+                  <Tag text={tag} />
+                </div>
+              ))}
             </div>
           </div>
         </div>
