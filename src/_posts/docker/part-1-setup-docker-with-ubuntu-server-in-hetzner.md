@@ -96,6 +96,12 @@ A XX.XX.XX.XX yourdomain.com
 CNAME * yourdomain.com
 ```
 
+For example this is how my sample entry looks like
+
+Record      Host        Value
+A           youtube1    95.217.191.119
+CNAME       *           youtube1.antosubash.com
+
 This might take some time to reflect so wait for a while to verify it.
 
 ## Verify DNS entry
