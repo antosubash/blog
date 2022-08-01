@@ -116,3 +116,15 @@ yourdomain.com -> XX.XX.XX.XX
 subdomain.yourdomain.com -> XX.XX.XX.XX
 
 So both your domain and subdomain should point to the same IP Which is the IP of the machine we just created.
+
+## Update ssh config
+
+ssh config file can be "~/.ssh/config"
+
+In the config file add a entry for the newly created server.
+
+```bash
+Host youtube1.youtdomain.com
+   IdentitiesOnly yes
+   IdentityFile ~/.ssh/yournewlycreatedkey # Not the pub file
+```
