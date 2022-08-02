@@ -124,7 +124,7 @@ ssh config file can be "~/.ssh/config"
 In the config file add a entry for the newly created server.
 
 ```bash
-Host youtube1.youtdomain.com
+Host youtube1.yourdomain.com
    IdentitiesOnly yes
    IdentityFile ~/.ssh/yournewlycreatedkey # Not the pub file
 ```
