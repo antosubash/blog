@@ -3,7 +3,6 @@ import formatDate from "../lib/utils/formatDate";
 import Tag from "./tag";
 
 interface PostItemProps {
-  key: any;
   slug: string;
   date: string;
   title: string;
@@ -14,57 +13,55 @@ interface PostItemProps {
 }
 
 const PostItem = (props: PostItemProps) => {
-  const { slug, date, title, summary } = props;
+  const { slug, date, title, summary, series, tags, part } = props;
   return (
-    <div className="py-12">
-      <article>
-        <div className="space-y-2 xl:grid xl:grid-cols-4 xl:space-y-0 xl:items-baseline">
-          <dl>
-            <dd className="text-base font-medium leading-6 ">
-              <time dateTime={date}>{formatDate(date)}</time>
-            </dd>
-            {props.series && (
-              <div className="pt-4">
-                <dd className="text-xl font-bold leading-6">
-                  {props.series}{" "}
-                  {props.part ? (
-                    <span className="pt-4 px-4 lg:block lg:px-0 text-xl font-bold leading-6">
-                      Part : {props.part}
-                    </span>
-                  ) : null}
-                </dd>
+    <article className="py-12">
+      <div className="space-y-2 xl:grid xl:grid-cols-4 xl:space-y-0 xl:items-baseline">
+        <div key={slug}>
+          <div className="text-base font-medium leading-6 ">
+            <time dateTime={date}>{formatDate(date)}</time>
+          </div>
+          {series && (
+            <div className="pt-4">
+              <div className="text-xl font-bold leading-6">
+                {series}{" "}
+                {part ? (
+                  <span className="pt-4 px-4 lg:block lg:px-0 text-xl font-bold leading-6">
+                    Part : {part}
+                  </span>
+                ) : null}
               </div>
-            )}
-          </dl>
-          <div className="space-y-5 xl:col-span-3">
-            <div className="space-y-6">
-              <div>
-                <h2 className="text-2xl font-bold leading-8 tracking-tight text-gray-900 dark:text-gray-100">
-                  <a href={`/posts/${slug}`}>{title}</a>
-                </h2>
+            </div>
+          )}
+        </div>
+        <div className="space-y-5 xl:col-span-3">
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-2xl font-bold leading-8 tracking-tight text-gray-900 dark:text-gray-100">
+                <a href={`/posts/${slug}`}>{title}</a>
+              </h2>
+            </div>
+            <div>{summary}</div>
+          </div>
+          <div className="text-base font-medium leading-6">
+            <a
+              href={`/posts/${slug}`}
+              className="text-primary-800 dark:text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+              aria-label={`Read "${title}"`}
+            >
+              Read more &rarr;
+            </a>
+          </div>
+          <div className="flex flex-row flex-wrap">
+            {props.tags.map((tag) => (
+              <div className="mt-3" id={tag}>
+                <Tag text={tag} />
               </div>
-              <div>{summary}</div>
-            </div>
-            <div className="text-base font-medium leading-6">
-              <a
-                href={`/posts/${slug}`}
-                className="text-primary-800 dark:text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-                aria-label={`Read "${title}"`}
-              >
-                Read more &rarr;
-              </a>
-            </div>
-            <div className="flex flex-row flex-wrap">
-              {props.tags.map((tag) => (
-                <div className="mt-3" id={tag}>
-                  <Tag text={tag} />
-                </div>
-              ))}
-            </div>
+            ))}
           </div>
         </div>
-      </article>
-    </div>
+      </div>
+    </article>
   );
 };
 

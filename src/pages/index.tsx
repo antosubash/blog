@@ -1,11 +1,10 @@
 /* eslint-disable react/no-unescaped-entities */
 import Container from "@components/container";
 import Layout from "@components/layout";
-import { getAllPosts, getLatestPosts } from "@lib/api";
+import { getLatestPosts } from "@lib/api";
 import Post from "@blog/types/postType";
 import PostItem from "@components/post-item";
 import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
 import Meta from "@components/meta";
 import { generateOgImage } from "@lib/generateOgImage";
 import Link from "next/link";
@@ -36,13 +35,14 @@ const Index = ({ allPosts }: Props) => {
                   const { slug, date, title, excerpt, tags } = post;
                   return (
                     <motion.li
+                      key={index}
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                       whileHover={{ scale: 1.1 }}
                     >
                       <PostItem
-                        key={index}
+                        key={slug}
                         slug={slug}
                         date={date}
                         title={title}
