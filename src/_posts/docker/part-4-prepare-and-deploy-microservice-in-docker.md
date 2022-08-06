@@ -3,6 +3,7 @@ title: "Prepare and deploy the microservice"
 excerpt: "In this post we will see how to deploy the microservice solution to the our server."
 date: "2022-07-30"
 part: 4
+videoId: 1oXjAOm2TgM
 series: "Docker Deployment"
 tags: [ "docker", "docker-compose" ]
 ---

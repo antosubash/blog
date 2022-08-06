@@ -3,6 +3,7 @@ title: "Deploy redis, rabbitmq, seq, registry and postgres in docker swarm"
 excerpt: "In this post we will see how to deploy redis, rabbitmq, postgres and registry."
 date: "2022-06-21"
 part: 3
+videoId: J2m6QrMpBm4
 series: "Docker Deployment"
 tags: [ "docker", "redis", "rabbitmq", "postgres", "registry", "seq"]
 ---

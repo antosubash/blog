@@ -2,6 +2,7 @@
 title: "Setting up Ubuntu Server with docker in Hetzner"
 excerpt: "In this post we will see how to create a ubuntu server for docker deployment."
 date: "2022-06-19"
+videoId: 5meiTtVRtRc
 part: 1
 series: "Docker Deployment"
 tags: [ "docker", "ubuntu", "hetzner"]
