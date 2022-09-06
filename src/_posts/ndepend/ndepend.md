@@ -11,7 +11,7 @@ tags: [ "dotnet", "tool",]
 
 In this post we will see how to use the NDepends to improve you .net development.
 
-## What is NDepends?
+## What is NDepend?
 
 NDepends is a static analyzer. It analyses your code and help you to improve code quality. It creates a dashboard to view the stats about your project and display most relevant info. It creates a in-depth reports that helps to maintain large complex project. It also helps to enforce coding standards.
 
@@ -42,4 +42,8 @@ Here is the install guide <https://www.ndepend.com/docs/getting-started-with-nde
 
 ## Using NDepend
 
-For this purpose I will use the Tasky Abp Microservice solution 
+For this purpose I will use the Tasky Abp Microservice solution. It is a ABP Microservice application which I have created for a youtube series.
+
+The first step is to add NDpend to your solution.
+
+![Adding NDepend](/assets/posts/ndepend/ndepend1.png)
