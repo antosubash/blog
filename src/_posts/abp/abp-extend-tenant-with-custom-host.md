@@ -3,6 +3,8 @@ title: "Extend Tenant management and add custom host to your ABP App. Part 7"
 excerpt: "In this post we will see how to extent the tenant entity and Add a custom tenant resolver for your ABP app."
 date: "2021-09-25"
 videoId: pdAJcxsCo8s
+series: "ABP Framework - Getting started"
+part: 7
 tags: [ "abp", "deployment" ]
 ---
 ## Table of contents

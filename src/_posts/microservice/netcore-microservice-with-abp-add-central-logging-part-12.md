@@ -3,7 +3,9 @@ title: "Logging with Seq - .NET Microservice with ABP - Part 12"
 excerpt: "In this post, we will see how to add centralized logging to our microservice application"
 date: "2022-04-13T00:00:00.000Z"
 videoId: ma0P3jo9uGE 
-tags: [ "dotnet", "abp", "microservice", "seq", "logging" ]
+series: ".NET Microservice with ABP"
+part: 12
+tags: [ "dotnet", "abp", "microservice", "seq", "logging", ]
 ---
 
 This is the part 12 of the series: [.NET Microservice with ABP](https://blog.antosubash.com/posts/abp-microservice-series)

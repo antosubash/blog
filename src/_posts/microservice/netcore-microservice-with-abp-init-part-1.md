@@ -3,6 +3,8 @@ title: "Initial setup - .NET Microservice with ABP - Part 1"
 excerpt: "In this post we will see how to do the initial setup for a abp microservice application."
 date: "2022-03-18"
 videoId: e95p53tDPis 
+series: ".NET Microservice with ABP"
+part: 1
 tags: [ "dotnet", "abp", "microservice", "netcore6" ]
 ---
 

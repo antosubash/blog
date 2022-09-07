@@ -3,6 +3,8 @@ title: "Administration Services - .NET Microservice with ABP - Part 3"
 excerpt: "In this post we will see how to do the create Administration service for our microservice application"
 date: "2022-03-19T01:00:00.000Z"
 videoId: Pwnz_t7IK80
+series: ".NET Microservice with ABP"
+part: 3
 tags: [ "dotnet", "abp", "microservice", "netcore6" ]
 ---
 

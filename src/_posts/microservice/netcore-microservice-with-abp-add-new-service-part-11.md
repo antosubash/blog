@@ -3,6 +3,8 @@ title: "Add New Service - .NET Microservice with ABP - Part 11"
 excerpt: "In this post we will see how to add docker support and create a CI/CD with github actions"
 date: "2022-04-07T00:00:00.000Z"
 videoId: i_MwyAYOknk
+series: ".NET Microservice with ABP"
+part: 11
 tags: [ "dotnet", "abp", "microservice" ]
 ---
 

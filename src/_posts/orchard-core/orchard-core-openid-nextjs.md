@@ -3,6 +3,8 @@ title: "Authentication using OpenId in React/NextJs App With Orchard Core - Part
 excerpt: "In this post we will see how to do authentication using OpenId for a React App using Orchard Core."
 date: "2021-11-18"
 videoId: UldaX-QXdqE
+series: "Orchard Core - Getting Started"
+part: 2
 tags: [ "orchard-core", "openid", "nextjs", "auth" ]
 ---
 ## Table of contents

@@ -3,6 +3,8 @@ title: "Changing theme for your ABP app. Part 10"
 excerpt: "In this post we will explore how to change the theme for your ABP application."
 date: "2021-10-26"
 videoId: tj_n6UJ_guU
+series: "ABP Framework - Getting started"
+part: 10
 tags: [ "abp", "bootstrap", "theme" ]
 ---
 ## Table of contents
