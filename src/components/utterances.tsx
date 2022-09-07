@@ -3,5 +3,5 @@ interface Props {}
 const commentNodeId = "comments";
 export const Utterances = (props: Props) => {
   useUtterances(commentNodeId);
-  return <div id={commentNodeId} />;
+  return <div className="pt-8" id={commentNodeId} />;
 };
