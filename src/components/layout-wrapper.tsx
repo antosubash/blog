@@ -5,6 +5,7 @@ import { Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
 import CommandBar from "./command-bar";
 import ShortcutHome from "./shortcut-home";
+import Kofi from "./kofi";
 const LayoutWrapper = ({ children }: any) => {
   let [isShowing, setIsShowing] = useState(false);
   return (
@@ -27,29 +28,27 @@ const LayoutWrapper = ({ children }: any) => {
                     <ShortcutHome />
                   </CommandBar>
                 </div>
-                <div className="font-bold px-5">
-                  <a href="/">Home</a>
-                </div>
-                <div>
+                <div className="flex justify-center items-center font-bold">
                   <a href="/page" className="font-bold px-5">
                     Articles
                   </a>
                 </div>
-                <div>
+                <div className="flex justify-center items-center font-bold">
                   <a href="/tags/series" className="font-bold px-5">
                     Series
                   </a>
                 </div>
-                <div>
+                <div className="flex justify-center items-center font-bold">
                   <a href="/tags" className="font-bold px-5">
                     Tags
                   </a>
                 </div>
-                <div>
+                <div className="flex justify-center items-center font-bold">
                   <a href="https://antosubash.com" className="font-bold px-5">
                     About
                   </a>
                 </div>
+                <Kofi />
               </div>
             </div>
 

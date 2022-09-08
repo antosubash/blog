@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
-import Markdown from './markdown';
+import React from "react";
+import Kofi from "./kofi";
+import Markdown from "./markdown";
 
 type Props = {
   content: string;
@@ -25,6 +26,9 @@ const PostBody = ({ content, videoId, title }: Props) => {
         ""
       )}
       <Markdown content={content} />
+      <div className="pt-8">
+        <Kofi />
+      </div>
     </div>
   );
 };
