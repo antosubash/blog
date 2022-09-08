@@ -1,5 +1,5 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
-const GA_TRACKING_ID = "UA-28730591-2";
+const GA_TRACKING_ID = "G-9EG6TJYHZ7";
 export default class MyDocument extends Document {
   render() {
     return (
