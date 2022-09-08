@@ -88,9 +88,6 @@ const LayoutWrapper = ({ children }: any) => {
             leaveTo="opacity-0 scale-95 "
           >
             <ul className="border-b-2 border-t-2 border-gray-500">
-              <li className="active">
-                <i className="ri-command-line"></i>
-              </li>
               <li>
                 <a
                   href="/"
