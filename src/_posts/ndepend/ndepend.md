@@ -62,7 +62,19 @@ After the clicking the analysis `ndepend` will start the analysis of your code. 
 
 ![Dashboard](/assets/posts/ndepend/ndepend3.png)
 
-Dashboard is where you will see most of the info about you solution. based on the status of you solution it will create a rating. In my case the rating was `B` for my tasky microservice solution. It also displays more basic metrics like "Types" and "Line of code". What I found most interesting is the "Quality Gates" and "Rules" section of the dashboard. It showed 2 problems I didn't see before in my code and gave me an explanation on why they are bad. That was really helpful. After seeing these problems I was more curious to find out what else was wrong in my solution and I had lots of minor issues. It was a great learning process.
+Dashboard is where you will see most of the info about you solution. based on the status of you solution it will create a rating. In my case the rating was `B` for my tasky microservice solution. It also displays more basic metrics like "Types" and "Line of code". What I found most interesting is the "Quality Gates" and "Rules" section of the dashboard. It showed 2 problems I didn't see before in my code and gave me an explanation on why they are bad.
+
+The problems were
+
+- Avoid methods with too many parameters
+
+It was a Identity server seed method which was very big and doing too many things.
+
+- Avoid having different types with same name
+
+This was a sample Dto class which I forgot to delete. So, the same type was available in multiple services.
+
+This was really helpful. After seeing these problems I was more curious to find out what else was wrong in my solution and I had lots of minor issues. It was a great learning process.
 
 ### Info Window
 
@@ -83,6 +95,10 @@ Once it is added the to the solution it starts to track the trend. the trend can
 ## Final thoughts
 
 If your are managing a large project then a tool like `ndepend` is very useful. It has good CI/CD integration so we can generate the nice report for every build and monitor the progress. The only problem I had is with the VS Code integration. There is a standalone instance which we can try with VS Code but there is no integration with VS Code. The rules helps you to write code with best practices and make you a better developer. It also helps with consistency in the codebase.
+
+Next version of the `ndepend` will have more integration with Rider and VS Code to open source file declaration and diff source files. but not a full integration. Here is how it will look like.
+
+![Dependency graph](/assets/posts/ndepend/ndepend6.png)
 
 ## Will I buy it?
 
