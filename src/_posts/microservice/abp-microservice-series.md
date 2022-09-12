@@ -8,29 +8,29 @@ tags: [ "dotnet", "abp", "microservice", "series"]
 
 ## Posts in the Series
 
-[Part 1. Initial Setup](https://blog.antosubash.com/posts/netcore-microservice-with-abp-init-part-1)
+[Part 1. Initial Setup](/posts/netcore-microservice-with-abp-init-part-1)
 
-[Part 2. Shared Project](https://blog.antosubash.com/posts/netcore-microservice-with-abp-shared-project-part-2)
+[Part 2. Shared Project](/posts/netcore-microservice-with-abp-shared-project-part-2)
 
-[Part 3. Administration Service](https://blog.antosubash.com/posts/netcore-microservice-with-abp-administration-services-part-3)
+[Part 3. Administration Service](/posts/netcore-microservice-with-abp-administration-services-part-3)
 
-[Part 4. Identity Service](https://blog.antosubash.com/posts/netcore-microservice-with-abp-identity-services-part-4)
+[Part 4. Identity Service](/posts/netcore-microservice-with-abp-identity-services-part-4)
 
-[Part 5. SaaS Service](https://blog.antosubash.com/posts/netcore-microservice-with-abp-saas-services-part-5)
+[Part 5. SaaS Service](/posts/netcore-microservice-with-abp-saas-services-part-5)
 
-[Part 6. DB Migration](https://blog.antosubash.com/posts/netcore-microservice-with-abp-db-migration-part-6)
+[Part 6. DB Migration](/posts/netcore-microservice-with-abp-db-migration-part-6)
 
-[Part 7. Yarp and Tye](https://blog.antosubash.com/posts/netcore-microservice-with-abp-yarp-and-tye-part-7)
+[Part 7. Yarp and Tye](/posts/netcore-microservice-with-abp-yarp-and-tye-part-7)
 
-[Part 8. Identity server and Angular App](https://blog.antosubash.com/posts/netcore-microservice-with-abp-identity-server-and-angular-part-8)
+[Part 8. Identity server and Angular App](/posts/netcore-microservice-with-abp-identity-server-and-angular-part-8)
 
-[Part 9. Distributed event bus](https://blog.antosubash.com/posts/netcore-microservice-with-abp-distributed-event-bus-part-9)
+[Part 9. Distributed event bus](/posts/netcore-microservice-with-abp-distributed-event-bus-part-9)
 
-[Part 10. Docker and CI/CD](https://blog.antosubash.com/posts/netcore-microservice-with-abp-docker-and-ci-cd-part-10)
+[Part 10. Docker and CI/CD](/posts/netcore-microservice-with-abp-docker-and-ci-cd-part-10)
 
-[Part 11. Add a New service](https://blog.antosubash.com/posts/netcore-microservice-with-abp-add-new-service-part-11)
+[Part 11. Add a New service](/posts/netcore-microservice-with-abp-add-new-service-part-11)
 
-[Part 12. Central Logging](https://blog.antosubash.com/posts/netcore-microservice-with-abp-add-central-logging-part-12)
+[Part 12. Central Logging](/posts/netcore-microservice-with-abp-add-central-logging-part-12)
 
 ## Table of contents
 
