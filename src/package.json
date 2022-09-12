@@ -6,8 +6,7 @@
     "build": "next build",
     "postbuild": "next-sitemap --config next-sitemap.config.js",
     "start": "next start",
-    "typecheck": "tsc",
-    "generate": "plop"
+    "typecheck": "tsc"
   },
   "dependencies": {
     "@headlessui/react": "^1.6.6",
@@ -17,8 +16,8 @@
     "canvas": "^2.9.3",
     "canvas-multiline-text": "^1.0.3",
     "classnames": "2.3.1",
-    "date-fns": "2.29.2",
-    "framer-motion": "^7.3.2",
+    "date-fns": "2.29.1",
+    "framer-motion": "^7.0.0",
     "gray-matter": "4.0.3",
     "highlight.js": "^11.6.0",
     "image-size": "^1.0.2",
@@ -53,7 +52,6 @@
     "autoprefixer": "^10.4.8",
     "globby": "13.1.2",
     "next-sitemap": "^3.1.16",
-    "plop": "^3.1.1",
     "postcss": "^8.4.16",
     "postcss-preset-env": "^7.7.2",
     "prettier": "^2.7.1",
