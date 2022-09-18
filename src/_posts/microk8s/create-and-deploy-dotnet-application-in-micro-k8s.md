@@ -30,13 +30,13 @@ you can find the sample application we will use in this post [here](https://gith
 
 ## Create a new application
 
-We will use the abp cli to create a new application. I have created a sample application which you can find [here](https://github.com/antosubash/abp-single-layer) and we will use that in this post. If you want to create a new application you can use the following command.
+We will use the abp cli to create a new application. If you want to create a new application you can use the following command.
 
 ```bash
 abp new TodoApp -t app-nolayers --preview -dbms PostgreSQL
 ```
 
-We are using the app-nolayers template and we are using the PostgreSQL database. You can use the other templates as well. You can find more information about the templates [here](https://docs.abp.io/en/abp/latest/Templates/Application).
+We are using the app-nolayers template and we are using the PostgreSQL database. You can use the other templates as well. You can find more information about this template [here](https://docs.abp.io/en/abp/latest/Startup-Templates/Application-Single-Layer).
 
 ## Build the application
 
@@ -67,6 +67,18 @@ await app.RunAsync();
 return 0;
 ```
 
+Since we are going to use nginx to serve the application we need to add the forwarded headers middleware. We will add the following code to the `TodoAppModule.cs` file.
+
+```csharp
+context.Services.Configure<ForwardedHeadersOptions>(options =>
+        {
+            options.ForwardedHeaders =
+                ForwardedHeaders.XForwardedProto;
+        }); // add this line in ConfigureServices method
+
+app.UseForwardedHeaders(); // add this line in  OnApplicationInitialization method
+```
+
 lets update the `tye.yaml` file with the following code.
 
 ```yaml
@@ -77,4 +89,151 @@ services:
   project: TodoApp/TodoApp.csproj
 ```
 
+lets add the version to the `TodoApp.csproj` file.
+
+```xml
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Version>1.0.0</Version> <!-- add this line -->
+  </PropertyGroup>
+</Project>
+```
+
+lets build the application again.
+
+```bash
+tye build
+```
+
+## Push the application to the registry
+
+lets push the application to the registry. we will use tye to push the application to the registry. tye will build the application and push it to the registry.
+
+```bash
+tye push
+```
+
+> this will push the application to the registry. make sure you have logged in to the registry before pushing the application.
+
+## Deploy the application
+
+lets deploy the application to the microk8s instance. the first thing is to generate the yaml files. we will use the tye to generate the yaml files.
+
+```bash
+tye generate --output todoapp-generate.yaml
+```
+
+this will generate the yaml files. we will use the `todoapp-generate.yaml` file to deploy the application. before deploying the application we need to update the `todoapp-generate.yaml` file. we will update the image name and add the environment variables. we will also add the ingress resource. we will use the following code to update the `todoapp-generate.yaml` file.
+
+```yaml
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: todoapp
+  labels:
+    app.kubernetes.io/name: 'todoapp'
+    app.kubernetes.io/part-of: 'todoapp'
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: todoapp
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: 'todoapp'
+        app.kubernetes.io/part-of: 'todoapp'
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: todoapp
+        image: registry.kdev.antosubash.com/todoapp:1.0.4
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: "1"
+            memory: 1Gi
+          requests:
+            cpu: "0.5"
+            memory: 1Gi
+        env:
+        - name: ASPNETCORE_URLS
+          value: 'http://*'
+        - name: PORT
+          value: '80'
+        - name: CONNECTIONSTRINGS__Default
+          value: 'Host=postgres.default.svc.cluster.local;Port=5432;Database=TodoApp;User ID=postgres;Password=my_postgres_password;'
+        - name: ASPNETCORE_ENVIRONMENT
+          value: 'Production'
+        - name: App__SelfUrl
+          value: 'https://todoapp.kdev.antosubash.com'
+        ports:
+        - containerPort: 80
+...
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: todoapp
+  labels:
+    app.kubernetes.io/name: 'todoapp'
+    app.kubernetes.io/part-of: 'todoapp'
+spec:
+  selector:
+    app.kubernetes.io/name: todoapp
+  type: ClusterIP
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 80
+...
+---
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: http-ingress-todoapp
+  annotations:
+    cert-manager.io/cluster-issuer: "lets-encrypt"
+    kubernetes.io/ingress.class: "public"
+    nginx.ingress.kubernetes.io/rewrite-target: '/$2'
+  labels:
+    app.kubernetes.io/part-of: 'todoapp'
+spec:
+  tls:
+  - hosts:
+    - todoapp.kdev.antosubash.com
+    secretName: todoapp-tls
+  rules:
+  - host: todoapp.kdev.antosubash.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: todoapp
+            port:
+              number: 80
+        pathType: Prefix
+        path: /()(.*)
+...
+```
+
+lets deploy the application to the microk8s instance.
+
+```bash
+kubectl apply -f todoapp-generate.yaml
+```
+
+## Access the application
+
+lets access the application. we will use the following url to access the application.
+
+```bash
+https://todoapp.kdev.antosubash.com
+```
+
 ## Conclusion
+
+This is the final post of the series. In this post we have seen how to deploy the application to the microk8s instance. we have also seen how to use the tye to deploy the application, build the application and push the application to the registry. we have also seen how to use the ingress resource to access the application. I hope you have enjoyed this series. I will see you in the next post.
