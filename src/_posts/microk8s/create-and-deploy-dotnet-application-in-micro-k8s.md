@@ -5,7 +5,7 @@ date: "2022-09-14T19:55:43.277Z"
 videoId: 
 series: "MicroK8s - Getting Started"
 part: 4
-tags: [ abp, tye, "MicroK8s" ]
+tags: [ abp, tye, "microk8s" ]
 ---
 
 ## Table of contents

@@ -4,7 +4,7 @@ excerpt: "In this post we will see how to get started with the MicroK8s and depl
 date: "2022-09-15T14:30:14.944Z"
 videoId: 
 series: "MicroK8s - Getting Started"
-tags: [ "MicroK8s", docker, series ]
+tags: [ "microk8s", docker, series ]
 ---
 
 ## Table of contents

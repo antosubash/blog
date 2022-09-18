@@ -5,7 +5,7 @@ date: "2022-09-14T19:50:03.655Z"
 videoId: 
 series: "MicroK8s - Getting Started"
 part: 1
-tags: [ ubuntu, "MicroK8s" ]
+tags: [ ubuntu, "microk8s" ]
 ---
 
 ## Table of contents

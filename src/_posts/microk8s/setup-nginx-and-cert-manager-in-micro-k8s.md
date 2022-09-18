@@ -5,7 +5,7 @@ date: "2022-09-14T19:51:51.590Z"
 videoId: 
 series: "MicroK8s - Getting Started"
 part: 2
-tags: [ ngnix, ssl, "MicroK8s", letsencrypt ]
+tags: [ ngnix, ssl, "microk8s", letsencrypt ]
 ---
 
 ## Table of contents
