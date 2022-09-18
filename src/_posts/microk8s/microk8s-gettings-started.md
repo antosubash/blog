@@ -44,6 +44,10 @@ The goals are as follows
 
 [Part 4. Create and deploy .Net application in MicroK8s](/posts/create-and-deploy-dotnet-application-in-micro-k8s)
 
+## Repository
+
+you can find most of the code and yaml files use in the series [here](https://github.com/antosubash/microk8s-hetzner-deployment)
+
 ## Conclusion
 
 This series is created with developers in mind. I wanted to show how easy it is to use k8s without the complexities. I think after docker swarm this is the best option for the my personal use. Give it a try and let me know how do you like it.
