@@ -24,4 +24,192 @@ Part 2. Setup Nginx and cert-manager in MicroK8s (this post)
 
 [Part 4. Create and deploy .Net application in MicroK8s](/posts/create-and-deploy-dotnet-application-in-micro-k8s)
 
+### Cert-Manager
+
+### What is cert-manager?
+
+cert-manager adds certificates and certificate issuers as resource types in Kubernetes clusters, and simplifies the process of obtaining, renewing and using those certificates.
+
+It can issue certificates from a variety of supported sources, including Let's Encrypt, HashiCorp Vault, and Venafi as well as private PKI. It will ensure certificates are valid and up to date, and attempt to renew certificates at a configured time before expiry.
+
+We are going to use Let's Encrypt for the ssl certificates.
+
+### Enable cert-manger
+
+cert-manager comes as an addon for the microk8s. Make sure the addon is enabled. To check if the addons is enabled. just check the status of the microk8s.
+
+```bash
+microk8s status
+```
+
+`cert-manager` addons should be inside the enabled section.
+
+If it is not available in the enabled section. then, run the following command to enable it.
+
+```bash
+microk8s enable cert-manager
+```
+
+This will enable the cert-manager in microk8s.
+
+### Add ClusterIssuer
+
+The first thing you'll need to configure after you've enabled cert-manager is an Issuer or a ClusterIssuer. These are resources that represent certificate authorities (CAs) able to sign certificates in response to certificate signing requests.
+
+### Production Issuer
+
+lets create a production issuer which can be used to get the ssl certificate from lets encrypt.
+
+```yaml
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+ name: lets-encrypt
+spec:
+ acme:
+   email:  username@yourdomain.com # Change the email here
+   server: https://acme-v02.api.letsencrypt.org/directory
+   privateKeySecretRef:
+     name: lets-encrypt-prod
+   solvers:
+   - http01:
+       ingress:
+         class: public
+```
+
+### Staging issuer
+
+```yaml
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+ name: lets-encrypt-staging
+spec:
+ acme:
+   server: https://acme-staging-v02.api.letsencrypt.org/directory
+   email: username@yourdomain.com # Change the email here
+   privateKeySecretRef:
+     name: lets-encrypt-staging
+   solvers:
+   - http01:
+       ingress:
+         class:  public
+```
+
+## Setup nginx
+
+### What is Ingress
+
+Ingress exposes HTTP and HTTPS routes from outside the cluster to services within the cluster. Traffic routing is controlled by rules defined on the Ingress resource. An Ingress may be configured to give Services externally-reachable URLs, load balance traffic, terminate SSL / TLS, and offer name-based virtual hosting. An Ingress controller is responsible for fulfilling the Ingress, usually with a load balancer, though it may also configure your edge router or additional frontends to help handle the traffic.
+
+We are going to use [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/) which comes as an addon for the microk8s.
+
+### Enable Ingress
+
+The first step is to make sure the addon is enabled. To verify the that just run the `status` command.
+
+```bash
+microk8s status
+```
+
+Make sure `ingress` is inside the enabled section.
+
+If it is not available in the enabled section. then, run the following command to enable it.
+
+```bash
+microk8s enable ingress
+```
+
+This will enable the ingress in microk8s.
+
+## Testing Ingress and cert-manager
+
+Now, we have our `ingress` and `cert-manager` enabled. lets test these with deploying a simple `whoami` application.
+
+```yaml
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: whoami
+  labels:
+    app: traefiklabs
+    name: whoami
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: traefiklabs
+      task: whoami
+  template:
+    metadata:
+      labels:
+        app: traefiklabs
+        task: whoami
+    spec:
+      containers:
+        - name: whoami
+          image: traefik/whoami
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: "100Mi"
+              cpu: "250m"
+            limits:
+              memory: "200Mi"
+              cpu: "500m"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: whoami-service
+spec:
+  ports:
+    - name: http
+      port: 80
+  selector:
+    app: traefiklabs
+    task: whoami
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: http-ingress-whoami
+  annotations:
+    cert-manager.io/cluster-issuer: "lets-encrypt"
+    kubernetes.io/ingress.class: "public"
+spec:
+  tls:
+    - hosts:
+      -  whoami.kdev.antosubash.com
+      secretName: whoami-tls
+  rules:
+  - host: "whoami.kdev.antosubash.com"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service: 
+            name: whoami-service
+            port: 
+              number: 80
+```
+
+you can also find this file in the repo [here](https://github.com/antosubash/microk8s-hetzner-deployment/blob/main/whoami/whoami.yaml)
+
+### Deploy
+
+We will use the `kubectl` to deploy this application.
+
+```bash
+kubectl apply -f whoami.yaml
+```
+
 ## Conclusion
+
+In this post we enabled and configured two addons of microk8s. its cert-manager and ingress and to test these addons we also deployed a sample app. In the next post we will see how to deploy registry and postgres database.
+
+[Part 3. Deploy docker registry and postgres database in MicroK8s](/posts/deploy-docker-registry-and-postgres-database-in-micro-k8s)

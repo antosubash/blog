@@ -172,3 +172,15 @@ microk8s config
 This config which is displayed here is the one we will use to connect to the cluster. copy it and configure your kubectl in your machine.
 
 If you want to know how to install `kubectl` look here <https://kubernetes.io/docs/tasks/tools/>
+
+## Enable addons
+
+```bash
+microk8s enable dns ingress prometheus cert-manager hostpath-storage
+```
+
+## Conclusion
+
+This is it for this post. We have created a server and installed microk8s and enabled few addons. now we are ready for the next step. In the next step we will see how to setup nginx and cert manager. so that we can deploy our first app.
+
+[Part 2. Setup Nginx and cert-manager in MicroK8s](/posts/setup-nginx-and-cert-manager-in-micro-k8s)
