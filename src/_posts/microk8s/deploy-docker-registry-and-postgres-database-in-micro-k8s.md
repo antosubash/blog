@@ -5,7 +5,7 @@ date: "2022-09-14T19:53:18.980Z"
 videoId: 
 series: "MicroK8s - Getting Started"
 part: 3
-tags: [ postgres, registry, "MicroK8s" ]
+tags: [ postgres, registry, "microk8s" ]
 ---
 
 ## Table of contents

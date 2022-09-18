@@ -4,6 +4,7 @@ import matter from "gray-matter";
 import getAllFilesRecursively from "./utils/files";
 import { MAX_DISPLAY } from "./constants";
 import kebabCase from "./utils/kebabCase";
+import { calcLength } from "framer-motion";
 
 const postsDirectory = join(process.cwd(), "_posts");
 
@@ -16,7 +17,7 @@ export function getAllTags() {
   let tagCount : any = {};
   allPosts.forEach((post: { tags: any[] }) => {
     post.tags.forEach((tag) => {
-      const formattedTag = kebabCase(tag)
+      const formattedTag = tag.toLowerCase();
       if (formattedTag in tagCount) {
           tagCount[formattedTag] += 1
         } else {
@@ -40,7 +41,7 @@ export function getPostByTag(tag: string) {
     "part"
   ]);
   const posts = allPosts.filter((post: any) => {
-    return post.tags.includes(tag);
+    return post.tags.includes(tag.toLowerCase());
   });
   return posts;
 }
