@@ -40,7 +40,6 @@ export function getPostByTag(tag: string) {
     "series",
     "part"
   ]);
-  console.log(allPosts);
   const posts = allPosts.filter((post: any) => {
     return post.tags.includes(tag.toLowerCase());
   });
