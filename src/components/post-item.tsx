@@ -23,12 +23,12 @@ const PostItem = (props: PostItemProps) => {
           </div>
           {series && (
             <div className="pt-4">
-              <div className="text-xl font-bold leading-6">
+              <div className="flex flex-col text-xl font-bold leading-6">
                 {series}{" "}
                 {part ? (
-                  <span className="pt-4 px-4 lg:block lg:px-0 text-xl font-bold leading-6">
+                  <div className="pt-4 lg:block lg:px-0 text-xl font-bold leading-6">
                     Part : {part}
-                  </span>
+                  </div>
                 ) : null}
               </div>
             </div>
