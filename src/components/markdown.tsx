@@ -77,7 +77,7 @@ const Markdown: FunctionComponent<IProps> = ({ content }) => {
   return (
     <div className="pt-8">
       <ReactMarkdown
-        className="prose max-w-full text-gray-900 dark:text-gray-50 prose-headings:text-gray-900 dark:prose-headings:text-gray-50 prose-code:bg-transparent text-xl"
+        className="prose max-w-full text-gray-900 dark:text-gray-50 prose-headings:text-gray-900 dark:prose-headings:text-gray-50 prose-code:bg-transparent prose-blockquote:text-teal-600 text-xl"
         components={components}
         children={content}
         remarkPlugins={[remarkToc, remarkGfm]}
