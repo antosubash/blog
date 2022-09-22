@@ -12,7 +12,7 @@ tags: [ postgres, registry, "microk8s" ]
 
 ## Introduction
 
-In this post we will see how to deploy and secure the registry along with deploying a postgres database in microk8s
+In this post we will see how to deploy and secure the registry along with deploying a postgres database in microk8s. We will also see how to connect to the created registry. We will also see how to create a secret in kubernetes and use it in the deployment. We will also see how to create a persistent volume and use it in the deployment.  
 
 ## Parts
 

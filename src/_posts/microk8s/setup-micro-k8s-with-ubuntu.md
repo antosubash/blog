@@ -12,7 +12,7 @@ tags: [ ubuntu, "microk8s" ]
 
 ## Introduction
 
-In this post we will see how to setup microk8s in ubuntu server.
+In this post we will see how to create a single node kubernetes cluster using microk8s. We will use hetzner cloud to create the server and install ubuntu server on it. We will then install microk8s and connect to the cluster using kubectl.
 
 ## Parts
 
