@@ -12,7 +12,7 @@ tags: [ ngnix, ssl, "microk8s", letsencrypt ]
 
 ## Introduction
 
-In this post we will see how to setup nginx reverse proxy and cert-manager in microk8s
+In this post we will see how to setup nginx reverse proxy and cert-manager in microk8s. We will use the nginx ingress controller to create a reverse proxy for our applications. We will also use cert-manager to create and manage SSL certificates for our applications.
 
 ## Parts
 
