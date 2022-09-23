@@ -247,11 +247,55 @@ you can copy the content of the config file and paste it in your `~/.kube/config
 
 ## Using Lens to access the cluster
 
-Lens is a tool to access the kubernetes cluster. you can find the installation guide [here](https://k8slens.dev/). once you have installed the lens you can add the cluster by clicking the `+` button. and paste the config file in the `kubeconfig` field and click the `connect` button. you can find the screenshot below.
+Lens is a tool to access the kubernetes cluster. you can find the installation guide [here](https://k8slens.dev/). once you have installed the lens you can add the cluster by clicking the `+` button. and paste the config file in the `kubeconfig` field and click the `connect` button.
 
-![Lens](/assets/posts/microk8s/microk8s5.gif)
+## Prepare the terminal with oh-my-zsh
 
+I am using the oh-my-zsh to prepare my terminal. you can find the installation guide [here](https://ohmyz.sh/)
 
+## Install oh-my-zsh
+
+```bash
+sudo apt install zsh
+sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+```
+
+## Install autosuggestions and syntax highlighting
+
+```bash
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+```
+
+## Update the .zshrc file
+
+```bash
+nano ~/.zshrc
+```
+
+add the following lines to the file
+
+```bash
+plugins=(git kubectl zsh-autosuggestions zsh-syntax-highlighting)
+```
+
+Also update the theme to `agnoster`
+
+```bash
+ZSH_THEME="agnoster"
+```
+
+add the kubectl alias to the file
+
+```bash
+alias kubectl='microk8s kubectl'
+```
+
+## Update the terminal
+
+```bash
+source ~/.zshrc
+```
 
 ## Conclusion
 
