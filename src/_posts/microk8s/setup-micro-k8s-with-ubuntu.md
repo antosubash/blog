@@ -179,8 +179,82 @@ If you want to know how to install `kubectl` look here <https://kubernetes.io/do
 microk8s enable dns ingress prometheus cert-manager hostpath-storage
 ```
 
+## Verify addons
+
+```bash
+microk8s kubectl get all --all-namespaces
+```
+
+## Create a setup script
+
+you can create a setup script to automate the setup process. I have created a setup script which you can find below. this script will install the microk8s and enable the addons.
+
+let's create a file called `setup.sh` and add the following content.
+
+```bash
+sudo nano setup.sh
+```
+
+lets set the permissions for the script
+
+```bash
+sudo chmod +x setup.sh
+```
+
+Now we have the file and the permissions. lets add the following content to the file.
+
+```bash
+#!/bin/bash
+sudo apt update
+sudo apt upgrade
+sudo apt install snapd -y
+snap version
+sudo snap install microk8s --classic --channel=1.25
+sudo usermod -a -G microk8s $USER
+sudo chown -f -R $USER ~/.kube
+su - $USER
+microk8s status --wait-ready
+alias kubectl='microk8s kubectl'
+kubectl cluster-info
+microk8s enable dns ingress prometheus cert-manager hostpath-storage
+microk8s kubectl get all --all-namespaces
+microk8s kubectl get nodes
+```
+
+## Run the setup script
+
+```bash
+sudo bash setup.sh
+```
+
+this will take some time to complete. once it is completed you can verify the status of the cluster by running the following command.
+
+```bash
+microk8s status
+```
+
+## Access the cluster
+
+To access the cluster we will use the `kubectl` command. you can find the installation guide for kubectl [here](https://kubernetes.io/docs/tasks/tools/)
+
+Once you have the kubectl installed you can run the following command to access the cluster.
+
+```bash
+microk8s config > ~/.kube/config
+```
+
+you can copy the content of the config file and paste it in your `~/.kube/config` file.
+
+## Using Lens to access the cluster
+
+Lens is a tool to access the kubernetes cluster. you can find the installation guide [here](https://k8slens.dev/). once you have installed the lens you can add the cluster by clicking the `+` button. and paste the config file in the `kubeconfig` field and click the `connect` button. you can find the screenshot below.
+
+![Lens](/assets/posts/microk8s/microk8s5.gif)
+
+
+
 ## Conclusion
 
-This is it for this post. We have created a server and installed microk8s and enabled few addons. now we are ready for the next step. In the next step we will see how to setup nginx and cert manager. so that we can deploy our first app.
+This is it for this post. We have created a server and installed microk8s and enabled few addons. we have also configured the kubectl to access the cluster. Now we are ready for the next step. In the next step we will see how to setup nginx and cert manager. so that we can deploy our first app.
 
 [Part 2. Setup Nginx and cert-manager in MicroK8s](/posts/setup-nginx-and-cert-manager-in-micro-k8s)
