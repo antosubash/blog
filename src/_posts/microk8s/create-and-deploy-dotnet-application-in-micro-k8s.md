@@ -2,7 +2,7 @@
 title: "Create and deploy .Net application in MicroK8s"
 excerpt: "In this post we will create a simple abp application and deploy it in the microk8s instance."
 date: "2022-09-14T19:55:43.277Z"
-videoId: 
+videoId: a_LuE43YaWc
 series: "MicroK8s - Getting Started"
 part: 4
 tags: [ abp, tye, "microk8s" ]

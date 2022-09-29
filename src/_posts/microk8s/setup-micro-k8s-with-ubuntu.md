@@ -2,7 +2,7 @@
 title: "Setup MicroK8s With Ubuntu"
 excerpt: "In this post we will see how to setup microk8s in ubuntu server."
 date: "2022-09-14T19:50:03.655Z"
-videoId: 
+videoId: j2C3nS9tjls
 series: "MicroK8s - Getting Started"
 part: 1
 tags: [ ubuntu, "microk8s" ]

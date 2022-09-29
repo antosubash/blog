@@ -2,7 +2,7 @@
 title: "Deploy docker registry and postgres database in MicroK8s"
 excerpt: "In this post we will see how to deploy and secure the registry along with deploying a postgres database in microk8s"
 date: "2022-09-14T19:53:18.980Z"
-videoId: 
+videoId: pxPARH8bF2s
 series: "MicroK8s - Getting Started"
 part: 3
 tags: [ postgres, registry, "microk8s" ]

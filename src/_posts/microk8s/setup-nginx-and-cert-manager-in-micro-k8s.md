@@ -2,7 +2,7 @@
 title: "Setup Nginx and cert-manager in MicroK8s"
 excerpt: "In this post we will see how to setup nginx reverse proxy and cert-manager in microk8s"
 date: "2022-09-14T19:51:51.590Z"
-videoId: 
+videoId: Wq0KQ0m_3lE
 series: "MicroK8s - Getting Started"
 part: 2
 tags: [ ngnix, ssl, "microk8s", letsencrypt ]
