@@ -2,7 +2,7 @@
 title: "MicroK8s - Hassle-free Kubernetes"
 excerpt: "In this post we will see how to get started with the MicroK8s Kubernetes distribution."
 date: "2022-09-15T14:30:14.944Z"
-videoId: 
+videoId: si-OPBZvC_o
 series: "MicroK8s - Getting Started"
 tags: [ "microk8s", docker, series ]
 ---
