@@ -11,7 +11,7 @@ tags: [ "orchard-core", "cms" ]
 
 ## Intro
 
-In this post we will see how to create content types using the code in Orchard Core.
+In this post we will see how to create content types using the code in Orchard Core. We will see how to create content types with different parts and fields. We will also see how to create content items using the code.
 
 ## Create a CMS
 
