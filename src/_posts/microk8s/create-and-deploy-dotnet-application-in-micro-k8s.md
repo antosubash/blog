@@ -124,9 +124,7 @@ lets deploy the application to the microk8s instance. the first thing is to gene
 tye generate
 ```
 
-. we will use this file to deploy the application.
-
-this will generate the yaml file we will rename the generated yaml file to `todoapp-generate.yaml`. we will use the `todoapp-generate.yaml` file to deploy the application. before deploying the application we need to update the `todoapp-generate.yaml` file. we will update the image name and add the environment variables. we will also add the ingress resource. we will use the following code to update the `todoapp-generate.yaml` file.
+this will generate the yaml file. we will rename the generated yaml file to `todoapp-generate.yaml`. we will use the `todoapp-generate.yaml` file to deploy the application. before deploying the application we need to update the `todoapp-generate.yaml` file. we will update the image name and add the environment variables. we will also add the ingress resource. we will use the following code to update the `todoapp-generate.yaml` file.
 
 ```yaml
 kind: Deployment
