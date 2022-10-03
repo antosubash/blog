@@ -123,7 +123,7 @@ snap version
 
 ## Install MicroK8s
 
-The current version of the kubernetes is 1.25 so we are using the following command. To verify the current version take a look [https://microk8s.io/docs/getting-started](here)
+The current version of the kubernetes is 1.25 so we are using the following command. To verify the current version take a look at [https://microk8s.io/docs/getting-started](https://microk8s.io/docs/getting-started)
 
 ```bash
 sudo snap install microk8s --classic --channel=1.25
