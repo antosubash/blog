@@ -12,7 +12,7 @@ tags: [ abp, tye, "microk8s" ]
 
 ## Introduction
 
-In this post we will create a simple abp application and deploy it in the microk8s instance. We will use tye to deploy the application in the cluster ant setup the ingress for the application the ingress will use cert-manager to get the certificate for the application. this app will connect to a postgres database to store its data.
+In this post we will create a simple abp application and deploy it in the microk8s instance. We will use tye to deploy the application in the cluster and setup the ingress for the application the ingress will use cert-manager to get the certificate for the application. this app will connect to a postgres database to store its data.
 
 ## Parts
 
