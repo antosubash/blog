@@ -10,14 +10,26 @@ import { Utterances } from "@components/utterances";
 import { BlogPost } from "@blog/types/postType";
 import { generateOgImage } from "@lib/generateOgImage";
 import Meta from "@components/meta";
+import { serialize } from "next-mdx-remote/serialize";
+import { MDXRemoteSerializeResult } from "next-mdx-remote";
+import "katex/dist/katex.min.css";
+import rehypeKatex from "rehype-katex";
+import remarkToc from "remark-toc";
+import remarkGfm from "remark-gfm";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import rehypeSlug from "rehype-slug";
 
 type Props = {
   post: BlogPost;
+  mdxSource: MDXRemoteSerializeResult<
+    Record<string, unknown>,
+    Record<string, string>
+  >;
   morePosts?: BlogPost[];
   preview?: boolean;
 };
 
-const Post = ({ post }: Props) => {
+const Post = ({ post, mdxSource }: Props) => {
   const router = useRouter();
   if (!router.isFallback && !post?.slug) {
     return <ErrorPage statusCode={404} />;
@@ -48,6 +60,7 @@ const Post = ({ post }: Props) => {
               videoId={post.videoId}
               content={post.content}
               title={post.title}
+              mdxSource={mdxSource}
             />
             <Utterances />
           </>
@@ -70,22 +83,29 @@ export async function getStaticProps({ params }: Params) {
     "title",
     "date",
     "slug",
-    "author",
     "content",
-    "ogImage",
-    "coverImage",
     "videoId",
     "tags",
     "excerpt",
     "series",
     "part",
   ]);
+  const mdxSource = await serialize(post.content || "", {
+    scope: {},
+    mdxOptions: {
+      remarkPlugins: [remarkToc, remarkGfm],
+      rehypePlugins: [rehypeKatex, rehypeSlug, rehypeAutolinkHeadings],
+      format: "md",
+    },
+    parseFrontmatter: true,
+  });
 
   await generateOgImage({ slug: params.slug, title: post.title });
 
   return {
     props: {
       post: post,
+      mdxSource: mdxSource,
     },
   };
 }

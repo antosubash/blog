@@ -1,5 +1,3 @@
-import Author from "@blog/types/author";
-
 export interface BlogPost {
   slug: string;
   title: string;
