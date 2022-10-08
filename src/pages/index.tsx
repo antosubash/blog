@@ -73,7 +73,17 @@ const Index = ({ allPosts }: Props) => {
 export default Index;
 
 export const getStaticProps = async ({ params }: any) => {
-  const allPosts = getLatestPosts();
+  const allPosts = getLatestPosts([
+    "title",
+    "date",
+    "slug",
+    "author",
+    "coverImage",
+    "excerpt",
+    "tags",
+    "series",
+    "part",
+  ]);
   await generateOgImage({ slug: "home", title: "Anto Subash's blog" });
   return {
     props: { allPosts },

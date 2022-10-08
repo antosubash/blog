@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import PostItem from "@components/post-item";
 
 interface SeriesProps {
-    series: BlogPost[];
+  series: BlogPost[];
 }
 const Series: NextPage<SeriesProps> = ({ series }: SeriesProps) => {
   return (
@@ -48,7 +48,17 @@ const Series: NextPage<SeriesProps> = ({ series }: SeriesProps) => {
 };
 
 export const getStaticProps: GetStaticProps = async ({}) => {
-  var series = getSeriesPosts();
+  var series = getSeriesPosts([
+    "title",
+    "date",
+    "slug",
+    "author",
+    "coverImage",
+    "excerpt",
+    "tags",
+    "series",
+    "part",
+  ]);
   return {
     props: {
       series,

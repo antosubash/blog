@@ -64,15 +64,41 @@ export function getPostBySlug(slug: string, fields: string[] = []): BlogPost {
   const fileContents = fs.readFileSync(file, "utf8");
   const { data, content } = matter(fileContents);
   var blogPost = {} as BlogPost;
-  blogPost.slug = slug;
-  blogPost.content = content;
-  blogPost.date = data.date;
-  blogPost.title = data.title;
-  blogPost.videoId = data.videoId || "";
-  blogPost.excerpt = data.excerpt;
-  blogPost.tags = data.tags || [];
-  blogPost.series = data.series || "";
-  blogPost.part = data.part ?? -1;
+  if (fields.length > 0) {
+    fields.forEach((field) => {
+      switch (field) {
+        case "slug":
+          blogPost[field] = slug;
+          break;
+        case "content":
+          blogPost[field] = content;
+          break;
+        case "date":
+          blogPost.date = data.date;
+          break;
+        case "tags":
+          blogPost.tags = data.tags || [];
+          break;
+        case "series":
+          blogPost.series = data.series || "";
+          break;
+        case "part":
+          blogPost.part = data.part ?? -1;
+          break;
+        case "title":
+          blogPost.title = data.title;
+          break;
+        case "videoId":
+          blogPost.videoId = data.videoId || "";
+          break;
+        case "excerpt":
+          blogPost.excerpt = data.excerpt;
+          break;
+        default:
+          break;
+      }
+    });
+  }
   return blogPost;
 }
 
@@ -100,7 +126,7 @@ export function getLatestPosts(
   return posts;
 }
 
-export function getSeriesPosts(fields: string[] = []) : BlogPost[] {
+export function getSeriesPosts(fields: string[] = []): BlogPost[] {
   const allPosts = getAllPosts(fields);
   const posts = allPosts.filter((post: BlogPost) => {
     return post.part == 0;
@@ -108,8 +134,11 @@ export function getSeriesPosts(fields: string[] = []) : BlogPost[] {
   return posts;
 }
 
-export function getPostBySeries(slug: string) : BlogPost[] {
-  const allPosts = getAllPosts();
+export function getPostBySeries(
+  slug: string,
+  fields: string[] = []
+): BlogPost[] {
+  const allPosts = getAllPosts(fields);
   var mainPost = allPosts.find((post: BlogPost) => {
     return post.slug == slug;
   });
