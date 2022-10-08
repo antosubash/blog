@@ -48,8 +48,8 @@ const Index = ({ allPosts }: Props) => {
                         title={title}
                         summary={excerpt}
                         tags={tags}
-                        series={post.series!}
-                        part={post.part!}
+                        series={post.series}
+                        part={post.part}
                       ></PostItem>
                     </motion.li>
                   );

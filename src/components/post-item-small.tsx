@@ -8,8 +8,8 @@ type Props = {
   title: string;
   summary: string;
   tags: string[];
-  series: string;
-  part: number;
+  series?: string;
+  part?: number;
 };
 
 const PostItemSmall = (props: Props) => {

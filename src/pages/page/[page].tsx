@@ -96,8 +96,8 @@ const PostPage = ({ allPosts, initialDisplayPosts, pagination }: Props) => {
                         title={title}
                         summary={excerpt}
                         tags={tags}
-                        series={series!}
-                        part={part!}
+                        series={series}
+                        part={part}
                       ></PostItemSmall>
                     </motion.div>
                   );

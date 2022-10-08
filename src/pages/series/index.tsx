@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import PostItem from "@components/post-item";
 import Container from "@components/container";
 import Layout from "@components/layout";
+import Meta from "@components/meta";
 
 interface SeriesProps {
   series: BlogPost[];
@@ -13,6 +14,12 @@ interface SeriesProps {
 const Series: NextPage<SeriesProps> = ({ series }: SeriesProps) => {
   return (
     <Layout>
+      <Meta
+        title="Anto's blog Series"
+        description="This page contains all the series."
+        url="/series"
+        image="/og/series.png"
+      />
       <Container>
         <div className="divide-y">
           <div className="pt-6 pb-8 space-y-2 md:space-y-5">
@@ -39,8 +46,8 @@ const Series: NextPage<SeriesProps> = ({ series }: SeriesProps) => {
                       title={title}
                       summary={excerpt}
                       tags={tags}
-                      series={post.series!}
-                      part={post.part!}
+                      series={post.series}
+                      part={post.part}
                     ></PostItem>
                   </motion.li>
                 );
