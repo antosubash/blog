@@ -3,8 +3,7 @@ import { join, basename } from "path";
 import matter from "gray-matter";
 import getAllFilesRecursively from "./utils/files";
 import { MAX_DISPLAY } from "./constants";
-import kebabCase from "./utils/kebabCase";
-import { calcLength } from "framer-motion";
+import { BlogPost } from "@blog/types/postType";
 
 const postsDirectory = join(process.cwd(), "_posts");
 
@@ -14,15 +13,15 @@ export function getPostFiles() {
 
 export function getAllTags() {
   var allPosts = getAllPosts(["tags"]);
-  let tagCount : any = {};
+  let tagCount: any = {};
   allPosts.forEach((post: { tags: any[] }) => {
     post.tags.forEach((tag) => {
       const formattedTag = tag.toLowerCase();
       if (formattedTag in tagCount) {
-          tagCount[formattedTag] += 1
-        } else {
-          tagCount[formattedTag] = 1
-        }
+        tagCount[formattedTag] += 1;
+      } else {
+        tagCount[formattedTag] = 1;
+      }
     });
   });
   return tagCount;
@@ -38,7 +37,7 @@ export function getPostByTag(tag: string) {
     "excerpt",
     "tags",
     "series",
-    "part"
+    "part",
   ]);
   const posts = allPosts.filter((post: any) => {
     return post.tags.includes(tag.toLowerCase());
@@ -60,35 +59,24 @@ export function getFileBySlug(slug: string) {
   return filePath;
 }
 
-export function getPostBySlug(slug: string, fields: string[] = []) {
+export function getPostBySlug(slug: string, fields: string[] = []): BlogPost {
   var file = getFileBySlug(slug);
   const fileContents = fs.readFileSync(file, "utf8");
   const { data, content } = matter(fileContents);
-
-  type Items = {
-    [key: string]: string;
-  };
-
-  const items: Items = {};
-
-  // Ensure only the minimal needed data is exposed
-  fields.forEach((field) => {
-    if (field === "slug") {
-      items[field] = slug!;
-    }
-    if (field === "content") {
-      items[field] = content;
-    }
-
-    if (data[field]) {
-      items[field] = data[field];
-    }
-  });
-
-  return items;
+  var blogPost = {} as BlogPost;
+  blogPost.slug = slug;
+  blogPost.content = content;
+  blogPost.date = data.date;
+  blogPost.title = data.title;
+  blogPost.videoId = data.videoId || "";
+  blogPost.excerpt = data.excerpt;
+  blogPost.tags = data.tags || [];
+  blogPost.series = data.series || "";
+  blogPost.part = data.part ?? -1;
+  return blogPost;
 }
 
-export function getAllPosts(fields: string[] = []) {
+export function getAllPosts(fields: string[] = []): BlogPost[] {
   const slugs = getAllSlugs();
   const posts = slugs
     .map((slug: any) => getPostBySlug(slug, fields))
@@ -97,11 +85,36 @@ export function getAllPosts(fields: string[] = []) {
   return posts;
 }
 
-export function getLatestPosts(fields: string[] = [], limit: number = MAX_DISPLAY) {
+export function getLatestPosts(
+  fields: string[] = [],
+  limit: number = MAX_DISPLAY
+): BlogPost[] {
   const slugs = getAllSlugs();
   const posts = slugs
-    .map((slug: any) => getPostBySlug(slug, fields))
+    .map((slug: string) => getPostBySlug(slug, fields))
     // sort posts by date in descending order
-    .sort((post1: any, post2: any) => (post1.date > post2.date ? -1 : 1)).slice(0, limit);
+    .sort((post1: BlogPost, post2: BlogPost) =>
+      post1.date > post2.date ? -1 : 1
+    )
+    .slice(0, limit) as BlogPost[];
+  return posts;
+}
+
+export function getSeriesPosts(fields: string[] = []) : BlogPost[] {
+  const allPosts = getAllPosts(fields);
+  const posts = allPosts.filter((post: BlogPost) => {
+    return post.part == 0;
+  });
+  return posts;
+}
+
+export function getPostBySeries(slug: string) : BlogPost[] {
+  const allPosts = getAllPosts();
+  var mainPost = allPosts.find((post: BlogPost) => {
+    return post.slug == slug;
+  });
+  const posts = allPosts.filter((post: BlogPost) => {
+    return post.series == mainPost?.series;
+  });
   return posts;
 }

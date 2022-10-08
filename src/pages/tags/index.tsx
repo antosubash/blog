@@ -12,19 +12,24 @@ type Props = {
 const Index = ({ tags }: Props) => {
   return (
     <Layout>
-      <Meta title="Anto's blog Tags" description="Tags page" url="/tags" image="/og/tags.png" />
+      <Meta
+        title="Anto's blog Tags"
+        description="Tags page"
+        url="/tags"
+        image="/og/tags.png"
+      />
       <Container>
-        <div className="flex flex-col items-start justify-start divide-y divide-gray-200 dark:divide-gray-700 md:justify-center md:items-center md:divide-y-0 md:flex-row md:space-x-6 md:mt-24">
-          <div className="pt-6 pb-8 space-x-2 md:space-y-5">
-            <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14 md:border-r-2 md:px-6">
+        <div className="divide-y">
+          <div className="pt-6 pb-8">
+            <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl md:text-6xl">
               Tags
             </h1>
           </div>
-          <div className="flex flex-wrap max-w-lg">
+          <div className="flex flex-wrap pt-4">
             {Object.keys(tags).length === 0 && "No tags found."}
             {Object.keys(tags).map((t) => {
               return (
-                <div key={t} className="mt-2 mb-2">
+                <div key={t} className="mt-2 mb-2 text-lg">
                   <Tag key={t} text={t} count={tags[t as any]} />
                 </div>
               );

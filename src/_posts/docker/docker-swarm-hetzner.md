@@ -4,6 +4,7 @@ excerpt: "In this post we will see how to setup docker swarm for your developmen
 date: "2022-07-31"
 videoId: LWflLXiAnFs
 series: "Docker Deployment"
+part: 0
 tags: [ "docker", "docker-swarm", "series" ]
 ---
 ## Table of contents

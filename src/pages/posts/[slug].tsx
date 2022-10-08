@@ -7,13 +7,13 @@ import Layout from "@components/layout";
 import { getPostBySlug, getAllPosts } from "@lib/api";
 import PageTitle from "@components/page-title";
 import { Utterances } from "@components/utterances";
-import PostType from "@blog/types/postType";
+import { BlogPost } from "@blog/types/postType";
 import { generateOgImage } from "@lib/generateOgImage";
 import Meta from "@components/meta";
 
 type Props = {
-  post: PostType;
-  morePosts?: PostType[];
+  post: BlogPost;
+  morePosts?: BlogPost[];
   preview?: boolean;
 };
 
@@ -40,9 +40,9 @@ const Post = ({ post }: Props) => {
             <PostHeader
               title={post.title}
               date={post.date}
-              series={post.series}
+              series={post.series!}
               tags={post.tags}
-              part={post.part}
+              part={post.part!}
             />
             <PostBody
               videoId={post.videoId}
