@@ -23,3 +23,11 @@ OpenIddict natively supports Entity Framework Core, Entity Framework 6 and Mongo
 ## Reason for the migration
 
 The main reason for the migration is that the Identity server is not maintained anymore. The last release was in 2019. The latest version of ABP framework is using OpenIddict. So, it is better to use the latest version of the framework. you can read more about the migration [here](https://docs.abp.io/en/abp/6.0/Migration-Guides/OpenIddict-Step-by-Step). you can learn more about the background of the migration [here](https://github.com/abpframework/abp/issues/11989)
+
+## Migration
+
+### Remove Identity Server
+
+First, we need to remove the Identity server from the solution and replace it with OpenIddict.
+
+We will search for the "IdentityServer" in the solution and remove all the references.
