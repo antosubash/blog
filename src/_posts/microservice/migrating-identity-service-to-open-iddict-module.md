@@ -26,8 +26,21 @@ The main reason for the migration is that the Identity server is not maintained 
 
 ## Migration
 
+### Update the packages
+
+First, lets update the packages. we will update all the packages to the latest version. 
+
+Use the following command to update the packages.
+
+```bash
+abp update
+```
+
+This will update all the packages to the latest version. You can see the changes in the `*.csproj` files.
+
 ### Remove Identity Server
 
-First, we need to remove the Identity server from the solution and replace it with OpenIddict.
+Now, we need to remove the Identity server from the solution and replace it with OpenIddict.
 
-We will search for the "IdentityServer" in the solution and remove all the references.
+We will search for the `IdentityServer` in the solution and replace all the references with `OpenIddict`. Filter the solution for `*.cs` and `*.csproj` files.
+
