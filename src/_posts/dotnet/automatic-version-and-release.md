@@ -1,4 +1,4 @@
-----
+---
 title: "Automatically version and release .Net Application"
 excerpt: "In this post you will see how to automatically version and release a .Net Application using GitHub Actions"
 date: "2022-10-23"
