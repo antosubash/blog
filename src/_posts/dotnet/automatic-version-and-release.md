@@ -156,15 +156,142 @@ jobs:
               prerelease: false,
               repo: context.repo.repo,
               tag_name: current_tag,
-              changelog : {
-                title: "Changelog",
-                body: "This is the changelog"
-              }
             });
           } catch (error) {
             core.setFailed(error.message);
           }
 ```
+
+This will run when we push a commit to the main branch. It will version the application, create a tag for the release and generate a changelog. It will also create a release using the GitHub API. You can find the changelog in the `CHANGELOG.md` file.
+
+If you are new to GitHub Actions, please check [this](https://docs.github.com/en/actions/learn-github-actions/introduction-to-github-actions) to learn more about GitHub Actions. It will help you to understand the above code.
+
+Here is a brief explanation of the above code.
+
+```yaml
+name: Version and Release
+```
+
+This is the name of the action.
+
+```yaml
+on:
+  push:
+    branches: [ "main" ]
+```
+
+This will run the action when we push a commit to the main branch.
+
+```yaml
+jobs:
+  build:
+    runs-on: ubuntu-latest
+```
+
+This is the job that will run. We are using ubuntu-latest as the operating system.
+
+```yaml
+- uses: actions/checkout@v3
+  with:
+    fetch-depth: 0
+```
+
+This will checkout the repository.
+
+```yaml
+- name: Setup .NET
+  uses: actions/setup-dotnet@v3
+  with:
+    dotnet-version: 6.0.x
+```
+
+This will setup the .Net environment.
+
+```yaml
+- name: Restore dependencies
+  run: dotnet restore
+```
+
+This will restore the dependencies.
+
+```yaml
+- name: Build
+  run: dotnet build --no-restore
+```
+
+This will build the application.
+
+```yaml
+- name: Install Versionize
+  run: dotnet tool install --global Versionize
+```
+
+This will install the versionize tool.
+
+```yaml
+- name: Setup git
+  run: |
+        git config --local user.email "antosubash@live.com"
+        git config --local user.name "Anto Subash"
+```
+
+This will setup the git user name and email.
+
+```yaml
+- name: Versionize Release
+  id: versionize
+  run: versionize --changelog-all --exit-insignificant-commits
+  continue-on-error: true
+```
+
+This will version the application, create a tag for the release and generate a changelog. You can find the changelog in the `CHANGELOG.md` file. 
+
+```yaml
+- name: No release required
+  if: steps.versionize.outcome != 'success'
+  run: echo "Skipping Release. No release required."
+```
+
+This will check if the versionize command was successful. If it was successful, it will continue to the next step. If it was not successful, it will skip the release.
+
+```yaml
+- name: Push changes to GitHub
+  if: steps.versionize.outcome == 'success'
+  uses: ad-m/github-push-action@master
+  with:
+    github_token: ${{ secrets.GITHUB_TOKEN }}
+    branch: ${{ github.ref }}
+    tags: true
+```
+
+This will push the changes to the GitHub repository.
+
+```yaml
+- name: "Create release"
+  if: steps.versionize.outcome == 'success'
+  uses: "actions/github-script@v5"
+  with:
+    github-token: "${{ secrets.GITHUB_TOKEN }}"
+    script: |
+      try {
+        const tags_url = context.payload.repository.tags_url + "?per_page=1"
+        const result = await github.request(tags_url)
+        const current_tag = result.data[0].name
+        await github.rest.repos.createRelease({
+          draft: false,
+          generate_release_notes: true,
+          name: current_tag,
+          owner: context.repo.owner,
+          prerelease: false,
+          repo: context.repo.repo,
+          tag_name: current_tag,
+        });
+      } catch (error) {
+        core.setFailed(error.message);
+      }
+```
+
+This will create a release using the GitHub API.
 
 ## Adding Husky.Net
 
