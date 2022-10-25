@@ -295,7 +295,7 @@ This will create a release using the GitHub API.
 
 ## Adding Husky.Net
 
-We will use Husky.Net to lint the commit message. this will make the commit message follow the conventional commits standard. 
+We will use Husky.Net to lint the commit message. this will make the commit message follow the conventional commits standard.
 
 > [!NOTE]
 > As I said earlier, This is not required. But it is a nice to have. If you don't want to use it you can skip this section. But I highly recommend it.
@@ -316,29 +316,15 @@ This will add a pre-commit hook to your project. You can find the hook in the `.
 husky run -v --group "pre-commit"
 ```
 
-### Add dotnet format hook
+### Add commit-msg hook
 
-We will add a dotnet format hook to format the code before the commit is made. Husky.Net will run the dotnet format hook before the commit is made.
-
-```bash
-dotnet husky add format-cs
-```
-
-This will add a dotnet format hook to your project. You can find the hook in the `.husky` folder. In the `format-cs` file, you can add the commands you want to run before the commit is made. In our case, we will run dotnet format.
+We will add a commit msg hook to lint the commit message before the commit is made. Husky.Net will run the commit msg hook before the commit is made.
 
 ```bash
-dotnet husky run --name "dotnet-format" --args "$1"
+dotnet husky add commit-msg
 ```
 
-### Add commit lint hook
-
-We will add a commit lint hook to lint the commit message before the commit is made. Husky.Net will run the commit lint hook before the commit is made.
-
-```bash
-dotnet husky add commit-lint
-```
-
-This will add a commit lint hook to your project. You can find the hook in the `.husky` folder. In the `commit-lint` file, you can add the commands you want to run before the commit is made. In our case, we will run commitlint.
+This will add a commit msg hook to your project. You can find the hook in the `.husky` folder. In the `commit-msg` file, you can add the commands you want to run before the commit is made. In our case, we will run commit-msg.
 
 ```bash
 husky run --name "commit-message-linter" --args "$1"
