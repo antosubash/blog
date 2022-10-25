@@ -31,7 +31,6 @@ Versionize is a library that can be used to version a .Net application. It uses 
 
 Husky.Net is a library that can be used to run git hooks in dotnet. It is a port of the famous [Husky](https://github.com/typicode/husky) library. Husky is a library that can be used to run git hooks in nodejs. Husky.Net can be used to run git hooks in dotnet. It can be used in any .Net application.
 
-> [!NOTE]
 > Husky is not required for this but it is a nice to have. It will help us to keep the commit messages clean and consistent. If you don't want to use it you can skip this section. But I highly recommend it.
 
 ## GitHub Actions
@@ -297,10 +296,11 @@ This will create a release using the GitHub API.
 
 We will use Husky.Net to lint the commit message. this will make the commit message follow the conventional commits standard.
 
-> [!NOTE]
 > As I said earlier, This is not required. But it is a nice to have. If you don't want to use it you can skip this section. But I highly recommend it.
 
 Follow the steps here to add Husky.Net to your project. <https://alirezanet.github.io/Husky.Net/guide/getting-started.html#installation>
+
+if you are new to git hooks, please check this <https://githooks.com>. It will help you to understand what git hooks are.
 
 ### Add a pre-commit hook
 
@@ -382,6 +382,51 @@ Now we have our hooks ready. We need to update the task runner to run the hooks.
      }
    ]
 }
+```
+
+## Commit and push
+
+Now we are ready to commit and push our changes. Commit and push your changes. You can find the commit message linter in action.
+
+if you followed the steps correctly, you should see the following output when you didn't follow the conventional commits standard.
+
+```bash
+[Husky] 🚀 Loading tasks ...
+--------------------------------------------------
+--------------------------------------------------
+[Husky] ⚡ Preparing task 'dotnet-format'
+[Husky] 💤 Skipped, no matched files
+--------------------------------------------------
+[Husky] 🚀 Loading tasks ...
+--------------------------------------------------
+[Husky] ⚡ Preparing task 'commit-message-linter'
+[Husky] ⌛ Executing task 'commit-message-linter' ...
+Invalid commit message
+e.g: 'feat(scope): subject' or 'fix: subject'
+More info: https://www.conventionalcommits.org/en/v1.0.0/
+script execution failed
+
+  ❌ Task 'commit-message-linter' failed in 2.445ms
+
+husky - commit-msg hook exited with code 1 (error)
+```
+
+if you commit message is valid, you should see the following output.
+
+```bash
+[Husky] 🚀 Loading tasks ...
+--------------------------------------------------
+[Husky] ⚡ Preparing task 'dotnet-format'
+[Husky] 💤 Skipped, no matched files
+--------------------------------------------------
+[Husky] 🚀 Loading tasks ...
+--------------------------------------------------
+[Husky] ⚡ Preparing task 'commit-message-linter'
+[Husky] ⌛ Executing task 'commit-message-linter' ...
+[Husky]  ✔ Successfully executed in 404ms
+--------------------------------------------------
+
+Great work! 🥂
 ```
 
 ## Conclusion
