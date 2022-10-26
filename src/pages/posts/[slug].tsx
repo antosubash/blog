@@ -10,6 +10,7 @@ import { Utterances } from "@components/utterances";
 import { BlogPost } from "@blog/types/postType";
 import { generateOgImage } from "@lib/generateOgImage";
 import Meta from "@components/meta";
+import TopProgress from "@components/top-progress";
 
 type Props = {
   post: BlogPost;
@@ -24,6 +25,7 @@ const Post = ({ post }: Props) => {
   }
   return (
     <Layout>
+      <TopProgress />
       <Container>
         {router.isFallback ? (
           <PageTitle>Loading…</PageTitle>
