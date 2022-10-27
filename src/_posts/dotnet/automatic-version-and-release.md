@@ -429,6 +429,24 @@ if you commit message is valid, you should see the following output.
 Great work! 🥂
 ```
 
+## Attach Husky.Net to your project
+
+To make things easier for other developers, you can attach Husky.Net to your project.
+
+```bash
+dotnet husky attach <path-to-project-file>
+```
+
+This will add required configuration to your project file. You can find the configuration in the `PropertyGroup` section.
+
+```xml
+<Target Name="husky" BeforeTargets="Restore;CollectPackageReferences" Condition="'$(HUSKY)' != 0">
+   <Exec Command="dotnet tool restore"  StandardOutputImportance="Low" StandardErrorImportance="High"/>
+   <Exec Command="dotnet husky install" StandardOutputImportance="Low" StandardErrorImportance="High"
+         WorkingDirectory="../../" />  <!--Update this to the relative path to your project root dir -->
+</Target>
+```
+
 ## Conclusion
 
 In this article, we have seen how to version and release a dotnet application using versionize and github actions. You can find the source code in the [github repository](https://github.com/antosubash/dotnet-version-and-release) for this article. If you have any questions or suggestions, please leave a comment below. Thanks for reading. Happy coding! 🚀 🚀 🚀
