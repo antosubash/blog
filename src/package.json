@@ -13,6 +13,7 @@
     "@heroicons/react": "^1.0.6",
     "@tailwindcss/forms": "^0.5.2",
     "@tailwindcss/typography": "^0.5.4",
+    "@vercel/analytics": "^0.1.5",
     "canvas": "^2.9.3",
     "canvas-multiline-text": "^1.0.3",
     "classnames": "2.3.1",
