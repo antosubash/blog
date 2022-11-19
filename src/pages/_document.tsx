@@ -22,7 +22,7 @@ export default class MyDocument extends Document {
             }}
           />
         </Head>
-        <body className="bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-200">
+        <body className="bg-gradient-to-l from-gray-100 via-gray-300 to-gray-100 text-gray-800 dark:text-gray-200  dark:from-gray-800 dark:via-gray-900 dark:to-gray-800">
           <Main />
           <NextScript />
         </body>

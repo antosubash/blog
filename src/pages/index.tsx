@@ -29,7 +29,7 @@ const Index = ({ allPosts }: Props) => {
                 Latest
               </h1>
             </div>
-            <ul className="divide-y">
+            <ul>
               <AnimatePresence>
                 {allPosts.map((post, index) => {
                   const { slug, date, title, excerpt, tags } = post;

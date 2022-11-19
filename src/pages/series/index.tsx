@@ -27,7 +27,7 @@ const Series: NextPage<SeriesProps> = ({ series }: SeriesProps) => {
               Series
             </h1>
           </div>
-          <ul className="divide-y">
+          <ul >
             <AnimatePresence>
               {series.map((post, index) => {
                 const { slug, date, title, excerpt, tags } = post;

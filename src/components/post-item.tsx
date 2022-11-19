@@ -12,10 +12,17 @@ interface PostItemProps {
   part?: number;
 }
 
-const PostItem = (props: PostItemProps) => {
-  const { slug, date, title, summary, series, tags, part } = props;
+const PostItem = ({
+  slug,
+  date,
+  title,
+  summary,
+  series,
+  tags,
+  part,
+}: PostItemProps) => {
   return (
-    <article className="py-12">
+    <article className="py-4 my-4 px-4 rounded-2xl border drop-shadow-lg border-gray-100 bg-white dark:border-gray-800 dark:bg-gray-900">
       <div className="space-y-2 xl:grid xl:grid-cols-4 xl:space-y-0 xl:items-baseline">
         <div key={slug}>
           <div className="text-base font-medium leading-6 ">
@@ -53,7 +60,7 @@ const PostItem = (props: PostItemProps) => {
             </a>
           </div>
           <div className="flex flex-row flex-wrap">
-            {props.tags.map((tag) => (
+            {tags.map((tag) => (
               <div className="mt-3" id={tag}>
                 <Tag text={tag} />
               </div>
