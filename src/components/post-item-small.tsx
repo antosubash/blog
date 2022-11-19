@@ -41,19 +41,19 @@ const PostItemSmall = (props: Props) => {
         </dl>
         <div className="space-y-3 xl:col-span-3">
           <div>
-            <h3 className="text-xl py-2 font-bold leading-8 tracking-tight">
+            <h3 className="text-xl font-bold leading-8 tracking-tight">
               <a href={`/posts/${slug}`}>{title}</a>
             </h3>
-            <div className="flex flex-wrap">
-              {props.tags.map((tag) => (
-                <div className="mt-2" id={tag}>
-                  <Tag text={tag} />
-                </div>
-              ))}
+            <div className="prose max-w-none text-gray-500 dark:text-gray-400">
+              {summary}
             </div>
           </div>
-          <div className="prose max-w-none text-gray-500 dark:text-gray-400 py-2">
-            {summary}
+          <div className="flex flex-wrap pb-4">
+            {props.tags.map((tag) => (
+              <div className="mt-2" id={tag}>
+                <Tag text={tag} />
+              </div>
+            ))}
           </div>
         </div>
       </article>
