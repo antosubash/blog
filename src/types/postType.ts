@@ -1,20 +1,23 @@
 import Author from "@blog/types/author";
 
-type PostType = {
+export interface BlogPost {
   slug: string;
   title: string;
   videoId: string;
   date: string;
-  coverImage: string;
-  author: Author;
   excerpt: string;
-  ogImage: {
-    url: string;
-  };
   content: string;
   tags: string[];
-  series: string;
-  part: number;
-};
+  series?: string;
+  part?: number;
+}
 
-export default PostType;
+export class BlogPostConvert {
+  public static toBlogPost(json: string): BlogPost {
+    return JSON.parse(json);
+  }
+
+  public static blogPostToJson(value: BlogPost): string {
+    return JSON.stringify(value);
+  }
+}

@@ -2,7 +2,9 @@
 title: ".NET Microservice with ABP - Full Series"
 excerpt: "This post contains all the parts of the microservice development with ABP"
 date: "2022-04-23T00:00:00.000Z"
-videoId: PFFNHQUn74A 
+videoId: PFFNHQUn74A
+part: 0
+series: ".NET Microservice with ABP"
 tags: [ "dotnet", "abp", "microservice", "series"]
 ---
 

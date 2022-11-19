@@ -2,14 +2,14 @@ import { useRouter } from "next/router";
 import React from "react";
 import ErrorPage from "next/error";
 import { getAllTags, getPostByTag } from "@lib/api";
-import PostType from "@blog/types/postType";
+import { BlogPost } from "@blog/types/postType";
 import Container from "@components/container";
 import { AnimatePresence, motion } from "framer-motion";
 import { generateOgImage } from "@lib/generateOgImage";
 import Meta from "@components/meta";
 import PostItemSmall from "@components/post-item-small";
 interface Props {
-  posts: PostType[];
+  posts: BlogPost[];
 }
 
 const TagList = ({ posts }: Props) => {
@@ -20,7 +20,12 @@ const TagList = ({ posts }: Props) => {
   }
   return (
     <Container>
-      <Meta title="Anto's blog Tags" description="Tags page" url={`${router.asPath}`} image={`/og/${tag}.png`} />
+      <Meta
+        title="Anto's blog Tags"
+        description="Tags page"
+        url={`${router.asPath}`}
+        image={`/og/${tag}.png`}
+      />
       <div className="divide-y divide-gray-500 dark:divide-gray-300">
         <div className="pt-6 pb-8 space-y-2 md:space-y-5">
           <h1 className="text-2xl uppercase font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-2xl sm:leading-10 md:text-2xl md:leading-14">

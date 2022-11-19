@@ -5,6 +5,7 @@ import { ThemeProvider } from "next-themes";
 import LayoutWrapper from "@components/layout-wrapper";
 import { AnimateSharedLayout, motion } from "framer-motion";
 import 'remixicon/fonts/remixicon.css'
+import { Analytics } from "@vercel/analytics/react";
 export default function MyApp({ Component, pageProps, router }: AppProps) {
   const spring = {
     type: "spring",
@@ -24,6 +25,7 @@ export default function MyApp({ Component, pageProps, router }: AppProps) {
             exit={{ opacity: 0 }}
           >
             <Component {...pageProps} key={router.pathname} />
+            <Analytics />
           </motion.div>
         </AnimateSharedLayout>
       </LayoutWrapper>

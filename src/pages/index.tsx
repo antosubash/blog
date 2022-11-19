@@ -2,14 +2,14 @@
 import Container from "@components/container";
 import Layout from "@components/layout";
 import { getLatestPosts } from "@lib/api";
-import Post from "@blog/types/postType";
+import { BlogPost } from "@blog/types/postType";
 import PostItem from "@components/post-item";
 import { AnimatePresence, motion } from "framer-motion";
 import Meta from "@components/meta";
 import { generateOgImage } from "@lib/generateOgImage";
 import Link from "next/link";
 type Props = {
-  allPosts: Post[];
+  allPosts: BlogPost[];
 };
 const Index = ({ allPosts }: Props) => {
   return (
@@ -84,7 +84,6 @@ export const getStaticProps = async ({ params }: any) => {
     "series",
     "part",
   ]);
-
   await generateOgImage({ slug: "home", title: "Anto Subash's blog" });
   return {
     props: { allPosts },

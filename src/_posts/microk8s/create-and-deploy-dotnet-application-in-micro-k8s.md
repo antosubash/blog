@@ -12,7 +12,7 @@ tags: [ abp, tye, "microk8s" ]
 
 ## Introduction
 
-In this post we will create a simple abp application and deploy it in the microk8s instance. We will use tye to deploy the application in the cluster. We will also see how to setup the ingress for the application. We will use cert-manager to get the certificate for the application. We will also see how to setup the database for the application. We will use postgres database for this application.
+In this post we will create a simple abp application and deploy it in the microk8s instance. We will use tye to deploy the application in the cluster and setup the ingress for the application the ingress will use cert-manager to get the certificate for the application. this app will connect to a postgres database to store its data.
 
 ## Parts
 
@@ -121,10 +121,10 @@ tye push
 lets deploy the application to the microk8s instance. the first thing is to generate the yaml files. we will use the tye to generate the yaml files.
 
 ```bash
-tye generate --output todoapp-generate.yaml
+tye generate
 ```
 
-this will generate the yaml files. we will use the `todoapp-generate.yaml` file to deploy the application. before deploying the application we need to update the `todoapp-generate.yaml` file. we will update the image name and add the environment variables. we will also add the ingress resource. we will use the following code to update the `todoapp-generate.yaml` file.
+this will generate the yaml file. we will rename the generated yaml file to `todoapp-generate.yaml`. we will use the `todoapp-generate.yaml` file to deploy the application. before deploying the application we need to update the `todoapp-generate.yaml` file. we will update the image name and add the environment variables. we will also add the ingress resource. we will use the following code to update the `todoapp-generate.yaml` file.
 
 ```yaml
 kind: Deployment

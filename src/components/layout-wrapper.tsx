@@ -23,18 +23,18 @@ const LayoutWrapper = ({ children }: any) => {
           <div className="flex items-center text-base leading-5">
             <div className="hidden md:block">
               <div className="flex">
-                <div className="flex justify-center items-center font-bold px-5 cursor-pointer">
+                {/* <div className="flex justify-center items-center font-bold px-5 cursor-pointer">
                   <CommandBar>
                     <ShortcutHome />
                   </CommandBar>
-                </div>
+                </div> */}
                 <div className="flex justify-center items-center font-bold">
                   <a href="/page" className="font-bold px-5">
                     Articles
                   </a>
                 </div>
                 <div className="flex justify-center items-center font-bold">
-                  <a href="/tags/series" className="font-bold px-5">
+                  <a href="/series" className="font-bold px-5">
                     Series
                   </a>
                 </div>

@@ -2,7 +2,7 @@
 import Container from "@components/container";
 import Layout from "@components/layout";
 import { getAllPosts } from "@lib/api";
-import Post from "@blog/types/postType";
+import { BlogPost } from "@blog/types/postType";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import Meta from "@components/meta";
@@ -12,8 +12,8 @@ import Pagination from "@components/pagination-item";
 import PostItemSmall from "@components/post-item-small";
 
 type Props = {
-  allPosts: Post[];
-  initialDisplayPosts: Post[];
+  allPosts: BlogPost[];
+  initialDisplayPosts: BlogPost[];
   pagination: any;
 };
 const PostPage = ({ allPosts, initialDisplayPosts, pagination }: Props) => {

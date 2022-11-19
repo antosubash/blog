@@ -4,6 +4,7 @@ excerpt: "In this post we will see how to get started with the MicroK8s Kubernet
 date: "2022-09-15T14:30:14.944Z"
 videoId: si-OPBZvC_o
 series: "MicroK8s - Getting Started"
+part: 0
 tags: [ "microk8s", docker, series ]
 ---
 
@@ -23,7 +24,7 @@ After moving away from docker swarm. I was looking for simple and easy to use ku
 
 ## What is the cost?
 
-In this post I will create a single node cluster which will cost around 15€ or $. I'm going to use hetzner cloud and you can use the referral link [https://hetzner.cloud/?ref=ENhA4rCZ5JUM](here) and get 20€ for free to try it out.
+In this post I will create a single node cluster which will cost around 15€ or $. I'm going to use hetzner cloud and you can use the referral link [https://hetzner.cloud/?ref=ENhA4rCZ5JUM](https://hetzner.cloud/?ref=ENhA4rCZ5JUM) and get 20€ for free to try it out.
 
 ## What are the goals
 
