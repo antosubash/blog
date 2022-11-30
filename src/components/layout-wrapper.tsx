@@ -20,7 +20,7 @@ const LayoutWrapper = ({ children }: any) => {
               </p>
             </a>
           </div>
-          <div className="flex items-center text-base leading-5">
+          <div className="flex items-center text-base leading-5 pr-6">
             <div className="hidden md:block">
               <div className="flex">
                 {/* <div className="flex justify-center items-center font-bold px-5 cursor-pointer">

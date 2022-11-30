@@ -29,7 +29,7 @@ const Index = ({ allPosts }: Props) => {
                 Latest
               </h1>
             </div>
-            <ul className="divide-y">
+            <ul>
               <AnimatePresence>
                 {allPosts.map((post, index) => {
                   const { slug, date, title, excerpt, tags } = post;
@@ -39,7 +39,6 @@ const Index = ({ allPosts }: Props) => {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
-                      whileHover={{ scale: 1.1 }}
                     >
                       <PostItem
                         key={slug}
@@ -60,7 +59,7 @@ const Index = ({ allPosts }: Props) => {
         </Container>
         <div className="flex justify-end font-bold">
           <Link href="/page" aria-label="all posts">
-            <div className="text-primary-500 cursor-pointer hover:text-primary-600 dark:hover:text-primary-400">
+            <div className="text-primary-500 cursor-pointer hover:text-primary-600 dark:hover:text-primary-400 pr-6 text-xl pt-2">
               All Posts &rarr;
             </div>
           </Link>

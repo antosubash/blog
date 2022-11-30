@@ -1,5 +1,3 @@
-import Author from "@blog/types/author";
-
 export interface BlogPost {
   slug: string;
   title: string;
@@ -10,6 +8,7 @@ export interface BlogPost {
   tags: string[];
   series?: string;
   part?: number;
+  isDraft: boolean;
 }
 
 export class BlogPostConvert {

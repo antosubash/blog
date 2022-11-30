@@ -11,7 +11,7 @@ type Props = {
 const PostBody = ({ content, videoId, title }: Props) => {
   var url = "https://www.youtube.com/watch?v=" + videoId;
   return (
-    <div className="divide-y divide-gray-200 dark:divide-gray-700 xl:pb-0 xl:col-span-3 xl:row-span-2">
+    <div className="xl:pb-0 xl:col-span-3 xl:row-span-2">
       {videoId ? (
         <iframe
           width="100%"

@@ -45,8 +45,8 @@ const PostMain = ({ allPosts, initialDisplayPosts, pagination }: Props) => {
           image="/og/home.png"
         />
         <Container>
-          <div className="divide-y">
-            <div className="pt-6 pb-8 space-y-2 md:space-y-5">
+          <div>
+            <div className="pt-6 space-y-2 md:space-y-5">
               <div className="relative">
                 <input
                   aria-label="Search articles"
@@ -72,13 +72,13 @@ const PostMain = ({ allPosts, initialDisplayPosts, pagination }: Props) => {
               </div>
             </div>
             {!searchValue && (
-              <div className="pt-6 pb-8 space-y-2 md:space-y-5">
+              <div className="pt-6 pb-4">
                 <h1 className="text-xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100">
                   All Posts
                 </h1>
               </div>
             )}
-            <ul className="divide-y">
+            <ul>
               <AnimatePresence>
                 {!displayPosts.length && "No posts found."}
                 {displayPosts.map((post) => {
@@ -88,7 +88,6 @@ const PostMain = ({ allPosts, initialDisplayPosts, pagination }: Props) => {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
-                      whileHover={{ scale: 1.1 }}
                       key={slug}
                     >
                       <PostItemSmall
