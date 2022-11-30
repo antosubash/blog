@@ -1,9 +1,10 @@
 ---
 title: "Migrating Identity Service to OpenIddict Module"
 excerpt: "In this post we will see how to replace Identity server with OpenIddict in our microservice"
-date: "2022-10-03T20:59:17.487Z"
+date: "2022-11-20T20:59:17.487Z"
 videoId: 
 tags: [ abp, identity-server, openiddict ]
+isDraft: true
 ---
 
 ## Table of contents
@@ -44,3 +45,11 @@ Now, we need to remove the Identity server from the solution and replace it with
 
 We will search for the `IdentityServer` in the solution and replace all the references with `OpenIddict`. Filter the solution for `*.cs` and `*.csproj` files.
 
+## Create a new temp project
+
+We will create a temp project and copy the `AuthServer` project from the temp project to the solution. We did the same while creating the microservice. We will do the same here.
+
+Create a new folder and create the solution using the following command.
+
+```bash
+abp new 

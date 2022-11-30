@@ -63,7 +63,9 @@ export function getPostBySlug(slug: string, fields: string[] = []): BlogPost {
   var file = getFileBySlug(slug);
   const fileContents = fs.readFileSync(file, "utf8");
   const { data, content } = matter(fileContents);
-  var blogPost = {} as BlogPost;
+  var blogPost = {
+    isDraft: data.isDraft || false,
+  } as BlogPost;
   if (fields.length > 0) {
     fields.forEach((field) => {
       switch (field) {
@@ -105,10 +107,12 @@ export function getPostBySlug(slug: string, fields: string[] = []): BlogPost {
 export function getAllPosts(fields: string[] = []): BlogPost[] {
   const slugs = getAllSlugs();
   const posts = slugs
-    .map((slug: any) => getPostBySlug(slug, fields))
+    .map((slug: string) => getPostBySlug(slug, fields))
     // sort posts by date in descending order
-    .sort((post1: any, post2: any) => (post1.date > post2.date ? -1 : 1));
-  return posts;
+    .sort((post1: BlogPost, post2: BlogPost) =>
+      post1.date > post2.date ? -1 : 1
+    ) as BlogPost[];
+  return posts.filter((post: BlogPost) => !post.isDraft);
 }
 
 export function getLatestPosts(
@@ -118,10 +122,10 @@ export function getLatestPosts(
   const slugs = getAllSlugs();
   const posts = slugs
     .map((slug: string) => getPostBySlug(slug, fields))
-    // sort posts by date in descending order
     .sort((post1: BlogPost, post2: BlogPost) =>
       post1.date > post2.date ? -1 : 1
     )
+    .filter((post: BlogPost) => !post.isDraft)
     .slice(0, limit) as BlogPost[];
   return posts;
 }
@@ -131,7 +135,7 @@ export function getSeriesPosts(fields: string[] = []): BlogPost[] {
   const posts = allPosts.filter((post: BlogPost) => {
     return post.part == 0;
   });
-  return posts;
+  return posts.filter((post: BlogPost) => !post.isDraft);
 }
 
 export function getPostBySeries(
@@ -145,5 +149,5 @@ export function getPostBySeries(
   const posts = allPosts.filter((post: BlogPost) => {
     return post.series == mainPost?.series;
   });
-  return posts;
+  return posts.filter((post: BlogPost) => !post.isDraft);
 }
