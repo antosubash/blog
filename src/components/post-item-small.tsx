@@ -17,7 +17,7 @@ const PostItemSmall = (props: Props) => {
   return (
     <li
       key={slug}
-      className="px-4 my-2 rounded-2xl border drop-shadow-lg border-gray-100 bg-slate-50 dark:border-gray-800 dark:bg-gray-900"
+      className="px-4 my-2 rounded-2xl border drop-shadow-lg border-gray-100 bg-slate-50 dark:border-gray-800 dark:bg-gray-950"
     >
       <article className="xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
         <dl>
