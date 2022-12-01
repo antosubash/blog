@@ -35,10 +35,12 @@ const Index = ({ allPosts }: Props) => {
                   const { slug, date, title, excerpt, tags } = post;
                   return (
                     <motion.li
-                      key={index}
+                      key={slug}
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
+                      whileHover={{ scale: 1.1 }}
+                      className="cursor-pointer"
                     >
                       <PostItem
                         key={slug}

@@ -38,6 +38,7 @@ const Series: NextPage<SeriesProps> = ({ series }: SeriesProps) => {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     whileHover={{ scale: 1.1 }}
+                    className="cursor-pointer"
                   >
                     <PostItem
                       key={slug}
