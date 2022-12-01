@@ -78,17 +78,20 @@ const PostMain = ({ allPosts, initialDisplayPosts, pagination }: Props) => {
                 </h1>
               </div>
             )}
-            <ul>
+            <div>
               <AnimatePresence>
                 {!displayPosts.length && "No posts found."}
                 {displayPosts.map((post) => {
-                  const { slug, date, title, excerpt, tags, series, part } = post;
+                  const { slug, date, title, excerpt, tags, series, part } =
+                    post;
                   return (
-                    <motion.div
+                    <motion.ul
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
+                      whileHover={{ scale: 1.1 }}
                       key={slug}
+                      className="cursor-pointer"
                     >
                       <PostItemSmall
                         slug={slug}
@@ -99,11 +102,11 @@ const PostMain = ({ allPosts, initialDisplayPosts, pagination }: Props) => {
                         series={series!}
                         part={part!}
                       ></PostItemSmall>
-                    </motion.div>
+                    </motion.ul>
                   );
                 })}
               </AnimatePresence>
-            </ul>
+            </div>
             {pagination && pagination.totalPages > 1 && !searchValue && (
               <Pagination
                 currentPage={pagination.currentPage}

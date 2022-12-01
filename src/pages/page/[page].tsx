@@ -89,6 +89,7 @@ const PostPage = ({ allPosts, initialDisplayPosts, pagination }: Props) => {
                       exit={{ opacity: 0 }}
                       whileHover={{ scale: 1.1 }}
                       key={slug}
+                      className="cursor-pointer"
                     >
                       <PostItemSmall
                         slug={slug}
