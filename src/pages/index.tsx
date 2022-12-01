@@ -35,7 +35,8 @@ const Index = ({ allPosts }: Props) => {
                   const { slug, date, title, excerpt, tags } = post;
                   return (
                     <motion.li
-                      key={slug}
+                      key={index}
+                      data-key={index}
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
@@ -44,6 +45,7 @@ const Index = ({ allPosts }: Props) => {
                     >
                       <PostItem
                         key={slug}
+                        data-key={slug}
                         slug={slug}
                         date={date}
                         title={title}
@@ -73,7 +75,7 @@ const Index = ({ allPosts }: Props) => {
 
 export default Index;
 
-export const getStaticProps = async ({ params }: any) => {
+export const getStaticProps = async () => {
   const allPosts = getLatestPosts([
     "title",
     "date",

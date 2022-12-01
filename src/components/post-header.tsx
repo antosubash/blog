@@ -26,7 +26,7 @@ const PostHeader = ({ title, date, tags, series, part }: Props) => {
             </dl>
             <div className="flex flex-row flex-wrap justify-center pb-2">
               {tags.map((tag) => (
-                <div className="mt-3" id={tag}>
+                <div className="mt-3" key={tag}>
                   <Tag text={tag} />
                 </div>
               ))}
