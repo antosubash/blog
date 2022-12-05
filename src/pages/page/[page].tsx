@@ -83,7 +83,7 @@ const PostPage = ({ allPosts, initialDisplayPosts, pagination }: Props) => {
                   
                   const { slug, date, title, excerpt, tags, series, part } = post;
                   return (
-                    <motion.div
+                    <motion.li
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
@@ -100,7 +100,7 @@ const PostPage = ({ allPosts, initialDisplayPosts, pagination }: Props) => {
                         series={series}
                         part={part}
                       ></PostItemSmall>
-                    </motion.div>
+                    </motion.li>
                   );
                 })}
               </AnimatePresence>

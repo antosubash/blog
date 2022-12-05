@@ -3,9 +3,8 @@ import ThemeSwitch from "./theme-switch";
 import PageTitle from "./page-title";
 import { Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
-import CommandBar from "./command-bar";
-import ShortcutHome from "./shortcut-home";
 import Kofi from "./kofi";
+import Link from "next/link";
 const LayoutWrapper = ({ children }: any) => {
   let [isShowing, setIsShowing] = useState(false);
   return (
@@ -13,12 +12,12 @@ const LayoutWrapper = ({ children }: any) => {
       <div className="flex flex-col justify-between h-screen">
         <header className="flex items-center justify-between py-10">
           <div>
-            <a href="/" aria-label="Blog">
+            <Link href="/" aria-label="Blog">
               <PageTitle>Anto Subash.</PageTitle>
               <p className="hidden md:block text-lg leading-7 px-5 text-center text-gray-500 dark:text-gray-400">
                 A personal blog from a lazy programmer.
               </p>
-            </a>
+            </Link>
           </div>
           <div className="flex items-center text-base leading-5 pr-6">
             <div className="hidden md:block">
@@ -29,24 +28,27 @@ const LayoutWrapper = ({ children }: any) => {
                   </CommandBar>
                 </div> */}
                 <div className="flex justify-center items-center font-bold">
-                  <a href="/page" className="font-bold px-5">
+                  <Link href="/page" className="font-bold px-5">
                     Articles
-                  </a>
+                  </Link>
                 </div>
                 <div className="flex justify-center items-center font-bold">
-                  <a href="/series" className="font-bold px-5">
+                  <Link href="/series" className="font-bold px-5">
                     Series
-                  </a>
+                  </Link>
                 </div>
                 <div className="flex justify-center items-center font-bold">
-                  <a href="/tags" className="font-bold px-5">
+                  <Link href="/tags" className="font-bold px-5">
                     Tags
-                  </a>
+                  </Link>
                 </div>
                 <div className="flex justify-center items-center font-bold">
-                  <a href="https://antosubash.com" className="font-bold px-5">
+                  <Link
+                    href="https://antosubash.com"
+                    className="font-bold px-5"
+                  >
                     About
-                  </a>
+                  </Link>
                 </div>
                 <Kofi />
               </div>
