@@ -1,3 +1,4 @@
+"use client";
 import SectionContainer from "./section-container";
 import ThemeSwitch from "./theme-switch";
 import PageTitle from "./page-title";

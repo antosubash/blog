@@ -19,6 +19,7 @@
     "canvas-multiline-text": "^1.0.3",
     "classnames": "2.3.2",
     "date-fns": "2.29.3",
+    "eslint-config-next": "^13.0.5",
     "framer-motion": "^7.6.16",
     "gray-matter": "4.0.3",
     "highlight.js": "^11.7.0",
