@@ -4,7 +4,6 @@ excerpt: "In this post we will see how to replace Identity server with OpenIddic
 date: "2022-12-05T20:59:17.487Z"
 videoId: 
 tags: [ abp, identity-server, openiddict, migration ]
-isDraft: false
 series: ".NET Microservice with ABP"
 part: 13
 ---
