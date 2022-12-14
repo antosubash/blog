@@ -56,7 +56,7 @@ Update the .Net version to `6.0` in the `*.csproj` files.
 <TargetFramework>net6.0</TargetFramework>
 ```
 
-## Update the tye.yaml file
+### Update the tye.yaml file
 
 Update the `tye.yaml` file to add the `AuthServer` project.
 
@@ -146,18 +146,9 @@ We will update the CORS and Redirect URIs in the `appsettings.json` file:
   },
 ```
 
-### Update the Project references
+> Note: after updating the .Net version, you may get the error from non abp packages. You can update the non abp packages to the latest version.
 
-We will update the project references in the `AuthServer.csproj` file:
-
-```xml
-    <ProjectReference Include="..\..\services\administration\src\Tasky.Administration.EntityFrameworkCore\Tasky.Administration.EntityFrameworkCore.csproj" />
-    <ProjectReference Include="..\..\services\identity\src\Tasky.IdentityService.EntityFrameworkCore\Tasky.IdentityService.EntityFrameworkCore.csproj" />
-    <ProjectReference Include="..\..\services\saas\src\Tasky.SaaS.EntityFrameworkCore\Tasky.SaaS.EntityFrameworkCore.csproj" />
-    <ProjectReference Include="..\..\shared\Tasky.Microservice.Shared\Tasky.Microservice.Shared.csproj" />
-```
-
-
+Build the solution to make sure everything is working fine.
 
 ## Replace the IdentityServer with OpenIddict
 
@@ -567,3 +558,5 @@ Now, run all the projects using tye and test the entire application with the ang
 ## Conclusion
 
 In this article, I have shown how to migrate the IdentityServer to OpenIddict. We have also seen how to create a new data seed contributor for OpenIddict and configure the AuthServer to use RabbitMQ and PostgreSQL. We have also tested the AuthServer and the entire application.
+
+you can find the source code for this article on [GitHub](https://github.com/antosubash/AbpMicroservice)
