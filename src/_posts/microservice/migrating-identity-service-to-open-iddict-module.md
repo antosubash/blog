@@ -541,8 +541,6 @@ dotnet run
 
 This will create the new Scopes and Clients in the database. We can check the database to see the new data.
 
-
-
 ## Test the AuthServer
 
 We can test the AuthServer by running the `AuthServer` project:
