@@ -68,6 +68,97 @@ Update the `tye.yaml` file to add the `AuthServer` project.
       port: 7600
 ```
 
+## Configure the AuthServer
+
+### Add Auth Server to the solution
+
+Add the `AuthServer` project to the solution.
+
+```bash
+dotnet sln add .\apps\Tasky.AuthServer\Tasky.AuthServer.csproj
+```
+
+Add the Project references to the `AuthServer` project.
+
+```bash
+dotnet add .\apps\Tasky.AuthServer\Tasky.AuthServer.csproj reference .\services\administration\src\Tasky.AdministrationService.EntityFrameworkCore\Tasky.AdministrationService.EntityFrameworkCore.csproj
+
+dotnet add .\apps\Tasky.AuthServer\Tasky.AuthServer.csproj reference .\services\identity\src\Tasky.IdentityService.EntityFrameworkCore\Tasky.IdentityService.EntityFrameworkCore.csproj
+
+dotnet add .\apps\Tasky.AuthServer\Tasky.AuthServer.csproj reference .\services\saas\src\Tasky.SaasService.EntityFrameworkCore\Tasky.SaasService.EntityFrameworkCore.csproj
+
+dotnet add .\apps\Tasky.AuthServer\Tasky.AuthServer.csproj reference .\shared\Tasky.Shared.Microservice.Hosting\Tasky.Shared.Microservice.Hosting.csproj
+```
+
+### Update the TaskyAuthServerModule Dependency
+
+We will update the `TaskyAuthServerModule` dependency in the `AuthServer.csproj` file:
+
+```csharp
+    typeof(AdministrationServiceEntityFrameworkCoreModule),
+    typeof(SaaSServiceEntityFrameworkCoreModule),
+    typeof(IdentityServiceEntityFrameworkCoreModule),
+    typeof(TaskyMicroserviceHosting)
+```
+
+### Configure RabbitMQ
+
+We will use RabbitMQ to publish the events. So, we need to configure RabbitMQ in the `AuthServer` project.
+
+Add the following section to the `appsettings.json` file:
+
+```json
+  "RabbitMQ": {
+    "Connections": {
+      "Default": {
+        "HostName": "localhost"
+      }
+    },
+    "EventBus": {
+      "ClientName": "Tasky_AuthServer",
+      "ExchangeName": "Tasky"
+    }
+  }
+```
+
+### Configure the Database
+
+We will update the connection string in the `appsettings.json` file:
+
+```json
+  "ConnectionStrings": {
+    "SaaS": "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=SaasService;Pooling=false;",
+    "IdentityService": "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=IdentityService;Pooling=false;",
+    "Administration": "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=AdministrationService;Pooling=false;"
+  },
+```
+
+### Update CORS and Redirect URIs
+
+We will update the CORS and Redirect URIs in the `appsettings.json` file:
+
+```json
+  "App": {
+    "SelfUrl": "https://localhost:44346",
+    "ClientUrl": "http://localhost:4200",
+    "CorsOrigins": "http://localhost:4200,http://localhost:3000,https://localhost:7001,https://localhost:7002,https://localhost:7003,https://localhost:7004,https://localhost:7005",
+    "RedirectAllowedUrls": "http://localhost:4200,http://localhost:3000,https://localhost:7001"
+  },
+```
+
+### Update the Project references
+
+We will update the project references in the `AuthServer.csproj` file:
+
+```xml
+    <ProjectReference Include="..\..\services\administration\src\Tasky.Administration.EntityFrameworkCore\Tasky.Administration.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\services\identity\src\Tasky.IdentityService.EntityFrameworkCore\Tasky.IdentityService.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\services\saas\src\Tasky.SaaS.EntityFrameworkCore\Tasky.SaaS.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\shared\Tasky.Microservice.Shared\Tasky.Microservice.Shared.csproj" />
+```
+
+
+
 ## Replace the IdentityServer with OpenIddict
 
 Search for `IdentityServer` in the solution and replace it with `OpenIddict` in the `*.csproj` files and `*.cs` files.
@@ -459,52 +550,7 @@ dotnet run
 
 This will create the new Scopes and Clients in the database. We can check the database to see the new data.
 
-## Configure the AuthServer
 
-### Configure RabbitMQ
-
-We will use RabbitMQ to publish the events. So, we need to configure RabbitMQ in the `AuthServer` project.
-
-Add the following section to the `appsettings.json` file:
-
-```json
-  "RabbitMQ": {
-    "Connections": {
-      "Default": {
-        "HostName": "localhost"
-      }
-    },
-    "EventBus": {
-      "ClientName": "Tasky_AuthServer",
-      "ExchangeName": "Tasky"
-    }
-  }
-```
-
-### Configure the Database
-
-We will update the connection string in the `appsettings.json` file:
-
-```json
-  "ConnectionStrings": {
-    "SaaS": "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=SaasService;Pooling=false;",
-    "IdentityService": "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=IdentityService;Pooling=false;",
-    "Administration": "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=AdministrationService;Pooling=false;"
-  },
-```
-
-### Update CORS and Redirect URIs
-
-We will update the CORS and Redirect URIs in the `appsettings.json` file:
-
-```json
-  "App": {
-    "SelfUrl": "https://localhost:44346",
-    "ClientUrl": "http://localhost:4200",
-    "CorsOrigins": "http://localhost:4200,http://localhost:3000,https://localhost:7001,https://localhost:7002,https://localhost:7003,https://localhost:7004,https://localhost:7005",
-    "RedirectAllowedUrls": "http://localhost:4200,http://localhost:3000,https://localhost:7001"
-  },
-```
 
 ## Test the AuthServer
 
