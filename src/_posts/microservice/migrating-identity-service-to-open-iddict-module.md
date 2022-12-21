@@ -146,6 +146,10 @@ We will update the CORS and Redirect URIs in the `appsettings.json` file:
   },
 ```
 
+### Update the port number in the `AuthServer` project
+
+We will update the port number in the `AuthServer` project to `7600` in the `Program.cs` file:
+
 > Note: after updating the .Net version, you may get the error from non abp packages. You can update the non abp packages to the latest version.
 
 Build the solution to make sure everything is working fine.
