@@ -267,15 +267,6 @@ public class OpenIddictDataSeeder : ITransientDependency
 
         foreach (var client in clients)
         {
-            //await CreateClientAsync(
-            //    client.ClientId,
-            //    commonScopes.Union(client.Scopes),
-            //    client.GrantTypes,
-            //    client.ClientSecret.ToSha256(),
-            //    redirectUris: client.RedirectUris,
-            //    postLogoutRedirectUris: client.PostLogoutRedirectUris
-            //);
-
             var isClientSecretAvailable = !string.IsNullOrEmpty(client.ClientSecret);
 
             await CreateClientAsync(
