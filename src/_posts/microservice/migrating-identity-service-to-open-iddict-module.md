@@ -2,7 +2,7 @@
 title: "Migrating Identity Service to OpenIddict Module"
 excerpt: "In this post we will see how to replace Identity server with OpenIddict in our microservice"
 date: "2022-12-05T20:59:17.487Z"
-videoId: 
+videoId: DgZvgij5E7g
 tags: [ abp, identity-server, openiddict, migration ]
 series: ".NET Microservice with ABP"
 part: 13
