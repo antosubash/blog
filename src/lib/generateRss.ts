@@ -30,7 +30,7 @@ export const generateRss = () => {
     .join("");
 
   const rss = `<?xml version="1.0" encoding="UTF-8"?>
-        <rss version="2.0">
+        <rss version="2.0" xmlns:content="https://blog.antosubash.com/">
         <channel>
             <title>Anto Subash</title>
             <link>https://blog.antosubash.com</link>
