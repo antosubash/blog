@@ -8,6 +8,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Meta from "@components/meta";
 import { generateOgImage } from "@lib/generateOgImage";
 import Link from "next/link";
+import { generateRss } from "@lib/generateRss";
 type Props = {
   allPosts: BlogPost[];
 };
@@ -88,6 +89,7 @@ export const getStaticProps = async () => {
     "part",
   ]);
   await generateOgImage({ slug: "home", title: "Anto Subash's blog" });
+  generateRss();
   return {
     props: { allPosts },
   };
