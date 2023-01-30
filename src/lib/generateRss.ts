@@ -1,10 +1,7 @@
-import { getAllPosts } from "@lib/api";
-import { NextApiRequest, NextApiResponse } from "next";
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+import { BlogPost } from "@blog/types/postType";
+import { writeFileSync, existsSync, rmSync } from "fs";
+import { getAllPosts } from "./api";
+export const generateRss = () => {
   const allPosts = getAllPosts([
     "title",
     "date",
@@ -19,7 +16,7 @@ export default async function handler(
   ]);
 
   const rssItems = allPosts
-    .map((post) => {
+    .map((post: BlogPost) => {
       const url = `https://blog.antosubash.com/posts/${post.slug}`;
       return `<item>
           <title>${post.title}</title>
@@ -42,6 +39,8 @@ export default async function handler(
             ${rssItems}
         </channel>
         </rss>`;
-  res.setHeader("Content-Type", "text/xml");
-  return res.status(200).send(rss);
-}
+  if (existsSync("public/rss.xml")) {
+    rmSync("public/rss.xml");
+  }
+  writeFileSync("public/rss.xml", rss);
+};
