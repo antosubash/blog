@@ -43,6 +43,11 @@ const LayoutWrapper = ({ children }: any) => {
                   </Link>
                 </div>
                 <div className="flex justify-center items-center font-bold">
+                  <Link href="/consulting" className="font-bold px-5">
+                    Consulting
+                  </Link>
+                </div>
+                <div className="flex justify-center items-center font-bold">
                   <Link
                     href="https://antosubash.com"
                     className="font-bold px-5"
