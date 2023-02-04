@@ -136,6 +136,14 @@ const LayoutWrapper = ({ children }: any) => {
               </li>
               <li>
                 <a
+                  href="/consulting"
+                  className="block text-xl text-center px-2 py-4 hover:bg-gray-400 dark:hover:bg-gray-700 font-bold"
+                >
+                  Consulting
+                </a>
+              </li>
+              <li>
+                <a
                   href="https://antosubash.com"
                   className="block text-xl text-center px-2 py-4 hover:bg-gray-400 dark:hover:bg-gray-700 font-bold"
                 >
