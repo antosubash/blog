@@ -15,18 +15,21 @@ const ConsultingPage = () => {
         <h1 className="text-4xl text-center font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100">
           Consulting
         </h1>
-        <p className="text-lg leading-7 pt-4">
+        <p className="text-lg text-center leading-7 pt-4">
           I am available for consulting work. I have worked with a few companies
           and individuals on various projects as a freelancer. If you are
           interested in working with me, please contact me at{" "}
-          <a className="text-blue-700" href="mailto:antosubash@outlook.com">
+          <a
+            className="text-blue-700 dark:text-yellow-400"
+            href="mailto:antosubash@outlook.com"
+          >
             antosubash@outlook.com
           </a>
         </p>
         <h2 className="text-2xl text-center font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 pt-10">
           ABP
         </h2>
-        <p className="text-lg leading-7 pt-4">
+        <p className="text-lg text-center leading-7 pt-4">
           I'm a ABP Expert. I have worked with ABP framework extensively and
           have built many ABP applications. I can help you build your ABP
           application from scratch or help you with your existing ABP
@@ -157,19 +160,31 @@ const ConsultingPage = () => {
 
         <h2 className="text-center pt-20 font-header text-2xl font-semibold uppercase text-primary sm:text-5xl lg:text-3xl">
           Partnership with{" "}
-          <img
-            src="/assets/sf.png"
-            alt="spatial focus logo"
-            className="mx-auto pt-8"
-          />
+          <a href="https://www.spatial-focus.net">
+            <img
+              src="/assets/sf.png"
+              alt="spatial focus logo"
+              className="mx-auto pt-8"
+            />
+          </a>
         </h2>
 
         <p className="text-center pt-4 text-grey text-lg">
-          I'm part of the Spatial Focus team, a company that provides software
-          services based in Vienna. we are microsoft partners and we are
-          specialized in .Net development. if you are interested in working with
-          us, please contact us at{" "}
-          <a className="text-blue-600" href="mailto:office@spatial—focus.net">
+          I'm part of the{" "}
+          <a
+            className="text-blue-500 dark:text-yellow-400"
+            href="https://www.spatial-focus.net/"
+          >
+            Spatial Focus
+          </a>{" "}
+          team, a company that provides software services based in Vienna. We
+          are Microsoft partners and specialized in .NET development for web and
+          mobile (ASP.NET Core frontend & backend, Blazor, MAUI). If you are
+          interested in working with us, please contact us at{" "}
+          <a
+            className="text-blue-600 dark:text-yellow-400"
+            href="mailto:office@spatial-focus.net"
+          >
             office@spatial—focus.net
           </a>
         </p>
@@ -183,9 +198,9 @@ const ConsultingPage = () => {
                 <h3 className="pt-8 text-lg font-semibold uppercase text-primary group-hover:text-yellow lg:text-xl">
                   WEB DEVELOPMENT
                 </h3>
-                <p className="text-grey pt-4 text-sm group-hover:text-white md:text-base">
+                <p className="text-grey pt-4 text-sm  md:text-base">
                   I'm a full stack developer with experience in building web
-                  apps using React, Next.js, .Net MVC and Razor Pages.
+                  apps using React, Next.js, Blazor, .Net MVC and Razor Pages.
                 </p>
               </div>
             </div>
@@ -194,7 +209,7 @@ const ConsultingPage = () => {
                 <h3 className="pt-8 text-lg font-semibold uppercase text-primary group-hover:text-yellow lg:text-xl">
                   API DEVELOPMENT
                 </h3>
-                <p className="text-grey pt-4 text-sm group-hover:text-white md:text-base">
+                <p className="text-grey pt-4 text-sm  md:text-base">
                   I have experience in building REST APIs using .Net Core.
                 </p>
               </div>
@@ -204,7 +219,7 @@ const ConsultingPage = () => {
                 <h3 className="pt-8 text-lg font-semibold uppercase text-primary group-hover:text-yellow lg:text-xl">
                   Mobile Development
                 </h3>
-                <p className="text-grey pt-4 text-sm group-hover:text-white md:text-base">
+                <p className="text-grey pt-4 text-sm  md:text-base">
                   I build mobile apps using Maui and Flutter.
                 </p>
               </div>
@@ -214,7 +229,7 @@ const ConsultingPage = () => {
                 <h3 className="pt-8 text-lg font-semibold uppercase text-primary group-hover:text-yellow lg:text-xl">
                   Devops
                 </h3>
-                <p className="text-grey pt-4 text-sm group-hover:text-white md:text-base">
+                <p className="text-grey pt-4 text-sm  md:text-base">
                   I can help you with your Devops needs. I have experience in
                   setting up CI/CD pipelines using Azure Devops and Github
                   Actions.
@@ -226,7 +241,7 @@ const ConsultingPage = () => {
                 <h3 className="pt-8 text-lg font-semibold uppercase text-primary group-hover:text-yellow lg:text-xl">
                   Deployment
                 </h3>
-                <p className="text-grey pt-4 text-sm group-hover:text-white md:text-base">
+                <p className="text-grey pt-4 text-sm  md:text-base">
                   I can help you deploy your application to Azure. I have
                   experience in deploying web apps, API apps, Azure Functions
                   and Azure Static Web Apps.
@@ -238,9 +253,10 @@ const ConsultingPage = () => {
                 <h3 className="pt-8 text-lg font-semibold uppercase text-primary group-hover:text-yellow lg:text-xl">
                   Bare Metal
                 </h3>
-                <p className="text-grey pt-4 text-sm group-hover:text-white md:text-base">
+                <p className="text-grey pt-4 text-sm  md:text-base">
                   I can help you deploy your application to your own bare metal
-                  server using Docker and Kubernetes. I have experience in creating and managing bare metal clusters in Hetzner.
+                  server using Docker and Kubernetes. I have experience in
+                  creating and managing bare metal clusters in Hetzner.
                 </p>
               </div>
             </div>
