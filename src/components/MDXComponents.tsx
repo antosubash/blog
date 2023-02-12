@@ -8,7 +8,7 @@ const ExternalLink = ({ href, children }: any) => {
   }
 
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer">
+    <a className="bg-blue-800" href={href} target="_blank" rel="noopener noreferrer">
       {children}
     </a>
   );

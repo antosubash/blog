@@ -48,14 +48,14 @@ export async function getPostByTag(tag: string) {
 
 export function getAllSlugs() {
   return getPostFiles().map((filePath: string) => {
-    const slug = basename(filePath, ".md");
+    const slug = basename(filePath, ".mdx");
     return slug;
   });
 }
 
 export function getFileBySlug(slug: string) {
   var filePath = getPostFiles().find(
-    (filePath: string) => basename(filePath, ".md") === slug
+    (filePath: string) => basename(filePath, ".mdx") === slug
   );
   return filePath;
 }
