@@ -2,6 +2,7 @@ import React, { FunctionComponent } from "react";
 import * as runtime from "react/jsx-runtime";
 import { runSync } from "@mdx-js/mdx";
 import MDXComponents from "./MDXComponents";
+import "@code-hike/mdx/dist/index.css";
 interface IProps {
   content: string;
 }
