@@ -11,6 +11,7 @@ import { BlogPost } from "@blog/types/postType";
 import { generateOgImage } from "@lib/generateOgImage";
 import Meta from "@components/meta";
 import TopProgress from "@components/top-progress";
+import { compileMdx } from "@lib/compile-mdx";
 
 type Props = {
   post: BlogPost;
@@ -83,6 +84,8 @@ export async function getStaticProps({ params }: Params) {
 
   await generateOgImage({ slug: params.slug, title: post.title });
 
+  const content = await compileMdx(post.content);
+  post.content = content;
   return {
     props: {
       post: post,
