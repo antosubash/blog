@@ -160,4 +160,4 @@ dotnet run
 
 Once the application is launched navigate to `/book` you will see the seeded book as a json response.
 
-Repo : <https://github.com/antosubash/AbpMinimalApiWithEFCore>
+Repo : https://github.com/antosubash/AbpMinimalApiWithEFCore

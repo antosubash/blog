@@ -28,7 +28,7 @@ In this post we will see how to setup a ubuntu server for our docker deployment.
 
 - Hetzner cloud account
 
-you can use the referral link here and get 20 Euro to play around. <https://hetzner.cloud/?ref=ENhA4rCZ5JUM>
+you can use the referral link here and get 20 Euro to play around. https://hetzner.cloud/?ref=ENhA4rCZ5JUM
 
 ## Creating ssh key
 
@@ -109,7 +109,7 @@ This might take some time to reflect so wait for a while to verify it.
 
 To verify dns entry we will use a tool called dig.
 
-you can find it here <https://toolbox.googleapps.com/apps/dig/#A/>
+you can find it here https://toolbox.googleapps.com/apps/dig/#A
 
 Make sure your domain is pointing to your ip and your subdomain is pointing to your domain
 

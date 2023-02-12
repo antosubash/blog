@@ -71,4 +71,4 @@ you can use the FeatureChecker service to check if the feature is enabled or not
 var maxTodoPerUser = await FeatureChecker.GetAsync<int>(TodoFeatures.MaxTodoPerUser);
 ```
 
-For more info check the official docs : <https://docs.abp.io/en/abp/latest/Features>
+For more info check the official docs : https://docs.abp.io/en/abp/latest/Features

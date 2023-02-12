@@ -462,4 +462,4 @@ In this post, we have deployed the docker registry and postgres database to the 
 
 ## Credits
 
-Docker registry is secured based on this post <https://timvw.be/2021/11/08/hosting-a-secure-registry-on-microk8s/>
+Docker registry is secured based on this post https://timvw.be/2021/11/08/hosting-a-secure-registry-on-microk8s/

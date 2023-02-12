@@ -19,7 +19,7 @@ You can watch the videos or continue with the post.
 
 ## Preparing the Project
 
-Use the Getting started at <https://docs.abp.io/en/abp/latest/getting-started?ui=mvc&db=ef&tiered=no> guide to setup the basic abp application
+Use the Getting started at https://docs.abp.io/en/abp/latest/getting-started?ui=mvc&db=ef&tiered=no guide to setup the basic abp application
 
 ## 1. Create an [Entity](https://docs.abp.io/en/abp/latest/Entities)
 
@@ -142,4 +142,4 @@ public class TodoAppService : YourProjectAppService
 
 Once you created the Application configuration ABP can automatically configure your service as API controllers by conventions.
 
-## Github Repo Link : <https://github.com/antosubash/Todos>
+## Github Repo Link : https://github.com/antosubash/Todos

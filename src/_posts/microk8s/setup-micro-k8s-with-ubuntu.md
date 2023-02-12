@@ -77,7 +77,7 @@ This might take some time to reflect so wait for a while to verify it.
 
 To verify dns entry we will use a tool called dig.
 
-you can find it here <https://toolbox.googleapps.com/apps/dig/#A/>
+you can find it here https://toolbox.googleapps.com/apps/dig/#A/
 
 Make sure your domain is pointing to your ip and your subdomain is pointing to your domain
 
@@ -171,7 +171,7 @@ microk8s config
 
 This config which is displayed here is the one we will use to connect to the cluster. copy it and configure your kubectl in your machine.
 
-If you want to know how to install `kubectl` look here <https://kubernetes.io/docs/tasks/tools/>
+If you want to know how to install `kubectl` look here https://kubernetes.io/docs/tasks/tools/
 
 ## Enable addons
 

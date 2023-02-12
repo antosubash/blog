@@ -37,7 +37,7 @@ Type : Public client
 
 Flows : Allow Authorization Code Flow
 
-Redirect Uris : <http://localhost:3000>
+Redirect Uris : http://localhost:3000
 
 Consent type: Explicit consent
 
@@ -254,4 +254,4 @@ yarn // To install the npm packages
 yarn dev // To run the app
 ```
 
-Repo : <https://github.com/antosubash/OrchardCoreReactAuth>
+Repo : https://github.com/antosubash/OrchardCoreReactAuth

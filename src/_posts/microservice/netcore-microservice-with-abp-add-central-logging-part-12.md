@@ -50,7 +50,7 @@ Seq is the intelligent search, analysis, and alerting server built specifically 
 
 Application logs are the most useful data available for detecting and solving a wide range of production issues and outages. Seq makes it easier to pinpoint the events and patterns in application behavior that show your system is working correctly — or why it isn't.
 
-More info here : <https://docs.datalust.co/docs/using-serilog>
+More info here : https://docs.datalust.co/docs/using-serilog
 
 ## Purpose
 
@@ -133,4 +133,4 @@ We are going to read the assembly name and send it to configure the logging. thi
 
 Once all the services are updated run the services and you will be able to see the logs in the seq admin app.
 
-Repo: <https://github.com/antosubash/Tasky>
+Repo: https://github.com/antosubash/Tasky

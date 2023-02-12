@@ -298,9 +298,9 @@ We will use Husky.Net to lint the commit message. this will make the commit mess
 
 > As I said earlier, This is not required. But it is a nice to have. If you don't want to use it you can skip this section. But I highly recommend it.
 
-Follow the steps here to add Husky.Net to your project. <https://alirezanet.github.io/Husky.Net/guide/getting-started.html#installation>
+Follow the steps here to add Husky.Net to your project. https://alirezanet.github.io/Husky.Net/guide/getting-started.html#installation
 
-if you are new to git hooks, please check this <https://githooks.com>. It will help you to understand what git hooks are.
+if you are new to git hooks, please check this https://githooks.com. It will help you to understand what git hooks are.
 
 ### Add a pre-commit hook
 

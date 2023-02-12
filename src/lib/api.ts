@@ -4,6 +4,7 @@ import matter from "gray-matter";
 import getAllFilesRecursively from "./utils/files";
 import { MAX_DISPLAY } from "./constants";
 import { BlogPost } from "@blog/types/postType";
+import { compileMdx } from "./compile-mdx";
 
 const postsDirectory = join(process.cwd(), "_posts");
 
@@ -11,8 +12,8 @@ export function getPostFiles() {
   return getAllFilesRecursively(postsDirectory);
 }
 
-export function getAllTags() {
-  var allPosts = getAllPosts(["tags"]);
+export async function getAllTags() {
+  var allPosts = await getAllPosts(["tags"]);
   let tagCount: any = {};
   allPosts.forEach((post: { tags: any[] }) => {
     post.tags.forEach((tag) => {
@@ -27,8 +28,8 @@ export function getAllTags() {
   return tagCount;
 }
 
-export function getPostByTag(tag: string) {
-  const allPosts = getAllPosts([
+export async function getPostByTag(tag: string) {
+  const allPosts = await getAllPosts([
     "title",
     "date",
     "slug",
@@ -59,10 +60,11 @@ export function getFileBySlug(slug: string) {
   return filePath;
 }
 
-export function getPostBySlug(slug: string, fields: string[] = []): BlogPost {
+export async function getPostBySlug(slug: string, fields: string[] = []): Promise<BlogPost> {
   var file = getFileBySlug(slug);
   const fileContents = fs.readFileSync(file, "utf8");
   const { data, content } = matter(fileContents);
+  const compiledMdx = await compileMdx(content);
   var blogPost = {
     isDraft: data.isDraft || false,
   } as BlogPost;
@@ -73,7 +75,7 @@ export function getPostBySlug(slug: string, fields: string[] = []): BlogPost {
           blogPost[field] = slug;
           break;
         case "content":
-          blogPost[field] = content;
+          blogPost[field] = compiledMdx;
           break;
         case "date":
           blogPost.date = data.date;
@@ -104,45 +106,46 @@ export function getPostBySlug(slug: string, fields: string[] = []): BlogPost {
   return blogPost;
 }
 
-export function getAllPosts(fields: string[] = []): BlogPost[] {
+export async function getAllPosts(fields: string[] = []): Promise<BlogPost[]> {
   const slugs = getAllSlugs();
-  const posts = slugs
-    .map((slug: string) => getPostBySlug(slug, fields))
-    // sort posts by date in descending order
+  const posts = await Promise.all(slugs
+    .map(async (slug: string) => await getPostBySlug(slug, fields)))
+  const storedPosts = posts
     .sort((post1: BlogPost, post2: BlogPost) =>
       post1.date > post2.date ? -1 : 1
     ) as BlogPost[];
-  return posts.filter((post: BlogPost) => !post.isDraft);
+  return storedPosts.filter((post: BlogPost) => !post.isDraft);
 }
 
-export function getLatestPosts(
+export async function getLatestPosts(
   fields: string[] = [],
   limit: number = MAX_DISPLAY
-): BlogPost[] {
+): Promise<BlogPost[]> {
   const slugs = getAllSlugs();
-  const posts = slugs
-    .map((slug: string) => getPostBySlug(slug, fields))
+  const posts = await Promise.all(slugs
+    .map(async (slug: string) => await getPostBySlug(slug, fields)))
+  const storedPosts = posts
     .sort((post1: BlogPost, post2: BlogPost) =>
       post1.date > post2.date ? -1 : 1
     )
     .filter((post: BlogPost) => !post.isDraft)
     .slice(0, limit) as BlogPost[];
-  return posts;
+  return storedPosts;
 }
 
-export function getSeriesPosts(fields: string[] = []): BlogPost[] {
-  const allPosts = getAllPosts(fields);
+export async function getSeriesPosts(fields: string[] = []): Promise<BlogPost[]> {
+  const allPosts = await getAllPosts(fields);
   const posts = allPosts.filter((post: BlogPost) => {
     return post.part == 0;
   });
   return posts.filter((post: BlogPost) => !post.isDraft);
 }
 
-export function getPostBySeries(
+export async function getPostBySeries(
   slug: string,
   fields: string[] = []
-): BlogPost[] {
-  const allPosts = getAllPosts(fields);
+): Promise<BlogPost[]> {
+  const allPosts = await getAllPosts(fields);
   var mainPost = allPosts.find((post: BlogPost) => {
     return post.slug == slug;
   });

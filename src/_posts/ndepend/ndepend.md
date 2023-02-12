@@ -15,7 +15,7 @@ In this post we will see how to use the NDepends to improve you .net development
 
 NDepends is a static analyzer. It analyses your code and help you to improve code quality. It creates a dashboard to view the stats about your project and display most relevant info. It creates a in-depth reports that helps to maintain large complex project. It also helps to enforce coding standards.
 
-you can find all the features available here : <https://www.ndepend.com/features/>
+you can find all the features available here : https://www.ndepend.com/features/
 
 ## Benefits of using NDepend
 
@@ -32,13 +32,13 @@ No. It is a paid product. At the time of the this writing it cost €399 for dev
 
 ## Sample Report
 
-Orchard core sample report: <https://www.ndepend.com/Sample-Reports/OnOrchadCore/NDependReport.html#Main>
+Orchard core sample report: https://www.ndepend.com/Sample-Reports/OnOrchadCore/NDependReport.html#Main
 
 ## Getting NDepend
 
-you can do download it from here <https://www.ndepend.com/download>
+you can do download it from here https://www.ndepend.com/download
 
-Here is the install guide <https://www.ndepend.com/docs/getting-started-with-ndepend#Part1>
+Here is the install guide https://www.ndepend.com/docs/getting-started-with-ndepend#Part1
 
 ## Using NDepend
 

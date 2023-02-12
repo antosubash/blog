@@ -191,4 +191,4 @@ dotnet run
 
 Once the application is launched navigate to `/swagger` you will see swagger UI.
 
-Repo : <https://github.com/antosubash/AbpMinimalApiCRUD>
+Repo : https://github.com/antosubash/AbpMinimalApiCRUD

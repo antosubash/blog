@@ -59,7 +59,7 @@ In the docker file option choose linux
 
 ![Docker Options](/assets/posts/microservice/part10/docker2.png)
 
-The final docker file will look like this. Here is the location of this sample file <https://github.com/antosubash/AbpMicroservice/blob/main/apps/Tasky.IdentityServer/Dockerfile>
+The final docker file will look like this. Here is the location of this sample file https://github.com/antosubash/AbpMicroservice/blob/main/apps/Tasky.IdentityServer/Dockerfile
 
 ![Docker file](/assets/posts/microservice/part10/docker3.png)
 

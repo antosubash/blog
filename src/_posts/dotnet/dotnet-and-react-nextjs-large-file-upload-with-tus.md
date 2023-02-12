@@ -158,4 +158,4 @@ Add the component to the page.
 <FileUpload></FileUpload>
 ```
 
-Github Repo: <https://github.com/antosubash/LargeFileUploadSample>
+Github Repo: https://github.com/antosubash/LargeFileUploadSample

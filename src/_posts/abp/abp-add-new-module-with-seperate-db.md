@@ -230,4 +230,4 @@ Configure<AbpAspNetCoreMvcOptions>(options =>
             });
 ```
 
-Repo: <https://github.com/antosubash/NewModuleWithTieredAbpApp>
+Repo: https://github.com/antosubash/NewModuleWithTieredAbpApp

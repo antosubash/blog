@@ -28,19 +28,19 @@ In this post we will see how to create a docker swarm and deploy traefik and por
 
 Traefik is a leading modern reverse proxy and load balancer that makes deploying microservices easy. Traefik integrates with your existing infrastructure components and configures itself automatically and dynamically.
 
-For more info visit : <https://traefik.io/traefik/>
+For more info visit : https://traefik.io/traefik
 
 ## What is portainer?
 
 Portainer is the definitive container management tool for Docker, Docker Swarm with it's highly intuitive GUI and API. Portainer is a fully featured management tool for Docker. It runs locally, giving developers a rich UI to build and publish container images, deploy and manage applications and leverage data persistence and horizontal scaling for their applications. And, once an application is deployed into a container, Portainer makes it easy for users to secure, monitor and measure the performance of the platform. The tool negates the need for developers to learn Infrastructure as Code and makes it easy for them to maximize their efficiency which means both users and organizations love it.
 
-For more info visit: <https://www.portainer.io/>
+For more info visit: https://www.portainer.io/
 
 ## What is Docker Swarm?
 
 Docker swarm is a container orchestration tool, meaning that it allows the user to manage multiple containers deployed across multiple host machines. One of the key benefits associated with the operation of a docker swarm is the high level of availability offered for applications.
 
-For more info: <https://docs.docker.com/engine/swarm/>
+For more info: https://docs.docker.com/engine/swarm/
 
 ## Init Docker Swarm
 

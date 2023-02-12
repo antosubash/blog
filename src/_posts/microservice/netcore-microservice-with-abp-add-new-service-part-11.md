@@ -651,4 +651,4 @@ Update the dependency in the Admin Host
 typeof(ProjectServiceApplicationContractsModule)
 ```
 
-Repo: <https://github.com/antosubash/Tasky>
+Repo: https://github.com/antosubash/Tasky

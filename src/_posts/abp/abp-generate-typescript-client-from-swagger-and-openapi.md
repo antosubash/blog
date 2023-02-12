@@ -92,7 +92,7 @@ namespace AbpNSwag
 }
 ```
 
-This file is copied from the here <https://github.com/domaindrivendev/Swashbuckle.WebApi/blob/master/Swashbuckle.Core/Swagger/TypeExtensions.cs>
+This file is copied from the here https://github.com/domaindrivendev/Swashbuckle.WebApi/blob/master/Swashbuckle.Core/Swagger/TypeExtensions.cs
 
 ### Change the custom schema id and operation id
 
@@ -129,7 +129,7 @@ Other options is to use the `openapi-typescript-codegen` package. Install the pa
 npm install openapi-typescript-codegen -g
 ```
 
-create the local copy of swagger json from here <https://localhost:44392/swagger/v1/swagger.json> now we can use this json file to generate type script client.
+create the local copy of swagger json from here https://localhost:44392/swagger/v1/swagger.json now we can use this json file to generate type script client.
 
 ```bash
 openapi -i swagger.json -o api -c axios
@@ -137,4 +137,4 @@ openapi -i swagger.json -o api -c axios
 
 this will generate axios client with proper structure.
 
-Repo : <https://github.com/antosubash/AbpNSwag>
+Repo : https://github.com/antosubash/AbpNSwag

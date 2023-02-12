@@ -191,4 +191,4 @@ This will display the current tenant name in the home page.
 
 Now create the new tenant and set the host name and use that host name to login to the app.
 
-GitHub Repo : <https://github.com/antosubash/TenantWithCustomHost>
+GitHub Repo : https://github.com/antosubash/TenantWithCustomHost

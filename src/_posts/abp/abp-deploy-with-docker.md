@@ -23,7 +23,7 @@ abp new AbpDocker -t app -u mvc --tiered -dbms PostgreSQL
 
 ## Create a same site cookies extension
 
-you can find the code for that here: <https://community.abp.io/articles/patch-for-chrome-login-issue-identityserver4-samesite-cookie-problem-weypwp3n>
+you can find the code for that here: https://community.abp.io/articles/patch-for-chrome-login-issue-identityserver4-samesite-cookie-problem-weypwp3n
 
 Here is the code
 
@@ -275,10 +275,10 @@ docker stack deploy -c .\docker-compose.yml abpdocker
 
 ## Run the app
 
-Visit the web app in <http://host.docker.internal:9005/>
+Visit the web app in http://host.docker.internal:9005
 
-Visit the identity server in <http://host.docker.internal:9006/>
+Visit the identity server in http://host.docker.internal:9006
 
-Visit the api in <http://host.docker.internal:9007/>
+Visit the api in http://host.docker.internal:9007
 
-Repo: <https://github.com/antosubash/AbpWithDocker>
+Repo: https://github.com/antosubash/AbpWithDocker

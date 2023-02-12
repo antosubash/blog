@@ -669,4 +669,4 @@ typeof(SaaSServiceEntityFrameworkCoreModule),
 typeof(SaaSServiceApplicationContractsModule)
 ```
 
-Repo: <https://github.com/antosubash/AbpMicroservice>
+Repo: https://github.com/antosubash/AbpMicroservice

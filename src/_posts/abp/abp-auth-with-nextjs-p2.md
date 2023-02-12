@@ -163,4 +163,4 @@ Now you can render the login component in any page to trigger the auth.
 
 `<Login></Login>`
 
-## Github Repo Link : <https://github.com/antosubash/Todos>
+## Github Repo Link : https://github.com/antosubash/Todos

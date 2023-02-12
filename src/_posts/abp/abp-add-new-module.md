@@ -182,4 +182,4 @@ Configure<AbpAspNetCoreMvcOptions>(options =>
 Run the `MainApp.Web` project and navigate to `https://localhost:<port>/swagger/` you will see the todo apis. You can test your API there.
 
 
-Repo: <https://github.com/antosubash/NewModuleWithAbp>
+Repo: https://github.com/antosubash/NewModuleWithAbp

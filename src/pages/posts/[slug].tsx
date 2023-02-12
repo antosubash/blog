@@ -69,7 +69,7 @@ type Params = {
 };
 
 export async function getStaticProps({ params }: Params) {
-  const post = getPostBySlug(params.slug, [
+  const post = await getPostBySlug(params.slug, [
     "title",
     "date",
     "slug",
@@ -83,9 +83,7 @@ export async function getStaticProps({ params }: Params) {
   ]);
 
   await generateOgImage({ slug: params.slug, title: post.title });
-
-  const content = await compileMdx(post.content);
-  post.content = content;
+  
   return {
     props: {
       post: post,
@@ -94,8 +92,7 @@ export async function getStaticProps({ params }: Params) {
 }
 
 export async function getStaticPaths() {
-  const posts = getAllPosts(["slug"]);
-
+  const posts = await getAllPosts(["slug"]);
   return {
     paths: posts.map((posts: any) => {
       return {

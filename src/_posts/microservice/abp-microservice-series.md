@@ -44,9 +44,9 @@ This post consolidates all the parts of the microservice development in the sing
 
 ABP framework is a complete infrastructure to create modern web applications by following the best practices and conventions of software development. ABP offers a complete, modular and layered software architecture based on Domain Driven Design principles and patterns. There are a lot of features provided by the ABP Framework to achieve real world scenarios easier, like Event Bus, Background Job System, Audit Logging, BLOB Storing, Data Seeding, Data Filtering, etc. ABP also simplifies (and even automates wherever possible) cross cutting concerns and common non-functional requirements like Exception Handling, Validation, Authorization, Localization, Caching, Dependency Injection, Setting Management, etc.
 
-You can find more info here: <https://github.com/abpframework/abp>
+You can find more info here: https://github.com/abpframework/abp
 
-You can find the documentation here: <https://docs.abp.io/en/abp/latest>
+You can find the documentation here: https://docs.abp.io/en/abp/latest
 
 Here is the [Quick Start Guide](https://docs.abp.io/en/abp/latest/Tutorials/Todo/Index?UI=MVC&DB=EF)
 

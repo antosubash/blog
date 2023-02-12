@@ -209,4 +209,4 @@ class _HomePageState extends State<HomePage> {
 }
 ```
 
-## Github Repo Link : <https://github.com/antosubash/Todos>
+## Github Repo Link : https://github.com/antosubash/Todos

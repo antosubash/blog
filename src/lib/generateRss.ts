@@ -1,8 +1,8 @@
 import { BlogPost } from "@blog/types/postType";
 import { writeFileSync, existsSync, rmSync } from "fs";
 import { getAllPosts } from "./api";
-export const generateRss = () => {
-  const allPosts = getAllPosts([
+export const generateRss = async () => {
+  const allPosts = await getAllPosts([
     "title",
     "date",
     "slug",

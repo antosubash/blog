@@ -45,7 +45,7 @@ Now listening on: http://localhost:5000
 Application started. Press Ctrl+C to shut down.
 ```
 
-Open a browser and navigate to <https://localhost:5001> to display the setup screen.
+Open a browser and navigate to https://localhost:5001 to display the setup screen.
 
 we will create the website using the `Headless` recipe. The Headless recipe is intended to get you started when using Orchard Core as an API, and Content Management System, with Administrator access to the host.
 
@@ -53,7 +53,7 @@ Complete the setup form and select the `Headless` recipe and SQLite for the data
 
 Submit the form. A few seconds later you should be looking at a `Headless` Site.
 
-In order to configure it and start writing content you can go to <https://localhost:5001/admin>
+In order to configure it and start writing content you can go to https://localhost:5001/admin
 
 ## Create content
 
@@ -91,6 +91,6 @@ create a `Pages` folder and create `todo.cshtml` file inside the `Pages` folder
 }
 ```
 
-Now navigate to <https://localhost:5001/todos> to see the created todos.
+Now navigate to https://localhost:5001/todos to see the created todos.
 
-Sample repo : <https://github.com/antosubash/Anto.OrchardCore.CMS>
+Sample repo : https://github.com/antosubash/Anto.OrchardCore.CMS

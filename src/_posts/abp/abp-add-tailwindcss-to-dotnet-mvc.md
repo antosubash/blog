@@ -149,4 +149,4 @@ This command will run the npm command before the build so that we will have our 
 
 To apply a background color use `bg-gray-200` you will see the color change.
 
-Repo: <https://github.com/antosubash/AbpTailwindMvcUI>
+Repo: https://github.com/antosubash/AbpTailwindMvcUI

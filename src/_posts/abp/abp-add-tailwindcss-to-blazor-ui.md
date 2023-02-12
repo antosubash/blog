@@ -152,4 +152,4 @@ This command will run the npm command before the build so that we will have our 
 
 To use the tailwind css you should use the `tw-` prefix. so to apply a background color use `tw-bg-gray-200` you will see the color change.
 
-Repo: <https://github.com/antosubash/AbpTailwindBlazor>
+Repo: https://github.com/antosubash/AbpTailwindBlazor

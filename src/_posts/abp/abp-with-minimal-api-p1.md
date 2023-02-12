@@ -93,4 +93,4 @@ To run the app.
 dotnet run
 ```
 
-Repo: <https://github.com/antosubash/AbpMinimalApiHelloWorld>
+Repo: https://github.com/antosubash/AbpMinimalApiHelloWorld

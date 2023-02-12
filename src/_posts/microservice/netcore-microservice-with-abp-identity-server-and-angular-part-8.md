@@ -45,7 +45,7 @@ We have copied the IdentityServer and Angular app from the default tired app. So
 
 ## IdentityServer
 
-Even thought we already have the Identity service. it only provides the API endpoints to manage the user. We need the Identity server to do the JWT auth and also for the login and registration. IdentityServer is the default way to login user in the ABP framework right now. But there are plans to replace IdentityServer and replace it with the [OpenIdDict](https://github.com/openiddict/openiddict-core) if you want to know more about this go and check here <https://github.com/abpframework/abp/issues/11989>
+Even thought we already have the Identity service. it only provides the API endpoints to manage the user. We need the Identity server to do the JWT auth and also for the login and registration. IdentityServer is the default way to login user in the ABP framework right now. But there are plans to replace IdentityServer and replace it with the [OpenIdDict](https://github.com/openiddict/openiddict-core) if you want to know more about this go and check here https://github.com/abpframework/abp/issues/11989
 
 ### Remove the wrong reference
 

@@ -10,8 +10,8 @@ tags: [ "blazor", "fluxor" ]
 ## What is Fluxor
 
 Fluxor is a zero boilerplate Flux/Redux library for .Net. The aim of Fluxor is to create a multi-UI, single-state store approach to front-end development without the headaches typically associated with other implementations, such as the overwhelming amount of boiler-plate code required just to add a very basic feature.
-Repo: <https://github.com/mrpmorris/Fluxor>
-Docs: <https://github.com/mrpmorris/Fluxor/blob/master/Docs/README.md>
+Repo: https://github.com/mrpmorris/Fluxor
+Docs: https://github.com/mrpmorris/Fluxor/blob/master/Docs/README.md
 
 ## When to use Fluxor
 
@@ -289,4 +289,4 @@ else
 }
 ```
 
-Repo : <https://github.com/antosubash/blazor-state-management-with-fluxor>
+Repo : https://github.com/antosubash/blazor-state-management-with-fluxor

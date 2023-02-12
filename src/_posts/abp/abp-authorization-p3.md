@@ -74,4 +74,4 @@ or
 await AuthorizationService.CheckAsync(TodosPermissions.Todo.Default);
 ```
 
-For more info check the official docs : <https://docs.abp.io/en/abp/latest/Authorization>
+For more info check the official docs : https://docs.abp.io/en/abp/latest/Authorization

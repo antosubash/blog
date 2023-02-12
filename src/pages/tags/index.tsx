@@ -44,7 +44,7 @@ const Index = ({ tags }: Props) => {
 export default Index;
 
 export const getStaticProps = async () => {
-  var tags = getAllTags();
+  var tags = await getAllTags();
   await generateOgImage({ slug: "tags", title: "Tags" });
   return {
     props: { tags },

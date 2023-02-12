@@ -42,13 +42,13 @@ Part 1. Initial Setup (this post)
 
 This is the first step in creating your ABP microservice application. We will create the projects structure and the required projects for your microservice setup.
 
-Most of the architecture is based on the EShopOnAbp Sample microservice application here <https://github.com/abpframework/eShopOnAbp>.
+Most of the architecture is based on the EShopOnAbp Sample microservice application here https://github.com/abpframework/eShopOnAbp.
 
 ## Startup script
 
 To simplify the project creation I have created a PowerShell script which will create the required projects and folders for use. You can copy and run this file to just create your base projects. The main reason to create this PowerShell script is the get started quickly. Setting up a microservice solution is a time-consuming process **this script will not create a working solution**. This will only create required projects in the particular structure. I came up with this structure following the [EShopOnAbp](https://github.com/abpframework/eShopOnAbp) application. you can update this script with your structure.
 
-You can find the startup script here <https://github.com/antosubash/abp-setup/blob/main/init.ps1>
+You can find the startup script here https://github.com/antosubash/abp-setup/blob/main/init.ps1
 
 ```bash
 $name = $args[0]
@@ -108,4 +108,4 @@ This will trigger the scripts and the project creation will start. Wait until th
 
 If you want to know more about what the script is doing please check out the video above which will have an explanation of what the script is doing.
 
-Here is the sample repo with the working version of this solution: <https://github.com/antosubash/AbpMicroservice>
+Here is the sample repo with the working version of this solution: https://github.com/antosubash/AbpMicroservice
