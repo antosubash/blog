@@ -3,6 +3,7 @@ import * as runtime from "react/jsx-runtime";
 import { runSync } from "@mdx-js/mdx";
 import MDXComponents from "./MDXComponents";
 import "@code-hike/mdx/dist/index.css";
+import "highlight.js/styles/night-owl.css";
 interface IProps {
   content: string;
 }

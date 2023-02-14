@@ -7,12 +7,10 @@ import { WordWrapIcon } from "icons/word-wrap";
 export const Pre = ({
   children,
   className = "",
-  hasCopyCode,
   filename,
   ...props
 }: ComponentProps<"pre"> & {
   filename?: string;
-  hasCopyCode?: boolean;
 }): ReactElement => {
   const preRef = useRef<HTMLPreElement | null>(null);
 
