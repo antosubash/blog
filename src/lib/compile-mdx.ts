@@ -4,6 +4,7 @@ import rehypeKatex from "rehype-katex";
 import rehypeHighlight from "rehype-highlight";
 import remarkToc from "remark-toc";
 import remarkGfm from "remark-gfm";
+import rehypeInferReadingTimeMeta from "rehype-infer-reading-time-meta";
 import { remarkCodeHike } from "@code-hike/mdx";
 import { compile } from "@mdx-js/mdx";
 export async function compileMdx(markdown: string) {
@@ -15,6 +16,7 @@ export async function compileMdx(markdown: string) {
       rehypeSlug,
       rehypeAutoLinkHeadings,
       rehypeKatex,
+      rehypeInferReadingTimeMeta,
     ],
     remarkPlugins: [remarkGfm, remarkToc],
   });

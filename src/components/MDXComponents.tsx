@@ -1,7 +1,6 @@
-import { useState } from "react";
-import CopyToClipboard from "react-copy-to-clipboard";
-import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { Code } from "./code";
+import { Pre } from "./pre";
+
 const ExternalLink = ({ href, children }: any) => {
   const siteUrl = "";
   const isRoot = href[0] === "/";
@@ -23,18 +22,12 @@ const ExternalLink = ({ href, children }: any) => {
   );
 };
 
-const CodeBlock = ({ className, ...props }: any) => {
-  const match = /language-(\w+)/.exec(className || "");
-  return match ? (
-    <code className={className} {...props} />
-  ) : (
-    <code className={className} {...props} />
-  );
-};
+
 
 const MDXComponents = {
   a: ExternalLink,
-  code: CodeBlock,
+  code: Code,
+  pre: Pre
 };
 
 export default MDXComponents;
