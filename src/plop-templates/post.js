@@ -27,7 +27,7 @@ module.exports = {
         const actions = [];
         actions.push({
             type: "add",
-            path: "_posts/{{folder}}/{{kebabCase title}}.md",
+            path: "_posts/{{folder}}/{{kebabCase title}}.mdx",
             templateFile: "plop-templates/post.hbs",
         });
         return actions;

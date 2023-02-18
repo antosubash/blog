@@ -6,6 +6,265 @@
             <description>Anto Subash's Blog</description>
             <language>en</language>
             <item>
+          <title>.Net Microservice template with ABP</title>
+          <link>https://blog.antosubash.com/posts/dotnet-microservice-template-with-abp</link>
+          <guid>https://blog.antosubash.com/posts/dotnet-microservice-template-with-abp</guid>
+          <pubDate>Sat, 18 Feb 2023 18:11:38 GMT</pubDate>
+          <description>In this post I will show you how to create ABP microservice using a dotnet new template.</description>
+          <content:encoded><![CDATA[/*@jsxRuntime automatic @jsxImportSource react*/
+const {Fragment: _Fragment, jsx: _jsx, jsxs: _jsxs} = arguments[0];
+function _createMdxContent(props) {
+  const _components = Object.assign({
+    h2: "h2",
+    a: "a",
+    span: "span",
+    ul: "ul",
+    li: "li",
+    p: "p",
+    pre: "pre",
+    code: "code",
+    blockquote: "blockquote"
+  }, props.components);
+  return _jsxs(_Fragment, {
+    children: [_jsxs(_components.h2, {
+      id: "table-of-contents",
+      children: [_jsx(_components.a, {
+        "aria-hidden": "true",
+        tabIndex: "-1",
+        href: "#table-of-contents",
+        children: _jsx(_components.span, {
+          className: "icon icon-link"
+        })
+      }), "Table of contents"]
+    }), "\n", _jsxs(_components.ul, {
+      children: ["\n", _jsx(_components.li, {
+        children: _jsx(_components.a, {
+          href: "#introduction",
+          children: "Introduction"
+        })
+      }), "\n", _jsx(_components.li, {
+        children: _jsx(_components.a, {
+          href: "#background",
+          children: "Background"
+        })
+      }), "\n", _jsx(_components.li, {
+        children: _jsx(_components.a, {
+          href: "#status",
+          children: "Status"
+        })
+      }), "\n", _jsx(_components.li, {
+        children: _jsx(_components.a, {
+          href: "#install-the-dotnet-new-template",
+          children: "Install the dotnet new template"
+        })
+      }), "\n", _jsx(_components.li, {
+        children: _jsx(_components.a, {
+          href: "#create-a-new-microservice-application",
+          children: "Create a new microservice application"
+        })
+      }), "\n", _jsx(_components.li, {
+        children: _jsx(_components.a, {
+          href: "#run-the-application",
+          children: "Run the application"
+        })
+      }), "\n", _jsx(_components.li, {
+        children: _jsx(_components.a, {
+          href: "#conclusion",
+          children: "Conclusion"
+        })
+      }), "\n"]
+    }), "\n", _jsxs(_components.h2, {
+      id: "introduction",
+      children: [_jsx(_components.a, {
+        "aria-hidden": "true",
+        tabIndex: "-1",
+        href: "#introduction",
+        children: _jsx(_components.span, {
+          className: "icon icon-link"
+        })
+      }), "Introduction"]
+    }), "\n", _jsx(_components.p, {
+      children: "In this post I will show you how to create ABP microservice using a dotnet new template."
+    }), "\n", _jsxs(_components.h2, {
+      id: "background",
+      children: [_jsx(_components.a, {
+        "aria-hidden": "true",
+        tabIndex: "-1",
+        href: "#background",
+        children: _jsx(_components.span, {
+          className: "icon icon-link"
+        })
+      }), "Background"]
+    }), "\n", _jsxs(_components.p, {
+      children: ["Right now it is not easy to create a new microservice application with ABP. I have made a 12 part video series on how to create a microservice application with ABP. It is a lot of work and it is not easy to follow. I have created a dotnet new template to make it easier to create a new microservice application with ABP. You can find the template on ", _jsx(_components.a, {
+        href: "https://github.com/antosubash/AbpMicroservice",
+        children: "GitHub"
+      }), ". To make this process easier I have created a dotnet new template. I have convert the sample application from the video series to a dotnet new template."]
+    }), "\n", _jsxs(_components.h2, {
+      id: "status",
+      children: [_jsx(_components.a, {
+        "aria-hidden": "true",
+        tabIndex: "-1",
+        href: "#status",
+        children: _jsx(_components.span, {
+          className: "icon icon-link"
+        })
+      }), "Status"]
+    }), "\n", _jsx(_components.p, {
+      children: "The template is still in the early stages. I have created the template using the sample application from the video series. I have not tested the template with all the features. This is really usefull if you already know how to create a microservice application with ABP. But if you are new to ABP then I would recommend to watch the video series. It will give you a good understanding of how to create a microservice application with ABP."
+    }), "\n", _jsxs(_components.h2, {
+      id: "install-the-dotnet-new-template",
+      children: [_jsx(_components.a, {
+        "aria-hidden": "true",
+        tabIndex: "-1",
+        href: "#install-the-dotnet-new-template",
+        children: _jsx(_components.span, {
+          className: "icon icon-link"
+        })
+      }), "Install the dotnet new template"]
+    }), "\n", _jsx(_components.p, {
+      children: "To install the dotnet new template you need to run the following command."
+    }), "\n", _jsx(_components.pre, {
+      children: _jsx(_components.code, {
+        className: "hljs language-bash",
+        children: "dotnet new install Anto.Abp.Microservice.Template::0.1.4\n"
+      })
+    }), "\n", _jsx(_components.p, {
+      children: "This will install the template to your local machine. You can check the installed templates by running the following command."
+    }), "\n", _jsx(_components.pre, {
+      children: _jsx(_components.code, {
+        className: "hljs language-bash",
+        children: "dotnet new -l\n"
+      })
+    }), "\n", _jsxs(_components.blockquote, {
+      children: ["\n", _jsxs(_components.p, {
+        children: ["Note: Right now the template is using PostgreSQL as the database provider. you can change the database provider to whatever you want. For more information on how to change the database provider please check the ", _jsx(_components.a, {
+          href: "https://docs.abp.io/en/abp/latest/Entity-Framework-Core-Other-DBMS",
+          children: "documentation"
+        }), "."]
+      }), "\n"]
+    }), "\n", _jsxs(_components.h2, {
+      id: "create-a-new-microservice-application",
+      children: [_jsx(_components.a, {
+        "aria-hidden": "true",
+        tabIndex: "-1",
+        href: "#create-a-new-microservice-application",
+        children: _jsx(_components.span, {
+          className: "icon icon-link"
+        })
+      }), "Create a new microservice application"]
+    }), "\n", _jsx(_components.p, {
+      children: "To create a new microservice application you need to run the following command."
+    }), "\n", _jsx(_components.pre, {
+      children: _jsx(_components.code, {
+        className: "hljs language-bash",
+        children: "dotnet new abp-ms -n MyMicroservice\n"
+      })
+    }), "\n", _jsxs(_components.p, {
+      children: ["This will create a new microservice application with the name ", _jsx(_components.code, {
+        children: "MyMicroservice"
+      }), ". You can change the name to whatever you want. This will create a new folder with the name ", _jsx(_components.code, {
+        children: "MyMicroservice"
+      }), ". You can open the folder in your favorite IDE."]
+    }), "\n", _jsxs(_components.h2, {
+      id: "run-the-application",
+      children: [_jsx(_components.a, {
+        "aria-hidden": "true",
+        tabIndex: "-1",
+        href: "#run-the-application",
+        children: _jsx(_components.span, {
+          className: "icon icon-link"
+        })
+      }), "Run the application"]
+    }), "\n", _jsx(_components.p, {
+      children: "Before you run the application make sure you have built the solution at least once. You can build the solution by running the following command."
+    }), "\n", _jsx(_components.pre, {
+      children: _jsx(_components.code, {
+        className: "hljs language-bash",
+        children: "dotnet build\n"
+      })
+    }), "\n", _jsxs(_components.p, {
+      children: ["Once the solution is built then we have to update the connection string in the ", _jsx(_components.code, {
+        children: "appsettings.json"
+      }), " file. You can find the ", _jsx(_components.code, {
+        children: "appsettings.json"
+      }), " file in the ", _jsx(_components.code, {
+        children: "*.HttpApi.Host"
+      }), " projects and ", _jsx(_components.code, {
+        children: "DbMigrator"
+      }), " project."]
+    }), "\n", _jsxs(_components.p, {
+      children: ["The first project you need to run is the ", _jsx(_components.code, {
+        children: "MyMicroservice.DbMigrator"
+      }), " project. You can run the project by running the following command."]
+    }), "\n", _jsx(_components.pre, {
+      children: _jsx(_components.code, {
+        className: "hljs language-bash",
+        children: "dotnet run --project MyMicroservice/shared/MyMicroservice.DbMigrator/MyMicroservice.DbMigrator.csproj\n"
+      })
+    }), "\n", _jsxs(_components.p, {
+      children: ["This will create the database and seed the data. Once the database is created you can run the ", _jsx(_components.code, {
+        children: "tye"
+      }), ". ", _jsx(_components.code, {
+        children: "tye"
+      }), " file is located in the ", _jsx(_components.code, {
+        children: "MyMicroservice"
+      }), " folder. You can run the ", _jsx(_components.code, {
+        children: "tye"
+      }), " by running the following command."]
+    }), "\n", _jsx(_components.pre, {
+      children: _jsx(_components.code, {
+        className: "hljs language-bash",
+        children: "tye run\n"
+      })
+    }), "\n", _jsxs(_components.blockquote, {
+      children: ["\n", _jsxs(_components.p, {
+        children: ["Note: You need to have ", _jsx(_components.code, {
+          children: "tye"
+        }), " installed on your machine. You can install ", _jsx(_components.code, {
+          children: "tye"
+        }), " by running the following command."]
+      }), "\n"]
+    }), "\n", _jsx(_components.pre, {
+      children: _jsxs(_components.code, {
+        className: "hljs language-bash",
+        children: ["dotnet tool install -g Microsoft.Tye --version ", _jsx(_components.span, {
+          className: "hljs-string",
+          children: "\"0.11.0-alpha.22111.1\""
+        }), "\n"]
+      })
+    }), "\n", _jsxs(_components.p, {
+      children: ["Once the ", _jsx(_components.code, {
+        children: "tye"
+      }), " is running you can open the ", _jsx(_components.code, {
+        children: "http://localhost:8000"
+      }), " in your browser. you should see all the services running."]
+    }), "\n", _jsxs(_components.h2, {
+      id: "conclusion",
+      children: [_jsx(_components.a, {
+        "aria-hidden": "true",
+        tabIndex: "-1",
+        href: "#conclusion",
+        children: _jsx(_components.span, {
+          className: "icon icon-link"
+        })
+      }), "Conclusion"]
+    }), "\n", _jsx(_components.p, {
+      children: "I think this is a good start for creating a new microservice application with ABP. I will be adding more features to the template in the future. If you have any suggestions or feedback please let me know in the comments. I would love to hear from you."
+    })]
+  });
+}
+function MDXContent(props = {}) {
+  const {wrapper: MDXLayout} = props.components || ({});
+  return MDXLayout ? _jsx(MDXLayout, Object.assign({}, props, {
+    children: _jsx(_createMdxContent, props)
+  })) : _createMdxContent(props);
+}
+return {
+  default: MDXContent
+};
+]]></content:encoded>
+          </item><item>
           <title>Migrating Identity Service to OpenIddict Module</title>
           <link>https://blog.antosubash.com/posts/migrating-identity-service-to-open-iddict-module</link>
           <guid>https://blog.antosubash.com/posts/migrating-identity-service-to-open-iddict-module</guid>
