@@ -43,6 +43,11 @@ const LayoutWrapper = ({ children }: any) => {
                   </Link>
                 </div>
                 <div className="flex justify-center items-center font-bold">
+                  <Link href="/consulting" className="font-bold px-5">
+                    Consulting
+                  </Link>
+                </div>
+                <div className="flex justify-center items-center font-bold">
                   <Link
                     href="https://antosubash.com"
                     className="font-bold px-5"
@@ -127,6 +132,14 @@ const LayoutWrapper = ({ children }: any) => {
                   className="block text-xl text-center px-2 py-4 hover:bg-gray-400 dark:hover:bg-gray-700 font-bold"
                 >
                   Tags
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/consulting"
+                  className="block text-xl text-center px-2 py-4 hover:bg-gray-400 dark:hover:bg-gray-700 font-bold"
+                >
+                  Consulting
                 </a>
               </li>
               <li>
