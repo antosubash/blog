@@ -25,7 +25,7 @@ export const Pre = ({
   }, []);
 
   return (
-    <div className="nextra-code-block relative mt-6 first:mt-0">
+    <div className="relative mt-6 first:mt-0">
       {filename && (
         <div className="absolute top-0 z-[1] w-full truncate rounded-t-xl bg-primary-700/5 py-2 px-4 text-xs text-gray-700 dark:bg-primary-300/10 dark:text-gray-200">
           {filename}
@@ -33,7 +33,7 @@ export const Pre = ({
       )}
       <pre
         className={[
-          "bg-primary-700/5 mb-4 overflow-x-auto rounded-xl font-medium subpixel-antialiased dark:bg-primary-300/10 text-[.9em]",
+          "bg-gray-400 mb-4 overflow-x-auto rounded-xl font-medium subpixel-antialiased dark:bg-primary-300/10 text-[.9em]",
           "contrast-more:border contrast-more:border-primary-900/20 contrast-more:contrast-150 contrast-more:dark:border-primary-100/40",
           filename ? "pt-12 pb-4" : "py-4",
           className,
