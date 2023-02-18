@@ -82,6 +82,10 @@ export async function getStaticProps({ params }: Params) {
     "part",
   ]);
 
+  const mdxSource = await compileMdx(post.content || "");
+
+  post.content = mdxSource;
+
   await generateOgImage({ slug: params.slug, title: post.title });
   
   return {

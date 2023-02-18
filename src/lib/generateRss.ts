@@ -1,8 +1,12 @@
 import { BlogPost } from "@blog/types/postType";
 import { writeFileSync, existsSync, rmSync } from "fs";
 import { getAllPosts } from "./api";
-export const generateRss = async () => {
-  const allPosts = await getAllPosts([
+import { renderToString } from "react-dom/server";
+import { createElement } from "react";
+import { evaluateSync } from "@mdx-js/mdx";
+import * as runtime from "react/jsx-runtime";
+export const generateRss = () => {
+  const allPosts = getAllPosts([
     "title",
     "date",
     "slug",
@@ -18,19 +22,24 @@ export const generateRss = async () => {
   const rssItems = allPosts
     .map((post: BlogPost) => {
       const url = `https://blog.antosubash.com/posts/${post.slug}`;
+      const mdx = evaluateSync(post.content, {
+        ...(runtime as any),
+      }).default;
       return `<item>
           <title>${post.title}</title>
           <link>${url}</link>
           <guid>${url}</guid>
           <pubDate>${new Date(post.date).toUTCString()}</pubDate>
           <description>${post.excerpt}</description>
-          <content:encoded><![CDATA[${post.content}]]></content:encoded>
+          <content:encoded><![CDATA[${renderToString(
+            createElement(mdx)
+          )}]]></content:encoded>
           </item>`;
     })
     .join("");
 
   const rss = `<?xml version="1.0" encoding="UTF-8"?>
-        <rss version="2.0" xmlns:content="https://blog.antosubash.com/">
+        <rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
         <channel>
             <title>Anto Subash</title>
             <link>https://blog.antosubash.com</link>
