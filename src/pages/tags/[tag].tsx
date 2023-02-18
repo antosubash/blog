@@ -73,7 +73,7 @@ type Params = {
 };
 
 export const getStaticProps = async ({ params }: Params) => {
-  var posts = getPostByTag(params.tag);
+  var posts = await getPostByTag(params.tag);
   await generateOgImage({ slug: params.tag, title: params.tag + " tag" });
   return {
     props: { posts },
@@ -81,7 +81,7 @@ export const getStaticProps = async ({ params }: Params) => {
 };
 
 export async function getStaticPaths() {
-  var tags = getAllTags();
+  var tags = await getAllTags();
 
   return {
     paths: Object.keys(tags).map((tag: string) => {

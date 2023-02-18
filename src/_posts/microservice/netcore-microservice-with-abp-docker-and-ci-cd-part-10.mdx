@@ -1,0 +1,99 @@
+---
+title: "Docker and CI/CD"
+excerpt: "In this post we will see how to add docker support and create a CI/CD with github actions"
+date: "2022-03-26T00:00:00.000Z"
+videoId: zUD2xPpvTVg 
+series: ".NET Microservice with ABP"
+part: 10
+tags: [ "dotnet", "abp", "microservice", "docker" ]
+---
+
+This is the part 10 of the series: [.NET Microservice with ABP](/posts/abp-microservice-series)
+
+## Posts in the Series
+
+[Part 1. Initial Setup](/posts/netcore-microservice-with-abp-init-part-1)
+
+[Part 2. Shared Project](/posts/netcore-microservice-with-abp-shared-project-part-2)
+
+[Part 3. Administration Service](/posts/netcore-microservice-with-abp-administration-services-part-3)
+
+[Part 4. Identity Service](/posts/netcore-microservice-with-abp-identity-services-part-4)
+
+[Part 5. SaaS Service](/posts/netcore-microservice-with-abp-saas-services-part-5)
+
+[Part 6. DB Migration](/posts/netcore-microservice-with-abp-db-migration-part-6)
+
+[Part 7. Yarp and Tye](/posts/netcore-microservice-with-abp-yarp-and-tye-part-7)
+
+[Part 8. Identity server and Angular App](/posts/netcore-microservice-with-abp-identity-server-and-angular-part-8)
+
+[Part 9. Distributed event bus](/posts/netcore-microservice-with-abp-distributed-event-bus-part-9)
+
+Part 10. Docker and CI/CD (this post)
+
+[Part 11. Add a New service](/posts/netcore-microservice-with-abp-add-new-service-part-11)
+
+[Part 12. Central Logging](/posts/netcore-microservice-with-abp-add-central-logging-part-12)
+
+
+## Table of contents
+
+## Intro
+
+In this post we will see how to add docker support to all the services and setup a CI/CD pipeline with github actions.
+
+## Docker support
+
+Docker support can be added easily by using visual studio. since all the project is available in the solution vs will create a Docker file and add it to the project. In this we will use the Identity server it will be similar for all the other services.
+
+To add Docker support right click on the Identity server project and choose add.
+
+![Add Docker](/assets/posts/microservice/part10/docker0.png)
+
+In the add menu choose docker support
+
+![Add Menu](/assets/posts/microservice/part10/docker1.png)
+
+In the docker file option choose linux
+
+![Docker Options](/assets/posts/microservice/part10/docker2.png)
+
+The final docker file will look like this. Here is the location of this sample file https://github.com/antosubash/AbpMicroservice/blob/main/apps/Tasky.IdentityServer/Dockerfile
+
+![Docker file](/assets/posts/microservice/part10/docker3.png)
+
+We have to do this to all the services.
+
+## CI/CD
+
+Here is the sample github action file.
+
+```yaml
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Gateway Docker image
+      run: docker build . --file gateway/Tasky.Gateway/Dockerfile --tag gateway:dev
+    - name: Build the IdentityServer Docker image
+      run: docker build . --file apps/Tasky.IdentityServer/Dockerfile --tag identityserver:dev
+    - name: Build the Administration Docker image
+      run: docker build . --file services/administration/host/Tasky.AdministrationService.HttpApi.Host/Dockerfile --tag administration:dev
+    - name: Build the IdentityService Docker image
+      run: docker build . --file services/identity/host/Tasky.IdentityService.HttpApi.Host/Dockerfile --tag identityservice:dev
+    - name: Build the SaaS Docker image
+      run: docker build . --file services/saas/host/Tasky.SaaSService.HttpApi.Host/Dockerfile --tag saas:dev
+```

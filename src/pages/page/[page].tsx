@@ -121,7 +121,7 @@ const PostPage = ({ allPosts, initialDisplayPosts, pagination }: Props) => {
 export default PostPage;
 
 export const getStaticProps = async ({ params }: any) => {
-  const allPosts = getAllPosts([
+  const allPosts = await getAllPosts([
     "title",
     "date",
     "slug",
@@ -150,7 +150,7 @@ export const getStaticProps = async ({ params }: any) => {
 };
 
 export const getStaticPaths = async () => {
-  const allPosts = getAllPosts([
+  const allPosts = await getAllPosts([
     "title",
     "date",
     "slug",

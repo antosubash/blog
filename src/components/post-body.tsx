@@ -18,7 +18,6 @@ const PostBody = ({ content, videoId, title }: Props) => {
           height="700"
           src={`https://www.youtube-nocookie.com/embed/${videoId}`}
           title={title}
-          frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
         ></iframe>

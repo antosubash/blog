@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unescaped-entities */
 import Container from "@components/container";
 import Layout from "@components/layout";
 import { getLatestPosts } from "@lib/api";
@@ -77,7 +76,7 @@ const Index = ({ allPosts }: Props) => {
 export default Index;
 
 export const getStaticProps = async () => {
-  const allPosts = getLatestPosts([
+  const allPosts = await getLatestPosts([
     "title",
     "date",
     "slug",
@@ -89,7 +88,7 @@ export const getStaticProps = async () => {
     "part",
   ]);
   await generateOgImage({ slug: "home", title: "Anto Subash's blog" });
-  generateRss();
+  await generateRss();
   return {
     props: { allPosts },
   };

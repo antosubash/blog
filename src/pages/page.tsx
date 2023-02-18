@@ -123,7 +123,7 @@ const PostMain = ({ allPosts, initialDisplayPosts, pagination }: Props) => {
 export default PostMain;
 
 export const getStaticProps = async ({ params }: any) => {
-  const allPosts = getAllPosts([
+  const allPosts = await getAllPosts([
     "title",
     "date",
     "slug",

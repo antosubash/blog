@@ -62,7 +62,7 @@ const Series: NextPage<SeriesProps> = ({ series }: SeriesProps) => {
 };
 
 export const getStaticProps: GetStaticProps = async ({}) => {
-  var series = getSeriesPosts([
+  var series = await getSeriesPosts([
     "title",
     "date",
     "slug",

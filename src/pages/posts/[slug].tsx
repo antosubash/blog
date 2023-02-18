@@ -11,6 +11,7 @@ import { BlogPost } from "@blog/types/postType";
 import { generateOgImage } from "@lib/generateOgImage";
 import Meta from "@components/meta";
 import TopProgress from "@components/top-progress";
+import { compileMdx } from "@lib/compile-mdx";
 
 type Props = {
   post: BlogPost;
@@ -68,7 +69,7 @@ type Params = {
 };
 
 export async function getStaticProps({ params }: Params) {
-  const post = getPostBySlug(params.slug, [
+  const post = await getPostBySlug(params.slug, [
     "title",
     "date",
     "slug",
@@ -82,7 +83,7 @@ export async function getStaticProps({ params }: Params) {
   ]);
 
   await generateOgImage({ slug: params.slug, title: post.title });
-
+  
   return {
     props: {
       post: post,
@@ -91,8 +92,7 @@ export async function getStaticProps({ params }: Params) {
 }
 
 export async function getStaticPaths() {
-  const posts = getAllPosts(["slug"]);
-
+  const posts = await getAllPosts(["slug"]);
   return {
     paths: posts.map((posts: any) => {
       return {
