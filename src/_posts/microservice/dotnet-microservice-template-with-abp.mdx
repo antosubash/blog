@@ -27,7 +27,7 @@ The template is still in the early stages. I have created the template using the
 To install the dotnet new template you need to run the following command.
 
 ```bash
-dotnet new install Anto.Abp.Microservice.Template::0.1.4
+dotnet new install Anto.Abp.Microservice.Template::1.1.2
 ```
 
 This will install the template to your local machine. You can check the installed templates by running the following command.
@@ -56,8 +56,15 @@ Before you run the application make sure you have built the solution at least on
 dotnet build
 ```
 
-Once the solution is built then we have to update the connection string in the `appsettings.json` file. You can find the `appsettings.json` file in the `*.HttpApi.Host` projects and `DbMigrator` project. 
+Once the solution is built run the following to command to install the npm packages.
 
+```bash
+abp install-libs
+```
+
+This will install the npm packages for all the projects.
+
+Once the packages are installed then we have to update the connection string in the `appsettings.json` file. You can find the `appsettings.json` file in the `*.HttpApi.Host` projects and `DbMigrator` project. 
 
 The first project you need to run is the `MyMicroservice.DbMigrator` project. You can run the project by running the following command.
 
