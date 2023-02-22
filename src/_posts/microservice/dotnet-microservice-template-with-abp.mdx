@@ -16,11 +16,28 @@ In this post I will show you how to create ABP microservice using a dotnet new t
 
 ## Background
 
-Right now it is not easy to create a new microservice application with ABP. I have made a 12 part video series on how to create a microservice application with ABP. It is a lot of work and it is not easy to follow. I have created a dotnet new template to make it easier to create a new microservice application with ABP. You can find the template on [GitHub](https://github.com/antosubash/AbpMicroservice). To make this process easier I have created a dotnet new template. I have convert the sample application from the video series to a dotnet new template.
+Right now it is not easy to create a new microservice application with ABP. I have made a 12 part video series on how to create a microservice application with ABP. It is a lot of work and it is not easy to follow. I have created a dotnet new template to make it easier to create a new microservice application with ABP. You can find the template on [GitHub](https://github.com/antosubash/AbpMicroservice). You can also find the video series on [YouTube](https://www.youtube.com/playlist?list=PL-rVxoM6JeHnaHsPJffa54WiDyU4Ue1GS).
 
 ## Status
 
 The template is still in the early stages. I have created the template using the sample application from the video series. I have not tested the template with all the features. This is really usefull if you already know how to create a microservice application with ABP. But if you are new to ABP then I would recommend to watch the video series. It will give you a good understanding of how to create a microservice application with ABP. 
+
+## Prerequisites
+
+To use the template you need to have the following installed on your machine.
+
+- [.Net 7.0 SDK](https://dotnet.microsoft.com/download/dotnet/7.0)
+- [Node.js](https://nodejs.org/en/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [RabbitMQ](https://www.rabbitmq.com/) 
+- [Redis](https://redis.io/) 
+- [ABP CLI](https://docs.abp.io/en/abp/latest/CLI)
+- [Tye](https://github.com/dotnet/tye) (Optional)
+
+I mostly use the [Visual Studio Code](https://code.visualstudio.com/) as my IDE. But you can use any IDE you want. I have tested the template with [Visual Studio Code](https://code.visualstudio.com/) and [Visual Studio 2022](https://visualstudio.microsoft.com/vs/preview/vs2022/).
+
+For my development environment I use [Docker](https://www.docker.com/) to run the database, RabbitMQ and Redis. you find my docker stack files in the [GitHub](https://github.com/antosubash/docker_stack/tree/master/stacks) repository.
+
 
 ## Install the dotnet new template
 
@@ -60,6 +77,12 @@ Once the solution is built run the following to command to install the npm packa
 
 ```bash
 abp install-libs
+```
+
+> Note: You need to have `abp` installed on your machine. You can install `abp` by running the following command.
+
+```bash
+dotnet tool install -g Volo.Abp.Cli
 ```
 
 This will install the npm packages for all the projects.
