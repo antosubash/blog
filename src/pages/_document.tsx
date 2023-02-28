@@ -7,6 +7,12 @@ export default class MyDocument extends Document {
         <Head>
           <script
             async
+            defer
+            data-website-id="32d87e93-77c1-48cb-b029-6b296ddc7827"
+            src="https://umami.antosubash.com/umami.js"
+          ></script>
+          <script
+            async
             src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
           />
           <script
