@@ -201,7 +201,7 @@ const ConsultingPage = () => {
             Here's what I'm good at
           </h2>
           <div className="grid grid-cols-1 gap-6 pt-10 sm:grid-cols-2 md:gap-10 md:pt-12 lg:grid-cols-3">
-            <div className="group rounded px-4 py-4 shadow hover:bg-primary">
+            <div className="group rounded px-4 py-4 shadow hover:bg-primary border-gray-100 bg-slate-50 dark:border-gray-800 dark:bg-gray-950">
               <div className="text-center">
                 <h3 className="pt-8 text-lg font-semibold uppercase text-primary group-hover:text-yellow lg:text-xl">
                   WEB DEVELOPMENT
@@ -212,7 +212,7 @@ const ConsultingPage = () => {
                 </p>
               </div>
             </div>
-            <div className="group rounded px-4 py-4 shadow hover:bg-primary">
+            <div className="group rounded px-4 py-4 shadow hover:bg-primary border-gray-100 bg-slate-50 dark:border-gray-800 dark:bg-gray-950">
               <div className="text-center">
                 <h3 className="pt-8 text-lg font-semibold uppercase text-primary group-hover:text-yellow lg:text-xl">
                   API DEVELOPMENT
@@ -222,7 +222,7 @@ const ConsultingPage = () => {
                 </p>
               </div>
             </div>
-            <div className="group rounded px-4 py-4 shadow hover:bg-primary">
+            <div className="group rounded px-4 py-4 shadow hover:bg-primary border-gray-100 bg-slate-50 dark:border-gray-800 dark:bg-gray-950">
               <div className="text-center">
                 <h3 className="pt-8 text-lg font-semibold uppercase text-primary group-hover:text-yellow lg:text-xl">
                   Mobile Development
@@ -232,7 +232,7 @@ const ConsultingPage = () => {
                 </p>
               </div>
             </div>
-            <div className="group rounded px-4 py-4 shadow hover:bg-primary">
+            <div className="group rounded px-4 py-4 shadow hover:bg-primary border-gray-100 bg-slate-50 dark:border-gray-800 dark:bg-gray-950">
               <div className="text-center">
                 <h3 className="pt-8 text-lg font-semibold uppercase text-primary group-hover:text-yellow lg:text-xl">
                   Devops
@@ -244,7 +244,7 @@ const ConsultingPage = () => {
                 </p>
               </div>
             </div>
-            <div className="group rounded px-4 py-4 shadow hover:bg-primary">
+            <div className="group rounded px-4 py-4 shadow hover:bg-primary border-gray-100 bg-slate-50 dark:border-gray-800 dark:bg-gray-950">
               <div className="text-center">
                 <h3 className="pt-8 text-lg font-semibold uppercase text-primary group-hover:text-yellow lg:text-xl">
                   Deployment
@@ -256,7 +256,7 @@ const ConsultingPage = () => {
                 </p>
               </div>
             </div>
-            <div className="group rounded px-4 py-4 shadow hover:bg-primary">
+            <div className="group rounded px-4 py-4 shadow hover:bg-primary border-gray-100 bg-slate-50 dark:border-gray-800 dark:bg-gray-950">
               <div className="text-center">
                 <h3 className="pt-8 text-lg font-semibold uppercase text-primary group-hover:text-yellow lg:text-xl">
                   Bare Metal

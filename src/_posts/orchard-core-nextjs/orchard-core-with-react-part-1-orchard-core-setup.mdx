@@ -1,0 +1,87 @@
+---
+title: "Orchard Core Setup"
+excerpt: "In this post, I will setup Orchard Core as Headless CMS with a Module."
+date: "2023-03-02T22:15:00.891Z"
+videoId: 
+series: "Orchard Core With React"
+part: 1
+tags: [ orchard-core,.net ]
+---
+
+## Table of contents
+
+## Introduction
+
+In this post, I will setup Orchard Core as Headless CMS with a Module.
+
+## Setup
+
+### Install Orchard Core .Net template
+
+```bash
+dotnet new install OrchardCore.ProjectTemplates::1.5.0
+```
+
+> Note: You can find the latest version of the template [here](https://www.nuget.org/packages/OrchardCore.ProjectTemplates/).
+
+
+### Create a new Orchard Core project
+
+```bash
+dotnet new occms -n Tasky -o Tasky
+```
+
+This will create a new Orchard Core project with the name Tasky and the output folder Tasky. 
+
+### Add a new Module
+
+```bash
+dotnet new ocmodule -n Tasky.Module -o Tasky.Module
+```
+
+This will create a new Orchard Core module with the name Tasky.Module and the output folder Tasky.Module.
+
+### Create Solution for the projects
+
+```bash
+dotnet new sln -n Tasky
+```
+
+This will create a new solution with the name Tasky. It is not necessary to create a solution, but it is a good practice to have a solution for all the projects.
+
+### Add projects to the solution
+
+```bash
+dotnet sln Tasky.sln add *.csproj
+```
+
+This will add all the projects to the solution.
+
+### Add a reference to the module project
+
+```bash
+dotnet add Tasky/Tasky.csproj reference Tasky.Module/Tasky.Module.csproj
+```
+
+This will add a reference to the module project in the main project. It is necessary to add a reference to the module project in the main project, otherwise the module will not be loaded. 
+
+> Note: You need to enable the module in the admin panel. The module will be loaded, but it will not be enabled. check the features section in the admin panel to enable the module.
+
+### Run the project
+
+```bash
+cd Tasky
+dotnet run
+```
+
+This will run the project. On the first run, you will see a setup page. You have to provide the database connection string and the admin user credentials along with the site name. Once you have provided the details, the setup will be completed and you will be redirected to the admin panel.
+
+
+
+
+
+
+
+
+
+
