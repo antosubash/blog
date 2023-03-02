@@ -15,12 +15,25 @@
 <h2>Introduction</h2>
 <p>In this post I will show you how to create ABP microservice using a dotnet new template.</p>
 <h2>Background</h2>
-<p>Right now it is not easy to create a new microservice application with ABP. I have made a 12 part video series on how to create a microservice application with ABP. It is a lot of work and it is not easy to follow. I have created a dotnet new template to make it easier to create a new microservice application with ABP. You can find the template on <a href="https://github.com/antosubash/AbpMicroservice">GitHub</a>. To make this process easier I have created a dotnet new template. I have convert the sample application from the video series to a dotnet new template.</p>
+<p>Right now it is not easy to create a new microservice application with ABP. I have made a 12 part video series on how to create a microservice application with ABP. It is a lot of work and it is not easy to follow. I have created a dotnet new template to make it easier to create a new microservice application with ABP. You can find the template on <a href="https://github.com/antosubash/AbpMicroservice">GitHub</a>. You can also find the video series on <a href="https://www.youtube.com/playlist?list=PL-rVxoM6JeHnaHsPJffa54WiDyU4Ue1GS">YouTube</a>. If you are new to ABP then start <a href="https://blog.antosubash.com/posts/abp-microservice-series">here</a> and then come back to this post.</p>
 <h2>Status</h2>
 <p>The template is still in the early stages. I have created the template using the sample application from the video series. I have not tested the template with all the features. This is really usefull if you already know how to create a microservice application with ABP. But if you are new to ABP then I would recommend to watch the video series. It will give you a good understanding of how to create a microservice application with ABP.</p>
+<h2>Prerequisites</h2>
+<p>To use the template you need to have the following installed on your machine.</p>
+<ul>
+<li><a href="https://dotnet.microsoft.com/download/dotnet/7.0">.Net 7.0 SDK</a></li>
+<li><a href="https://nodejs.org/en/">Node.js</a></li>
+<li><a href="https://www.postgresql.org/">PostgreSQL</a></li>
+<li><a href="https://www.rabbitmq.com/">RabbitMQ</a></li>
+<li><a href="https://redis.io/">Redis</a></li>
+<li><a href="https://docs.abp.io/en/abp/latest/CLI">ABP CLI</a></li>
+<li><a href="https://github.com/dotnet/tye">Tye</a> (Optional)</li>
+</ul>
+<p>I mostly use the <a href="https://code.visualstudio.com/">Visual Studio Code</a> as my IDE. But you can use any IDE you want. I have tested the template with <a href="https://code.visualstudio.com/">Visual Studio Code</a> and <a href="https://visualstudio.microsoft.com/vs/preview/vs2022/">Visual Studio 2022</a>.</p>
+<p>For my development environment I use <a href="https://www.docker.com/">Docker</a> to run the database, RabbitMQ and Redis. you find my docker stack files in the <a href="https://github.com/antosubash/docker_stack/tree/master/stacks">GitHub</a> repository.</p>
 <h2>Install the dotnet new template</h2>
 <p>To install the dotnet new template you need to run the following command.</p>
-<pre><code class="language-bash">dotnet new install Anto.Abp.Microservice.Template::0.1.4
+<pre><code class="language-bash">dotnet new install Anto.Abp.Microservice.Template::1.1.2
 </code></pre>
 <p>This will install the template to your local machine. You can check the installed templates by running the following command.</p>
 <pre><code class="language-bash">dotnet new -l
@@ -37,7 +50,16 @@
 <p>Before you run the application make sure you have built the solution at least once. You can build the solution by running the following command.</p>
 <pre><code class="language-bash">dotnet build
 </code></pre>
-<p>Once the solution is built then we have to update the connection string in the <code>appsettings.json</code> file. You can find the <code>appsettings.json</code> file in the <code>*.HttpApi.Host</code> projects and <code>DbMigrator</code> project.</p>
+<p>Once the solution is built run the following to command to install the npm packages.</p>
+<pre><code class="language-bash">abp install-libs
+</code></pre>
+<blockquote>
+<p>Note: You need to have <code>abp</code> installed on your machine. You can install <code>abp</code> by running the following command.</p>
+</blockquote>
+<pre><code class="language-bash">dotnet tool install -g Volo.Abp.Cli
+</code></pre>
+<p>This will install the npm packages for all the projects.</p>
+<p>Once the packages are installed then we have to update the connection string in the <code>appsettings.json</code> file. You can find the <code>appsettings.json</code> file in the <code>*.HttpApi.Host</code> projects and <code>DbMigrator</code> project.</p>
 <p>The first project you need to run is the <code>MyMicroservice.DbMigrator</code> project. You can run the project by running the following command.</p>
 <pre><code class="language-bash">dotnet run --project MyMicroservice/shared/MyMicroservice.DbMigrator/MyMicroservice.DbMigrator.csproj
 </code></pre>
@@ -2725,7 +2747,9 @@ else
 <li>Provides a distributed event bus to communicate your services.</li>
 </ul>
 <h2>Purpose</h2>
-<p>By default when you create a ABP application it will be a monolith. There is no definitive guide on how to create a microservice application with all the modules. The purpose of this blog series is to have a base solution of the ABP running as a microservice application. We will have a SaaS service for Tenant Management and Identity Service for Identity and IdentityServer and Admin Service for features, permissions, settings and audit logs. this will be a great base solution for your microservice and you will see how to setup the microservice from the scratch.</p>]]></content:encoded>
+<p>By default when you create a ABP application it will be a monolith. There is no definitive guide on how to create a microservice application with all the modules. The purpose of this blog series is to have a base solution of the ABP running as a microservice application. We will have a SaaS service for Tenant Management and Identity Service for Identity and IdentityServer and Admin Service for features, permissions, settings and audit logs. this will be a great base solution for your microservice and you will see how to setup the microservice from the scratch.</p>
+<h2>Template</h2>
+<p>I have created a template for creating a microservice application based on this series. You can find the template here: https://github.com/antosubash/AbpMicroservice. You can use this template to create your microservice application.</p>]]></content:encoded>
           </item><item>
           <title>Logging with Seq</title>
           <link>https://blog.antosubash.com/posts/netcore-microservice-with-abp-add-central-logging-part-12</link>

@@ -157,8 +157,16 @@ const ConsultingPage = () => {
             </defs>
           </svg>
         </div>
+        <div className="container py-8 md:py-20" id="about">
+          <h2 className="text-center font-header text-2xl font-semibold text-primary sm:text-5xl lg:text-3xl">
+            You can find my expert link at{" "}
+            <a href="https://abp.io/expert/antosubash" target="_blank">
+              https://abp.io/expert/antosubash
+            </a>
+          </h2>
+        </div>
 
-        <h2 className="text-center pt-20 font-header text-2xl font-semibold uppercase text-primary sm:text-5xl lg:text-3xl">
+        <h2 className="text-center font-header text-2xl font-semibold uppercase text-primary sm:text-5xl lg:text-3xl">
           Partnership with{" "}
           <a href="https://www.spatial-focus.net">
             <img
