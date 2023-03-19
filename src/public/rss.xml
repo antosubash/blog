@@ -6,6 +6,91 @@
             <description>Anto Subash's Blog</description>
             <language>en</language>
             <item>
+          <title>Abp Dockerfile</title>
+          <link>https://blog.antosubash.com/posts/abp-docker-file</link>
+          <guid>https://blog.antosubash.com/posts/abp-docker-file</guid>
+          <pubDate>Sun, 19 Mar 2023 21:52:11 GMT</pubDate>
+          <description>In this post we will see how to create proper docker file for your abp application.</description>
+          <content:encoded><![CDATA[<h2>Table of contents</h2>
+<h2>Introduction</h2>
+<p>In this post we will see how to create proper docker file for your abp application.</p>
+<h2>What is the problem?</h2>
+<p>If you are using abp framework for your application, you might have noticed that abp framework stoped including the &quot;libs&quot; folder in the application template. This was done to reduce the size of the application. It is a good practice to not include the &quot;libs&quot; folder in the sorces control. But if you are using docker, you need to include the &quot;libs&quot; folder in the docker image.
+This is a problem when you are doing CI/CD.</p>
+<p>We will see what are the ways to solve this problem.</p>
+<h2>Solutions</h2>
+<p>There are few ways to solve this problem.</p>
+<h3>1. Include the &quot;libs&quot; folder in the source control</h3>
+<p>This is the easiest way to solve the problem. But it is not a good practice to include the &quot;libs&quot; folder in the source control. I have been using this method for a long time. But I have decided to move on and find a better solution.</p>
+<h3>2. Install the npm packages in CI/CD pipeline</h3>
+<p>I have tried this method. It works but it is not a good solution. Because then i&#x27;m tied to the CI/CD product. If i want to change the CI/CD product, i have to change the way i install the npm packages.</p>
+<h3>3. Create a docker file which will install the npm packages</h3>
+<p>This is the best solution. We will create a docker file which will install the npm packages. Then we will use this docker file in our CI/CD pipeline.</p>
+<h2>Create a docker file</h2>
+<p>We will create a docker file which will install the npm packages. Then we will use this docker file in our CI/CD pipeline.</p>
+<h3>1. Create a docker file</h3>
+<p>Create a docker file in the root of your application. Name it &quot;Dockerfile&quot;.</p>
+<h3>2. Add the following content to the docker file</h3>
+<pre><code class="language-bash">FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
+WORKDIR /app
+EXPOSE 80
+
+ENV ASPNETCORE_URLS=http://+:80
+
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+WORKDIR /src
+
+# set up node
+ENV NODE_VERSION 16.13.0
+ENV NODE_DOWNLOAD_URL https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz
+ENV NODE_DOWNLOAD_SHA 589b7e7eb22f8358797a2c14a0bd865459d0b44458b8f05d2721294dacc7f734
+
+RUN curl -SL &quot;$NODE_DOWNLOAD_URL&quot; --output nodejs.tar.gz \
+    &amp;&amp; echo &quot;$NODE_DOWNLOAD_SHA nodejs.tar.gz&quot; | sha256sum -c - \
+    &amp;&amp; tar -xzf &quot;nodejs.tar.gz&quot; -C /usr/local --strip-components=1 \
+    &amp;&amp; rm nodejs.tar.gz \
+    &amp;&amp; ln -s /usr/local/bin/node /usr/local/bin/nodejs
+
+RUN apt update &amp;&amp; apt -y install gnupg
+
+ENV YARN_VERSION 1.22.15
+
+RUN set -ex \
+  &amp;&amp; wget -qO- https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --import \
+  &amp;&amp; curl -fSLO --compressed &quot;https://yarnpkg.com/downloads/$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz&quot; \
+  &amp;&amp; curl -fSLO --compressed &quot;https://yarnpkg.com/downloads/$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz.asc&quot; \
+  &amp;&amp; gpg --batch --verify yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz \
+  &amp;&amp; mkdir -p /opt/yarn \
+  &amp;&amp; tar -xzf yarn-v$YARN_VERSION.tar.gz -C /opt/yarn --strip-components=1 \
+  &amp;&amp; ln -s /opt/yarn/bin/yarn /usr/local/bin/yarn \
+  &amp;&amp; ln -s /opt/yarn/bin/yarn /usr/local/bin/yarnpkg \
+  &amp;&amp; rm yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz
+
+COPY [&quot;abp/AbpTemplate/AbpTemplate.csproj&quot;, &quot;abp/AbpTemplate/&quot;]
+RUN dotnet restore &quot;abp/AbpTemplate/AbpTemplate.csproj&quot;
+COPY . .
+WORKDIR &quot;/src/abp/AbpTemplate&quot;
+RUN dotnet tool install -g Volo.Abp.Cli
+ENV PATH=&quot;${PATH}:/root/.dotnet/tools&quot;
+RUN abp install-libs
+RUN dotnet build &quot;AbpTemplate.csproj&quot; -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish &quot;AbpTemplate.csproj&quot; -c Release -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT [&quot;dotnet&quot;, &quot;AbpTemplate.dll&quot;]
+</code></pre>
+<p>This docker file will install the npm packages. Then it will build the application.</p>
+<p>Here is the link to the docker file in github. <a href="https://github.com/antosubash/AbpTemplate/blob/main/abp/AbpTemplate/Dockerfile">Dockerfile</a></p>
+<p>There are few things to note in the docker file. It is using the dotnet 7.0 sdk. It is also using the node 16.13.0. You can change the node version to the version you are using. You can also change the dotnet version to the version you are using.</p>
+<p>You can also change the &quot;AbpTemplate&quot; to the name of your application.</p>
+<p>Here is the repo for the application. <a href="https://github.com/antosubash/AbpTemplate">AbpTemplate</a></p>
+<h2>Conclusion</h2>
+<p>In this post we saw how to create a docker file which will install the npm packages for your abp application. This will help you to create a docker image which will have the &quot;libs&quot; folder for your CI/CD pipeline. Hope this helps. Fell free to leave a comment if you have any questions.</p>]]></content:encoded>
+          </item><item>
           <title>.Net Microservice template with ABP</title>
           <link>https://blog.antosubash.com/posts/dotnet-microservice-template-with-abp</link>
           <guid>https://blog.antosubash.com/posts/dotnet-microservice-template-with-abp</guid>
@@ -1620,15 +1705,15 @@ spec:
 <p>I&#x27;m going to use hetzner cloud to create this machine if you don&#x27;t have one then you can use the referral link <a href="here">https://hetzner.cloud/?ref=ENhA4rCZ5JUM</a> and get 20€ for free to try it out.</p>
 <h3>Creating a project</h3>
 <p>Once you have the hetzner account. login and create a project.</p>
-<p><img src="/assets/posts/microk8s/microk8s1.gif" alt="Create Project"/></p>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/microk8s/microk8s1.gif" alt="Create Project"/></p>
 <h3>Setup SSH</h3>
 <p>The first step in the project is to SSH for the project.</p>
-<p><img src="/assets/posts/microk8s/microk8s2.gif" alt="SSH key"/></p>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/microk8s/microk8s2.gif" alt="SSH key"/></p>
 <h3>Setup Firewall</h3>
 <p>Now lets setup the firewall for our server.</p>
-<p><img src="/assets/posts/microk8s/microk8s3.gif" alt="Firewall"/></p>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/microk8s/microk8s3.gif" alt="Firewall"/></p>
 <h3>Create server with firewall and ssh key</h3>
-<p><img src="/assets/posts/microk8s/microk8s4.gif" alt="Create server"/></p>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/microk8s/microk8s4.gif" alt="Create server"/></p>
 <h2>Add DNS entry</h2>
 <p>Now you have to add a DNS entry for your newly created machine. you can fine the the IP address of the machine in the Hetzner server page.</p>
 <p>We need to add <code>A</code> record and a <code>CNAME</code> record.</p>
@@ -1799,13 +1884,13 @@ git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-m
 <p>For this purpose I will use the Tasky Abp Microservice solution. It is a ABP Microservice application which I have created for a youtube series.</p>
 <p>The first step is to add NDpend to your solution.</p>
 <h3>Adding NDepend</h3>
-<p><img src="/assets/posts/ndepend/ndepend1.png" alt="Adding NDepend"/></p>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/ndepend/ndepend1.png" alt="Adding NDepend"/></p>
 <p>As shown in the image adding <code>ndepend</code> to your solution is very easy. once added it will start the analysis of the solution and find all the projects and assemblies of your project. once it is done it will prompt with the list of found assemblies. you might want to ignore some assemblies like test and those can be managed in the next step.</p>
 <h3>Start Analysis</h3>
-<p><img src="/assets/posts/ndepend/ndepend2.png" alt="Start Analysis"/></p>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/ndepend/ndepend2.png" alt="Start Analysis"/></p>
 <p>After the clicking the analysis <code>ndepend</code> will start the analysis of your code. it might take a min for it show the dashboard.</p>
 <h3>Dashboard</h3>
-<p><img src="/assets/posts/ndepend/ndepend3.png" alt="Dashboard"/></p>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/ndepend/ndepend3.png" alt="Dashboard"/></p>
 <p>Dashboard is where you will see most of the info about you solution. based on the status of you solution it will create a rating. In my case the rating was <code>B</code> for my tasky microservice solution. It also displays more basic metrics like &quot;Types&quot; and &quot;Line of code&quot;. What I found most interesting is the &quot;Quality Gates&quot; and &quot;Rules&quot; section of the dashboard. It showed 2 problems I didn&#x27;t see before in my code and gave me an explanation on why they are bad.</p>
 <p>The problems were</p>
 <ul>
@@ -1818,17 +1903,17 @@ git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-m
 <p>This was a sample Dto class which I forgot to delete. So, the same type was available in multiple services.</p>
 <p>This was really helpful. After seeing these problems I was more curious to find out what else was wrong in my solution and I had lots of minor issues. It was a great learning process.</p>
 <h3>Info Window</h3>
-<p><img src="/assets/posts/ndepend/ndepend4.png" alt="Info Window"/></p>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/ndepend/ndepend4.png" alt="Info Window"/></p>
 <p>Info window explains your problem. It show what rules were broken and explain the rule clearly in a simple way. It also shows suggestion on how to fix the problem.</p>
 <h3>Dependency graph</h3>
-<p><img src="/assets/posts/ndepend/ndepend5.png" alt="Dependency graph"/></p>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/ndepend/ndepend5.png" alt="Dependency graph"/></p>
 <p>This is one thing I wished that VS already had. When I saw the Dependency graph it was easy to understand the structure of the application. This will the first thing I do on any new solution to get the overall view of the solution. This helps to create a memory map of project.</p>
 <h3>And many more</h3>
 <p>Once it is added the to the solution it starts to track the trend. the trend can be viewed in the graph. it will help us in improving the codebase. there are many more feature for this tool this is just an introduction of very few benefits.</p>
 <h2>Final thoughts</h2>
 <p>If your are managing a large project then a tool like <code>ndepend</code> is very useful. It has good CI/CD integration so we can generate the nice report for every build and monitor the progress. The only problem I had is with the VS Code integration. There is a standalone instance which we can try with VS Code but there is no integration with VS Code. The rules helps you to write code with best practices and make you a better developer. It also helps with consistency in the codebase.</p>
 <p>Next version of the <code>ndepend</code> will have more integration with Rider and VS Code to open source file declaration and diff source files. but not a full integration. Here is how it will look like.</p>
-<p><img src="/assets/posts/ndepend/ndepend6.png" alt="Dependency graph"/></p>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/ndepend/ndepend6.png" alt="Dependency graph"/></p>
 <h2>Will I buy it?</h2>
 <p>For a personal project - No</p>
 <p>For a Commercial project - Yes, for sure.</p>
@@ -2440,26 +2525,26 @@ networks:
 <h2>Create ubuntu machine with docker</h2>
 <p>For this we will the hetzner apps. Hetzner provides machine with docker CE. this will save us some time.</p>
 <h3>Add ssh key to hetzner project</h3>
-<p><img src="/assets/posts/docker-deployment/hetzner1.png" alt="Add ssh to your hetzner project"/></p>
-<p><img src="/assets/posts/docker-deployment/hetzner2.png" alt="Add ssh to your hetzner project"/></p>
-<p><img src="/assets/posts/docker-deployment/hetzner3.png" alt="Add ssh to your hetzner project"/></p>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/docker-deployment/hetzner1.png" alt="Add ssh to your hetzner project"/></p>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/docker-deployment/hetzner2.png" alt="Add ssh to your hetzner project"/></p>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/docker-deployment/hetzner3.png" alt="Add ssh to your hetzner project"/></p>
 <h3>Create server</h3>
-<p><img src="/assets/posts/docker-deployment/hetzner4.png" alt="Create Server"/></p>
-<p><img src="/assets/posts/docker-deployment/hetzner5.png" alt="Create Server"/></p>
-<p><img src="/assets/posts/docker-deployment/hetzner6.png" alt="Create Server"/></p>
-<p><img src="/assets/posts/docker-deployment/hetzner7.png" alt="Create Server"/></p>
-<p><img src="/assets/posts/docker-deployment/hetzner8.png" alt="Create Server"/></p>
-<p><img src="/assets/posts/docker-deployment/hetzner9.png" alt="Create Server"/></p>
-<p><img src="/assets/posts/docker-deployment/hetzner10.png" alt="Create Server"/></p>
-<p><img src="/assets/posts/docker-deployment/hetzner11.png" alt="Create Server"/></p>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/docker-deployment/hetzner4.png" alt="Create Server"/></p>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/docker-deployment/hetzner5.png" alt="Create Server"/></p>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/docker-deployment/hetzner6.png" alt="Create Server"/></p>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/docker-deployment/hetzner7.png" alt="Create Server"/></p>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/docker-deployment/hetzner8.png" alt="Create Server"/></p>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/docker-deployment/hetzner9.png" alt="Create Server"/></p>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/docker-deployment/hetzner10.png" alt="Create Server"/></p>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/docker-deployment/hetzner11.png" alt="Create Server"/></p>
 <h3>Create the firewall for the server</h3>
-<p><img src="/assets/posts/docker-deployment/hetzner12.png" alt="Create firewall"/></p>
-<p><img src="/assets/posts/docker-deployment/hetzner13.png" alt="Create firewall"/></p>
-<p><img src="/assets/posts/docker-deployment/hetzner14.png" alt="Create firewall"/></p>
-<p><img src="/assets/posts/docker-deployment/hetzner15.png" alt="Create firewall"/></p>
-<p><img src="/assets/posts/docker-deployment/hetzner16.png" alt="Create firewall"/></p>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/docker-deployment/hetzner12.png" alt="Create firewall"/></p>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/docker-deployment/hetzner13.png" alt="Create firewall"/></p>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/docker-deployment/hetzner14.png" alt="Create firewall"/></p>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/docker-deployment/hetzner15.png" alt="Create firewall"/></p>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/docker-deployment/hetzner16.png" alt="Create firewall"/></p>
 <h3>IP address of our machine</h3>
-<p><img src="/assets/posts/docker-deployment/hetzner17.png" alt="IP address"/></p>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/docker-deployment/hetzner17.png" alt="IP address"/></p>
 <h2>Add DNS entry</h2>
 <p>Now you have to add a DNS entry for your newly created machine. you can fine the the IP address of the machine in the Hetzner server page.</p>
 <p>We need to add <code>A</code> record and a <code>CNAME</code> record.</p>
@@ -3385,13 +3470,13 @@ typeof(ProjectServiceApplicationContractsModule)
 <h2>Docker support</h2>
 <p>Docker support can be added easily by using visual studio. since all the project is available in the solution vs will create a Docker file and add it to the project. In this we will use the Identity server it will be similar for all the other services.</p>
 <p>To add Docker support right click on the Identity server project and choose add.</p>
-<p><img src="/assets/posts/microservice/part10/docker0.png" alt="Add Docker"/></p>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/microservice/part10/docker0.png" alt="Add Docker"/></p>
 <p>In the add menu choose docker support</p>
-<p><img src="/assets/posts/microservice/part10/docker1.png" alt="Add Menu"/></p>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/microservice/part10/docker1.png" alt="Add Menu"/></p>
 <p>In the docker file option choose linux</p>
-<p><img src="/assets/posts/microservice/part10/docker2.png" alt="Docker Options"/></p>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/microservice/part10/docker2.png" alt="Docker Options"/></p>
 <p>The final docker file will look like this. Here is the location of this sample file https://github.com/antosubash/AbpMicroservice/blob/main/apps/Tasky.IdentityServer/Dockerfile</p>
-<p><img src="/assets/posts/microservice/part10/docker3.png" alt="Docker file"/></p>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/microservice/part10/docker3.png" alt="Docker file"/></p>
 <p>We have to do this to all the services.</p>
 <h2>CI/CD</h2>
 <p>Here is the sample github action file.</p>
@@ -6697,16 +6782,16 @@ namespace MyCms.Projects
 <pre><code class="language-cs">dotnet run
 </code></pre>
 <p>You will see a Setup screen in the <code>Recipe</code> dropdown choose the <code>Headless Site</code></p>
-<p><img src="/assets/posts/orchard/part3/orchardcore3.1.png" alt="Setup"/></p>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/orchard/part3/orchardcore3.1.png" alt="Setup"/></p>
 <p>Once the setup is complete then enable the <code>MyCms.Projects</code> module.</p>
-<p><img src="/assets/posts/orchard/part3/orchardcore3.2.png" alt="Features"/></p>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/orchard/part3/orchardcore3.2.png" alt="Features"/></p>
 <p>Go to Features and you will see the list of all the features. Search for &quot;MyCms.Projects&quot; and enable it.</p>
-<p><img src="/assets/posts/orchard/part3/orchardcore3.3.png" alt="Enable"/></p>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/orchard/part3/orchardcore3.3.png" alt="Enable"/></p>
 <p>Once the module is enabled then we can start creating our content.</p>
 <p>Go to <code>Content Items</code> page you will see a <code>New Projects</code> menu now.</p>
-<p><img src="/assets/posts/orchard/part3/orchardcore3.4.png" alt="New Projects"/></p>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/orchard/part3/orchardcore3.4.png" alt="New Projects"/></p>
 <p>You will be able to create a new project now.</p>
-<p><img src="/assets/posts/orchard/part3/orchardcore3.6.png" alt="Create Projects"/></p>]]></content:encoded>
+<p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/orchard/part3/orchardcore3.6.png" alt="Create Projects"/></p>]]></content:encoded>
           </item><item>
           <title>Authentication using OpenId in React/NextJs App With Orchard Core - Part 2</title>
           <link>https://blog.antosubash.com/posts/orchard-core-openid-nextjs</link>
@@ -7273,7 +7358,7 @@ Application started. Press Ctrl+C to shut down.
 <p>Now remove the nuget package reference from the <code>ThemeChange.Web</code> project for <code>Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic</code>.</p>
 <p>Add project reference from to the  <code>Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic</code> to the <code>ThemeChange.Web</code>.</p>
 <h2>Change the bootstrap theme</h2>
-<p>We are going to use the <a href="https://github.com/creativetimofficial/material-kit">Material kit</a>. It is a free and Open Source UI Kit for Bootstrap 4. Download the minified css from the <a href="https://github.com/creativetimofficial/material-kit/blob/master/assets/css/material-kit.min.css">assets/css/material-kit.min.css</a> and place it in the <code>wwwroot/styles/material-kit.min.css</code> in the <code>ThemeChange.Web</code></p>
+<p>We are going to use the <a href="https://github.com/creativetimofficial/material-kit">Material kit</a>. It is a free and Open Source UI Kit for Bootstrap 4. Download the minified css from the <a href="https://github.com/creativetimofficial/material-kit/blob/masterhttps://raw.githubusercontent.com/antosubash/images/main/assets/css/material-kit.min.css">assets/css/material-kit.min.css</a> and place it in the <code>wwwroot/styles/material-kit.min.css</code> in the <code>ThemeChange.Web</code></p>
 <h3>Remove the default bootstrap theme</h3>
 <p>Update the <code>ConfigureBundle</code> method in the <code>BasicThemeGlobalStyleContributor</code> in the <code>Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic</code> project</p>
 <pre><code class="language-cs">public override void ConfigureBundle(BundleConfigurationContext context)
