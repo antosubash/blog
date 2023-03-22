@@ -84,9 +84,68 @@ COPY --from=publish /app/publish .
 ENTRYPOINT [&quot;dotnet&quot;, &quot;AbpTemplate.dll&quot;]
 </code></pre>
 <p>This docker file will install the npm packages. Then it will build the application.</p>
+<p>if you are new to docker, then this docker file might look complicated. But it is not. It is just a bunch of commands. You can read more about docker files <a href="https://docs.docker.com/engine/reference/builder/">here</a>.</p>
+<p>let me explain what each command is doing.</p>
+<pre><code class="language-bash">FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
+WORKDIR /app
+EXPOSE 80
+
+ENV ASPNETCORE_URLS=http://+:80
+</code></pre>
+<p>This is the base image. It is using the dotnet 7.0 aspnet image. It is also exposing the port 80.</p>
+<pre><code class="language-bash">FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+WORKDIR /src
+</code></pre>
+<p>This is the build image. It is using the dotnet 7.0 sdk image. It is also setting the working directory to &quot;/src&quot;.</p>
+<pre><code class="language-bash"># set up node
+ENV NODE_VERSION 16.13.0
+ENV NODE_DOWNLOAD_URL https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz
+ENV NODE_DOWNLOAD_SHA 589b7e7eb22f8358797a2c14a0bd865459d0b44458b8f05d2721294dacc7f734
+
+RUN curl -SL &quot;$NODE_DOWNLOAD_URL&quot; --output nodejs.tar.gz \
+    &amp;&amp; echo &quot;$NODE_DOWNLOAD_SHA nodejs.tar.gz&quot; | sha256sum -c - \
+    &amp;&amp; tar -xzf &quot;nodejs.tar.gz&quot; -C /usr/local --strip-components=1 \
+    &amp;&amp; rm nodejs.tar.gz \
+    &amp;&amp; ln -s /usr/local/bin/node /usr/local/bin/nodejs
+
+RUN apt update &amp;&amp; apt -y install gnupg
+
+ENV YARN_VERSION 1.22.15
+
+RUN set -ex \
+  &amp;&amp; wget -qO- https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --import \
+  &amp;&amp; curl -fSLO --compressed &quot;https://yarnpkg.com/downloads/$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz&quot; \
+  &amp;&amp; curl -fSLO --compressed &quot;https://yarnpkg.com/downloads/$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz.asc&quot; \
+  &amp;&amp; gpg --batch --verify yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz \
+  &amp;&amp; mkdir -p /opt/yarn \
+  &amp;&amp; tar -xzf yarn-v$YARN_VERSION.tar.gz -C /opt/yarn --strip-components=1 \
+  &amp;&amp; ln -s /opt/yarn/bin/yarn /usr/local/bin/yarn \
+  &amp;&amp; ln -s /opt/yarn/bin/yarn /usr/local/bin/yarnpkg \
+  &amp;&amp; rm yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz
+</code></pre>
+<p>This is the part where we are installing the node and yarn. You can change the node version to the version you are using. You can also change the yarn version to the version you are using.</p>
+<pre><code class="language-bash">COPY [&quot;abp/AbpTemplate/AbpTemplate.csproj&quot;, &quot;abp/AbpTemplate/&quot;]
+RUN dotnet restore &quot;abp/AbpTemplate/AbpTemplate.csproj&quot;
+COPY . .
+WORKDIR &quot;/src/abp/AbpTemplate&quot;
+RUN dotnet tool install -g Volo.Abp.Cli
+ENV PATH=&quot;${PATH}:/root/.dotnet/tools&quot;
+RUN abp install-libs
+RUN dotnet build &quot;AbpTemplate.csproj&quot; -c Release -o /app/build
+</code></pre>
+<p>This is the part where we are restoring the nuget packages and building the application. You can change the project name to the name of your project. You can also change the working directory to the directory of your project.</p>
+<p>We are also installing the abp cli. You can read more about the abp cli <a href="https://docs.abp.io/en/abp/latest/CLI">here</a>. The abp cli is used to install the npm packages. You can also use the npm cli to install the npm packages. But I prefer to use the abp cli because you can use the abp cli to install the npm packages for all the modules in your solution.</p>
+<pre><code class="language-bash">FROM build AS publish
+RUN dotnet publish &quot;AbpTemplate.csproj&quot; -c Release -o /app/publish /p:UseAppHost=false
+</code></pre>
+<p>This is the part where we are publishing the application.</p>
+<pre><code class="language-bash">FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT [&quot;dotnet&quot;, &quot;AbpTemplate.dll&quot;]
+</code></pre>
+<p>This is the part where we are copying the published application to the base image.</p>
 <p>Here is the link to the docker file in github. <a href="https://github.com/antosubash/AbpTemplate/blob/main/abp/AbpTemplate/Dockerfile">Dockerfile</a></p>
-<p>There are few things to note in the docker file. It is using the dotnet 7.0 sdk. It is also using the node 16.13.0. You can change the node version to the version you are using. You can also change the dotnet version to the version you are using.</p>
-<p>You can also change the &quot;AbpTemplate&quot; to the name of your application.</p>
 <p>Here is the repo for the application. <a href="https://github.com/antosubash/AbpTemplate">AbpTemplate</a></p>
 <h2>Conclusion</h2>
 <p>In this post we saw how to create a docker file which will install the npm packages for your abp application. This will help you to create a docker image which will have the &quot;libs&quot; folder for your CI/CD pipeline. Hope this helps. Fell free to leave a comment if you have any questions.</p>]]></content:encoded>

@@ -4,7 +4,7 @@ import Container from "@components/container";
 import PostBody from "@components/post-body";
 import PostHeader from "@components/post-header";
 import Layout from "@components/layout";
-import { getPostBySlug, getAllPosts } from "@lib/api";
+import { getPostBySlug, getAllPosts, getRelatedPosts } from "@lib/api";
 import PageTitle from "@components/page-title";
 import { Utterances } from "@components/utterances";
 import { BlogPost } from "@blog/types/postType";
@@ -12,14 +12,15 @@ import { generateOgImage } from "@lib/generateOgImage";
 import Meta from "@components/meta";
 import TopProgress from "@components/top-progress";
 import { compileMdx } from "@lib/compile-mdx";
+import RelatedPosts from "@components/related-posts";
 
 type Props = {
   post: BlogPost;
-  morePosts?: BlogPost[];
+  relatedPosts: BlogPost[];
   preview?: boolean;
 };
 
-const Post = ({ post }: Props) => {
+const Post = ({ post, relatedPosts }: Props) => {
   const router = useRouter();
   if (!router.isFallback && !post?.slug) {
     return <ErrorPage statusCode={404} />;
@@ -52,6 +53,7 @@ const Post = ({ post }: Props) => {
               content={post.content}
               title={post.title}
             />
+            <RelatedPosts posts={relatedPosts} />
             <Utterances />
           </>
         )}
@@ -87,10 +89,20 @@ export async function getStaticProps({ params }: Params) {
   post.content = mdxSource;
 
   await generateOgImage({ slug: params.slug, title: post.title });
-  
+
+  const relatedPosts = await getRelatedPosts(params.slug, [
+    "title",
+    "date",
+    "slug",
+    "tags",
+    "excerpt",
+    "series",
+  ]);
+
   return {
     props: {
       post: post,
+      relatedPosts: relatedPosts,
     },
   };
 }

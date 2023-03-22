@@ -4,6 +4,7 @@ import matter from "gray-matter";
 import getAllFilesRecursively from "./utils/files";
 import { MAX_DISPLAY } from "./constants";
 import { BlogPost } from "@blog/types/postType";
+import { count } from "console";
 
 const postsDirectory = join(process.cwd(), "_posts");
 
@@ -130,9 +131,7 @@ export function getLatestPosts(
   return storedPosts;
 }
 
-export function getSeriesPosts(
-  fields: string[] = []
-): BlogPost[] {
+export function getSeriesPosts(fields: string[] = []): BlogPost[] {
   const allPosts = getAllPosts(fields);
   const posts = allPosts.filter((post: BlogPost) => {
     return post.part == 0;
@@ -152,4 +151,48 @@ export function getPostBySeries(
     return post.series == mainPost?.series;
   });
   return posts.filter((post: BlogPost) => !post.isDraft);
+}
+
+export function getRelatedPosts(
+  slug: string,
+  fields: string[] = [],
+  count: number = 3
+): BlogPost[] {
+  const allPosts = getAllPosts(fields);
+  var mainPost = allPosts.find((post: BlogPost) => {
+    return post.slug == slug;
+  });
+  // Remove the current post from the list
+  allPosts.splice(allPosts.indexOf(mainPost!), 1);
+
+  // Check if the post has a series
+
+  if (mainPost?.series !== "") {
+    // Get all posts in the series and filter by date
+    const posts = allPosts
+      .filter((post: BlogPost) => {
+        return post.series == mainPost?.series;
+      })
+      .sort((post1: BlogPost, post2: BlogPost) =>
+        post1.date > post2.date ? -1 : 1
+      );
+    return posts.slice(0, count);
+  } else if (mainPost?.tags.length > 0) {
+    // Get all posts with the same tags and filter by date
+    const posts = allPosts
+      .filter((post: BlogPost) => {
+        return post.tags.some((tag) => mainPost?.tags.includes(tag));
+      })
+      .sort((post1: BlogPost, post2: BlogPost) =>
+        post1.date > post2.date ? -1 : 1
+      );
+    return posts.slice(0, count);
+  }
+  else {
+    // Get all posts and filter by date
+    const posts = allPosts.sort((post1: BlogPost, post2: BlogPost) =>
+      post1.date > post2.date ? -1 : 1
+    );
+    return posts.slice(0, count);
+  }
 }

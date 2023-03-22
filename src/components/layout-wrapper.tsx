@@ -42,12 +42,12 @@ const LayoutWrapper = ({ children }: any) => {
                     Tags
                   </Link>
                 </div>
-                <div className="flex justify-center items-center font-bold">
+                <div className="flex justify-center items-center font-bold umami--click--consulting-desktop">
                   <Link href="/consulting" className="font-bold px-5">
                     Consulting
                   </Link>
                 </div>
-                <div className="flex justify-center items-center font-bold">
+                <div className="flex justify-center items-center font-bold umami--click--about-desktop">
                   <Link
                     href="https://antosubash.com"
                     className="font-bold px-5"
@@ -137,7 +137,7 @@ const LayoutWrapper = ({ children }: any) => {
               <li>
                 <a
                   href="/consulting"
-                  className="block text-xl text-center px-2 py-4 hover:bg-gray-400 dark:hover:bg-gray-700 font-bold"
+                  className="block text-xl text-center px-2 py-4 hover:bg-gray-400 dark:hover:bg-gray-700 font-bold umami--click--consulting-mobile"
                 >
                   Consulting
                 </a>
@@ -145,7 +145,7 @@ const LayoutWrapper = ({ children }: any) => {
               <li>
                 <a
                   href="https://antosubash.com"
-                  className="block text-xl text-center px-2 py-4 hover:bg-gray-400 dark:hover:bg-gray-700 font-bold"
+                  className="block text-xl text-center px-2 py-4 hover:bg-gray-400 dark:hover:bg-gray-700 font-bold umami--click--about-mobile"
                 >
                   About
                 </a>

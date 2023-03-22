@@ -9,7 +9,6 @@ type Props = {
 };
 
 const PostBody = ({ content, videoId, title }: Props) => {
-  var url = "https://www.youtube.com/watch?v=" + videoId;
   return (
     <div className="xl:pb-0 xl:col-span-3 xl:row-span-2">
       {videoId ? (
