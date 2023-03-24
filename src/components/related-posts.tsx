@@ -1,4 +1,5 @@
 import { BlogPost } from "@blog/types/postType";
+import Link from "next/link";
 
 const RelatedPost = ({ posts }: { posts: BlogPost[] }) => {
   return (
@@ -10,14 +11,7 @@ const RelatedPost = ({ posts }: { posts: BlogPost[] }) => {
         {posts.map((post) => {
           const href = `/posts/${post.slug}`;
           return (
-            <div
-              key={post.slug}
-              onClick={() => {
-                // TODO: Find out Why Link is sending wrong href
-                window.location.href = href;
-              }}
-              className="px-4 mx-2 rounded-2xl cursor-pointer border drop-shadow-lg border-gray-100 bg-slate-50 dark:border-gray-800 dark:bg-gray-950 z-40"
-            >
+            <Link href={href}>
               <div className="text-xl font-bold text-gray-800 dark:text-gray-200 umami--click--related-post ">
                 <div
                   key={post.slug}
@@ -34,7 +28,7 @@ const RelatedPost = ({ posts }: { posts: BlogPost[] }) => {
                   </p>
                 </div>
               </div>
-            </div>
+            </Link>
           );
         })}
       </div>
