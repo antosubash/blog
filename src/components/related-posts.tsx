@@ -15,7 +15,7 @@ const RelatedPost = ({ posts }: { posts: BlogPost[] }) => {
               href={href}
               className="px-4 mx-2 rounded-2xl border drop-shadow-lg border-gray-100 bg-slate-50 dark:border-gray-800 dark:bg-gray-950"
             >
-              <div className="text-xl font-bold text-gray-800 dark:text-gray-200 umami--click--related-post ">
+              <div className="text-xl font-bold text-gray-800 dark:text-gray-200 umami--click--related-post">
                 <div
                   key={post.slug}
                   className="flex flex-col items-center w-full p-4"

@@ -54,7 +54,7 @@ const Post = ({ post, relatedPosts }: Props) => {
               title={post.title}
             />
             <RelatedPosts posts={relatedPosts} />
-            <Utterances />
+            <Utterances slug={post.slug} />
           </>
         )}
       </Container>
