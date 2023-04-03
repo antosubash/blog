@@ -6,6 +6,98 @@
             <description>Anto Subash's Blog</description>
             <language>en</language>
             <item>
+          <title>ABP React Template</title>
+          <link>https://blog.antosubash.com/posts/abp-react-template</link>
+          <guid>https://blog.antosubash.com/posts/abp-react-template</guid>
+          <pubDate>Mon, 03 Apr 2023 12:54:31 GMT</pubDate>
+          <description>React Starter Template for ABP application.</description>
+          <content:encoded><![CDATA[<h2>Table of contents</h2>
+<h2>Introduction</h2>
+<p>React Starter Template for ABP application with Next.js and Tailwind CSS is ready to use. You can use this template to start your next project.</p>
+<h2>Why?</h2>
+<p>I have been working on a project that uses ABP Framework and React. I have been using Next.js and Tailwind CSS for a while and I want to create a template use in my new project. I thought it would be useful for others as well. So, I decided to share it with you. I hope you find it useful.</p>
+<h2>Demo Application</h2>
+<p>You can find the demo application <a href="https://abpreact.antosubash.com/">here</a>. You can use the following credentials to login.</p>
+<ul>
+<li>Username: admin</li>
+<li>Password: 1q2w3E*</li>
+</ul>
+<h2>Source Code</h2>
+<p>You can find the source code on <a href="https://github.com/antosubash/abpreact">GitHub</a>.</p>
+<blockquote>
+<p>If you find this template useful, please consider starring the repository. It will help others to find it easily.</p>
+</blockquote>
+<h2>Key Technologies</h2>
+<ul>
+<li>Next JS</li>
+<li>Tailwind CSS</li>
+<li>TypeScript</li>
+<li>DaisyUI</li>
+<li>Radix UI</li>
+</ul>
+<h2>What is ABP Framework?</h2>
+<p><a href="https://abp.io/">ABP Framework</a> is a full stack web application framework. It is based on ASP.NET Core. It provides a lot of features out of the box. You can use it to build enterprise applications. It is free and open source. You can find the source code on <a href="https://github.com/abpframework/abp">GitHub</a>. You can also find the documentation on <a href="https://docs.abp.io/">docs.abp.io</a>.</p>
+<h2>What is Next.js?</h2>
+<p><a href="https://nextjs.org/">Next.js</a> is a React framework. It removes lots of complexity of the react application. It is free and open source. You can find the source code on <a href="https://github.com/vercel/next.js">GitHub</a>.</p>
+<h2>What is Tailwind CSS?</h2>
+<p><a href="https://tailwindcss.com/">Tailwind CSS</a> is a utility-first CSS framework. You can find the source code on <a href="https://github.com/tailwindlabs/tailwindcss">GitHub</a>.</p>
+<h2>Features</h2>
+<ul>
+<li>Authentication</li>
+<li>Authorization</li>
+<li>Role Management</li>
+<li>User Management</li>
+<li>Tenant Management</li>
+<li>Localization</li>
+<li>Theming</li>
+<li>Responsive Design</li>
+</ul>
+<h2>Goals</h2>
+<ul>
+<li>Provide a starter template for ABP Framework with React.</li>
+<li>It should be easy to use and extend.</li>
+<li>It should be easy to add new features.</li>
+<li>It should be easy to customize.</li>
+<li>It should be easy to integrate with ABP Framework.</li>
+<li>It should be upto date with ABP Framework and React.</li>
+</ul>
+<h2>Getting Started</h2>
+<h3>Prerequisites</h3>
+<ul>
+<li>Node.js</li>
+<li>Pnpm</li>
+<li>Turborepo</li>
+</ul>
+<h3>Get the code</h3>
+<pre><code class="language-bash">npx degit antosubash/abpreact my-abp-react-app
+cd my-abp-react-app
+</code></pre>
+<p>This will create a new folder named <code>my-abp-react-app</code> and copy the template files into it. Right now, the template is not published to npm. So, you need to use <code>npx degit</code> to get the code. I will come up with a better solution soon.</p>
+<h3>Install dependencies</h3>
+<pre><code class="language-bash">pnpm install
+</code></pre>
+<blockquote>
+<p>Note: You can use any other package manager instead of pnpm. But I recommend using pnpm.</p>
+</blockquote>
+<h3>Run the app</h3>
+<pre><code class="language-bash">pnpm dev
+</code></pre>
+<blockquote>
+<p>Note: You need to run the ABP Framework backend before running the app.</p>
+</blockquote>
+<h2>Documentation</h2>
+<p>I&#x27;m working on the documentation. It will be available soon.</p>
+<h2>Contributing</h2>
+<p>I&#x27;m open to contributions. Please feel free to open an issue or a pull request.</p>
+<h2>Special Thanks</h2>
+<p>Special thanks to <a href="https://github.com/sajanv88">Sajan</a> for his help. His help was invaluable. I started this project a while ago. But I couldn&#x27;t find time to finish it. He helped me to finish it. Thanks a lot, Sajan.</p>
+<h2>What to expect next?</h2>
+<p>Multi-tenant support is coming soon. I&#x27;m working on it. I will update this post when it&#x27;s ready. I will also update the documentation.</p>
+<h2>Roadmap</h2>
+<p>Most of the features are implemented. We are planning to keep it similar to the ABP Framework Open Source Application. That means all the commercial features will not be implemented.</p>
+<h2>Conclusion</h2>
+<p>I hope you find this template useful. If you have any questions or suggestions, please feel free to open an issue or a pull request. I will try to answer them as soon as possible. Thanks for reading. Happy coding!</p>]]></content:encoded>
+          </item><item>
           <title>Abp Dockerfile</title>
           <link>https://blog.antosubash.com/posts/abp-docker-file</link>
           <guid>https://blog.antosubash.com/posts/abp-docker-file</guid>
