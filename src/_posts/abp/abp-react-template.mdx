@@ -16,6 +16,42 @@ React Starter Template for ABP application with Next.js and Tailwind CSS is read
 
 I have been working on a project that uses ABP Framework, Next.js and Tailwind CSS for a while and I want to create a template that will kickstart my next project easily. Since ABP doesn't have React Template yet. I thought it would be useful for others as well. So, I decided to share it with you. I hope you find it useful.
 
+## Getting Started
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/en/)
+- [pnpm](https://pnpm.js.org/en/installation)
+- [ABP Framework](https://abp.io/)
+- [.Net 7](https://dotnet.microsoft.com/download/dotnet/7.0)
+
+### Installing Template
+
+Install the ABP React .Net Template
+
+```bash
+dotnet new install Anto.Abp.React.Template
+```
+
+> Note: This only creates React Application. You need to create an ABP application separately. You can find the documentation [here](https://docs.abp.io/en/abp/latest/Getting-Started).
+
+### Creating a new project
+
+Create a new project using the template
+
+```bash
+dotnet new abp-react -o MyProjectName
+```
+
+### Running the project
+
+```bash
+cd MyProjectName
+pnpm install
+pnpm dev
+```
+> Note: You can use any other package manager instead of pnpm. But I recommend using pnpm. It's fast and reliable. Make sure you have ABP application is running before running the app.
+
 ## Best Use Case
 
 The best use case is to create customer facing applications. You can use it to create a dashboard or a portal. You can also use it to create a public website. The template is not limited to these use cases. You can use it to create any kind of application. It supports SSR, CSR and static pages. 
@@ -80,38 +116,6 @@ The main focus is the customization. you should be able to bring your own Design
 
 Special thanks to [Sajan](https://github.com/sajanv88) for his help. His help was invaluable. I started this project a while ago. But I couldn't find time to finish it. He helped me to finish it. Thanks a lot, Sajan.
 
-## Getting Started
-
-### Prerequisites
-
--   Node.js
--   Pnpm
--   Turborepo
-
-### Get the code
-
-```bash
-npx degit antosubash/abpreact my-abp-react-app
-cd my-abp-react-app
-```
-
-This will create a new folder named `my-abp-react-app` and copy the template files into it. Right now, the template is not published to npm. So, you need to use `npx degit` to get the code. I will come up with a better solution soon.
-
-### Install dependencies
-
-```bash
-pnpm install
-```
-> Note: You can use any other package manager instead of pnpm. But I recommend using pnpm.
-
-### Run the app
-
-```bash
-pnpm dev
-```
-
-> Note: You need to run the ABP Framework backend before running the app.
-
 ## Documentation
 
 I'm working on the documentation. It will be available soon.
@@ -119,8 +123,6 @@ I'm working on the documentation. It will be available soon.
 ## Contributing
 
 I'm open to contributions. Please feel free to open an issue or a pull request.
-
-
 
 ## What to expect next?
 
