@@ -1,0 +1,67 @@
+---
+title: "ABP no-layer module template"
+excerpt: "In this article, you will learn how to create a no-layer module template for abp application."
+date: "2023-05-21T17:28:49.979Z"
+videoId: 
+tags: [ abp, module, no-layer, template ]
+---
+
+## Table of contents
+
+## Introduction
+
+In this article, you will learn how to create a no-layer module template for abp application.
+
+## Why create a no-layer module template?
+
+In the abp framework, when you create a module, by default, it will create a layer module. But in some cases, you may not need to create a module without DDD. For example, you want to create a module that only contains a controller and a service. At this time, you can create a no-layer module.
+
+I create lots of ABP application and modules for my work. I found that I often don't use all the features of the template and I have to delete some files and projects. So I started creating project with no-layer template. I found that it is very convenient to use. but If I want to create a no-layer module, I have to create it manually. So I created a no-layer module template. 
+
+> Note: The no-layer module is not a recommended module type. It is recommended to use a layer module provided by the abp framework. This is just a experiment. If you have any questions, please submit an issue.
+
+## Primary Use Cases
+
+Right now, the no-layer module template is only used for creating simple API's. If you have a module which only contains few api endpoints, you can use this template. the current focus is to support only the the no-layer template. but you can also use it in other cases if you want. because it is a just a normal ABP module.
+
+## Create a no-layer module template
+
+### Install the template
+
+```bash
+dotnet new -i Anto.Abp.Module.Template
+```
+
+### Create a no-layer module
+
+```bash
+dotnet new abp-module -n MyModuleName
+```
+
+The above command will create a no-layer module named `MyModuleName`. make sure you create in the `modules` folder. If you want to create a no-layer module in another folder.
+
+## Structure of the no-layer module
+
+The main focus is simplicity. All the projects in the DDD layers are removed and replaced with folders in the single project. you can keep the things you use and delete the things you don't use.
+
+## Future plans
+
+- Remove AutoMapper
+- Remove Localization
+- Add plopjs generator to generate API endpoints
+
+Repo: https://github.com/antosubash/abp-module-template
+
+## Conclusion
+
+This is just a experiment. I'm not using this in any production application. I started this because I felt like I was doing too many premature optimizations when I was creating a module. After creating few modules with `abp add-module` command, your solution will be filled with lots of projects and files and test projects. It increases build time and VS starts to lag. I'm hoping this will solve that problem. But I'm not sure about that. I'm still testing this. maybe I will use this in my next project. If you have any questions, please submit an issue.
+
+
+
+
+
+
+
+
+
+
