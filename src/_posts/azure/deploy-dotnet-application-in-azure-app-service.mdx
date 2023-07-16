@@ -3,7 +3,7 @@ title: "Deploy .Net App to Azure App Service using GitHub Actions"
 excerpt: "How to deploy a .Net app to Azure App Service using GitHub Actions"
 date: "2023-07-12"
 videoId: 
-tags: [ "Azure", "dotnet", "github", "github-actions" ]
+tags: [ "Azure", "dotnet", "github", "github-actions", "azure-app-service" ]
 ---
 ## Table of contents
 
@@ -103,13 +103,16 @@ dotnet new gitignore
 
 ### Create a GitHub Action Workflow
 
-Create a GitHub Action workflow using the following command.
+We will create a GitHub Action workflow to build, test, publish and deploy the .Net app to Azure App Service. Create a GitHub Action workflow using the following command.
+
+#### Create a github workflow file
 
 ```bash
-dotnet new workflow
+mkdir -p .github/workflows
+new-item -path .github/workflows -name dotnet.yml -itemtype file
 ```
 
-### Update the GitHub Action Workflow
+#### Update the GitHub Action Workflow
 
 Update the GitHub Action workflow with the following content.
 
