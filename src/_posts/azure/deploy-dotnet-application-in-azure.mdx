@@ -1,0 +1,160 @@
+---
+title: "Deploy .Net App to Azure App Service using GitHub Actions"
+excerpt: "How to deploy a .Net app to Azure App Service using GitHub Actions"
+date: "2023-07-12"
+videoId: 
+tags: [ "Azure", "dotnet", "github", "github-actions" ]
+---
+## Table of contents
+
+## Introduction
+
+In this post, we will see how to deploy a .Net app to Azure App Service using GitHub Actions.
+
+## Prerequisites
+
+* GitHub Account
+* Azure Account
+
+## Create a GitHub Repository
+
+### Install GitHub CLI
+
+Install GitHub CLI from [here](https://cli.github.com/).
+
+### Create a GitHub Repository
+
+Create a GitHub repository using the following command.
+
+```bash
+gh repo create <repo-name> --public
+```
+
+### Clone the GitHub Repository
+
+Clone the GitHub repository using the following command.
+
+```bash
+gh repo clone <repo-name>
+```
+
+## Create a .Net App
+
+### Install .Net SDK
+
+Install .Net SDK from [here](https://dotnet.microsoft.com/download).
+
+### Create a .Net App
+
+Create a .Net app using the following command.
+
+```bash
+dotnet new webapp -o <app-name>
+```
+
+### Run the .Net App
+
+Run the .Net app using the following command.
+
+```bash
+dotnet run
+```
+For now we will only use the empty application.
+
+## Create an Azure App Service
+
+### Install Azure CLI
+
+Install Azure CLI from [here](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli).
+
+### Login to Azure
+
+Login to Azure using the following command.
+
+```bash
+az login --use-device-code
+```
+
+### Create an Azure App Service
+
+Create an Azure App Service using the following command.
+
+```bash
+az webapp up --name <app-name> --sku F1
+```
+
+### Get the Azure App Service Publish Profile
+
+Get the Azure App Service publish profile using the following command.
+
+```bash
+az webapp deployment list-publishing-profiles --name <app-name> --output json --query "[?contains(publishMethod, 'FTP')].[publishUrl,userName,userPWD]" --output tsv
+```
+
+## Create a GitHub Action
+
+### Create a GitHub Action
+
+Create a GitHub Action using the following command.
+
+```bash
+dotnet new gitignore
+```
+
+### Create a GitHub Action Workflow
+
+Create a GitHub Action workflow using the following command.
+
+```bash
+dotnet new workflow
+```
+
+### Update the GitHub Action Workflow
+
+Update the GitHub Action workflow with the following content.
+
+```yaml
+name: .NET Core App CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+    
+        steps:
+        - uses: actions/checkout@v2
+    
+        - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+            dotnet-version: 5.0.x
+    
+        - name: Build with dotnet
+        run: dotnet build --configuration Release
+    
+        - name: Test with dotnet
+        run: dotnet test --no-restore --verbosity normal
+    
+        - name: Publish with dotnet
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+
+        - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+        - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+            app-name: <app-name>
+            slot-name: production
+            publish-profile: ${{ secrets.AzureAppService_PublishProfile_<app-name> }}
+            package: ${{env.DOTNET_ROOT}}/myapp
+    ```
+    
+
