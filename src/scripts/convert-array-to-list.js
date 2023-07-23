@@ -32,8 +32,9 @@ for (let i = 0; i < fileNames.length; i++) {
         // convert the tags array to a list of tags in the frontmatter
         const tagsLine = lines[tagsIndex];
         const tags = tagsLine.split(':')[1].trim();
-        // remove the [ and ] from the tags array
-        const tagsList = tags.slice(1, -1).split(',').map(tag => tag.trim());
+        // remove tag quotes from the tags
+        const tagsList = tags.slice(1, -1).split(',').map(tag => tag.trim().slice(1, -1));
+
         const tagsListString = tagsList.map(tag => `- ${tag}`).join('\n');
         lines[tagsIndex] = `tags:\n${tagsListString}`;
         const newFileContents = lines.join('\n');
