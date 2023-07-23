@@ -33,7 +33,16 @@ for (let i = 0; i < fileNames.length; i++) {
         const tagsLine = lines[tagsIndex];
         const tags = tagsLine.split(':')[1].trim();
         // remove tag quotes from the tags
-        const tagsList = tags.slice(1, -1).split(',').map(tag => tag.trim().slice(1, -1));
+        const tagsList = tags.slice(1, -1).split(',').map(tag => tag.trim());
+
+        // create the new tags list string without quotes
+
+        for (let j = 0; j < tagsList.length; j++) {
+            const tag = tagsList[j];
+            if (tag.startsWith('"') && tag.endsWith('"'){
+                tagsList[j] = tag.slice(1, -1);
+            }
+        }
 
         const tagsListString = tagsList.map(tag => `  - ${tag}`).join('\n');
         lines[tagsIndex] = `tags:\n${tagsListString}`;
