@@ -35,7 +35,7 @@ for (let i = 0; i < fileNames.length; i++) {
         // remove tag quotes from the tags
         const tagsList = tags.slice(1, -1).split(',').map(tag => tag.trim().slice(1, -1));
 
-        const tagsListString = tagsList.map(tag => `- ${tag}`).join('\n');
+        const tagsListString = tagsList.map(tag => `  - ${tag}`).join('\n');
         lines[tagsIndex] = `tags:\n${tagsListString}`;
         const newFileContents = lines.join('\n');
         fs.writeFileSync(file, newFileContents);
