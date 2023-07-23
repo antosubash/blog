@@ -29,10 +29,18 @@
       "@blog/types/*": [
         "types/*"
       ],
-      "@lib/*" :[
+      "@lib/*": [
         "lib/*"
+      ],
+      "contentlayer/generated": [
+        "./.contentlayer/generated"
       ]
     },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "exclude": [
     "node_modules"
@@ -40,6 +48,8 @@
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx",
+    ".contentlayer/generated",
+    ".next/types/**/*.ts"
   ]
 }
