@@ -34,6 +34,7 @@
     "contentlayer": "^0.3.4",
     "date-fns": "^2.30.0",
     "framer-motion": "^10.13.0",
+    "github-slugger": "^2.0.0",
     "gray-matter": "4.0.3",
     "highlight.js": "^11.8.0",
     "image-size": "^1.0.2",
@@ -49,6 +50,7 @@
     "rehype-infer-reading-time-meta": "^1.1.0",
     "rehype-infer-title-meta": "^1.1.0",
     "rehype-katex": "^6.0.2",
+    "rehype-pretty-code": "^0.10.0",
     "rehype-raw": "^6.1.1",
     "rehype-slug": "^5.1.0",
     "remark": "14.0.3",
@@ -59,7 +61,8 @@
     "remark-mdx-code-meta": "^2.0.0",
     "remark-toc": "^8.0.1",
     "remixicon": "^2.5.0",
-    "typescript": "^4.9.4"
+    "typescript": "^4.9.4",
+    "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
     "@types/canvas-multiline-text": "^1.0.0",

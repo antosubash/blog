@@ -5,22 +5,6 @@ import Layout from '@components/layout'
 import Container from '@components/container'
 import PostItem from '@components/post-item'
 
-function PostCard(post: Post) {
-  return (
-    <div className="mb-8">
-      <h2 className="mb-1 text-xl">
-        <Link href={post.slug} className="text-blue-700 hover:text-blue-900 dark:text-blue-400">
-          {post.title}
-        </Link>
-      </h2>
-      <time dateTime={post.date} className="mb-2 block text-xs text-gray-600">
-        {format(parseISO(post.date), 'LLLL d, yyyy')}
-      </time>
-      <div className="text-sm [&>*]:mb-3 [&>*:last-child]:mb-0" dangerouslySetInnerHTML={{ __html: post.excerpt }} />
-    </div>
-  )
-}
-
 export default function Home() {
   const posts = allPosts.sort((a, b) => compareDesc(new Date(a.date), new Date(b.date))).slice(0, 5)
 
@@ -35,7 +19,7 @@ export default function Home() {
             </div>
             <ul>
                 {posts.map((post, index) => {
-                  const { slug, date, title, excerpt, tags } = post;
+                  const { url, date, title, excerpt, tags } = post;
                   return (
                     <li
                       key={index}
@@ -43,9 +27,9 @@ export default function Home() {
                       className="cursor-pointer"
                     >
                       <PostItem
-                        key={slug}
-                        data-key={slug}
-                        slug={slug}
+                        key={url}
+                        data-key={url}
+                        slug={url}
                         date={date}
                         title={title}
                         summary={excerpt}

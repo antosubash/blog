@@ -1,6 +1,8 @@
 import React from "react";
 import Kofi from "./kofi";
-import Markdown from "./markdown";
+import { useMDXComponent } from 'next-contentlayer/hooks'
+import Image from "next/image"
+import { Pre } from "./pre";
 
 type Props = {
   content: string;
@@ -8,7 +10,15 @@ type Props = {
   title: string;
 };
 
+// Define your custom MDX components.
+
+const components = {
+  Image,
+  Pre
+}
+
 const PostBody = ({ content, videoId, title }: Props) => {
+  const MDXContent = useMDXComponent(content)
   return (
     <div className="xl:pb-0 xl:col-span-3 xl:row-span-2">
       {videoId ? (
@@ -23,7 +33,10 @@ const PostBody = ({ content, videoId, title }: Props) => {
       ) : (
         ""
       )}
-      <Markdown content={content} />
+      {/* <Markdown content={content} /> */}
+      <div className="prose dark:prose-dark max-w-none">
+         <MDXContent components={components} />
+      </div>
       <div className="pt-8">
         <Kofi />
       </div>
