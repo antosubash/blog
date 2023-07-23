@@ -9,8 +9,9 @@ export const Post = defineDocumentType(() => ({
     excerpt: { type: "string", required: true },
     tags : { type: "list" , of : { type : "string" } },
     videoId: { type: "string" },
-    part: { type: "string" },
+    part: { type: "number" },
     series: { type: "string" },
+    
   },
   computedFields: {
     url: {
