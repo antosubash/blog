@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import Head from "next/head";
-
+import "../styles/index.css";
 export const metadata: Metadata = {
   title: "Home",
   description: "Welcome to Next.js",

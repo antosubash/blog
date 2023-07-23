@@ -11,12 +11,15 @@ export const Post = defineDocumentType(() => ({
     videoId: { type: "string" },
     part: { type: "number" },
     series: { type: "string" },
-    
+    isDraft: { type: "boolean" },
   },
   computedFields: {
-    url: {
+    slug: {
       type: "string",
-      resolve: (post: { _raw: { flattenedPath: any; }; }) => `/posts/${post._raw.flattenedPath}`,
+      resolve: (post: any) => {
+        const slug = post._raw.sourceFileName.replace(/\.mdx$/, "");
+        return `/posts/${slug}`;
+      },
     },
   },
 }));

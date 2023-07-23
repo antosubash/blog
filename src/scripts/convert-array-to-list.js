@@ -39,7 +39,7 @@ for (let i = 0; i < fileNames.length; i++) {
 
         for (let j = 0; j < tagsList.length; j++) {
             const tag = tagsList[j];
-            if (tag.startsWith('"') && tag.endsWith('"'){
+            if (tag.startsWith('"') && tag.endsWith('"')) {
                 tagsList[j] = tag.slice(1, -1);
             }
         }

@@ -1,4 +1,5 @@
-import { useRouter } from "next/router";
+'use client'
+import { useRouter } from "next/navigation";
 
 const Tag = ({ text, count }: any) => {
   var router = useRouter();
