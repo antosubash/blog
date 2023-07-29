@@ -1,5 +1,6 @@
-import { allPosts } from "contentlayer/generated";
+import { Post, allPosts } from "contentlayer/generated";
 import { compareDesc } from "date-fns";
+import { TagItem } from "models/TagItem";
 
 export function getPosts() {
   const posts = allPosts.sort((a, b) => {
@@ -39,4 +40,43 @@ export function getSeries(title: string, current: string) {
         };
       }),
   };
+}
+
+export function getSeriesList() {
+  const series = new Set<Post>();
+  allPosts.forEach((post) => {
+    if (post.series != null && post.isDraft !== true && post.part === 0) {
+      series.add(post);
+    }
+  });
+  return Array.from(series);
+}
+
+export function getTags(): TagItem[] {
+  const tags = new Set<string>();
+  allPosts.forEach((post) => {
+    post?.tags?.forEach((tag) => {
+      tags.add(tag);
+    });
+  });
+  const tagItems = Array.from(tags).map((tag) => {
+    return {
+      name: tag,
+      count: getPostsByTag(tag).length,
+    };
+  });
+  return tagItems.sort((a, b) => b.count - a.count);
+}
+
+export function getPostsByTag(tag: string) {
+  return allPosts.filter((post) => post.tags?.includes(tag));
+}
+
+export function getRelatedPosts(post: Post) {
+  return allPosts.filter((p) => {
+    return (
+      p.slug !== post.slug &&
+      p.tags?.some((t) => post.tags?.includes(t))
+    );
+  });
 }

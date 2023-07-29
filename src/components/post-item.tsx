@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React from "react";
-import { format, parseISO } from 'date-fns'
+import { format, parseISO } from "date-fns";
 import Tag from "./tag";
 
 interface PostItemProps {
@@ -28,7 +28,9 @@ const PostItem = ({
         <div className="space-y-2 xl:grid xl:grid-cols-4 xl:space-y-0 xl:items-baseline">
           <div>
             <div className="text-base font-medium leading-6 ">
-              <time dateTime={date}>{format(parseISO(date), 'LLLL d, yyyy')}</time>
+              <time dateTime={date}>
+                {format(parseISO(date), "LLLL d, yyyy")}
+              </time>
             </div>
             {series && (
               <div className="pt-4">

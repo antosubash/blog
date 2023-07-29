@@ -1,18 +1,14 @@
-'use client'
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const Tag = ({ text, count }: any) => {
-  var router = useRouter();
   return (
-    <div
-      onClick={(e) => {
-        e.preventDefault();
-        router.push(`/tags/${text}`);
-      }}
+    <Link
+      href={`/tags/${text}`}
+      passHref={true}
       className="text-sm mr-3 font-bold uppercase px-3 py-1 bg-gray-200 dark:bg-gray-600 rounded-full cursor-pointer"
     >
       {text} {count ? `(${count})` : null}
-    </div>
+    </Link>
   );
 };
 
