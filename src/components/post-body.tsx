@@ -35,8 +35,7 @@ const PostBody = ({ content, videoId, title }: Props) => {
       ) : (
         ""
       )}
-      {/* <Markdown content={content} /> */}
-      <div className="prose dark:prose-dark max-w-none">
+      <div className="prose dark:prose-dark max-w-none text-xl">
          <MDXContent components={components} />
       </div>
       <div className="pt-8">

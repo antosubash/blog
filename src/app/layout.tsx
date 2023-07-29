@@ -2,7 +2,7 @@
 import { Metadata } from "next";
 import Head from "next/head";
 import "../styles/index.css";
-import "highlight.js/styles/base16/dracula.css";
+import "highlight.js/styles/atom-one-dark.css";
 import ThemeSwitch from "@components/theme-switch";
 import Link from "next/link";
 import PageTitle from "@components/page-title";
@@ -46,7 +46,7 @@ export default function RootLayout({
           }}
         />
       </Head>
-      <body className="bg-gradient-to-l from-gray-100 via-gray-300 to-gray-100 text-gray-800 dark:text-gray-200  dark:from-gray-800 dark:via-gray-900 dark:to-gray-800 ">
+      <body className="bg-gradient-to-l from-gray-100 via-gray-300 to-gray-100 text-gray-800 dark:text-gray-200 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800">
         <ThemeProvider attribute="class">
           <div className="flex flex-col justify-between h-screen max-w-5xl px-4 mx-auto sm:px-6 xl:max-w-7xl xl:px-0">
             <header className="flex items-center justify-between py-10">

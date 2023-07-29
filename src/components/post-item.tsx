@@ -24,7 +24,7 @@ const PostItem = ({
 }: PostItemProps) => {
   return (
     <Link href={`${slug}`}>
-      <div className="py-4 my-4 px-4 rounded-2xl border drop-shadow-lg border-gray-100 bg-white dark:border-gray-800 dark:bg-gray-950">
+      <div className="py-4 my-4 px-4 rounded-2xl border drop-shadow-lg border-gray-100 bg-white dark:border-gray-800 dark:bg-gray-950 hover:scale-110 transition-all">
         <div className="space-y-2 xl:grid xl:grid-cols-4 xl:space-y-0 xl:items-baseline">
           <div>
             <div className="text-base font-medium leading-6 ">
