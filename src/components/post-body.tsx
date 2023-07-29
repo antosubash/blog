@@ -3,6 +3,7 @@ import Kofi from "./kofi";
 import { useMDXComponent } from 'next-contentlayer/hooks'
 import Image from "next/image"
 import { Pre } from "./pre";
+import { Code } from "./code";
 
 type Props = {
   content: string;
@@ -14,7 +15,8 @@ type Props = {
 
 const components = {
   Image,
-  Pre
+  Pre,
+  Code,
 }
 
 const PostBody = ({ content, videoId, title }: Props) => {

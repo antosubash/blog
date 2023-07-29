@@ -1,10 +1,11 @@
 import { defineDocumentType, makeSource } from "contentlayer/source-files";
 import GithubSlugger from "github-slugger";
 import remarkGfm from "remark-gfm";
-import rehypePrettyCode from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
-import { rehypePrettyCodeClasses, rehypePrettyCodeOptions } from "@lib/rehyePrettyCode";
+import { rehypePrettyCodeClasses } from "@lib/rehyePrettyCode";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import highlight from "rehype-highlight";
+import readingTime from "reading-time";
 const HEADING_LINK_ANCHOR = `before:content-['#'] before:absolute before:-ml-[1em] before:text-rose-100/0 hover:before:text-rose-100/50 pl-[1em] -ml-[1em]`;
 export const Post = defineDocumentType(() => ({
   name: "Post",
@@ -20,28 +21,12 @@ export const Post = defineDocumentType(() => ({
     isDraft: { type: "boolean" },
   },
   contentType: "mdx",
-  // mdx: {
-  //   esbuildOptions(options: any) {
-  //     options.target = "esnext";
-  //     return options;
-  //   },
-  //   remarkPlugins: [[remarkGfm]],
-  //   rehypePlugins: [
-  //     [rehypeSlug],
-  //     [rehypePrettyCode, rehypePrettyCodeOptions],
-  //     [rehypePrettyCodeClasses],
-  //     [
-  //       rehypeAutolinkHeadings,
-  //       {
-  //         behavior: "wrap",
-  //         properties: {
-  //           className: [HEADING_LINK_ANCHOR],
-  //         },
-  //       },
-  //     ],
-  //   ],
-  // },
+
   computedFields: {
+    readingTime: {
+      type: "json",
+      resolve: (doc) => readingTime(doc.body.raw),
+    },
     slug: {
       type: "string",
       resolve: (post: any) => {
@@ -78,4 +63,28 @@ export const Post = defineDocumentType(() => ({
   },
 }));
 
-export default makeSource({ contentDirPath: "_posts", documentTypes: [Post] });
+export default makeSource({
+  contentDirPath: "_posts",
+  documentTypes: [Post],
+  mdx: {
+    esbuildOptions(options: any) {
+      options.target = "esnext";
+      return options;
+    },
+    remarkPlugins: [[remarkGfm]],
+    rehypePlugins: [
+      [highlight],
+      [rehypeSlug],
+      [rehypePrettyCodeClasses],
+      [
+        rehypeAutolinkHeadings,
+        {
+          behavior: "wrap",
+          properties: {
+            className: [HEADING_LINK_ANCHOR],
+          },
+        },
+      ],
+    ],
+  },
+});

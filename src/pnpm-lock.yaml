@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 overrides:
   '@opentelemetry/api': 1.4.1
   '@opentelemetry/core': 1.13.0
@@ -83,6 +79,9 @@ dependencies:
   react-dom:
     specifier: ^18.2.0
     version: 18.2.0(react@18.2.0)
+  reading-time:
+    specifier: ^1.5.0
+    version: 1.5.0
   rehype-autolink-headings:
     specifier: ^6.1.1
     version: 6.1.1
@@ -4946,6 +4945,10 @@ packages:
     dependencies:
       picomatch: 2.3.1
 
+  /reading-time@1.5.0:
+    resolution: {integrity: sha512-onYyVhBNr4CmAxFsKS7bz+uTLRakypIe4R+5A824vBSkQy/hB3fZepoVEf8OVAxzLvK+H/jm9TzpI3ETSm64Kg==}
+    dev: false
+
   /rechoir@0.8.0:
     resolution: {integrity: sha512-/vxpCXddiX8NGfGO/mTafwjq4aFa/71pvamip0++IQk3zG8cbCj0fifNPrjjF1XMXUne91jL9OoxmdykoEtifQ==}
     engines: {node: '>= 10.13.0'}
@@ -6031,3 +6034,7 @@ packages:
   /zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
     dev: false
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false

@@ -39,7 +39,7 @@ const PostLayout = ({ params }: { params: { slug: string } }) => {
                 title={post.title}
               />
               {/* <RelatedPosts posts={relatedPosts} /> */}
-              <Utterances slug={post.slug} />
+              {/* <Utterances slug={post.slug} /> */}
             </>
         </Container>
     </Layout>

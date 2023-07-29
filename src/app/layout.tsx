@@ -2,7 +2,7 @@
 import { Metadata } from "next";
 import Head from "next/head";
 import "../styles/index.css";
-// import "../node_modules/highlight.js/styles/atom-one-dark.css";
+import "highlight.js/styles/base16/dracula.css";
 import ThemeSwitch from "@components/theme-switch";
 import Link from "next/link";
 import PageTitle from "@components/page-title";
