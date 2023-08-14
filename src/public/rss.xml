@@ -6,6 +6,248 @@
             <description>Anto Subash's Blog</description>
             <language>en</language>
             <item>
+          <title>Azure Deployment for .Net</title>
+          <link>https://blog.antosubash.com/posts/azure-deployment-for-dotnet</link>
+          <guid>https://blog.antosubash.com/posts/azure-deployment-for-dotnet</guid>
+          <pubDate>Wed, 12 Jul 2023 11:53:48 GMT</pubDate>
+          <description>This is a collection of Azure Deployment for articles for .Net</description>
+          <content:encoded><![CDATA[<h2>Table of contents</h2>
+<h2>Introduction</h2>
+<p>Azure Deployment for .Net is a collection of articles that will help you to deploy your .Net application to Azure. I usually self-host most of my apps in Hetzner Cloud, but I also have some apps running in Azure. I have been using Azure for a long time but there is no collection of articles that I can refer to when I need to deploy a new app. So I decided to create this collection of articles to help me and others to deploy .Net apps to Azure.</p>
+<h2>Why?</h2>
+<p>Most of the time, I deploy my .Net apps to Hetzner Cloud. I have written a collection of articles on how to deploy .Net apps to Hetzner Cloud. But When I do consulting work, I deploy the apps to Azure because most of the clients are using Azure. I have been using Azure for a long time but there is no collection of articles that I can refer to when I need to deploy a new app. So I decided to create this collection of articles to help me and others to deploy .Net apps to Azure.</p>
+<h2>Prerequisites</h2>
+<ul>
+<li><a href="https://azure.microsoft.com/en-us/free/">Azure Account</a></li>
+<li><a href="https://docs.microsoft.com/en-us/cli/azure/install-azure-cli">Azure CLI</a></li>
+<li><a href="https://github.com">GitHub Account</a></li>
+<li><a href="https://www.terraform.io/downloads.html">Terraform</a></li>
+<li><a href="https://www.docker.com/products/docker-desktop">Docker</a></li>
+</ul>
+<h2>Azure Deployment for .Net</h2>
+<p>There are many ways to deploy your .Net application to Azure. I want to write about few of them that I have used in the past.</p>
+<ul>
+<li><a href="https://docs.microsoft.com/en-us/azure/app-service/overview">Azure App Service</a></li>
+<li><a href="https://docs.microsoft.com/en-us/azure/aks/">Azure Kubernetes Service</a></li>
+</ul>
+<h2>Azure App Service</h2>
+<p>Azure App Service is a fully managed web hosting service for building web apps, mobile back ends, and RESTful APIs. It is a platform as a service (PaaS) offering of Microsoft Azure. It is a highly scalable service that allows developers to deploy their applications to Azure without worrying about the underlying infrastructure. It supports many languages and frameworks, including .NET, Node.js, Python, Java, PHP, Ruby, and Go. It is a great service for hosting your .Net application.</p>
+<p>you can find the full article <a href="/posts/deploy-dotnet-application-in-azure-app-service">here</a></p>
+<h2>Azure Kubernetes Service</h2>
+<p>Azure Kubernetes Service (AKS) is a managed container orchestration service, based on the open source Kubernetes system, which is available on the Microsoft Azure public cloud. Azure Kubernetes Service is used to deploy and manage containerized applications more easily and efficiently. Azure Kubernetes Service offers serverless Kubernetes, an integrated continuous integration and continuous delivery (CI/CD) experience, and enterprise-grade security and governance. Unite your development and operations teams on a single platform to rapidly build, deliver, and scale applications with confidence.</p>
+<p>you can find the full article <a href="/posts/deploy-dotnet-application-in-azure-kubernetes-service">here</a></p>
+<h2>Other Azure Deployment</h2>
+<p>There are many other ways to deploy your .Net application to Azure and I will be writing about them in the future. I will be adding the links to the articles here.</p>
+<h2>Conclusion</h2>
+<p>I hope this collection of articles will help you to deploy your .Net application to Azure. If you have any questions or feedback, please feel free to comment below and let me know.</p>]]></content:encoded>
+          </item><item>
+          <title>Deploy .Net App to Azure App Service using GitHub Actions</title>
+          <link>https://blog.antosubash.com/posts/deploy-dotnet-application-in-azure-app-service</link>
+          <guid>https://blog.antosubash.com/posts/deploy-dotnet-application-in-azure-app-service</guid>
+          <pubDate>Wed, 12 Jul 2023 00:00:00 GMT</pubDate>
+          <description>How to deploy a .Net app to Azure App Service using GitHub Actions</description>
+          <content:encoded><![CDATA[<h2>Table of contents</h2>
+<h2>Introduction</h2>
+<p>In this post, we will see how to deploy a .Net app to Azure App Service using GitHub Actions.</p>
+<h2>Prerequisites</h2>
+<ul>
+<li>GitHub Account</li>
+<li>Azure Account</li>
+</ul>
+<h2>Create a GitHub Repository</h2>
+<h3>Install GitHub CLI</h3>
+<p>Install GitHub CLI from <a href="https://cli.github.com/">here</a>.</p>
+<h3>Create a GitHub Repository</h3>
+<p>Create a GitHub repository using the following command.</p>
+<pre><code class="language-bash">gh repo create &lt;repo-name&gt; --public
+</code></pre>
+<h3>Clone the GitHub Repository</h3>
+<p>Clone the GitHub repository using the following command.</p>
+<pre><code class="language-bash">gh repo clone &lt;repo-name&gt;
+</code></pre>
+<h2>Create a .Net App</h2>
+<h3>Install .Net SDK</h3>
+<p>Install .Net SDK from <a href="https://dotnet.microsoft.com/download">here</a>.</p>
+<h3>Create a .Net App</h3>
+<p>Create a .Net app using the following command.</p>
+<pre><code class="language-bash">dotnet new webapp -o &lt;app-name&gt;
+</code></pre>
+<h3>Run the .Net App</h3>
+<p>Run the .Net app using the following command.</p>
+<pre><code class="language-bash">dotnet run
+</code></pre>
+<p>For now we will only use the empty application.</p>
+<h2>Create an Azure App Service</h2>
+<h3>Install Azure CLI</h3>
+<p>Install Azure CLI from <a href="https://docs.microsoft.com/en-us/cli/azure/install-azure-cli">here</a>.</p>
+<h3>Login to Azure</h3>
+<p>Login to Azure using the following command.</p>
+<pre><code class="language-bash">az login --use-device-code
+</code></pre>
+<h3>Create an Azure App Service</h3>
+<p>Create an Azure App Service using the following command.</p>
+<pre><code class="language-bash">az webapp up --name &lt;app-name&gt; --sku F1
+</code></pre>
+<h3>Get the Azure App Service Publish Profile</h3>
+<p>Get the Azure App Service publish profile using the following command.</p>
+<pre><code class="language-bash">az webapp deployment list-publishing-profiles --name &lt;app-name&gt; --output json --query &quot;[?contains(publishMethod, &#x27;FTP&#x27;)].[publishUrl,userName,userPWD]&quot; --output tsv
+</code></pre>
+<h2>Create a GitHub Action</h2>
+<h3>Create a GitHub Action</h3>
+<p>Create a GitHub Action using the following command.</p>
+<pre><code class="language-bash">dotnet new gitignore
+</code></pre>
+<h3>Create a GitHub Action Workflow</h3>
+<p>We will create a GitHub Action workflow to build, test, publish and deploy the .Net app to Azure App Service. Create a GitHub Action workflow using the following command.</p>
+<h4>Create a github workflow file</h4>
+<pre><code class="language-bash">mkdir -p .github/workflows
+new-item -path .github/workflows -name dotnet.yml -itemtype file
+</code></pre>
+<h4>Update the GitHub Action Workflow</h4>
+<p>Update the GitHub Action workflow with the following content.</p>
+<pre><code class="language-yaml">name: .NET Core App CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+    
+        steps:
+        - uses: actions/checkout@v2
+    
+        - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+            dotnet-version: 5.0.x
+    
+        - name: Build with dotnet
+        run: dotnet build --configuration Release
+    
+        - name: Test with dotnet
+        run: dotnet test --no-restore --verbosity normal
+    
+        - name: Publish with dotnet
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+
+        - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+        - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+            app-name: &lt;app-name&gt;
+            slot-name: production
+            publish-profile: ${{ secrets.AzureAppService_PublishProfile_&lt;app-name&gt; }}
+            package: ${{env.DOTNET_ROOT}}/myapp
+</code></pre>]]></content:encoded>
+          </item><item>
+          <title>ABP no-layer module template</title>
+          <link>https://blog.antosubash.com/posts/abp-no-layer-module-template</link>
+          <guid>https://blog.antosubash.com/posts/abp-no-layer-module-template</guid>
+          <pubDate>Sun, 21 May 2023 17:28:49 GMT</pubDate>
+          <description>In this article, you will learn how to create a no-layer module template for abp application.</description>
+          <content:encoded><![CDATA[<h2>Table of contents</h2>
+<h2>Introduction</h2>
+<p>In this article, you will learn how to create a no-layer module template for abp application.</p>
+<h2>Why create a no-layer module template?</h2>
+<p>In the abp framework, when you create a module, by default, it will create a layer module. But in some cases, you may not need to create a module without DDD. For example, you want to create a module that only contains a controller and a service. At this time, you can create a no-layer module.</p>
+<p>I create lots of ABP application and modules for my work. I found that I often don&#x27;t use all the features of the template and I have to delete some files and projects. So I started creating project with no-layer template. I found that it is very convenient to use. but If I want to create a no-layer module, I have to create it manually. So I created a no-layer module template.</p>
+<blockquote>
+<p>Note: The no-layer module is not a recommended module type. It is recommended to use a layer module provided by the abp framework. This is just a experiment.</p>
+</blockquote>
+<h2>Primary Use Cases</h2>
+<p>Right now, the no-layer module template is only used for creating simple API&#x27;s. If you have a module which only contains few api endpoints, you can use this template. the current focus is to support only the the no-layer template. but you can also use it in other cases if you want. because it is a just a normal ABP module.</p>
+<h2>Create a no-layer module template</h2>
+<h3>Install the template</h3>
+<pre><code class="language-bash">dotnet new -i Anto.Abp.Module.Template
+</code></pre>
+<h3>Create a no-layer module</h3>
+<pre><code class="language-bash">dotnet new abp-module -n MyModuleName
+</code></pre>
+<p>The above command will create a no-layer module named <code>MyModuleName</code>. make sure you create in the <code>modules</code> folder. If you want to create a no-layer module in another folder.</p>
+<p>This command will only create the module. you have to manually add the module to the application.</p>
+<h2>Structure of the no-layer module</h2>
+<p>The main focus is simplicity. All the projects in the DDD layers are removed and replaced with folders in the single project. you can keep the things you use and delete the things you don&#x27;t use.</p>
+<h2>Future plans</h2>
+<ul>
+<li>Remove AutoMapper</li>
+<li>Remove Localization</li>
+<li>Add plopjs generator to generate API endpoints</li>
+</ul>
+<p>Repo: https://github.com/antosubash/abp-module-template</p>
+<h2>Conclusion</h2>
+<p>This is just a experiment. I&#x27;m not using this in any production application. I started this because I felt like I was doing too many premature optimizations when I was creating a module. After creating few modules with <code>abp add-module</code> command, your solution will be filled with lots of projects and files and test projects. It increases build time and VS starts to lag. I&#x27;m hoping this will solve that problem. But I&#x27;m not sure about that. I&#x27;m still testing this. maybe I will use this in my next project. If you have any questions, please comment below.</p>]]></content:encoded>
+          </item><item>
+          <title>Abp CLI Template</title>
+          <link>https://blog.antosubash.com/posts/abp-cli-template</link>
+          <guid>https://blog.antosubash.com/posts/abp-cli-template</guid>
+          <pubDate>Sat, 20 May 2023 00:00:00 GMT</pubDate>
+          <description>In this post we will see how to create a Cli for your abp application.</description>
+          <content:encoded><![CDATA[<h2>Table of contents</h2>
+<h2>Intro</h2>
+<p>In this post we will see how to create a Cli for your abp application.</p>
+<h2>Why a CLI?</h2>
+<p>The CLI is a great way to automate repetitive tasks. I use it to import large amounts of data into the database, to create new entities, to seed dummy data, etc.</p>
+<h2>Create a new CLI</h2>
+<p>To create a new CLI, you need to install the cli dotnet new template.</p>
+<pre><code class="language-bash">dotnet new install Anto.Cli.Template
+</code></pre>
+<p>Then you can create a new CLI project.</p>
+<pre><code class="language-bash">dotnet new cli-template -o MyProject --api myabpproject.com
+</code></pre>
+<blockquote>
+<p>Note: The --api parameter is the url of your abp project.</p>
+</blockquote>
+<h2>How to use it</h2>
+<p>The CLI is a dotnet core console application. You can run it with the following command.</p>
+<pre><code class="language-bash">dotnet run -- --help
+</code></pre>
+<h2>Features</h2>
+<ul>
+<li>Login</li>
+<li>Logout</li>
+<li>Seed Tenant</li>
+<li>Seed User</li>
+</ul>
+<h2>Future plans</h2>
+<ul>
+<li>Import data from csv</li>
+</ul>
+<h2>Setup</h2>
+<p>Once you have created the cli there are few things you need to do.</p>
+<ul>
+<li>Create a new OpenIdConnect client in your abp project for the cli.</li>
+<li>Update the ClientId and Scope in the <code>AuthService.cs</code> file.</li>
+</ul>
+<h2>Generating HttpClient?</h2>
+<p>The CLI uses the abp REST API to communicate with the abp project. But that means you need to generate the HttpClient before you can use it. To do that, I have used <code>nswag</code> to generate the client. To generate the client, you need to run the following command.</p>
+<pre><code class="language-bash">yarn gen-api
+</code></pre>
+<blockquote>
+<p>Note: You need to have <code>nswag</code> installed globally.#</p>
+</blockquote>
+<p>Check the <code>package.json</code> file for more details.</p>
+<h2>Storing the token</h2>
+<p>The CLI stores the token in the <code>access-token.bin</code> file. If you want to change the location of the file, you can change it in the <code>CliPaths.cs</code> file. the token is not encrypted, keep that in mind.</p>
+<h2>Code generation</h2>
+<p>This cli uses <code>plop</code> to generate code. You can find the templates in the <code>plop-templates</code> folder. You can add your own templates there.</p>
+<p>Right now, there is only 3 templates. you can just run the following command to generate the code.</p>
+<pre><code class="language-bash">yarn plop
+</code></pre>
+<blockquote>
+<p>Note: Make sure you have install npm packages before running the command.</p>
+</blockquote>
+<p>Repo: https://github.com/antosubash/abp-cli-template</p>
+<h2>Conclusion</h2>
+<p>This is a very simple CLI, but it can be very useful. I hope you like it.</p>]]></content:encoded>
+          </item><item>
           <title>ABP React Template</title>
           <link>https://blog.antosubash.com/posts/abp-react-template</link>
           <guid>https://blog.antosubash.com/posts/abp-react-template</guid>
@@ -15,7 +257,45 @@
 <h2>Introduction</h2>
 <p>React Starter Template for ABP application with Next.js and Tailwind CSS is ready to use. You can use this template to start your next project.</p>
 <h2>Why?</h2>
-<p>I have been working on a project that uses ABP Framework and React. I have been using Next.js and Tailwind CSS for a while and I want to create a template use in my new project. I thought it would be useful for others as well. So, I decided to share it with you. I hope you find it useful.</p>
+<p>I have been working on a project that uses ABP Framework, Next.js and Tailwind CSS for a while and I want to create a template that will kickstart my next project easily. Since ABP doesn&#x27;t have React Template yet. I thought it would be useful for others as well. So, I decided to share it with you. I hope you find it useful.</p>
+<h2>What is ABP Framework?</h2>
+<p><a href="https://abp.io/">ABP Framework</a> is a full stack web application framework. It is based on ASP.NET Core. It provides a lot of features out of the box. You can use it to build enterprise applications. It is free and open source. You can find the source code on <a href="https://github.com/abpframework/abp">GitHub</a>. You can also find the documentation on <a href="https://docs.abp.io/">docs.abp.io</a>.</p>
+<h2>What is Next.js?</h2>
+<p><a href="https://nextjs.org/">Next.js</a> is a React framework. It removes lots of complexity of the react application. It is free and open source. You can find the source code on <a href="https://github.com/vercel/next.js">GitHub</a>.</p>
+<h2>What is Tailwind CSS?</h2>
+<p><a href="https://tailwindcss.com/">Tailwind CSS</a> is a utility-first CSS framework. You can find the source code on <a href="https://github.com/tailwindlabs/tailwindcss">GitHub</a>.</p>
+<h2>Getting Started</h2>
+<h3>Prerequisites</h3>
+<ul>
+<li><a href="https://nodejs.org/en/">Node.js</a></li>
+<li><a href="https://pnpm.js.org/en/installation">pnpm</a></li>
+<li><a href="https://abp.io/">ABP Framework</a></li>
+<li><a href="https://dotnet.microsoft.com/download/dotnet/7.0">.Net 7</a></li>
+</ul>
+<h3>Installing Template</h3>
+<p>Install the ABP React .Net Template</p>
+<pre><code class="language-bash">dotnet new install Anto.Abp.React.Template
+</code></pre>
+<blockquote>
+<p>Note: This only creates React Application. You need to create an ABP application separately. You can find the documentation <a href="https://docs.abp.io/en/abp/latest/Getting-Started">here</a>.</p>
+</blockquote>
+<h3>Creating a new project</h3>
+<p>Create a new project using the template</p>
+<pre><code class="language-bash">dotnet new abp-react -o my-project-name
+</code></pre>
+<blockquote>
+<p>Note: You can use any name for the project. I used <code>my-project-name</code> for this example. keep in mind that the project name should be in kebab case (all lowercase and words separated by hyphens) because it will be used as the name of the packages org name.</p>
+</blockquote>
+<h3>Running the project</h3>
+<pre><code class="language-bash">cd MyProjectName
+pnpm install
+pnpm dev
+</code></pre>
+<blockquote>
+<p>Note: You can use any other package manager instead of pnpm. But I recommend using pnpm. It&#x27;s fast and reliable. Make sure you have ABP application is running before running the app.</p>
+</blockquote>
+<h2>Best Use Case</h2>
+<p>The best use case is to create customer facing applications. You can use it to create a dashboard or a portal. You can also use it to create a public website. The template is not limited to these use cases. You can use it to create any kind of application. It supports SSR, CSR and static pages.</p>
 <h2>Demo Application</h2>
 <p>You can find the demo application <a href="https://abpreact.antosubash.com/">here</a>. You can use the following credentials to login.</p>
 <ul>
@@ -35,12 +315,6 @@
 <li>DaisyUI</li>
 <li>Radix UI</li>
 </ul>
-<h2>What is ABP Framework?</h2>
-<p><a href="https://abp.io/">ABP Framework</a> is a full stack web application framework. It is based on ASP.NET Core. It provides a lot of features out of the box. You can use it to build enterprise applications. It is free and open source. You can find the source code on <a href="https://github.com/abpframework/abp">GitHub</a>. You can also find the documentation on <a href="https://docs.abp.io/">docs.abp.io</a>.</p>
-<h2>What is Next.js?</h2>
-<p><a href="https://nextjs.org/">Next.js</a> is a React framework. It removes lots of complexity of the react application. It is free and open source. You can find the source code on <a href="https://github.com/vercel/next.js">GitHub</a>.</p>
-<h2>What is Tailwind CSS?</h2>
-<p><a href="https://tailwindcss.com/">Tailwind CSS</a> is a utility-first CSS framework. You can find the source code on <a href="https://github.com/tailwindlabs/tailwindcss">GitHub</a>.</p>
 <h2>Features</h2>
 <ul>
 <li>Authentication</li>
@@ -59,41 +333,18 @@
 <li>It should be easy to add new features.</li>
 <li>It should be easy to customize.</li>
 <li>It should be easy to integrate with ABP Framework.</li>
-<li>It should be upto date with ABP Framework and React.</li>
+<li>It should be up to date with ABP Framework and React.</li>
 </ul>
-<h2>Getting Started</h2>
-<h3>Prerequisites</h3>
-<ul>
-<li>Node.js</li>
-<li>Pnpm</li>
-<li>Turborepo</li>
-</ul>
-<h3>Get the code</h3>
-<pre><code class="language-bash">npx degit antosubash/abpreact my-abp-react-app
-cd my-abp-react-app
-</code></pre>
-<p>This will create a new folder named <code>my-abp-react-app</code> and copy the template files into it. Right now, the template is not published to npm. So, you need to use <code>npx degit</code> to get the code. I will come up with a better solution soon.</p>
-<h3>Install dependencies</h3>
-<pre><code class="language-bash">pnpm install
-</code></pre>
-<blockquote>
-<p>Note: You can use any other package manager instead of pnpm. But I recommend using pnpm.</p>
-</blockquote>
-<h3>Run the app</h3>
-<pre><code class="language-bash">pnpm dev
-</code></pre>
-<blockquote>
-<p>Note: You need to run the ABP Framework backend before running the app.</p>
-</blockquote>
+<p>The main focus is the customization. you should be able to bring your own Design system and UI components. I have only used Tailwind CSS and Radix UI for the demo application. You can use any other design system and UI components.</p>
+<h2>Special Thanks</h2>
+<p>Special thanks to <a href="https://github.com/sajanv88">Sajan</a> for his help. His help was invaluable. I started this project a while ago. But I couldn&#x27;t find time to finish it. He helped me to finish it. Thanks a lot, Sajan.</p>
 <h2>Documentation</h2>
 <p>I&#x27;m working on the documentation. It will be available soon.</p>
 <h2>Contributing</h2>
 <p>I&#x27;m open to contributions. Please feel free to open an issue or a pull request.</p>
-<h2>Special Thanks</h2>
-<p>Special thanks to <a href="https://github.com/sajanv88">Sajan</a> for his help. His help was invaluable. I started this project a while ago. But I couldn&#x27;t find time to finish it. He helped me to finish it. Thanks a lot, Sajan.</p>
 <h2>What to expect next?</h2>
 <p>Multi-tenant support is coming soon. I&#x27;m working on it. I will update this post when it&#x27;s ready. I will also update the documentation.</p>
-<h2>Roadmap</h2>
+<h2>Road map</h2>
 <p>Most of the features are implemented. We are planning to keep it similar to the ABP Framework Open Source Application. That means all the commercial features will not be implemented.</p>
 <h2>Conclusion</h2>
 <p>I hope you find this template useful. If you have any questions or suggestions, please feel free to open an issue or a pull request. I will try to answer them as soon as possible. Thanks for reading. Happy coding!</p>]]></content:encoded>

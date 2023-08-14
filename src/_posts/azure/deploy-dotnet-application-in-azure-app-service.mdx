@@ -1,8 +1,10 @@
 ---
 title: "Deploy .Net App to Azure App Service using GitHub Actions"
 excerpt: "How to deploy a .Net app to Azure App Service using GitHub Actions"
-date: "2023-07-12"
+date: "2023-08-15"
 videoId: 
+series: "Azure Deployment for .Net"
+part: 1
 tags: [ "Azure", "dotnet", "github", "github-actions", "azure-app-service" ]
 ---
 ## Table of contents
@@ -91,6 +93,31 @@ Get the Azure App Service publish profile using the following command.
 az webapp deployment list-publishing-profiles --name <app-name> --output json --query "[?contains(publishMethod, 'FTP')].[publishUrl,userName,userPWD]" --output tsv
 ```
 
+### Add the Azure App Service Publish Profile to GitHub Secrets
+
+Add the Azure App Service publish profile to GitHub secrets using the following command.
+
+```bash
+gh secret set AzureAppService_PublishProfile_<app-name> --repo <repo-name> --body "<publish-profile>"
+```
+
+### Get the Azure Credentials
+
+Get the Azure credentials using the following command.
+
+```bash
+az ad sp create-for-rbac --name "GitHubActions" --role contributor --scopes /subscriptions/<subscription-id>/resourceGroups/<resource-group> --sdk-auth
+```
+
+### Add the Azure Credentials to GitHub Secrets
+
+Add the Azure credentials to GitHub secrets using the following command.
+
+```bash
+gh secret set AZURE_CREDENTIALS --repo <repo-name> --body "<azure-credentials>"
+```
+
+
 ## Create a GitHub Action
 
 ### Create a GitHub Action
@@ -121,8 +148,6 @@ name: .NET Core App CI
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
     branches: [ main ]
 
 jobs:
@@ -158,6 +183,19 @@ jobs:
             slot-name: production
             publish-profile: ${{ secrets.AzureAppService_PublishProfile_<app-name> }}
             package: ${{env.DOTNET_ROOT}}/myapp
-    ```
-    
+```
+
+### Commit and Push the Changes
+
+Commit and push the changes using the following commands.
+
+```bash
+git add .
+git commit -m "Add GitHub Action workflow"
+git push
+```
+
+## Conclusion
+
+In this post, we saw how to deploy a .Net app to Azure App Service using GitHub Actions.
 
