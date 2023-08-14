@@ -9,13 +9,13 @@
           <title>Azure Deployment for .Net</title>
           <link>https://blog.antosubash.com/posts/azure-deployment-for-dotnet</link>
           <guid>https://blog.antosubash.com/posts/azure-deployment-for-dotnet</guid>
-          <pubDate>Wed, 12 Jul 2023 11:53:48 GMT</pubDate>
+          <pubDate>Mon, 14 Aug 2023 11:53:48 GMT</pubDate>
           <description>This is a collection of Azure Deployment for articles for .Net</description>
           <content:encoded><![CDATA[<h2>Table of contents</h2>
-<h2>Introduction</h2>
-<p>Azure Deployment for .Net is a collection of articles that will help you to deploy your .Net application to Azure. I usually self-host most of my apps in Hetzner Cloud, but I also have some apps running in Azure. I have been using Azure for a long time but there is no collection of articles that I can refer to when I need to deploy a new app. So I decided to create this collection of articles to help me and others to deploy .Net apps to Azure.</p>
 <h2>Why?</h2>
 <p>Most of the time, I deploy my .Net apps to Hetzner Cloud. I have written a collection of articles on how to deploy .Net apps to Hetzner Cloud. But When I do consulting work, I deploy the apps to Azure because most of the clients are using Azure. I have been using Azure for a long time but there is no collection of articles that I can refer to when I need to deploy a new app. So I decided to create this collection of articles to help me and others to deploy .Net apps to Azure.</p>
+<h2>Who is this for?</h2>
+<p>To be frank this is for me. I am creating this collection of articles for myself. But I am sure this will help others as well. If you are a .Net developer and want to deploy your .Net application to Azure, this collection of articles is for you. There are many ways to deploy your .Net application to Azure. I will be writing about few of them that I have used in the past. I will be adding the links to the articles here as I write them. If you have any questions or feedback, please feel free to comment below and let me know.</p>
 <h2>Prerequisites</h2>
 <ul>
 <li><a href="https://azure.microsoft.com/en-us/free/">Azure Account</a></li>
@@ -25,128 +25,22 @@
 <li><a href="https://www.docker.com/products/docker-desktop">Docker</a></li>
 </ul>
 <h2>Azure Deployment for .Net</h2>
-<p>There are many ways to deploy your .Net application to Azure. I want to write about few of them that I have used in the past.</p>
+<p>There are many ways to deploy your .Net application to Azure but I only use AKS to deploy my .Net application to Azure. Because I am a big fan of Kubernetes and I use Kubernetes to deploy my .Net application to Hetzner Cloud. So I use AKS to deploy my .Net application to Azure. I will be writing about other ways to deploy your .Net application to Azure in the future. I will be adding the links to the articles here.</p>
 <ul>
-<li><a href="https://docs.microsoft.com/en-us/azure/app-service/overview">Azure App Service</a></li>
 <li><a href="https://docs.microsoft.com/en-us/azure/aks/">Azure Kubernetes Service</a></li>
 </ul>
-<h2>Azure App Service</h2>
-<p>Azure App Service is a fully managed web hosting service for building web apps, mobile back ends, and RESTful APIs. It is a platform as a service (PaaS) offering of Microsoft Azure. It is a highly scalable service that allows developers to deploy their applications to Azure without worrying about the underlying infrastructure. It supports many languages and frameworks, including .NET, Node.js, Python, Java, PHP, Ruby, and Go. It is a great service for hosting your .Net application.</p>
-<p>you can find the full article <a href="/posts/deploy-dotnet-application-in-azure-app-service">here</a></p>
 <h2>Azure Kubernetes Service</h2>
 <p>Azure Kubernetes Service (AKS) is a managed container orchestration service, based on the open source Kubernetes system, which is available on the Microsoft Azure public cloud. Azure Kubernetes Service is used to deploy and manage containerized applications more easily and efficiently. Azure Kubernetes Service offers serverless Kubernetes, an integrated continuous integration and continuous delivery (CI/CD) experience, and enterprise-grade security and governance. Unite your development and operations teams on a single platform to rapidly build, deliver, and scale applications with confidence.</p>
-<p>you can find the full article <a href="/posts/deploy-dotnet-application-in-azure-kubernetes-service">here</a></p>
-<h2>Other Azure Deployment</h2>
-<p>There are many other ways to deploy your .Net application to Azure and I will be writing about them in the future. I will be adding the links to the articles here.</p>
+<h2>What does this series cover?</h2>
+<p>I want to cover the start to finish of deploying a .Net application to Azure. I will be using GitHub Actions to build and push the Docker image to Azure Container Registry. I will be using Terraform to create the AKS cluster and deploy the .Net application to AKS.</p>
+<p>Part 1 - <a href="/posts/github-actions-build-version-push-docker-image-to-azure-container-registry">Setup GitHub Actions to build, Version and push Docker image to Azure Container Registry</a></p>
+<p>Part 2 - <a href="/posts/setup-terraform-to-create-azure-kubernetes-service-aks-cluster-and-container-registry">Setup Terraform to create Azure Kubernetes Service (AKS) Cluster and Container Registry</a></p>
+<p>Part 3 - <a href="/posts/setup-k8s-to-deploy-certmanager-nginx-ingress-controller-with-static-ip">Setup K8s to deploy CertManager, Nginx Ingress Controller with Static IP</a></p>
+<p>Part 4 - <a href="/posts/setup-cloudflare-dns-for-azure-kubernetes-service-aks-cluster">Setup CloudFlare DNS for Azure Kubernetes Service (AKS) Cluster</a></p>
+<p>Part 5 - <a href="/posts/deploy-a-sample-whoami-application-with-https-enabled">Deploy a sample whoami application with HTTPS enabled</a></p>
+<p>Part 6 - <a href="/posts/setup-terraform-to-deploy-dotnet-application-to-azure-kubernetes-service-aks-cluster">Setup Terraform to deploy .Net application to Azure Kubernetes Service (AKS) Cluster</a></p>
 <h2>Conclusion</h2>
 <p>I hope this collection of articles will help you to deploy your .Net application to Azure. If you have any questions or feedback, please feel free to comment below and let me know.</p>]]></content:encoded>
-          </item><item>
-          <title>Deploy .Net App to Azure App Service using GitHub Actions</title>
-          <link>https://blog.antosubash.com/posts/deploy-dotnet-application-in-azure-app-service</link>
-          <guid>https://blog.antosubash.com/posts/deploy-dotnet-application-in-azure-app-service</guid>
-          <pubDate>Wed, 12 Jul 2023 00:00:00 GMT</pubDate>
-          <description>How to deploy a .Net app to Azure App Service using GitHub Actions</description>
-          <content:encoded><![CDATA[<h2>Table of contents</h2>
-<h2>Introduction</h2>
-<p>In this post, we will see how to deploy a .Net app to Azure App Service using GitHub Actions.</p>
-<h2>Prerequisites</h2>
-<ul>
-<li>GitHub Account</li>
-<li>Azure Account</li>
-</ul>
-<h2>Create a GitHub Repository</h2>
-<h3>Install GitHub CLI</h3>
-<p>Install GitHub CLI from <a href="https://cli.github.com/">here</a>.</p>
-<h3>Create a GitHub Repository</h3>
-<p>Create a GitHub repository using the following command.</p>
-<pre><code class="language-bash">gh repo create &lt;repo-name&gt; --public
-</code></pre>
-<h3>Clone the GitHub Repository</h3>
-<p>Clone the GitHub repository using the following command.</p>
-<pre><code class="language-bash">gh repo clone &lt;repo-name&gt;
-</code></pre>
-<h2>Create a .Net App</h2>
-<h3>Install .Net SDK</h3>
-<p>Install .Net SDK from <a href="https://dotnet.microsoft.com/download">here</a>.</p>
-<h3>Create a .Net App</h3>
-<p>Create a .Net app using the following command.</p>
-<pre><code class="language-bash">dotnet new webapp -o &lt;app-name&gt;
-</code></pre>
-<h3>Run the .Net App</h3>
-<p>Run the .Net app using the following command.</p>
-<pre><code class="language-bash">dotnet run
-</code></pre>
-<p>For now we will only use the empty application.</p>
-<h2>Create an Azure App Service</h2>
-<h3>Install Azure CLI</h3>
-<p>Install Azure CLI from <a href="https://docs.microsoft.com/en-us/cli/azure/install-azure-cli">here</a>.</p>
-<h3>Login to Azure</h3>
-<p>Login to Azure using the following command.</p>
-<pre><code class="language-bash">az login --use-device-code
-</code></pre>
-<h3>Create an Azure App Service</h3>
-<p>Create an Azure App Service using the following command.</p>
-<pre><code class="language-bash">az webapp up --name &lt;app-name&gt; --sku F1
-</code></pre>
-<h3>Get the Azure App Service Publish Profile</h3>
-<p>Get the Azure App Service publish profile using the following command.</p>
-<pre><code class="language-bash">az webapp deployment list-publishing-profiles --name &lt;app-name&gt; --output json --query &quot;[?contains(publishMethod, &#x27;FTP&#x27;)].[publishUrl,userName,userPWD]&quot; --output tsv
-</code></pre>
-<h2>Create a GitHub Action</h2>
-<h3>Create a GitHub Action</h3>
-<p>Create a GitHub Action using the following command.</p>
-<pre><code class="language-bash">dotnet new gitignore
-</code></pre>
-<h3>Create a GitHub Action Workflow</h3>
-<p>We will create a GitHub Action workflow to build, test, publish and deploy the .Net app to Azure App Service. Create a GitHub Action workflow using the following command.</p>
-<h4>Create a github workflow file</h4>
-<pre><code class="language-bash">mkdir -p .github/workflows
-new-item -path .github/workflows -name dotnet.yml -itemtype file
-</code></pre>
-<h4>Update the GitHub Action Workflow</h4>
-<p>Update the GitHub Action workflow with the following content.</p>
-<pre><code class="language-yaml">name: .NET Core App CI
-
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
-jobs:
-    build:
-        runs-on: ubuntu-latest
-    
-        steps:
-        - uses: actions/checkout@v2
-    
-        - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-            dotnet-version: 5.0.x
-    
-        - name: Build with dotnet
-        run: dotnet build --configuration Release
-    
-        - name: Test with dotnet
-        run: dotnet test --no-restore --verbosity normal
-    
-        - name: Publish with dotnet
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
-
-        - name: Login via Azure CLI
-        uses: azure/login@v1
-        with:
-            creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-        - name: Deploy to Azure Web App
-        uses: azure/webapps-deploy@v2
-        with:
-            app-name: &lt;app-name&gt;
-            slot-name: production
-            publish-profile: ${{ secrets.AzureAppService_PublishProfile_&lt;app-name&gt; }}
-            package: ${{env.DOTNET_ROOT}}/myapp
-</code></pre>]]></content:encoded>
           </item><item>
           <title>ABP no-layer module template</title>
           <link>https://blog.antosubash.com/posts/abp-no-layer-module-template</link>

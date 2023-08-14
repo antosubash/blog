@@ -1,22 +1,26 @@
 ---
-title: "Azure Deployment for .Net"
-excerpt: "This is a collection of Azure Deployment for articles for .Net"
+title: "Azure Deployment for .Net - Introduction - Prerequisites"
+excerpt: "This is the introduction to the Azure Deployment for .Net series."
 date: "2023-08-14T11:53:48.157Z"
 videoId: 
-series: "Azure Deployment for .Net"
+series: "Azure Kubernetes (AKS) Deployment for .Net"
 part: 0
-tags: [ "Azure", "dotnet", "github", "github-actions"  ]
+tags: [ "Azure", "dotnet", "github", "github-actions", "terraform", "kubernetes", "aks", "cloudflare", "helm", "cert-manager", "nginx-ingress-controller", "docker", "azure-container-registry" ]
 ---
 
 ## Table of contents
 
+## Azure Kubernetes Service
+
+Azure Kubernetes Service (AKS) is a managed container orchestration service, based on the open source Kubernetes system, which is available on the Microsoft Azure public cloud. Azure Kubernetes Service is used to deploy and manage containerized applications more easily and efficiently. Azure Kubernetes Service offers serverless Kubernetes, an integrated continuous integration and continuous delivery (CI/CD) experience, and enterprise-grade security and governance. Unite your development and operations teams on a single platform to rapidly build, deliver, and scale applications with confidence.
+
 ## Why?
 
-Most of the time, I deploy my .Net apps to Hetzner Cloud. I have written a collection of articles on how to deploy .Net apps to Hetzner Cloud. But When I do consulting work, I deploy the apps to Azure because most of the clients are using Azure. I have been using Azure for a long time but there is no collection of articles that I can refer to when I need to deploy a new app. So I decided to create this collection of articles to help me and others to deploy .Net apps to Azure.
+Most of the time, I deploy my .Net apps to Hetzner Cloud. I have written a collection of articles on how to deploy .Net apps to Hetzner Cloud. But When I do consulting work, I deploy the apps to Azure because most of my clients are using Azure. So I thought it would be a good idea to write a collection of articles on how to deploy .Net apps to Azure.
 
 ## Who is this for?
 
-To be frank this is for me. I am creating this collection of articles for myself. But I am sure this will help others as well. If you are a .Net developer and want to deploy your .Net application to Azure, this collection of articles is for you. There are many ways to deploy your .Net application to Azure. I will be writing about few of them that I have used in the past. I will be adding the links to the articles here as I write them. If you have any questions or feedback, please feel free to comment below and let me know.
+This is for anyone who wants to deploy their .Net application to Azure. I will be using GitHub Actions to build and push the Docker image to Azure Container Registry. I will be using Terraform to create the AKS cluster and deploy the .Net application to AKS. So you should have some basic knowledge of Docker, GitHub Actions, and Terraform.
 
 ## Prerequisites
 
@@ -25,35 +29,91 @@ To be frank this is for me. I am creating this collection of articles for myself
 - [GitHub Account](https://github.com)
 - [Terraform](https://www.terraform.io/downloads.html)
 - [Docker](https://www.docker.com/products/docker-desktop)
+- [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+- [Helm](https://helm.sh/docs/intro/install/)
+- [CloudFlare Account](https://www.cloudflare.com/)
 
-## Azure Deployment for .Net
+### Azure CLI
 
-There are many ways to deploy your .Net application to Azure. I want to write about few of them that I have used in the past.
+The Azure CLI is a command-line tool for managing Azure resources. Make sure you have the Azure CLI installed on your machine. You can install the Azure CLI from [here](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli). You can check if the Azure CLI is installed on your machine by running the following command.
 
-- [Azure App Service](https://docs.microsoft.com/en-us/azure/app-service/overview)
-- [Azure Kubernetes Service](https://docs.microsoft.com/en-us/azure/aks/)
+```bash
+az --version
+```
 
-## Azure App Service
+### Azure login
 
-Azure App Service is a fully managed web hosting service for building web apps, mobile back ends, and RESTful APIs. It is a platform as a service (PaaS) offering of Microsoft Azure. It is a highly scalable service that allows developers to deploy their applications to Azure without worrying about the underlying infrastructure. It supports many languages and frameworks, including .NET, Node.js, Python, Java, PHP, Ruby, and Go. It is a great service for hosting your .Net application.
+You need to login to your Azure account using the Azure CLI. You can login to your Azure account by running the following command. This will open a browser window and ask you to login to your Azure account. Once you login to your Azure account, you will be able to run Azure CLI commands.
 
-you can find the full article [here](/posts/deploy-dotnet-application-in-azure-app-service)
+```bash
+az login
+```
 
+if you are part of multiple subscriptions, you can set the default subscription by running the following command. Replace the `SUBSCRIPTION_ID` with your subscription id.
 
-## Azure Kubernetes Service
+```bash
+az account set --subscription="SUBSCRIPTION_ID"
+```
 
-Azure Kubernetes Service (AKS) is a managed container orchestration service, based on the open source Kubernetes system, which is available on the Microsoft Azure public cloud. Azure Kubernetes Service is used to deploy and manage containerized applications more easily and efficiently. Azure Kubernetes Service offers serverless Kubernetes, an integrated continuous integration and continuous delivery (CI/CD) experience, and enterprise-grade security and governance. Unite your development and operations teams on a single platform to rapidly build, deliver, and scale applications with confidence.
+### Docker desktop
 
-you can find the full article [here](/posts/deploy-dotnet-application-in-azure-kubernetes-service)
+You need to install Docker desktop on your machine. You can install Docker desktop from [here](https://www.docker.com/products/docker-desktop). Once you install Docker desktop, you can check if Docker is installed on your machine by running the following command.
 
-## Other Azure Deployment
+```bash
+docker --version
+```
 
-There are many other ways to deploy your .Net application to Azure and I will be writing about them in the future. I will be adding the links to the articles here.
+### Kubectl
+
+You need to install Kubectl on your machine. You can install Kubectl from [here](https://kubernetes.io/docs/tasks/tools/install-kubectl/). Once you install Kubectl, you can check if Kubectl is installed on your machine by running the following command.
+
+```bash
+kubectl version --client
+```
+
+### Helm
+
+You need to install Helm on your machine. You can install Helm from [here](https://helm.sh/docs/intro/install/). Once you install Helm, you can check if Helm is installed on your machine by running the following command.
+
+```bash
+helm version
+```
+
+### Terraform
+
+You need to install Terraform on your machine. You can install Terraform from [here](https://www.terraform.io/downloads.html). Once you install Terraform, you can check if Terraform is installed on your machine by running the following command.
+
+```bash
+terraform version
+```
+
+### CloudFlare
+
+Cloudflare proves the api to manage the DNS. So we will use the Cloudflare api to manage the DNS for our application. You can create a Cloudflare account from [here](https://www.cloudflare.com/). Once you create a Cloudflare account, you need to get the API key from the Cloudflare dashboard and cloudflare zone id. You can get the API key from the Cloudflare dashboard by going to `My Profile` and then `API Tokens`. You can get the zone id from the Cloudflare dashboard by going to `DNS` and then `Advanced Details`. You can get the zone id from the `Zone ID` field.
+
+### GitHub Actions
+
+We will be using GitHub Actions to build and push the Docker image to Azure Container Registry. So you need to create a GitHub account from [here](https://github.com). Once you create a GitHub account, you need to create a GitHub repository. You can create a GitHub repository by clicking on the `New` button on the GitHub dashboard. You can name the repository anything you want. I will be naming the repository `azure-deployment-for-dotnet`. You can leave the repository as public and click on the `Create repository` button.
+
+## What does this series cover?
+
+I want to cover the start to finish of deploying a .Net application to Azure. I will be using GitHub Actions to build and push the Docker image to Azure Container Registry. I will be using Terraform to create the AKS cluster and deploy the .Net application to AKS.
+
+Part 0 - [Prerequisites](/posts/azure-deployment-for-dotnet)
+
+Part 1 - [Setup Terraform to create Azure Kubernetes Service (AKS) Cluster and Container Registry](/posts/setup-terraform-to-create-azure-kubernetes-service-aks-cluster-and-container-registry)
+
+Part 2 - [Setup K8s to deploy CertManager, Nginx Ingress Controller with Static IP](/posts/setup-k8s-to-deploy-certmanager-nginx-ingress-controller-with-static-ip)
+
+Part 3 - [Setup CloudFlare DNS for Azure Kubernetes Service (AKS) Cluster](/posts/setup-cloudflare-dns-for-azure-kubernetes-service-aks-cluster)
+
+Part 4 - [Deploy a sample whoami application with HTTPS enabled](/posts/deploy-a-sample-whoami-application-with-https-enabled)
+
+Part 5 - [Setup GitHub Actions to build, Version and push Docker image to Azure Container Registry](/posts/github-actions-build-version-push-docker-image-to-azure-container-registry)
+
+Part 6 - [Setup Terraform to deploy .Net application to Azure Kubernetes Service (AKS) Cluster](/posts/setup-terraform-to-deploy-dotnet-application-to-azure-kubernetes-service-aks-cluster)
+
 
 ## Conclusion
 
-I hope this collection of articles will help you to deploy your .Net application to Azure. If you have any questions or feedback, please feel free to comment below and let me know.
-
-
-
-
+This is the introduction to the Azure Deployment for .Net series. In the next article, we will setup GitHub Actions to build, Version and push Docker image to Azure Container Registry. If you have any questions or feedback, please feel free to post them in the comments section.
