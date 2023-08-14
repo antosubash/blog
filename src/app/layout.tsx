@@ -1,12 +1,10 @@
-"use client";
 import { Metadata } from "next";
 import Head from "next/head";
 import "../styles/index.css";
 import "highlight.js/styles/atom-one-dark.css";
-import ThemeSwitch from "@components/theme-switch";
+// import ThemeSwitch from "@components/theme-switch";
 import Link from "next/link";
 import PageTitle from "@components/page-title";
-import { useState } from "react";
 import { ThemeProvider } from "next-themes";
 export const metadata: Metadata = {
   title: "Anto Subash | Software Engineer",
@@ -19,7 +17,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  let [isShowing, setIsShowing] = useState(false);
   return (
     <html lang="en">
       <Head>
@@ -107,10 +104,9 @@ export default function RootLayout({
                     />
                   </svg>
                 </Link>
-                <ThemeSwitch />
+                {/* <ThemeSwitch /> */}
                 <div className="md:hidden">
                   <button
-                    onClick={() => setIsShowing(!isShowing)}
                     className="w-8 h-8 p-1 ml-1 mr-1 rounded sm:ml-4"
                   >
                     <svg
@@ -175,7 +171,7 @@ export default function RootLayout({
                 </li>
               </ul>
             </div>
-            <main className="mb-auto">{children}</main>
+            {/* <main className="mb-auto">{children}</main> */}
           </div>
         </ThemeProvider>
       </body>

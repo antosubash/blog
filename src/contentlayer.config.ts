@@ -2,7 +2,6 @@ import { defineDocumentType, makeSource } from "contentlayer/source-files";
 import GithubSlugger from "github-slugger";
 import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
-import { rehypePrettyCodeClasses } from "@lib/rehyePrettyCode";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import highlight from "rehype-highlight";
 import readingTime from "reading-time";
@@ -75,7 +74,6 @@ export default makeSource({
     rehypePlugins: [
       [highlight],
       [rehypeSlug],
-      [rehypePrettyCodeClasses],
       [
         rehypeAutolinkHeadings,
         {

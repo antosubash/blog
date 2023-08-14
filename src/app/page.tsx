@@ -10,7 +10,7 @@ export default function Home() {
 
   return (
       <Layout>
-        <Container>
+        {/* <Container>
           <div className="divide-y">
             <div className="pt-6 pb-8 space-y-2 md:space-y-5">
               <h1 className="text-4xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100">
@@ -49,7 +49,7 @@ export default function Home() {
               All Posts &rarr;
             </div>
           </Link>
-        </div>
+        </div> */}
       </Layout>
   )
 }
