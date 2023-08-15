@@ -1,20 +1,31 @@
 ---
-title: "Setup terraform to create Azure Kubernetes (AKS) cluster and Azure Container Registry (ACR)"
-excerpt: "This is the second part of the series where we will setup terraform to create Azure Kubernetes (AKS) cluster and Azure Container Registry (ACR)."
+title: "Setup terraform to create AKS cluster and ACR"
+excerpt: "In this we will setup terraform to create Azure Kubernetes (AKS) cluster and Azure Container Registry (ACR)."
 date: "2023-08-16T11:53:48.157Z"
 videoId:
 series: "Azure Kubernetes (AKS) Deployment for .Net"
-part: 5
+part: 1
 tags: ["aks", "azure", "kubernetes", "terraform", "acr"]
 ---
 
 ## Table of contents
 
-## Init terraform
+## Terraform
 
-```bash
-terraform init
+Terraform is an open-source infrastructure as code software tool created by HashiCorp. It enables users to define and provision a datacenter infrastructure using a high-level configuration language known as Hashicorp Configuration Language (HCL), or optionally JSON. Terraform supports a number of cloud infrastructure providers such as Amazon Web Services, IBM Cloud (formerly Bluemix), Google Cloud Platform, Linode, Microsoft Azure, Oracle Cloud Infrastructure, or VMware vSphere as well as OpenStack.
+
+## Install terraform
+
+Download and install terraform from [here](https://www.terraform.io/downloads.html).
+
+## Create a new folder for infrastructure
+
+```bash 
+mkdir infrastructure
+cd infrastructure
 ```
+
+We will create all the terraform files in this folder. this will be only for infrastructure.
 
 ### Create main.tf
 
@@ -22,11 +33,15 @@ terraform init
 new-item main.tf
 ```
 
+This is where we will create all the resources.
+
 ### create variables.tf
 
 ```bash
 new-item variables.tf
 ```
+
+This is where we will create all the variables. We will use these variables in main.tf file.
 
 ### Create terraform.tfvars
 
@@ -34,17 +49,24 @@ new-item variables.tf
 new-item terraform.tfvars
 ```
 
+This is where we will create all the variables values. We will use these variables values in main.tf file. This file will not be checked in to source control. You can add this file to .gitignore file. you can also use this file to override the variables values.
+you can create multiple terraform.tfvars files for different environments.
+
 ### Create output.tf
 
 ```bash
 new-item output.tf
 ```
 
-### Create provider.tf
+This is where we will create all the outputs. We will use these outputs in main.tf file.
+
+###  Create configs folder
 
 ```bash
-new-item provider.tf
+mkdir configs
 ```
+
+This is where we will create all the kube config files. We will use these kube config files to connect to AKS cluster.
 
 ## Create variables and outputs
 
@@ -84,50 +106,6 @@ variable "resource_group_tags" {
   validation {
     condition     = contains(keys(var.resource_group_tags), "project")
     error_message = "The resource_group_tags map must contain a key named \"project\"."
-  }
-}
-
-variable "letsencrypt_email" {
-  default     = ""
-  description = "The email address to use for Let's Encrypt."
-  type        = string
-
-  validation {
-    condition     = can(regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", var.letsencrypt_email))
-    error_message = "The letsencrypt_email variable must be a valid email address."
-  }
-}
-
-variable "cloudflare_domain_name" {
-  default     = ""
-  description = "The domain name to use for Let's Encrypt."
-  type        = string
-
-  validation {
-    condition     = can(regex("^[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", var.cloudflare_domain_name))
-    error_message = "The cloudflare_domain_name variable must be a valid domain name."
-  }
-}
-
-variable "cloudflare_zone_id" {
-  default     = ""
-  description = "The Cloudflare Zone ID for the domain name."
-  type        = string
-
-  validation {
-    condition     = length(var.cloudflare_zone_id) > 0
-    error_message = "The cloudflare_zone_id variable must be a valid Cloudflare Zone ID."
-  }
-}
-
-variable "cloudflare_api_token" {
-  default    = ""
-  description = "The Cloudflare API Token for the domain name."
-  type        = string
-
-  validation {
-    condition     = length(var.cloudflare_api_token) > 0
-    error_message = "The cloudflare_api_token variable must be a valid Cloudflare API Token."
   }
 }
 ```
@@ -223,19 +201,9 @@ terraform {
       version = ">= 2.0.0"
     }
 
-    helm = {
-      source  = "hashicorp/helm"
-      version = "~> 2.0.0"
-    }
-
     random = {
       source  = "hashicorp/random"
       version = "~> 3.0.0"
-    }
-
-    cloudflare = {
-      source  = "cloudflare/cloudflare"
-      version = "~> 3.0"
     }
 
     local = {
@@ -278,21 +246,6 @@ provider "kubernetes" {
   cluster_ca_certificate = base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.cluster_ca_certificate)
 }
 
-// create helm provider
-
-provider "helm" {
-  kubernetes {
-    host                   = azurerm_kubernetes_cluster.aks.kube_config.0.host
-    client_certificate     = base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.client_certificate)
-    client_key             = base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.client_key)
-    cluster_ca_certificate = base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.cluster_ca_certificate)
-  }
-}
-
-provider "cloudflare" {
-  api_token = var.cloudflare_api_token
-}
-
 provider "local" {
 }
 
@@ -312,94 +265,6 @@ resource "azurerm_role_assignment" "aks_acr_role_assignment" {
   role_definition_name = "AcrPull"
   principal_id         = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
 }
-
-// create static ip inside aks resource group
-
-resource "azurerm_public_ip" "aks_static_ip" {
-  depends_on          = [azurerm_kubernetes_cluster.aks]
-  name                = "${local.name_suffix}-aks-static-ip"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_kubernetes_cluster.aks.node_resource_group
-  allocation_method   = "Static"
-  sku                 = "Standard"
-  tags                = var.resource_group_tags
-}
-
-// add cloudflare cname dns record for aks static ip
-
-resource "cloudflare_record" "aks_static_ip_dns" {
-  depends_on = [azurerm_public_ip.aks_static_ip]
-  zone_id    = var.cloudflare_zone_id
-  name       = "${var.resource_group_tags["project"]}.${var.cloudflare_domain_name}"
-  value      = azurerm_public_ip.aks_static_ip.ip_address
-  type       = "A"
-  proxied    = false
-  ttl        = 1
-}
-
-// add cloudflare cname dns record for aks static ip
-
-resource "cloudflare_record" "aks_static_ip_dns_cname" {
-  depends_on = [azurerm_public_ip.aks_static_ip]
-  zone_id    = var.cloudflare_zone_id
-  name       = "*.${var.resource_group_tags["project"]}.${var.cloudflare_domain_name}"
-  value      = "${var.resource_group_tags["project"]}.${var.cloudflare_domain_name}"
-  type       = "CNAME"
-  proxied    = false
-  ttl        = 1
-}
-
-// create local variable for aks namespace
-
-locals {
-  aks_namespace = "${var.resource_group_tags["project"]}-${var.resource_group_tags["environment"]}-ingress-nginx"
-}
-
-// create aks ingress namespace
-
-resource "kubernetes_namespace" "ingress_namespace" {
-  depends_on = [azurerm_kubernetes_cluster.aks]
-  metadata {
-    name = "${local.aks_namespace}"
-  }
-}
-
-// deploy nginx ingress controller to aks with static ip
-
-resource "helm_release" "nginx_ingress" {
-  depends_on = [azurerm_public_ip.aks_static_ip]
-  name       = "nginx-ingress"
-  repository = "https://kubernetes.github.io/ingress-nginx"
-  chart      = "ingress-nginx"
-  namespace  = "${local.aks_namespace}"
-  version    = "4.7.0"
-
-  set {
-    name  = "controller.service.loadBalancerIP"
-    value = azurerm_public_ip.aks_static_ip.ip_address
-  }
-
-  set {
-    name  = "controller.service.externalTrafficPolicy"
-    value = "Local"
-  }
-}
-
-// deploy cert-manager to aks
-
-resource "helm_release" "cert_manager" {
-  depends_on = [azurerm_kubernetes_cluster.aks]
-  name       = "cert-manager"
-  repository = "https://charts.jetstack.io"
-  chart      = "cert-manager"
-  namespace  = "${local.aks_namespace}"
-  version    = "1.12.0"
-
-  set {
-    name  = "installCRDs"
-    value = true
-  }
-}
 ```
 
 ## Create terraform.tfvars
@@ -413,4 +278,43 @@ resource_group_tags = {
 }
 ```
 
-## 
+## Upgrade terraform
+
+```bash
+terraform init -upgrade
+```
+
+This will upgrade the terraform to latest version and download the latest provider. This will also update the lock file.
+
+> Note: terraform use azure cli to authenticate to azure. Make sure you have azure cli installed and logged in to azure.
+
+## Plan terraform with tfvars file
+
+```bash
+terraform plan -var-file="terraform.tfvars"
+```
+
+Always plan before applying terraform. This will show you what resources will be created. This will also show you if there are any errors. This will not create any resources so it is safe to run this command.
+
+## Apply terraform with tfvars file with auto approve
+
+```bash
+terraform apply -var-file="terraform.tfvars" -auto-approve
+```
+
+This will create all the resources. This will also create a kube config file in configs folder. This file will be used to connect to AKS cluster.
+
+## Destroy terraform with tfvars file with auto approve
+
+```bash
+terraform destroy -var-file="terraform.tfvars" -auto-approve
+```
+
+This will destroy all the resources. I recommend you create and destroy the resources few times to and get familiar with terraform.
+
+# Conclusion
+
+If you are new to terraform I recommend you to go through the [official documentation](https://www.terraform.io/docs/index.html). This will give you a good understanding of terraform. In the next post we prepare the aks cluster for deployment.
+
+
+
