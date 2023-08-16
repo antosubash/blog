@@ -1,6 +1,6 @@
 ---
-title: "Setup terraform to create AKS cluster and ACR"
-excerpt: "In this we will setup terraform to create Azure Kubernetes (AKS) cluster and Azure Container Registry (ACR)."
+title: "Create AKS cluster and ACR with Terraform"
+excerpt: "In this we will create Azure Kubernetes (AKS) cluster and Azure Container Registry (ACR)."
 date: "2023-08-16T11:53:48.157Z"
 videoId:
 series: "Azure Kubernetes (AKS) Deployment for .Net"
@@ -12,7 +12,7 @@ tags: ["aks", "azure", "kubernetes", "terraform", "acr"]
 
 ## Terraform
 
-Terraform is an open-source infrastructure as code software tool created by HashiCorp. It enables users to define and provision a datacenter infrastructure using a high-level configuration language known as Hashicorp Configuration Language (HCL), or optionally JSON. Terraform supports a number of cloud infrastructure providers such as Amazon Web Services, IBM Cloud (formerly Bluemix), Google Cloud Platform, Linode, Microsoft Azure, Oracle Cloud Infrastructure, or VMware vSphere as well as OpenStack.
+Terraform is an open-source infrastructure as code software tool created by HashiCorp. It enables users to define and provision a datacenter infrastructure using a high-level configuration language known as Hashicorp Configuration Language (HCL), or optionally JSON. Terraform supports a number of cloud infrastructure providers such as Amazon Web Services Google Cloud Platform, Linode, Microsoft Azure, Oracle Cloud Infrastructure, Hetzner or VMware vSphere as well as OpenStack.
 
 ## Install terraform
 
@@ -43,14 +43,14 @@ new-item variables.tf
 
 This is where we will create all the variables. We will use these variables in main.tf file.
 
-### Create terraform.tfvars
+### Create dev.tfvars
 
 ```bash
-new-item terraform.tfvars
+new-item dev.tfvars
 ```
 
 This is where we will create all the variables values. We will use these variables values in main.tf file. This file will not be checked in to source control. You can add this file to .gitignore file. you can also use this file to override the variables values.
-you can create multiple terraform.tfvars files for different environments.
+you can create multiple tfvars files for different environments.
 
 ### Create output.tf
 
@@ -267,7 +267,7 @@ resource "azurerm_role_assignment" "aks_acr_role_assignment" {
 }
 ```
 
-## Create terraform.tfvars
+## Create dev.tfvars
 
 ```bash
 location = "westeurope"
@@ -291,7 +291,7 @@ This will upgrade the terraform to latest version and download the latest provid
 ## Plan terraform with tfvars file
 
 ```bash
-terraform plan -var-file="terraform.tfvars"
+terraform plan -var-file="dev.tfvars"
 ```
 
 Always plan before applying terraform. This will show you what resources will be created. This will also show you if there are any errors. This will not create any resources so it is safe to run this command.
@@ -299,7 +299,7 @@ Always plan before applying terraform. This will show you what resources will be
 ## Apply terraform with tfvars file with auto approve
 
 ```bash
-terraform apply -var-file="terraform.tfvars" -auto-approve
+terraform apply -var-file="dev.tfvars" -auto-approve
 ```
 
 This will create all the resources. This will also create a kube config file in configs folder. This file will be used to connect to AKS cluster.
@@ -307,7 +307,7 @@ This will create all the resources. This will also create a kube config file in 
 ## Destroy terraform with tfvars file with auto approve
 
 ```bash
-terraform destroy -var-file="terraform.tfvars" -auto-approve
+terraform destroy -var-file="dev.tfvars" -auto-approve
 ```
 
 This will destroy all the resources. I recommend you create and destroy the resources few times to and get familiar with terraform.

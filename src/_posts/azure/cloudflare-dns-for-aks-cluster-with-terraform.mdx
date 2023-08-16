@@ -1,5 +1,5 @@
 ---
-title: "Setup Cloudflare DNS for AKS Cluster with Terraform"
+title: "Cloudflare DNS for AKS Cluster with Terraform"
 excerpt: "In this we will setup Cloudflare DNS for AKS Cluster with Terraform"
 date: "2023-08-19T11:53:48.157Z"
 videoId:
@@ -28,7 +28,7 @@ Make sure you have completed the previous article and have the following resourc
 
 ### Update Terraform Variables
 
-Update the `terraform.tfvars` file with the following values.
+Update the `dev.tfvars` file with the following values.
 
 ```terraform
 variable "cloudflare_domain_name" {
@@ -69,7 +69,8 @@ This will be used to create the Cloudflare DNS records. The `cloudflare_domain_n
 
 ## Create Cloudflare DNS Records
 
-Create a new file `cloudflare.tf` and add the following code.
+update the `main.tf` file with the following code.
+
 
 ```terraform
 resource "cloudflare_record" "aks" {

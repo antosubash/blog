@@ -21,8 +21,8 @@
 <h3>create variables.tf</h3>
 <pre><code class="language-bash">new-item variables.tf
 </code></pre>
-<h3>Create terraform.tfvars</h3>
-<pre><code class="language-bash">new-item terraform.tfvars
+<h3>Create dev.tfvars</h3>
+<pre><code class="language-bash">new-item dev.tfvars
 </code></pre>
 <h3>Create output.tf</h3>
 <pre><code class="language-bash">new-item output.tf
@@ -376,7 +376,7 @@ resource &quot;helm_release&quot; &quot;cert_manager&quot; {
   }
 }
 </code></pre>
-<h2>Create terraform.tfvars</h2>
+<h2>Create dev.tfvars</h2>
 <pre><code class="language-bash">location = &quot;westeurope&quot;
 resource_group_name = &quot;projectname-dev-rg&quot;
 resource_group_tags = {
