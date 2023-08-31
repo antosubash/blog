@@ -6,6 +6,435 @@
             <description>Anto Subash's Blog</description>
             <language>en</language>
             <item>
+          <title>Create AKS cluster and ACR with Terraform</title>
+          <link>https://blog.antosubash.com/posts/terraform-to-create-azure-kubernetes-service-aks-cluster-and-container-registry</link>
+          <guid>https://blog.antosubash.com/posts/terraform-to-create-azure-kubernetes-service-aks-cluster-and-container-registry</guid>
+          <pubDate>Wed, 16 Aug 2023 11:53:48 GMT</pubDate>
+          <description>In this we will create Azure Kubernetes (AKS) cluster and Azure Container Registry (ACR).</description>
+          <content:encoded><![CDATA[<h2>Table of contents</h2>
+<h2>Terraform</h2>
+<p>Terraform is an open-source infrastructure as code software tool created by HashiCorp. It enables users to define and provision a datacenter infrastructure using a high-level configuration language known as Hashicorp Configuration Language (HCL), or optionally JSON. Terraform supports a number of cloud infrastructure providers such as Amazon Web Services Google Cloud Platform, Linode, Microsoft Azure, Oracle Cloud Infrastructure, Hetzner or VMware vSphere as well as OpenStack.</p>
+<h2>Install terraform</h2>
+<p>Download and install terraform from <a href="https://www.terraform.io/downloads.html">here</a>.</p>
+<h2>Create a new folder for infrastructure</h2>
+<pre><code class="language-bash">mkdir infrastructure
+cd infrastructure
+</code></pre>
+<p>We will create all the terraform files in this folder. this will be only for infrastructure.</p>
+<h3>Create main.tf</h3>
+<pre><code class="language-bash">new-item main.tf
+</code></pre>
+<p>This is where we will create all the resources.</p>
+<h3>create variables.tf</h3>
+<pre><code class="language-bash">new-item variables.tf
+</code></pre>
+<p>This is where we will create all the variables. We will use these variables in main.tf file.</p>
+<h3>Create dev.tfvars</h3>
+<pre><code class="language-bash">new-item dev.tfvars
+</code></pre>
+<p>This is where we will create all the variables values. We will use these variables values in main.tf file. This file will not be checked in to source control. You can add this file to .gitignore file. you can also use this file to override the variables values.
+you can create multiple tfvars files for different environments.</p>
+<h3>Create output.tf</h3>
+<pre><code class="language-bash">new-item output.tf
+</code></pre>
+<p>This is where we will create all the outputs. We will use these outputs in main.tf file.</p>
+<h3>Create configs folder</h3>
+<pre><code class="language-bash">mkdir configs
+</code></pre>
+<p>This is where we will create all the kube config files. We will use these kube config files to connect to AKS cluster.</p>
+<h2>Create variables and outputs</h2>
+<h3>Add the following code to variables.tf</h3>
+<pre><code class="language-bash">variable &quot;location&quot; {
+  default     = &quot;westeurope&quot;
+  description = &quot;The Azure Region in which all resources should be created.&quot;
+  type        = string
+}
+
+variable &quot;resource_group_name&quot; {
+  default     = &quot;projectname-dev-rg&quot;
+  description = &quot;The name of the resource group in which all resources should be created.&quot;
+  type        = string
+}
+
+variable &quot;resource_group_tags&quot; {
+  default = {
+    environment = &quot;dev&quot;,
+    project     = &quot;projectname&quot;
+  }
+  description = &quot;A map of tags to add to all resources for this environment.&quot;
+  type        = map(string)
+
+  validation {
+    condition     = length(keys(var.resource_group_tags)) == 2
+    error_message = &quot;The resource_group_tags map must contain exactly two elements.&quot;
+  }
+
+  validation {
+    condition     = contains(keys(var.resource_group_tags), &quot;environment&quot;)
+    error_message = &quot;The resource_group_tags map must contain a key named \&quot;environment\&quot;.&quot;
+  }
+
+  validation {
+    condition     = contains(keys(var.resource_group_tags), &quot;project&quot;)
+    error_message = &quot;The resource_group_tags map must contain a key named \&quot;project\&quot;.&quot;
+  }
+}
+</code></pre>
+<h3>Add the following code to output.tf</h3>
+<pre><code class="language-bash">output &quot;resource_group_id&quot; {
+  value = azurerm_resource_group.rg.id
+}
+
+output &quot;resource_group_name&quot; {
+  value = azurerm_resource_group.rg.name
+}
+
+output &quot;resource_group_location&quot; {
+  value = azurerm_resource_group.rg.location
+}
+
+output &quot;resource_group_tags&quot; {
+  value = azurerm_resource_group.rg.tags
+}
+
+output &quot;acr_id&quot; {
+  value = azurerm_container_registry.acr.id
+}
+
+output &quot;acr_name&quot; {
+  value = azurerm_container_registry.acr.name
+}
+
+output &quot;acr_login_server&quot; {
+  value = azurerm_container_registry.acr.login_server
+}
+
+output &quot;acr_admin_username&quot; {
+  value = azurerm_container_registry.acr.admin_username
+}
+
+output &quot;acr_admin_password&quot; {
+  value = azurerm_container_registry.acr.admin_password
+  sensitive = true
+}
+
+output &quot;aks_id&quot; {
+  value = azurerm_kubernetes_cluster.aks.id
+}
+
+output &quot;aks_name&quot; {
+  value = azurerm_kubernetes_cluster.aks.name
+}
+
+output &quot;aks_location&quot; {
+  value = azurerm_kubernetes_cluster.aks.location
+}
+
+output &quot;aks_node_resource_group&quot; {
+  value = azurerm_kubernetes_cluster.aks.node_resource_group
+}
+
+output &quot;aks_dns_prefix&quot; {
+  value = azurerm_kubernetes_cluster.aks.dns_prefix
+}
+
+output &quot;aks_kube_admin_config&quot; {
+  value = azurerm_kubernetes_cluster.aks.kube_admin_config_raw
+  sensitive = true
+}
+
+output &quot;aks_kube_config&quot; {
+  value = azurerm_kubernetes_cluster.aks.kube_config_raw
+  sensitive = true
+}
+
+output &quot;aks_identity&quot; {
+  value = azurerm_kubernetes_cluster.aks.identity
+}
+</code></pre>
+<h2>Add the following code to main.tf</h2>
+<pre><code class="language-bash"># Configure the Azure provider
+terraform {
+  required_providers {
+    azurerm = {
+      source  = &quot;hashicorp/azurerm&quot;
+      version = &quot;~&gt; 3.0.2&quot;
+    }
+
+    kubernetes = {
+      source  = &quot;hashicorp/kubernetes&quot;
+      version = &quot;&gt;= 2.0.0&quot;
+    }
+
+    random = {
+      source  = &quot;hashicorp/random&quot;
+      version = &quot;~&gt; 3.0.0&quot;
+    }
+
+    local = {
+      source  = &quot;hashicorp/local&quot;
+      version = &quot;~&gt; 2.0.0&quot;
+    }
+  }
+  required_version = &quot;&gt;= 1.1.0&quot;
+}
+
+provider &quot;azurerm&quot; {
+  features {}
+}
+
+locals {
+  name_suffix = &quot;${var.resource_group_tags[&quot;project&quot;]}-${var.resource_group_tags[&quot;environment&quot;]}&quot;
+}
+
+resource &quot;azurerm_resource_group&quot; &quot;rg&quot; {
+  name     = &quot;${local.name_suffix}-rg&quot;
+  location = var.location
+  tags     = var.resource_group_tags
+}
+
+// create acr
+
+resource &quot;azurerm_container_registry&quot; &quot;acr&quot; {
+  name                = &quot;${replace(local.name_suffix, &quot;-&quot;, &quot;&quot;)}acr&quot;
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  sku                 = &quot;Basic&quot;
+  admin_enabled       = true
+  tags                = var.resource_group_tags
+}
+
+provider &quot;kubernetes&quot; {
+  host                   = azurerm_kubernetes_cluster.aks.kube_config.0.host
+  client_certificate     = base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.client_certificate)
+  client_key             = base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.client_key)
+  cluster_ca_certificate = base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.cluster_ca_certificate)
+}
+
+provider &quot;local&quot; {
+}
+
+
+resource &quot;local_file&quot; &quot;kube_config&quot; {
+  filename = &quot;${path.module}/configs/${local.name_suffix}.config&quot;
+  content  = &lt;&lt;EOT
+${azurerm_kubernetes_cluster.aks.kube_config_raw}
+EOT
+}
+
+// attach acr to aks
+
+resource &quot;azurerm_role_assignment&quot; &quot;aks_acr_role_assignment&quot; {
+  depends_on           = [azurerm_kubernetes_cluster.aks]
+  scope                = azurerm_container_registry.acr.id
+  role_definition_name = &quot;AcrPull&quot;
+  principal_id         = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
+}
+</code></pre>
+<h2>Create dev.tfvars</h2>
+<pre><code class="language-bash">location = &quot;westeurope&quot;
+resource_group_name = &quot;projectname-dev-rg&quot;
+resource_group_tags = {
+  environment = &quot;dev&quot;
+  project     = &quot;projectname&quot;
+}
+</code></pre>
+<h2>Upgrade terraform</h2>
+<pre><code class="language-bash">terraform init -upgrade
+</code></pre>
+<p>This will upgrade the terraform to latest version and download the latest provider. This will also update the lock file.</p>
+<blockquote>
+<p>Note: terraform use azure cli to authenticate to azure. Make sure you have azure cli installed and logged in to azure.</p>
+</blockquote>
+<h2>Plan terraform with tfvars file</h2>
+<pre><code class="language-bash">terraform plan -var-file=&quot;dev.tfvars&quot;
+</code></pre>
+<p>Always plan before applying terraform. This will show you what resources will be created. This will also show you if there are any errors. This will not create any resources so it is safe to run this command.</p>
+<h2>Apply terraform with tfvars file with auto approve</h2>
+<pre><code class="language-bash">terraform apply -var-file=&quot;dev.tfvars&quot; -auto-approve
+</code></pre>
+<p>This will create all the resources. This will also create a kube config file in configs folder. This file will be used to connect to AKS cluster.</p>
+<h2>Destroy terraform with tfvars file with auto approve</h2>
+<pre><code class="language-bash">terraform destroy -var-file=&quot;dev.tfvars&quot; -auto-approve
+</code></pre>
+<p>This will destroy all the resources. I recommend you create and destroy the resources few times to and get familiar with terraform.</p>
+<h2>Parts in this series</h2>
+<p>Part 0 - <a href="/posts/azure-deployment-for-dotnet">Prerequisites</a></p>
+<p>Part 1 - <a href="/posts/terraform-to-create-azure-kubernetes-service-aks-cluster-and-container-registry">Setup Terraform to create Azure Kubernetes Service (AKS) Cluster and Container Registry</a></p>
+<p>Part 2 - <a href="/posts/certmanager-nginx-ingress-controller-with-static-ip-in-aks">Setup K8s to deploy CertManager, Nginx Ingress Controller with Static IP</a></p>
+<p>Part 3 - <a href="/posts/cloudflare-dns-for-aks-cluster-with-terraform">Setup CloudFlare DNS for Azure Kubernetes Service (AKS) Cluster</a></p>
+<p>Part 4 - <a href="/posts/deploy-a-sample-whoami-application-with-https-enabled">Deploy a sample whoami application with HTTPS enabled</a></p>
+<p>Part 5 - <a href="/posts/github-actions-build-version-push-docker-image-to-azure-container-registry">Setup GitHub Actions to build, Version and push Docker image to Azure Container Registry</a></p>
+<p>Part 6 - <a href="/posts/github-actions-to-deploy-dotnet-application-to-aks-cluster">Setup GitHub Actions to deploy .Net application to Azure Kubernetes Service (AKS) Cluster</a></p>
+<h1>Conclusion</h1>
+<p>If you are new to terraform I recommend you to go through the <a href="https://www.terraform.io/docs/index.html">official documentation</a>. This will give you a good understanding of terraform. In the next post we prepare the aks cluster for deployment.</p>]]></content:encoded>
+          </item><item>
+          <title>Azure Deployment for .Net - Introduction - Prerequisites</title>
+          <link>https://blog.antosubash.com/posts/azure-deployment-for-dotnet</link>
+          <guid>https://blog.antosubash.com/posts/azure-deployment-for-dotnet</guid>
+          <pubDate>Mon, 14 Aug 2023 11:53:48 GMT</pubDate>
+          <description>This is the introduction to the Azure Deployment for .Net series.</description>
+          <content:encoded><![CDATA[<h2>Table of contents</h2>
+<h2>Azure Kubernetes Service</h2>
+<p>Azure Kubernetes Service (AKS) is a managed container orchestration service, based on the open source Kubernetes system, which is available on the Microsoft Azure public cloud. Azure Kubernetes Service is used to deploy and manage containerized applications more easily and efficiently. Azure Kubernetes Service offers serverless Kubernetes, an integrated continuous integration and continuous delivery (CI/CD) experience, and enterprise-grade security and governance. Unite your development and operations teams on a single platform to rapidly build, deliver, and scale applications with confidence.</p>
+<h2>Why?</h2>
+<p>Most of the time, I deploy my .Net apps to Hetzner Cloud. I have written a collection of articles on how to deploy .Net apps to Hetzner Cloud. But When I do consulting work, I deploy the apps to Azure because most of my clients are using Azure. So I thought it would be a good idea to write a collection of articles on how to deploy .Net apps to Azure.</p>
+<h2>Who is this for?</h2>
+<p>This is for anyone who wants to deploy their .Net application to Azure. I will be using GitHub Actions to build and push the Docker image to Azure Container Registry. I will be using Terraform to create the AKS cluster and deploy the .Net application to AKS. So you should have some basic knowledge of Docker, GitHub Actions, and Terraform. Keep in mind that this is simple aks deployment. We will not be using any advanced features of AKS like autoscaling, etc. If you want to learn more about AKS, you can check out the official documentation <a href="https://docs.microsoft.com/en-us/azure/aks/">here</a>.</p>
+<h2>Prerequisites</h2>
+<ul>
+<li><a href="https://azure.microsoft.com/en-us/free/">Azure Account</a></li>
+<li><a href="https://docs.microsoft.com/en-us/cli/azure/install-azure-cli">Azure CLI</a></li>
+<li><a href="https://github.com">GitHub Account</a></li>
+<li><a href="https://www.terraform.io/downloads.html">Terraform</a></li>
+<li><a href="https://www.docker.com/products/docker-desktop">Docker</a></li>
+<li><a href="https://kubernetes.io/docs/tasks/tools/install-kubectl/">Kubectl</a></li>
+<li><a href="https://helm.sh/docs/intro/install/">Helm</a></li>
+<li><a href="https://www.cloudflare.com/">CloudFlare Account</a></li>
+</ul>
+<h3>Azure CLI</h3>
+<p>The Azure CLI is a command-line tool for managing Azure resources. Make sure you have the Azure CLI installed on your machine. You can install the Azure CLI from <a href="https://docs.microsoft.com/en-us/cli/azure/install-azure-cli">here</a>. You can check if the Azure CLI is installed on your machine by running the following command.</p>
+<pre><code class="language-bash">az --version
+</code></pre>
+<h3>Azure login</h3>
+<p>You need to login to your Azure account using the Azure CLI. You can login to your Azure account by running the following command. This will open a browser window and ask you to login to your Azure account. Once you login to your Azure account, you will be able to run Azure CLI commands.</p>
+<pre><code class="language-bash">az login
+</code></pre>
+<p>if you are part of multiple subscriptions, you can set the default subscription by running the following command. Replace the <code>SUBSCRIPTION_ID</code> with your subscription id.</p>
+<pre><code class="language-bash">az account set --subscription=&quot;SUBSCRIPTION_ID&quot;
+</code></pre>
+<h3>Docker desktop</h3>
+<p>You need to install Docker desktop on your machine. You can install Docker desktop from <a href="https://www.docker.com/products/docker-desktop">here</a>. Once you install Docker desktop, you can check if Docker is installed on your machine by running the following command.</p>
+<pre><code class="language-bash">docker --version
+</code></pre>
+<h3>Kubectl</h3>
+<p>You need to install Kubectl on your machine. You can install Kubectl from <a href="https://kubernetes.io/docs/tasks/tools/install-kubectl/">here</a>. Once you install Kubectl, you can check if Kubectl is installed on your machine by running the following command.</p>
+<pre><code class="language-bash">kubectl version --client
+</code></pre>
+<h3>Helm</h3>
+<p>You need to install Helm on your machine. You can install Helm from <a href="https://helm.sh/docs/intro/install/">here</a>. Once you install Helm, you can check if Helm is installed on your machine by running the following command.</p>
+<pre><code class="language-bash">helm version
+</code></pre>
+<h3>Terraform</h3>
+<p>You need to install Terraform on your machine. You can install Terraform from <a href="https://www.terraform.io/downloads.html">here</a>. Once you install Terraform, you can check if Terraform is installed on your machine by running the following command.</p>
+<pre><code class="language-bash">terraform version
+</code></pre>
+<h3>CloudFlare</h3>
+<p>Cloudflare proves the api to manage the DNS. So we will use the Cloudflare api to manage the DNS for our application. You can create a Cloudflare account from <a href="https://www.cloudflare.com/">here</a>. Once you create a Cloudflare account, you need to get the API key from the Cloudflare dashboard and cloudflare zone id. You can get the API key from the Cloudflare dashboard by going to <code>My Profile</code> and then <code>API Tokens</code>. You can get the zone id from the Cloudflare dashboard by going to <code>DNS</code> and then <code>Advanced Details</code>. You can get the zone id from the <code>Zone ID</code> field.</p>
+<h3>GitHub Actions</h3>
+<p>We will be using GitHub Actions to build and push the Docker image to Azure Container Registry. So you need to create a GitHub account from <a href="https://github.com">here</a>. Once you create a GitHub account, you need to create a GitHub repository. You can create a GitHub repository by clicking on the <code>New</code> button on the GitHub dashboard. You can name the repository anything you want. I will be naming the repository <code>azure-deployment-for-dotnet</code>. You can leave the repository as public and click on the <code>Create repository</code> button.</p>
+<h2>What does this series cover?</h2>
+<p>I want to cover the start to finish of deploying a .Net application to Azure. I will be using GitHub Actions to build and push the Docker image to Azure Container Registry. I will be using Terraform to create the AKS cluster and deploy the .Net application to AKS.</p>
+<p>Part 0 - <a href="/posts/azure-deployment-for-dotnet">Prerequisites</a></p>
+<p>Part 1 - <a href="/posts/terraform-to-create-azure-kubernetes-service-aks-cluster-and-container-registry">Setup Terraform to create Azure Kubernetes Service (AKS) Cluster and Container Registry</a></p>
+<p>Part 2 - <a href="/posts/certmanager-nginx-ingress-controller-with-static-ip-in-aks">Setup K8s to deploy CertManager, Nginx Ingress Controller with Static IP</a></p>
+<p>Part 3 - <a href="/posts/cloudflare-dns-for-aks-cluster-with-terraform">Setup CloudFlare DNS for Azure Kubernetes Service (AKS) Cluster</a></p>
+<p>Part 4 - <a href="/posts/deploy-a-sample-whoami-application-with-https-enabled">Deploy a sample whoami application with HTTPS enabled</a></p>
+<p>Part 5 - <a href="/posts/github-actions-build-version-push-docker-image-to-azure-container-registry">Setup GitHub Actions to build, Version and push Docker image to Azure Container Registry</a></p>
+<p>Part 6 - <a href="/posts/github-actions-to-deploy-dotnet-application-to-aks-cluster">Setup GitHub Actions to deploy .Net application to Azure Kubernetes Service (AKS) Cluster</a></p>
+<h2>Conclusion</h2>
+<p>This is the introduction to the Azure Deployment for .Net series. In the next article, we will setup GitHub Actions to build, Version and push Docker image to Azure Container Registry. If you have any questions or feedback, please feel free to post them in the comments section.</p>]]></content:encoded>
+          </item><item>
+          <title>ABP no-layer module template</title>
+          <link>https://blog.antosubash.com/posts/abp-no-layer-module-template</link>
+          <guid>https://blog.antosubash.com/posts/abp-no-layer-module-template</guid>
+          <pubDate>Sun, 21 May 2023 17:28:49 GMT</pubDate>
+          <description>In this article, you will learn how to create a no-layer module template for abp application.</description>
+          <content:encoded><![CDATA[<h2>Table of contents</h2>
+<h2>Introduction</h2>
+<p>In this article, you will learn how to create a no-layer module template for abp application.</p>
+<h2>Why create a no-layer module template?</h2>
+<p>In the abp framework, when you create a module, by default, it will create a layer module. But in some cases, you may not need to create a module without DDD. For example, you want to create a module that only contains a controller and a service. At this time, you can create a no-layer module.</p>
+<p>I create lots of ABP application and modules for my work. I found that I often don&#x27;t use all the features of the template and I have to delete some files and projects. So I started creating project with no-layer template. I found that it is very convenient to use. but If I want to create a no-layer module, I have to create it manually. So I created a no-layer module template.</p>
+<blockquote>
+<p>Note: The no-layer module is not a recommended module type. It is recommended to use a layer module provided by the abp framework. This is just a experiment.</p>
+</blockquote>
+<h2>Primary Use Cases</h2>
+<p>Right now, the no-layer module template is only used for creating simple API&#x27;s. If you have a module which only contains few api endpoints, you can use this template. the current focus is to support only the the no-layer template. but you can also use it in other cases if you want. because it is a just a normal ABP module.</p>
+<h2>Create a no-layer module template</h2>
+<h3>Install the template</h3>
+<pre><code class="language-bash">dotnet new -i Anto.Abp.Module.Template
+</code></pre>
+<h3>Create a no-layer module</h3>
+<pre><code class="language-bash">dotnet new abp-module -n MyModuleName
+</code></pre>
+<p>The above command will create a no-layer module named <code>MyModuleName</code>. make sure you create in the <code>modules</code> folder. If you want to create a no-layer module in another folder.</p>
+<p>This command will only create the module. you have to manually add the module to the application.</p>
+<h2>Structure of the no-layer module</h2>
+<p>The main focus is simplicity. All the projects in the DDD layers are removed and replaced with folders in the single project. you can keep the things you use and delete the things you don&#x27;t use.</p>
+<h2>Future plans</h2>
+<ul>
+<li>Remove AutoMapper</li>
+<li>Remove Localization</li>
+<li>Add plopjs generator to generate API endpoints</li>
+</ul>
+<p>Repo: https://github.com/antosubash/abp-module-template</p>
+<h2>Conclusion</h2>
+<p>This is just a experiment. I&#x27;m not using this in any production application. I started this because I felt like I was doing too many premature optimizations when I was creating a module. After creating few modules with <code>abp add-module</code> command, your solution will be filled with lots of projects and files and test projects. It increases build time and VS starts to lag. I&#x27;m hoping this will solve that problem. But I&#x27;m not sure about that. I&#x27;m still testing this. maybe I will use this in my next project. If you have any questions, please comment below.</p>]]></content:encoded>
+          </item><item>
+          <title>Abp CLI Template</title>
+          <link>https://blog.antosubash.com/posts/abp-cli-template</link>
+          <guid>https://blog.antosubash.com/posts/abp-cli-template</guid>
+          <pubDate>Sat, 20 May 2023 00:00:00 GMT</pubDate>
+          <description>In this post we will see how to create a Cli for your abp application.</description>
+          <content:encoded><![CDATA[<h2>Table of contents</h2>
+<h2>Intro</h2>
+<p>In this post we will see how to create a Cli for your abp application.</p>
+<h2>Why a CLI?</h2>
+<p>The CLI is a great way to automate repetitive tasks. I use it to import large amounts of data into the database, to create new entities, to seed dummy data, etc.</p>
+<h2>Create a new CLI</h2>
+<p>To create a new CLI, you need to install the cli dotnet new template.</p>
+<pre><code class="language-bash">dotnet new install Anto.Cli.Template
+</code></pre>
+<p>Then you can create a new CLI project.</p>
+<pre><code class="language-bash">dotnet new cli-template -o MyProject --api myabpproject.com
+</code></pre>
+<blockquote>
+<p>Note: The --api parameter is the url of your abp project.</p>
+</blockquote>
+<h2>How to use it</h2>
+<p>The CLI is a dotnet core console application. You can run it with the following command.</p>
+<pre><code class="language-bash">dotnet run -- --help
+</code></pre>
+<h2>Features</h2>
+<ul>
+<li>Login</li>
+<li>Logout</li>
+<li>Seed Tenant</li>
+<li>Seed User</li>
+</ul>
+<h2>Future plans</h2>
+<ul>
+<li>Import data from csv</li>
+</ul>
+<h2>Setup</h2>
+<p>Once you have created the cli there are few things you need to do.</p>
+<ul>
+<li>Create a new OpenIdConnect client in your abp project for the cli.</li>
+<li>Update the ClientId and Scope in the <code>AuthService.cs</code> file.</li>
+</ul>
+<h2>Generating HttpClient?</h2>
+<p>The CLI uses the abp REST API to communicate with the abp project. But that means you need to generate the HttpClient before you can use it. To do that, I have used <code>nswag</code> to generate the client. To generate the client, you need to run the following command.</p>
+<pre><code class="language-bash">yarn gen-api
+</code></pre>
+<blockquote>
+<p>Note: You need to have <code>nswag</code> installed globally.#</p>
+</blockquote>
+<p>Check the <code>package.json</code> file for more details.</p>
+<h2>Storing the token</h2>
+<p>The CLI stores the token in the <code>access-token.bin</code> file. If you want to change the location of the file, you can change it in the <code>CliPaths.cs</code> file. the token is not encrypted, keep that in mind.</p>
+<h2>Code generation</h2>
+<p>This cli uses <code>plop</code> to generate code. You can find the templates in the <code>plop-templates</code> folder. You can add your own templates there.</p>
+<p>Right now, there is only 3 templates. you can just run the following command to generate the code.</p>
+<pre><code class="language-bash">yarn plop
+</code></pre>
+<blockquote>
+<p>Note: Make sure you have install npm packages before running the command.</p>
+</blockquote>
+<p>Repo: https://github.com/antosubash/abp-cli-template</p>
+<h2>Conclusion</h2>
+<p>This is a very simple CLI, but it can be very useful. I hope you like it.</p>]]></content:encoded>
+          </item><item>
           <title>ABP React Template</title>
           <link>https://blog.antosubash.com/posts/abp-react-template</link>
           <guid>https://blog.antosubash.com/posts/abp-react-template</guid>
@@ -15,7 +444,45 @@
 <h2>Introduction</h2>
 <p>React Starter Template for ABP application with Next.js and Tailwind CSS is ready to use. You can use this template to start your next project.</p>
 <h2>Why?</h2>
-<p>I have been working on a project that uses ABP Framework and React. I have been using Next.js and Tailwind CSS for a while and I want to create a template use in my new project. I thought it would be useful for others as well. So, I decided to share it with you. I hope you find it useful.</p>
+<p>I have been working on a project that uses ABP Framework, Next.js and Tailwind CSS for a while and I want to create a template that will kickstart my next project easily. Since ABP doesn&#x27;t have React Template yet. I thought it would be useful for others as well. So, I decided to share it with you. I hope you find it useful.</p>
+<h2>What is ABP Framework?</h2>
+<p><a href="https://abp.io/">ABP Framework</a> is a full stack web application framework. It is based on ASP.NET Core. It provides a lot of features out of the box. You can use it to build enterprise applications. It is free and open source. You can find the source code on <a href="https://github.com/abpframework/abp">GitHub</a>. You can also find the documentation on <a href="https://docs.abp.io/">docs.abp.io</a>.</p>
+<h2>What is Next.js?</h2>
+<p><a href="https://nextjs.org/">Next.js</a> is a React framework. It removes lots of complexity of the react application. It is free and open source. You can find the source code on <a href="https://github.com/vercel/next.js">GitHub</a>.</p>
+<h2>What is Tailwind CSS?</h2>
+<p><a href="https://tailwindcss.com/">Tailwind CSS</a> is a utility-first CSS framework. You can find the source code on <a href="https://github.com/tailwindlabs/tailwindcss">GitHub</a>.</p>
+<h2>Getting Started</h2>
+<h3>Prerequisites</h3>
+<ul>
+<li><a href="https://nodejs.org/en/">Node.js</a></li>
+<li><a href="https://pnpm.js.org/en/installation">pnpm</a></li>
+<li><a href="https://abp.io/">ABP Framework</a></li>
+<li><a href="https://dotnet.microsoft.com/download/dotnet/7.0">.Net 7</a></li>
+</ul>
+<h3>Installing Template</h3>
+<p>Install the ABP React .Net Template</p>
+<pre><code class="language-bash">dotnet new install Anto.Abp.React.Template
+</code></pre>
+<blockquote>
+<p>Note: This only creates React Application. You need to create an ABP application separately. You can find the documentation <a href="https://docs.abp.io/en/abp/latest/Getting-Started">here</a>.</p>
+</blockquote>
+<h3>Creating a new project</h3>
+<p>Create a new project using the template</p>
+<pre><code class="language-bash">dotnet new abp-react -o my-project-name
+</code></pre>
+<blockquote>
+<p>Note: You can use any name for the project. I used <code>my-project-name</code> for this example. keep in mind that the project name should be in kebab case (all lowercase and words separated by hyphens) because it will be used as the name of the packages org name.</p>
+</blockquote>
+<h3>Running the project</h3>
+<pre><code class="language-bash">cd MyProjectName
+pnpm install
+pnpm dev
+</code></pre>
+<blockquote>
+<p>Note: You can use any other package manager instead of pnpm. But I recommend using pnpm. It&#x27;s fast and reliable. Make sure you have ABP application is running before running the app.</p>
+</blockquote>
+<h2>Best Use Case</h2>
+<p>The best use case is to create customer facing applications. You can use it to create a dashboard or a portal. You can also use it to create a public website. The template is not limited to these use cases. You can use it to create any kind of application. It supports SSR, CSR and static pages.</p>
 <h2>Demo Application</h2>
 <p>You can find the demo application <a href="https://abpreact.antosubash.com/">here</a>. You can use the following credentials to login.</p>
 <ul>
@@ -35,12 +502,6 @@
 <li>DaisyUI</li>
 <li>Radix UI</li>
 </ul>
-<h2>What is ABP Framework?</h2>
-<p><a href="https://abp.io/">ABP Framework</a> is a full stack web application framework. It is based on ASP.NET Core. It provides a lot of features out of the box. You can use it to build enterprise applications. It is free and open source. You can find the source code on <a href="https://github.com/abpframework/abp">GitHub</a>. You can also find the documentation on <a href="https://docs.abp.io/">docs.abp.io</a>.</p>
-<h2>What is Next.js?</h2>
-<p><a href="https://nextjs.org/">Next.js</a> is a React framework. It removes lots of complexity of the react application. It is free and open source. You can find the source code on <a href="https://github.com/vercel/next.js">GitHub</a>.</p>
-<h2>What is Tailwind CSS?</h2>
-<p><a href="https://tailwindcss.com/">Tailwind CSS</a> is a utility-first CSS framework. You can find the source code on <a href="https://github.com/tailwindlabs/tailwindcss">GitHub</a>.</p>
 <h2>Features</h2>
 <ul>
 <li>Authentication</li>
@@ -59,41 +520,18 @@
 <li>It should be easy to add new features.</li>
 <li>It should be easy to customize.</li>
 <li>It should be easy to integrate with ABP Framework.</li>
-<li>It should be upto date with ABP Framework and React.</li>
+<li>It should be up to date with ABP Framework and React.</li>
 </ul>
-<h2>Getting Started</h2>
-<h3>Prerequisites</h3>
-<ul>
-<li>Node.js</li>
-<li>Pnpm</li>
-<li>Turborepo</li>
-</ul>
-<h3>Get the code</h3>
-<pre><code class="language-bash">npx degit antosubash/abpreact my-abp-react-app
-cd my-abp-react-app
-</code></pre>
-<p>This will create a new folder named <code>my-abp-react-app</code> and copy the template files into it. Right now, the template is not published to npm. So, you need to use <code>npx degit</code> to get the code. I will come up with a better solution soon.</p>
-<h3>Install dependencies</h3>
-<pre><code class="language-bash">pnpm install
-</code></pre>
-<blockquote>
-<p>Note: You can use any other package manager instead of pnpm. But I recommend using pnpm.</p>
-</blockquote>
-<h3>Run the app</h3>
-<pre><code class="language-bash">pnpm dev
-</code></pre>
-<blockquote>
-<p>Note: You need to run the ABP Framework backend before running the app.</p>
-</blockquote>
+<p>The main focus is the customization. you should be able to bring your own Design system and UI components. I have only used Tailwind CSS and Radix UI for the demo application. You can use any other design system and UI components.</p>
+<h2>Special Thanks</h2>
+<p>Special thanks to <a href="https://github.com/sajanv88">Sajan</a> for his help. His help was invaluable. I started this project a while ago. But I couldn&#x27;t find time to finish it. He helped me to finish it. Thanks a lot, Sajan.</p>
 <h2>Documentation</h2>
 <p>I&#x27;m working on the documentation. It will be available soon.</p>
 <h2>Contributing</h2>
 <p>I&#x27;m open to contributions. Please feel free to open an issue or a pull request.</p>
-<h2>Special Thanks</h2>
-<p>Special thanks to <a href="https://github.com/sajanv88">Sajan</a> for his help. His help was invaluable. I started this project a while ago. But I couldn&#x27;t find time to finish it. He helped me to finish it. Thanks a lot, Sajan.</p>
 <h2>What to expect next?</h2>
 <p>Multi-tenant support is coming soon. I&#x27;m working on it. I will update this post when it&#x27;s ready. I will also update the documentation.</p>
-<h2>Roadmap</h2>
+<h2>Road map</h2>
 <p>Most of the features are implemented. We are planning to keep it similar to the ABP Framework Open Source Application. That means all the commercial features will not be implemented.</p>
 <h2>Conclusion</h2>
 <p>I hope you find this template useful. If you have any questions or suggestions, please feel free to open an issue or a pull request. I will try to answer them as soon as possible. Thanks for reading. Happy coding!</p>]]></content:encoded>
@@ -9088,6 +9526,20 @@ CreateMap&lt;TodoDto, Todo&gt;();
 </code></pre>
 <p>Once you created the Application configuration ABP can automatically configure your service as API controllers by conventions.</p>
 <h2>Github Repo Link : https://github.com/antosubash/Todos</h2>]]></content:encoded>
+          </item><item>
+          <title>undefined</title>
+          <link>https://blog.antosubash.com/posts/deploy-a-sample-whoami-application-with-https-enabled</link>
+          <guid>https://blog.antosubash.com/posts/deploy-a-sample-whoami-application-with-https-enabled</guid>
+          <pubDate>Invalid Date</pubDate>
+          <description>undefined</description>
+          <content:encoded><![CDATA[]]></content:encoded>
+          </item><item>
+          <title>undefined</title>
+          <link>https://blog.antosubash.com/posts/github-actions-to-deploy-dotnet-application-to-aks-cluster</link>
+          <guid>https://blog.antosubash.com/posts/github-actions-to-deploy-dotnet-application-to-aks-cluster</guid>
+          <pubDate>Invalid Date</pubDate>
+          <description>undefined</description>
+          <content:encoded><![CDATA[]]></content:encoded>
           </item><item>
           <title>Docker swarm setup for localhost</title>
           <link>https://blog.antosubash.com/posts/docker-swarm-localhost</link>
