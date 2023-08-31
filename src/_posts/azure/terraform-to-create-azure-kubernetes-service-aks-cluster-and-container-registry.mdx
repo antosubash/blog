@@ -312,6 +312,23 @@ terraform destroy -var-file="dev.tfvars" -auto-approve
 
 This will destroy all the resources. I recommend you create and destroy the resources few times to and get familiar with terraform.
 
+## Parts in this series
+
+Part 0 - [Prerequisites](/posts/azure-deployment-for-dotnet)
+
+Part 1 - [Setup Terraform to create Azure Kubernetes Service (AKS) Cluster and Container Registry](/posts/terraform-to-create-azure-kubernetes-service-aks-cluster-and-container-registry)
+
+Part 2 - [Setup K8s to deploy CertManager, Nginx Ingress Controller with Static IP](/posts/certmanager-nginx-ingress-controller-with-static-ip-in-aks)
+
+Part 3 - [Setup CloudFlare DNS for Azure Kubernetes Service (AKS) Cluster](/posts/cloudflare-dns-for-aks-cluster-with-terraform)
+
+Part 4 - [Deploy a sample whoami application with HTTPS enabled](/posts/deploy-a-sample-whoami-application-with-https-enabled)
+
+Part 5 - [Setup GitHub Actions to build, Version and push Docker image to Azure Container Registry](/posts/github-actions-build-version-push-docker-image-to-azure-container-registry)
+
+Part 6 - [Setup GitHub Actions to deploy .Net application to Azure Kubernetes Service (AKS) Cluster](/posts/github-actions-to-deploy-dotnet-application-to-aks-cluster)
+
+
 # Conclusion
 
 If you are new to terraform I recommend you to go through the [official documentation](https://www.terraform.io/docs/index.html). This will give you a good understanding of terraform. In the next post we prepare the aks cluster for deployment.

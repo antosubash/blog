@@ -5,8 +5,10 @@ date: "2023-08-19T11:53:48.157Z"
 videoId:
 series: "Azure Kubernetes (AKS) Deployment for .Net"
 part: 3
+isDraft: false
 tags: ["aks", "kubernetes", "terraform", "cloudflare"]
 ---
+import Parts from "./parts.mdx"
 
 ## Table of Contents
 
@@ -26,11 +28,34 @@ Make sure you have completed the previous article and have the following resourc
 
 ## Setup Cloudflare DNS for AKS Cluster with Terraform
 
-### Update Terraform Variables
+### Update the Terraform Provider
+
+Update the provider section with the following code.
+
+```bash
+cloudflare = {
+  source  = "cloudflare/cloudflare"
+  version = "~> 3.0"
+}
+```
+
+### Update the Terraform tfvars file
 
 Update the `dev.tfvars` file with the following values.
 
-```terraform
+```bash
+cloudflare_domain_name = "yourdomain.com"
+cloudflare_zone_id     = "yourzoneid"
+cloudflare_api_token   = "yourapitoken"
+```
+
+You can get the Zone ID and API Token from the Cloudflare dashboard.
+
+### Update Terraform Variables
+
+Update the `variables.tf` file with the following values.
+
+```bash
 variable "cloudflare_domain_name" {
   default     = ""
   description = "The domain name to use for Let's Encrypt."
@@ -71,14 +96,16 @@ This will be used to create the Cloudflare DNS records. The `cloudflare_domain_n
 
 update the `main.tf` file with the following code.
 
-
-```terraform
+```bash
 resource "cloudflare_record" "aks" {
   zone_id = var.cloudflare_zone_id
   name    = "aks"
   value   = azurerm_kubernetes_cluster.aks.fqdn
   type    = "CNAME"
   ttl     = 1
-  proxied = true
+  proxied = false
 }
 ```
+
+<Parts />
+

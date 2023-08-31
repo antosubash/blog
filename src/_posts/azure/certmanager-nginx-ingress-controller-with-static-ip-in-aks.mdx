@@ -35,7 +35,7 @@ helm repo update
 
 Update the terraform script to install cert manager. 
 
-```terraform
+```bash
 resource "azurerm_public_ip" "aks_static_ip" {
   depends_on          = [azurerm_kubernetes_cluster.aks]
   name                = "${local.name_suffix}-aks-static-ip"
@@ -49,7 +49,7 @@ resource "azurerm_public_ip" "aks_static_ip" {
 
 This will create a static IP address for the ingress controller. 
 
-```terraform
+```bash
 locals {
   aks_namespace = "${var.resource_group_tags["project"]}-${var.resource_group_tags["environment"]}-ingress-nginx"
 }
@@ -57,7 +57,7 @@ locals {
 
 This will create a name based on the project and environment.
 
-```terraform
+```bash
 resource "kubernetes_namespace" "ingress_namespace" {
   depends_on = [azurerm_kubernetes_cluster.aks]
   metadata {
@@ -68,7 +68,7 @@ resource "kubernetes_namespace" "ingress_namespace" {
 
 This will create a namespace for the ingress controller. 
 
-```terraform
+```bash
 resource "helm_release" "nginx_ingress" {
   depends_on = [azurerm_public_ip.aks_static_ip]
   name       = "nginx-ingress"
@@ -91,7 +91,7 @@ resource "helm_release" "nginx_ingress" {
 
 This will install the nginx ingress controller. we are setting the static IP address for the ingress controller.
 
-```terraform
+```bash
 resource "helm_release" "cert_manager" {
   depends_on = [azurerm_kubernetes_cluster.aks]
   name       = "cert-manager"
@@ -122,6 +122,22 @@ terraform apply -var-file="dev.tfvars" -auto-approve
 ```
 
 This will apply the terraform script.
+
+## Parts in this series
+
+Part 0 - [Prerequisites](/posts/azure-deployment-for-dotnet)
+
+Part 1 - [Setup Terraform to create Azure Kubernetes Service (AKS) Cluster and Container Registry](/posts/terraform-to-create-azure-kubernetes-service-aks-cluster-and-container-registry)
+
+Part 2 - [Setup K8s to deploy CertManager, Nginx Ingress Controller with Static IP](/posts/certmanager-nginx-ingress-controller-with-static-ip-in-aks)
+
+Part 3 - [Setup CloudFlare DNS for Azure Kubernetes Service (AKS) Cluster](/posts/cloudflare-dns-for-aks-cluster-with-terraform)
+
+Part 4 - [Deploy a sample whoami application with HTTPS enabled](/posts/deploy-a-sample-whoami-application-with-https-enabled)
+
+Part 5 - [Setup GitHub Actions to build, Version and push Docker image to Azure Container Registry](/posts/github-actions-build-version-push-docker-image-to-azure-container-registry)
+
+Part 6 - [Setup GitHub Actions to deploy .Net application to Azure Kubernetes Service (AKS) Cluster](/posts/github-actions-to-deploy-dotnet-application-to-aks-cluster)
 
 ## Conclusion
 
