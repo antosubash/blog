@@ -6,30 +6,132 @@
             <description>Anto Subash's Blog</description>
             <language>en</language>
             <item>
-          <title>Setup terraform to create Azure Kubernetes (AKS) cluster and Azure Container Registry (ACR)</title>
-          <link>https://blog.antosubash.com/posts/setup-terraform-to-create-azure-kubernetes-service-aks-cluster-and-container-registry</link>
-          <guid>https://blog.antosubash.com/posts/setup-terraform-to-create-azure-kubernetes-service-aks-cluster-and-container-registry</guid>
-          <pubDate>Wed, 16 Aug 2023 11:53:48 GMT</pubDate>
-          <description>This is the second part of the series where we will setup terraform to create Azure Kubernetes (AKS) cluster and Azure Container Registry (ACR).</description>
+          <title>Cert Manager and Nginx Ingress Controller on AKS Cluster with static IP</title>
+          <link>https://blog.antosubash.com/posts/certmanager-nginx-ingress-controller-with-static-ip-in-aks</link>
+          <guid>https://blog.antosubash.com/posts/certmanager-nginx-ingress-controller-with-static-ip-in-aks</guid>
+          <pubDate>Fri, 18 Aug 2023 11:53:48 GMT</pubDate>
+          <description>In this we will setup Cert Manager and Nginx Ingress Controller on AKS Cluster</description>
           <content:encoded><![CDATA[<h2>Table of contents</h2>
-<h2>Init terraform</h2>
-<pre><code class="language-bash">terraform init
+<h2>This series is a Work in Progress</h2>
+<h2>Introduction</h2>
+<p>In the previous article we have created AKS cluster using Terraform. In this article we will setup Cert Manager and Nginx Ingress Controller on AKS Cluster.</p>
+<h2>Prerequisite</h2>
+<p>Make sure you have completed the previous article and have AKS cluster ready.</p>
+<h2>Setup Cert Manager</h2>
+<p>Cert-Manager is a Kubernetes add-on to automate the management and issuance of TLS certificates from various issuing sources. It will ensure certificates are valid and up to date periodically, and attempt to renew certificates at an appropriate time before expiry.</p>
+<h3>Install Cert Manager</h3>
+<p>Cert Manager is deployed as a series of Kubernetes components, and we will install it using Helm.</p>
+<pre><code class="language-bash">helm repo add jetstack https://charts.jetstack.io
+helm repo update
 </code></pre>
+<h2>Prepare the terraform script</h2>
+<p>Update the terraform script to install cert manager.</p>
+<pre><code class="language-bash">resource &quot;azurerm_public_ip&quot; &quot;aks_static_ip&quot; {
+  depends_on          = [azurerm_kubernetes_cluster.aks]
+  name                = &quot;${local.name_suffix}-aks-static-ip&quot;
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_kubernetes_cluster.aks.node_resource_group
+  allocation_method   = &quot;Static&quot;
+  sku                 = &quot;Standard&quot;
+  tags                = var.resource_group_tags
+}
+</code></pre>
+<p>This will create a static IP address for the ingress controller.</p>
+<pre><code class="language-bash">locals {
+  aks_namespace = &quot;${var.resource_group_tags[&quot;project&quot;]}-${var.resource_group_tags[&quot;environment&quot;]}-ingress-nginx&quot;
+}
+</code></pre>
+<p>This will create a name based on the project and environment.</p>
+<pre><code class="language-bash">resource &quot;kubernetes_namespace&quot; &quot;ingress_namespace&quot; {
+  depends_on = [azurerm_kubernetes_cluster.aks]
+  metadata {
+    name = &quot;${local.aks_namespace}&quot;
+  }
+}
+</code></pre>
+<p>This will create a namespace for the ingress controller.</p>
+<pre><code class="language-bash">resource &quot;helm_release&quot; &quot;nginx_ingress&quot; {
+  depends_on = [azurerm_public_ip.aks_static_ip]
+  name       = &quot;nginx-ingress&quot;
+  repository = &quot;https://kubernetes.github.io/ingress-nginx&quot;
+  chart      = &quot;ingress-nginx&quot;
+  namespace  = &quot;${local.aks_namespace}&quot;
+  version    = &quot;4.7.0&quot;
+
+  set {
+    name  = &quot;controller.service.loadBalancerIP&quot;
+    value = azurerm_public_ip.aks_static_ip.ip_address
+  }
+
+  set {
+    name  = &quot;controller.service.externalTrafficPolicy&quot;
+    value = &quot;Local&quot;
+  }
+}
+</code></pre>
+<p>This will install the nginx ingress controller. we are setting the static IP address for the ingress controller.</p>
+<pre><code class="language-bash">resource &quot;helm_release&quot; &quot;cert_manager&quot; {
+  depends_on = [azurerm_kubernetes_cluster.aks]
+  name       = &quot;cert-manager&quot;
+  repository = &quot;https://charts.jetstack.io&quot;
+  chart      = &quot;cert-manager&quot;
+  namespace  = &quot;${local.aks_namespace}&quot;
+  version    = &quot;1.12.0&quot;
+
+  set {
+    name  = &quot;installCRDs&quot;
+    value = true
+  }
+}
+</code></pre>
+<p>This will install the cert manager.</p>
+<h2>Plan and Apply the terraform script with tfvars</h2>
+<pre><code class="language-bash">terraform plan -var-file=&quot;dev.tfvars&quot;
+</code></pre>
+<p>This will show the plan for the terraform script.</p>
+<pre><code class="language-bash">terraform apply -var-file=&quot;dev.tfvars&quot; -auto-approve
+</code></pre>
+<p>This will apply the terraform script.</p>
+<h2>Conclusion</h2>
+<p>In this article we have setup Cert Manager and Nginx Ingress Controller on AKS Cluster. It will help us to manage the certificates and ingress controller. In the next article we will see how to use cloudflare for DNS and setup the DNS records automatically using Terraform.</p>]]></content:encoded>
+          </item><item>
+          <title>Create AKS cluster and ACR with Terraform</title>
+          <link>https://blog.antosubash.com/posts/terraform-to-create-azure-kubernetes-service-aks-cluster-and-container-registry</link>
+          <guid>https://blog.antosubash.com/posts/terraform-to-create-azure-kubernetes-service-aks-cluster-and-container-registry</guid>
+          <pubDate>Wed, 16 Aug 2023 11:53:48 GMT</pubDate>
+          <description>In this we will create Azure Kubernetes (AKS) cluster and Azure Container Registry (ACR).</description>
+          <content:encoded><![CDATA[<h2>Table of contents</h2>
+<h2>This series is a Work in Progress</h2>
+<h2>Terraform</h2>
+<p>Terraform is an open-source infrastructure as code software tool created by HashiCorp. It enables users to define and provision a datacenter infrastructure using a high-level configuration language known as Hashicorp Configuration Language (HCL), or optionally JSON. Terraform supports a number of cloud infrastructure providers such as Amazon Web Services Google Cloud Platform, Linode, Microsoft Azure, Oracle Cloud Infrastructure, Hetzner or VMware vSphere as well as OpenStack.</p>
+<h2>Install terraform</h2>
+<p>Download and install terraform from <a href="https://www.terraform.io/downloads.html">here</a>.</p>
+<h2>Create a new folder for infrastructure</h2>
+<pre><code class="language-bash">mkdir infrastructure
+cd infrastructure
+</code></pre>
+<p>We will create all the terraform files in this folder. this will be only for infrastructure.</p>
 <h3>Create main.tf</h3>
 <pre><code class="language-bash">new-item main.tf
 </code></pre>
+<p>This is where we will create all the resources.</p>
 <h3>create variables.tf</h3>
 <pre><code class="language-bash">new-item variables.tf
 </code></pre>
+<p>This is where we will create all the variables. We will use these variables in main.tf file.</p>
 <h3>Create dev.tfvars</h3>
 <pre><code class="language-bash">new-item dev.tfvars
 </code></pre>
+<p>This is where we will create all the variables values. We will use these variables values in main.tf file. This file will not be checked in to source control. You can add this file to .gitignore file. you can also use this file to override the variables values.
+you can create multiple tfvars files for different environments.</p>
 <h3>Create output.tf</h3>
 <pre><code class="language-bash">new-item output.tf
 </code></pre>
-<h3>Create provider.tf</h3>
-<pre><code class="language-bash">new-item provider.tf
+<p>This is where we will create all the outputs. We will use these outputs in main.tf file.</p>
+<h3>Create configs folder</h3>
+<pre><code class="language-bash">mkdir configs
 </code></pre>
+<p>This is where we will create all the kube config files. We will use these kube config files to connect to AKS cluster.</p>
 <h2>Create variables and outputs</h2>
 <h3>Add the following code to variables.tf</h3>
 <pre><code class="language-bash">variable &quot;location&quot; {
@@ -65,50 +167,6 @@ variable &quot;resource_group_tags&quot; {
   validation {
     condition     = contains(keys(var.resource_group_tags), &quot;project&quot;)
     error_message = &quot;The resource_group_tags map must contain a key named \&quot;project\&quot;.&quot;
-  }
-}
-
-variable &quot;letsencrypt_email&quot; {
-  default     = &quot;&quot;
-  description = &quot;The email address to use for Let&#x27;s Encrypt.&quot;
-  type        = string
-
-  validation {
-    condition     = can(regex(&quot;^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$&quot;, var.letsencrypt_email))
-    error_message = &quot;The letsencrypt_email variable must be a valid email address.&quot;
-  }
-}
-
-variable &quot;cloudflare_domain_name&quot; {
-  default     = &quot;&quot;
-  description = &quot;The domain name to use for Let&#x27;s Encrypt.&quot;
-  type        = string
-
-  validation {
-    condition     = can(regex(&quot;^[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$&quot;, var.cloudflare_domain_name))
-    error_message = &quot;The cloudflare_domain_name variable must be a valid domain name.&quot;
-  }
-}
-
-variable &quot;cloudflare_zone_id&quot; {
-  default     = &quot;&quot;
-  description = &quot;The Cloudflare Zone ID for the domain name.&quot;
-  type        = string
-
-  validation {
-    condition     = length(var.cloudflare_zone_id) &gt; 0
-    error_message = &quot;The cloudflare_zone_id variable must be a valid Cloudflare Zone ID.&quot;
-  }
-}
-
-variable &quot;cloudflare_api_token&quot; {
-  default    = &quot;&quot;
-  description = &quot;The Cloudflare API Token for the domain name.&quot;
-  type        = string
-
-  validation {
-    condition     = length(var.cloudflare_api_token) &gt; 0
-    error_message = &quot;The cloudflare_api_token variable must be a valid Cloudflare API Token.&quot;
   }
 }
 </code></pre>
@@ -198,19 +256,9 @@ terraform {
       version = &quot;&gt;= 2.0.0&quot;
     }
 
-    helm = {
-      source  = &quot;hashicorp/helm&quot;
-      version = &quot;~&gt; 2.0.0&quot;
-    }
-
     random = {
       source  = &quot;hashicorp/random&quot;
       version = &quot;~&gt; 3.0.0&quot;
-    }
-
-    cloudflare = {
-      source  = &quot;cloudflare/cloudflare&quot;
-      version = &quot;~&gt; 3.0&quot;
     }
 
     local = {
@@ -253,21 +301,6 @@ provider &quot;kubernetes&quot; {
   cluster_ca_certificate = base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.cluster_ca_certificate)
 }
 
-// create helm provider
-
-provider &quot;helm&quot; {
-  kubernetes {
-    host                   = azurerm_kubernetes_cluster.aks.kube_config.0.host
-    client_certificate     = base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.client_certificate)
-    client_key             = base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.client_key)
-    cluster_ca_certificate = base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.cluster_ca_certificate)
-  }
-}
-
-provider &quot;cloudflare&quot; {
-  api_token = var.cloudflare_api_token
-}
-
 provider &quot;local&quot; {
 }
 
@@ -287,94 +320,6 @@ resource &quot;azurerm_role_assignment&quot; &quot;aks_acr_role_assignment&quot;
   role_definition_name = &quot;AcrPull&quot;
   principal_id         = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
 }
-
-// create static ip inside aks resource group
-
-resource &quot;azurerm_public_ip&quot; &quot;aks_static_ip&quot; {
-  depends_on          = [azurerm_kubernetes_cluster.aks]
-  name                = &quot;${local.name_suffix}-aks-static-ip&quot;
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_kubernetes_cluster.aks.node_resource_group
-  allocation_method   = &quot;Static&quot;
-  sku                 = &quot;Standard&quot;
-  tags                = var.resource_group_tags
-}
-
-// add cloudflare cname dns record for aks static ip
-
-resource &quot;cloudflare_record&quot; &quot;aks_static_ip_dns&quot; {
-  depends_on = [azurerm_public_ip.aks_static_ip]
-  zone_id    = var.cloudflare_zone_id
-  name       = &quot;${var.resource_group_tags[&quot;project&quot;]}.${var.cloudflare_domain_name}&quot;
-  value      = azurerm_public_ip.aks_static_ip.ip_address
-  type       = &quot;A&quot;
-  proxied    = false
-  ttl        = 1
-}
-
-// add cloudflare cname dns record for aks static ip
-
-resource &quot;cloudflare_record&quot; &quot;aks_static_ip_dns_cname&quot; {
-  depends_on = [azurerm_public_ip.aks_static_ip]
-  zone_id    = var.cloudflare_zone_id
-  name       = &quot;*.${var.resource_group_tags[&quot;project&quot;]}.${var.cloudflare_domain_name}&quot;
-  value      = &quot;${var.resource_group_tags[&quot;project&quot;]}.${var.cloudflare_domain_name}&quot;
-  type       = &quot;CNAME&quot;
-  proxied    = false
-  ttl        = 1
-}
-
-// create local variable for aks namespace
-
-locals {
-  aks_namespace = &quot;${var.resource_group_tags[&quot;project&quot;]}-${var.resource_group_tags[&quot;environment&quot;]}-ingress-nginx&quot;
-}
-
-// create aks ingress namespace
-
-resource &quot;kubernetes_namespace&quot; &quot;ingress_namespace&quot; {
-  depends_on = [azurerm_kubernetes_cluster.aks]
-  metadata {
-    name = &quot;${local.aks_namespace}&quot;
-  }
-}
-
-// deploy nginx ingress controller to aks with static ip
-
-resource &quot;helm_release&quot; &quot;nginx_ingress&quot; {
-  depends_on = [azurerm_public_ip.aks_static_ip]
-  name       = &quot;nginx-ingress&quot;
-  repository = &quot;https://kubernetes.github.io/ingress-nginx&quot;
-  chart      = &quot;ingress-nginx&quot;
-  namespace  = &quot;${local.aks_namespace}&quot;
-  version    = &quot;4.7.0&quot;
-
-  set {
-    name  = &quot;controller.service.loadBalancerIP&quot;
-    value = azurerm_public_ip.aks_static_ip.ip_address
-  }
-
-  set {
-    name  = &quot;controller.service.externalTrafficPolicy&quot;
-    value = &quot;Local&quot;
-  }
-}
-
-// deploy cert-manager to aks
-
-resource &quot;helm_release&quot; &quot;cert_manager&quot; {
-  depends_on = [azurerm_kubernetes_cluster.aks]
-  name       = &quot;cert-manager&quot;
-  repository = &quot;https://charts.jetstack.io&quot;
-  chart      = &quot;cert-manager&quot;
-  namespace  = &quot;${local.aks_namespace}&quot;
-  version    = &quot;1.12.0&quot;
-
-  set {
-    name  = &quot;installCRDs&quot;
-    value = true
-  }
-}
 </code></pre>
 <h2>Create dev.tfvars</h2>
 <pre><code class="language-bash">location = &quot;westeurope&quot;
@@ -384,218 +329,27 @@ resource_group_tags = {
   project     = &quot;projectname&quot;
 }
 </code></pre>
-<h2></h2>]]></content:encoded>
-          </item><item>
-          <title>Build, Version and Publish .Net Application to Azure Container Registry (ACR) using GitHub Actions</title>
-          <link>https://blog.antosubash.com/posts/github-actions-build-version-push-docker-image-to-azure-container-registry</link>
-          <guid>https://blog.antosubash.com/posts/github-actions-build-version-push-docker-image-to-azure-container-registry</guid>
-          <pubDate>Tue, 15 Aug 2023 11:53:48 GMT</pubDate>
-          <description>This is the first part of the series of articles on Azure Kubernetes (AKS) Deployment for .Net. In this article, we will see how to build, version and publish .Net application to Azure Container Registry (ACR) using GitHub Actions.</description>
-          <content:encoded><![CDATA[<h2>Table of contents</h2>
-<h2>Build</h2>
-<h3>Create a new GitHub repository</h3>
-<p>Create a new GitHub repository with the name <code>aks-dotnet-app</code>.</p>
-<h3>Create a new .Net Core Web API project</h3>
-<p>Create a new .Net Core Web API project with the name <code>aks-dotnet-app</code> using the following command.</p>
-<pre><code class="language-bash">dotnet new webapi -n TaskyWebApi -o src/TaskyWebApi
-dotnet new sln -n Tasky -o src
-dotnet sln src/Tasky.sln add src/TaskyWebApi/TaskyWebApi.csproj
+<h2>Upgrade terraform</h2>
+<pre><code class="language-bash">terraform init -upgrade
 </code></pre>
-<h3>Add a new Dockerfile</h3>
-<p>Add a new Dockerfile with the name <code>Dockerfile</code> under <code>src/TaskyWebApi</code> folder.</p>
-<pre><code class="language-dockerfile">FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
-WORKDIR /app
-EXPOSE 80
-EXPOSE 443
-
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-WORKDIR /src
-COPY [&quot;TaskyWebApi/TaskyWebApi.csproj&quot;, &quot;TaskyWebApi/&quot;]
-RUN dotnet restore &quot;TaskyWebApi/TaskyWebApi.csproj&quot;
-COPY . .
-WORKDIR &quot;/src/TaskyWebApi&quot;
-RUN dotnet build &quot;TaskyWebApi.csproj&quot; -c Release -o /app/build
-
-FROM build AS publish
-RUN dotnet publish &quot;TaskyWebApi.csproj&quot; -c Release -o /app/publish
-
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT [&quot;dotnet&quot;, &quot;TaskyWebApi.dll&quot;]
+<p>This will upgrade the terraform to latest version and download the latest provider. This will also update the lock file.</p>
+<blockquote>
+<p>Note: terraform use azure cli to authenticate to azure. Make sure you have azure cli installed and logged in to azure.</p>
+</blockquote>
+<h2>Plan terraform with tfvars file</h2>
+<pre><code class="language-bash">terraform plan -var-file=&quot;dev.tfvars&quot;
 </code></pre>
-<h3>Add github action env variables</h3>
-<p>Add the following environment variables to the GitHub repository secrets.</p>
-<ul>
-<li>REGISTRY_SERVER</li>
-<li>REGISTRY_USERNAME</li>
-<li>REGISTRY_PASSWORD</li>
-<li>RESOURCE_GROUP</li>
-<li>CLUSTER_NAME</li>
-<li>NAMESPACE</li>
-<li>AZURE_CREDENTIALS</li>
-</ul>
-<p>You can get the values from the terraform output. If you don&#x27;t have the terraform output, you can get the values from the Azure portal.</p>
-<h3>Add the kubernetes manifest file for the web api</h3>
-<p>Add a new kubernetes manifest file with the name <code>tasky.yaml</code> under <code>src/k8s</code> folder.</p>
-<pre><code class="language-yaml">apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: tasky
-  labels:
-    app: tasky
-spec:
-    replicas: 1
-    selector:
-        matchLabels:
-        app: tasky
-    template:
-        metadata:
-        labels:
-            app: tasky
-        spec:
-        containers:
-            - name: tasky
-            image: tasky:latest
-            imagePullPolicy: Always
-            ports:
-                - containerPort: 80
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: tasky
-spec:
-    type: ClusterIP
-    ports:
-        - port: 80
-        targetPort: 80
-    selector:
-        app: tasky
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: tasky
-  annotations:
-    kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
-spec:
-    rules:
-        - http:
-            paths:
-            - path: /tasky(/|$)(.*)
-                pathType: Prefix
-                backend:
-                service:
-                    name: tasky
-                    port:
-                    number: 80
+<p>Always plan before applying terraform. This will show you what resources will be created. This will also show you if there are any errors. This will not create any resources so it is safe to run this command.</p>
+<h2>Apply terraform with tfvars file with auto approve</h2>
+<pre><code class="language-bash">terraform apply -var-file=&quot;dev.tfvars&quot; -auto-approve
 </code></pre>
-<h3>Add a new GitHub Action workflow</h3>
-<ol>
-<li>Add a new GitHub Action workflow with the name <code>build.yml</code> under <code>.github/workflows</code> folder.</li>
-</ol>
-<pre><code class="language-yml">name: Build, Version and Publish .Net Application to Azure Container Registry (ACR)
-
-on:
-  push:
-    branches:
-      - dev
-
-jobs:
-  build-version-publish:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./src
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 7.0.x
-      - name: Install dependencies
-        run: dotnet restore ./Tasky.sln
-      - name: Build
-        run: dotnet build ./Tasky.sln --configuration Release --no-restore
-      - name: Install Versionize
-        run: dotnet tool install --global Versionize
-      - name: Setup git
-        run: |
-          git config --local user.email &quot;antosubash@live.com&quot;
-          git config --local user.name &quot;Anto Subash&quot;
-      - name: Versionize Release
-        id: versionize
-        run: versionize --changelog-all --exit-insignificant-commits --pre-release dev
-      - name: No release required
-        if: steps.versionize.outcome != &#x27;success&#x27;
-        run: echo &quot;Skipping Release. No release required.&quot;
-      - name: Push changes to GitHub
-        if: steps.versionize.outcome == &#x27;success&#x27;
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
-          tags: true
-      - name: Get .NET SDK project versions
-        if: steps.versionize.outcome == &#x27;success&#x27;
-        uses: kzrnm/get-net-sdk-project-versions-action@v1
-        id: get-version
-        with:
-          proj-path: ./src/aks-dotnet-app.csproj
-      - run: echo &quot;${{ steps.get-version.outputs.version }}&quot;
-        if: steps.versionize.outcome == &#x27;success&#x27;
-      - name: Docker Login
-        if: steps.versionize.outcome == &#x27;success&#x27;
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.REGISTRY_USERNAME }}
-          password: ${{ secrets.REGISTRY_PASSWORD }}
-          registry: ${{ secrets.REGISTRY_SERVER }}
-      - name: Azure login
-        if: steps.versionize.outcome == &#x27;success&#x27;
-        id: login
-        uses: azure/login@v1.4.3
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - name: Set AKS context
-        if: steps.versionize.outcome == &#x27;success&#x27;
-        id: set-context
-        uses: azure/aks-set-context@v3
-        with:
-          resource-group: &#x27;${{ secrets.RESOURCE_GROUP }}&#x27; 
-          cluster-name: &#x27;${{ secrets.CLUSTER_NAME }}&#x27;
-      - name: Setup kubectl
-        if: steps.versionize.outcome == &#x27;success&#x27;
-        id: install-kubectl
-        uses: azure/setup-kubectl@v3
-      - name: Build tasky Docker image
-        if: steps.versionize.outcome == &#x27;success&#x27;
-        run: |
-          docker build -t ${{ secrets.REGISTRY_SERVER }}/tasky:${{ steps.get-version.outputs.version }} -t ${{ secrets.REGISTRY_SERVER }}/tasky:${{ github.ref_name }} -t ${{ secrets.REGISTRY_SERVER }}/tasky:${{ github.sha }} -f ./src/Tasky.AuthServer/Dockerfile .
-          docker push ${{ secrets.REGISTRY_SERVER }}/tasky:${{ steps.get-version.outputs.version }}
-          docker push ${{ secrets.REGISTRY_SERVER }}/tasky:${{ github.sha }}
-          docker push ${{ secrets.REGISTRY_SERVER }}/tasky:${{ github.ref_name }}
-
-      - name: Deploy to Auth Server to AKS
-        if: steps.versionize.outcome == &#x27;success&#x27;
-        id: deploy-aks-auth
-        uses: Azure/k8s-deploy@v4
-        with:
-          namespace: &#x27;${{ secrets.NAMESPACE }}&#x27;
-          manifests: |
-             src/k8s/tasky.yaml
-          images: &#x27;${{ secrets.REGISTRY_SERVER }}/tasky:${{ github.sha }}&#x27;
-          pull-images: false
-```
-
-
-</code></pre>]]></content:encoded>
+<p>This will create all the resources. This will also create a kube config file in configs folder. This file will be used to connect to AKS cluster.</p>
+<h2>Destroy terraform with tfvars file with auto approve</h2>
+<pre><code class="language-bash">terraform destroy -var-file=&quot;dev.tfvars&quot; -auto-approve
+</code></pre>
+<p>This will destroy all the resources. I recommend you create and destroy the resources few times to and get familiar with terraform.</p>
+<h1>Conclusion</h1>
+<p>If you are new to terraform I recommend you to go through the <a href="https://www.terraform.io/docs/index.html">official documentation</a>. This will give you a good understanding of terraform. In the next post we prepare the aks cluster for deployment.</p>]]></content:encoded>
           </item><item>
           <title>Azure Deployment for .Net - Introduction - Prerequisites</title>
           <link>https://blog.antosubash.com/posts/azure-deployment-for-dotnet</link>
@@ -654,12 +408,12 @@ jobs:
 <h2>What does this series cover?</h2>
 <p>I want to cover the start to finish of deploying a .Net application to Azure. I will be using GitHub Actions to build and push the Docker image to Azure Container Registry. I will be using Terraform to create the AKS cluster and deploy the .Net application to AKS.</p>
 <p>Part 0 - <a href="/posts/azure-deployment-for-dotnet">Prerequisites</a></p>
-<p>Part 1 - <a href="/posts/setup-terraform-to-create-azure-kubernetes-service-aks-cluster-and-container-registry">Setup Terraform to create Azure Kubernetes Service (AKS) Cluster and Container Registry</a></p>
-<p>Part 2 - <a href="/posts/setup-k8s-to-deploy-certmanager-nginx-ingress-controller-with-static-ip">Setup K8s to deploy CertManager, Nginx Ingress Controller with Static IP</a></p>
-<p>Part 3 - <a href="/posts/setup-cloudflare-dns-for-azure-kubernetes-service-aks-cluster">Setup CloudFlare DNS for Azure Kubernetes Service (AKS) Cluster</a></p>
-<p>Part 4 - <a href="/posts/deploy-a-sample-whoami-application-with-https-enabled">Deploy a sample whoami application with HTTPS enabled</a></p>
-<p>Part 5 - <a href="/posts/github-actions-build-version-push-docker-image-to-azure-container-registry">Setup GitHub Actions to build, Version and push Docker image to Azure Container Registry</a></p>
-<p>Part 6 - <a href="/posts/setup-terraform-to-deploy-dotnet-application-to-azure-kubernetes-service-aks-cluster">Setup Terraform to deploy .Net application to Azure Kubernetes Service (AKS) Cluster</a></p>
+<p>Part 1 - <a href="/posts/terraform-to-create-azure-kubernetes-service-aks-cluster-and-container-registry">Setup Terraform to create Azure Kubernetes Service (AKS) Cluster and Container Registry</a></p>
+<p>Part 2 - <a href="/posts/certmanager-nginx-ingress-controller-with-static-ip-in-aks">Setup K8s to deploy CertManager, Nginx Ingress Controller with Static IP</a></p>
+<p>Part 3 - Setup CloudFlare DNS for Azure Kubernetes Service (AKS) Cluster</p>
+<p>Part 4 - Deploy a sample whoami application with HTTPS enabled</p>
+<p>Part 5 - Setup GitHub Actions to build, Version and push Docker image to Azure Container Registry</p>
+<p>Part 6 - Setup GitHub Actions to deploy .Net application to Azure Kubernetes Service (AKS) Cluster</p>
 <h2>Conclusion</h2>
 <p>This is the introduction to the Azure Deployment for .Net series. In the next article, we will setup GitHub Actions to build, Version and push Docker image to Azure Container Registry. If you have any questions or feedback, please feel free to post them in the comments section.</p>]]></content:encoded>
           </item><item>
@@ -2619,7 +2373,7 @@ spec:
 <ul>
 <li>Hetzner Account</li>
 </ul>
-<p>I&#x27;m going to use hetzner cloud to create this machine if you don&#x27;t have one then you can use the referral link <a href="here">https://hetzner.cloud/?ref=ENhA4rCZ5JUM</a> and get 20€ for free to try it out.</p>
+<p>I&#x27;m going to use hetzner cloud to create this machine if you don&#x27;t have one then you can use the referral link <a href="https://hetzner.cloud/?ref=ENhA4rCZ5JUM">https://hetzner.cloud/?ref=ENhA4rCZ5JUM</a> and get 20€ for free to try it out.</p>
 <h3>Creating a project</h3>
 <p>Once you have the hetzner account. login and create a project.</p>
 <p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/microk8s/microk8s1.gif" alt="Create Project"/></p>

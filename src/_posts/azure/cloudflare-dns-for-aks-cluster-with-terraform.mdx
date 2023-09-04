@@ -3,12 +3,15 @@ title: "Cloudflare DNS for AKS Cluster with Terraform"
 excerpt: "In this we will setup Cloudflare DNS for AKS Cluster with Terraform"
 date: "2023-08-19T11:53:48.157Z"
 videoId:
+isDraft: true
 series: "Azure Kubernetes (AKS) Deployment for .Net"
 part: 3
 tags: ["aks", "kubernetes", "terraform", "cloudflare"]
 ---
 
 ## Table of Contents
+
+## This series is a Work in Progress
 
 ## Introduction
 
@@ -30,7 +33,7 @@ Make sure you have completed the previous article and have the following resourc
 
 Update the `dev.tfvars` file with the following values.
 
-```terraform
+```bash
 variable "cloudflare_domain_name" {
   default     = ""
   description = "The domain name to use for Let's Encrypt."
@@ -72,7 +75,7 @@ This will be used to create the Cloudflare DNS records. The `cloudflare_domain_n
 update the `main.tf` file with the following code.
 
 
-```terraform
+```bash
 resource "cloudflare_record" "aks" {
   zone_id = var.cloudflare_zone_id
   name    = "aks"

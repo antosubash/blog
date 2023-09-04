@@ -10,6 +10,8 @@ tags: ["aks", "azure", "kubernetes", "terraform", "acr"]
 
 ## Table of contents
 
+## This series is a Work in Progress
+
 ## Introduction
 
 In the previous article we have created AKS cluster using Terraform. In this article we will setup Cert Manager and Nginx Ingress Controller on AKS Cluster. 
@@ -35,7 +37,7 @@ helm repo update
 
 Update the terraform script to install cert manager. 
 
-```terraform
+```bash
 resource "azurerm_public_ip" "aks_static_ip" {
   depends_on          = [azurerm_kubernetes_cluster.aks]
   name                = "${local.name_suffix}-aks-static-ip"
@@ -49,7 +51,7 @@ resource "azurerm_public_ip" "aks_static_ip" {
 
 This will create a static IP address for the ingress controller. 
 
-```terraform
+```bash
 locals {
   aks_namespace = "${var.resource_group_tags["project"]}-${var.resource_group_tags["environment"]}-ingress-nginx"
 }
@@ -57,7 +59,7 @@ locals {
 
 This will create a name based on the project and environment.
 
-```terraform
+```bash
 resource "kubernetes_namespace" "ingress_namespace" {
   depends_on = [azurerm_kubernetes_cluster.aks]
   metadata {
@@ -68,7 +70,7 @@ resource "kubernetes_namespace" "ingress_namespace" {
 
 This will create a namespace for the ingress controller. 
 
-```terraform
+```bash
 resource "helm_release" "nginx_ingress" {
   depends_on = [azurerm_public_ip.aks_static_ip]
   name       = "nginx-ingress"
@@ -91,7 +93,7 @@ resource "helm_release" "nginx_ingress" {
 
 This will install the nginx ingress controller. we are setting the static IP address for the ingress controller.
 
-```terraform
+```bash
 resource "helm_release" "cert_manager" {
   depends_on = [azurerm_kubernetes_cluster.aks]
   name       = "cert-manager"
