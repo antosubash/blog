@@ -1,0 +1,111 @@
+---
+title: "Cloudflare DNS for AKS Cluster with Terraform"
+excerpt: "In this we will setup Cloudflare DNS for AKS Cluster with Terraform"
+date: "2023-08-19T11:53:48.157Z"
+videoId:
+series: "Azure Kubernetes (AKS) Deployment for .Net"
+part: 3
+isDraft: false
+tags: ["aks", "kubernetes", "terraform", "cloudflare"]
+---
+import Parts from "./parts.mdx"
+
+## Table of Contents
+
+## Introduction
+
+In this article we will setup Cloudflare DNS for AKS Cluster with Terraform.
+
+## Prerequisite
+
+Make sure you have completed the previous article and have the following resources created.
+
+- Azure Kubernetes Cluster
+- Azure Container Registry
+- CertManager for Kubernetes
+- Ingress Controller for Kubernetes
+- Cloudflare Account
+
+## Setup Cloudflare DNS for AKS Cluster with Terraform
+
+### Update the Terraform Provider
+
+Update the provider section with the following code.
+
+```bash
+cloudflare = {
+  source  = "cloudflare/cloudflare"
+  version = "~> 3.0"
+}
+```
+
+### Update the Terraform tfvars file
+
+Update the `dev.tfvars` file with the following values.
+
+```bash
+cloudflare_domain_name = "yourdomain.com"
+cloudflare_zone_id     = "yourzoneid"
+cloudflare_api_token   = "yourapitoken"
+```
+
+You can get the Zone ID and API Token from the Cloudflare dashboard.
+
+### Update Terraform Variables
+
+Update the `variables.tf` file with the following values.
+
+```bash
+variable "cloudflare_domain_name" {
+  default     = ""
+  description = "The domain name to use for Let's Encrypt."
+  type        = string
+
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", var.cloudflare_domain_name))
+    error_message = "The cloudflare_domain_name variable must be a valid domain name."
+  }
+}
+
+variable "cloudflare_zone_id" {
+  default     = ""
+  description = "The Cloudflare Zone ID for the domain name."
+  type        = string
+
+  validation {
+    condition     = length(var.cloudflare_zone_id) > 0
+    error_message = "The cloudflare_zone_id variable must be a valid Cloudflare Zone ID."
+  }
+}
+
+variable "cloudflare_api_token" {
+  default    = ""
+  description = "The Cloudflare API Token for the domain name."
+  type        = string
+
+  validation {
+    condition     = length(var.cloudflare_api_token) > 0
+    error_message = "The cloudflare_api_token variable must be a valid Cloudflare API Token."
+  }
+}
+```
+
+This will be used to create the Cloudflare DNS records. The `cloudflare_domain_name` is the domain name that you have registered with Cloudflare. The `cloudflare_zone_id` is the Zone ID for the domain name. The `cloudflare_api_token` is the API Token for the domain name. You can get the Zone ID and API Token from the Cloudflare dashboard.
+
+## Create Cloudflare DNS Records
+
+update the `main.tf` file with the following code.
+
+```bash
+resource "cloudflare_record" "aks" {
+  zone_id = var.cloudflare_zone_id
+  name    = "aks"
+  value   = azurerm_kubernetes_cluster.aks.fqdn
+  type    = "CNAME"
+  ttl     = 1
+  proxied = false
+}
+```
+
+<Parts />
+

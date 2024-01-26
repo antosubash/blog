@@ -1,0 +1,275 @@
+---
+title: "Prepare and deploy the microservice"
+excerpt: "In this post we will see how to deploy the microservice solution to the our server."
+date: "2022-07-30"
+part: 4
+videoId: 1oXjAOm2TgM
+series: "Docker Deployment"
+tags:
+  - docker
+  - docker-compose
+---
+
+## Posts in the Series
+
+[Part 1. Setting up Ubuntu Server with docker in Hetzner](/posts/part-1-setup-docker-with-ubuntu-server-in-hetzner)
+
+[Part 2. Setting up docker swarm with traefik and portainer](/posts/part-2-setup-docker-swarm-with-traefik-and-portainer)
+
+[Part 3. Deploy redis, rabbitmq, seq, registry and postgres in docker swarm](/posts/part-3-deploy-registry-redis-rabitmq-postgresql-in-docker)
+
+Part 4. Prepare and deploy the microservice for deployment (this post)
+
+## Table of contents
+
+## Intro
+
+In this post we will prepare the microservice project for deployment and deploy it to the docker swarm. I'm going to use this [Sample microservice application](/posts/abp-microservice-series) you can find the repo [here](https://github.com/antosubash/Tasky)
+
+## Update the github actions
+
+```yml
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Docker Login
+      # You may pin to the exact commit or the version.
+      # uses: docker/login-action@dd4fa0671be5250ee6f50aedf4cb05514abda2c7
+      uses: docker/login-action@v1.14.1
+      with:
+        # Server address of Docker registry. If not set then will default to Docker Hub
+        registry: registry.yourdomain.com
+        # Username used to log against the Docker registry
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        # Password or personal access token used to log against the Docker registry
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+    - uses: actions/checkout@v2
+    - name: Build the Gateway Docker image
+      run: docker build . --file gateway/Tasky.Gateway/Dockerfile --tag gateway:dev
+    - name: Docker tag images
+      run: docker tag gateway:dev registry.yourdomain.com/gateway:dev
+    - name: Push Gateway image
+      run: docker push registry.yourdomain.com/gateway:dev
+      
+    - name: Build the IdentityServer Docker image
+      run: docker build . --file apps/Tasky.IdentityServer/Dockerfile --tag identityserver:dev
+    - name: Docker tag IdentityServer images
+      run: docker tag identityserver:dev registry.yourdomain.com/identityserver:dev
+    - name: Push IdentityServer image
+      run: docker push registry.yourdomain.com/identityserver:dev
+  
+    - name: Build the Administration Docker image
+      run: docker build . --file services/administration/host/Tasky.Administration.HttpApi.Host/Dockerfile --tag administration:dev
+    - name: Docker tag Administration images
+      run: docker tag administration:dev registry.yourdomain.com/administration:dev
+    - name: Push Administration image
+      run: docker push registry.yourdomain.com/administration:dev
+      
+    - name: Build the IdentityService Docker image
+      run: docker build . --file services/identity/host/Tasky.IdentityService.HttpApi.Host/Dockerfile --tag identityservice:dev
+    - name: Docker tag identityservice images
+      run: docker tag identityservice:dev registry.yourdomain.com/identityservice:dev
+    - name: Push IdentityService image
+      run: docker push registry.yourdomain.com/identityservice:dev
+    
+    - name: Build the SaaS Docker image
+      run: docker build . --file services/saas/host/Tasky.SaaS.HttpApi.Host/Dockerfile --tag saas:dev
+    - name: Docker tag SaaS images
+      run: docker tag saas:dev registry.yourdomain.com/saas:dev
+    - name: Push SaaS image
+      run: docker push registry.yourdomain.com/saas:dev
+
+    - name: Build the DbMigrator Docker image
+      run: docker build . --file shared/Tasky.DbMigrator/Dockerfile --tag migrator:dev
+    - name: Docker tag DbMigrator images
+      run: docker tag migrator:dev registry.yourdomain.com/migrator:dev
+    - name: Push DbMigrator image
+      run: docker push registry.yourdomain.com/migrator:dev
+```
+
+`secrets.REGISTRY_USERNAME` and `secrets.REGISTRY_PASSWORD` are coming from the repository secrets.
+
+## Create docker compose
+
+### Migrator
+
+```yml
+version: '3.4'
+
+services:
+  dbmigrator:
+    image: registry.antosubash.com/migrator:dev
+    environment:
+      ConnectionStrings__SaaSService: "User ID=postgres;Password=my_postgres_password;Host=10.0.0.2;Port=5432;Database=TaskySaaSService;Pooling=false;"
+      ConnectionStrings__IdentityService: "User ID=postgres;Password=my_postgres_password;Host=10.0.0.2;Port=5432;Database=TaskyIdentityService;Pooling=false;"
+      ConnectionStrings__AdministrationService : "User ID=postgres;Password=my_postgres_password;Host=10.0.0.2;Port=5432;Database=TaskyAdministrationService;Pooling=false;"
+      ConnectionStrings__ProjectService : "User ID=postgres;Password=my_postgres_password;Host=10.0.0.2;Port=5432;Database=TaskyProjectService;Pooling=false;"
+```
+
+### Tasky Services Compose
+
+```yml
+version: '3.4'
+
+services:
+  identityserver:
+    image: registry.youtube.antosubash.com/identityserver:dev
+    networks:
+      - traefik-public
+    environment:
+      App__SelfUrl: "https://id.tasky.youtube.antosubash.com"
+      App__ClientUrl: "https://app.tasky.youtube.antosubash.com,https://gw.tasky.youtube.antosubash.com"
+      App__CorsOrigins: "https://app.tasky.youtube.antosubash.com,https://gw.tasky.youtube.antosubash.com"
+      App__RedirectAllowedUrls: "https://app.tasky.youtube.antosubash.com,https://gw.tasky.youtube.antosubash.com"
+      ConnectionStrings__SaaSService: "User ID=postgres;Password=my_postgres_password;Host=10.0.0.2;Port=5432;Database=TaskySaaSService;Pooling=false;"
+      ConnectionStrings__IdentityService: "User ID=postgres;Password=my_postgres_password;Host=10.0.0.2;Port=5432;Database=TaskyIdentityService;Pooling=false;"
+      ConnectionStrings__AdministrationService : "User ID=postgres;Password=my_postgres_password;Host=10.0.0.2;Port=5432;Database=TaskyAdministrationService;Pooling=false;"
+      ConnectionStrings__ProjectService : "User ID=postgres;Password=my_postgres_password;Host=10.0.0.2;Port=5432;Database=TaskyProjectService;Pooling=false;"
+      Redis__Configuration : "10.0.0.2:6379,password=my_master_password"
+      RabbitMQ__Connections__Default__HostName : "10.0.0.2"
+      RabbitMQ__Connections__EventBus__ClientName : "TaskyIdentityService"
+      RabbitMQ__Connections__EventBus__ExchangeName : "Tasky"
+      Serilog__WriteTo__[0]__Name : "Seq"
+      Serilog__WriteTo__[0]__Args__serverUrl : "https://seq.youtube.antosubash.com"
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.identityserver.rule=Host(`id.tasky.youtube.antosubash.com`)"
+        - "traefik.http.services.identityserver.loadbalancer.server.port=80"
+        - "traefik.http.routers.identityserver.entrypoints=websecure"
+        - "traefik.http.routers.identityserver.tls=true"
+        - "traefik.http.routers.identityserver.tls.certresolver=leresolver"
+
+  gateway:
+    image: registry.youtube.antosubash.com/gateway:dev
+    networks:
+      - traefik-public
+    environment:
+      ReverseProxy__Clusters__main__Destinations__main__Address : "http://10.0.0.2:7001"
+      ReverseProxy__Clusters__identity__Destinations__identity__Address : "http://10.0.0.2:7002"
+      ReverseProxy__Clusters__account__Destinations__account__Address : "http://10.0.0.2:7002"
+      ReverseProxy__Clusters__saas__Destinations__saas__Address : "http://10.0.0.2:7003"
+      ReverseProxy__Clusters__project__Destinations__project__Address : "http://10.0.0.2:7004"
+      Serilog__WriteTo__[0]__Name : "Seq"
+      Serilog__WriteTo__[0]__Args__serverUrl : "https://seq.youtube.antosubash.com"
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.gateway.rule=Host(`gw.tasky.youtube.antosubash.com`)"
+        - "traefik.http.services.gateway.loadbalancer.server.port=80"
+        - "traefik.http.routers.gateway.entrypoints=websecure"
+        - "traefik.http.routers.gateway.tls=true"
+        - "traefik.http.routers.gateway.tls.certresolver=leresolver"
+
+  administrationservice:
+    image: registry.youtube.antosubash.com/administration:dev
+    ports:
+      - target: 80
+        published: 7001
+        protocol: tcp
+        mode: host
+    environment:
+      App__CorsOrigins: http://10.0.0.2:7000
+      ConnectionStrings__SaaSService: "User ID=postgres;Password=my_postgres_password;Host=10.0.0.2;Port=5432;Database=TaskySaaSService;Pooling=false;"
+      ConnectionStrings__IdentityService: "User ID=postgres;Password=my_postgres_password;Host=10.0.0.2;Port=5432;Database=TaskyIdentityService;Pooling=false;"
+      ConnectionStrings__AdministrationService : "User ID=postgres;Password=my_postgres_password;Host=10.0.0.2;Port=5432;Database=TaskyAdministrationService;Pooling=false;"
+      ConnectionStrings__ProjectService : "User ID=postgres;Password=my_postgres_password;Host=10.0.0.2;Port=5432;Database=TaskyProjectService;Pooling=false;"
+      Redis__Configuration : "10.0.0.2:6379,password=my_master_password"
+      AuthServer__Authority : "https://id.tasky.youtube.antosubash.com"
+      AuthServer__RequireHttpsMetadata : "false"
+      AuthServer__SwaggerClientId : "AdministrationService_Swagger"
+      AuthServer__SwaggerClientSecret : "1q2w3e*"
+      RabbitMQ__Connections__Default__HostName : "10.0.0.2"
+      RabbitMQ__Connections__EventBus__ClientName : "TaskyAdministrationService"
+      RabbitMQ__Connections__EventBus__ExchangeName : "Tasky"
+      Serilog__WriteTo__[0]__Name : "Seq"
+      Serilog__WriteTo__[0]__Args__serverUrl : "https://seq.youtube.antosubash.com"
+
+  identityservice:
+    image: registry.youtube.antosubash.com/identityservice:dev
+    ports:
+      - target: 80
+        published: 7002
+        protocol: tcp
+        mode: host
+    environment:
+      App__CorsOrigins: http://10.0.0.2:7000
+      ConnectionStrings__SaaSService: "User ID=postgres;Password=my_postgres_password;Host=10.0.0.2;Port=5432;Database=TaskySaaSService;Pooling=false;"
+      ConnectionStrings__IdentityService: "User ID=postgres;Password=my_postgres_password;Host=10.0.0.2;Port=5432;Database=TaskyIdentityService;Pooling=false;"
+      ConnectionStrings__AdministrationService : "User ID=postgres;Password=my_postgres_password;Host=10.0.0.2;Port=5432;Database=TaskyAdministrationService;Pooling=false;"
+      ConnectionStrings__ProjectService : "User ID=postgres;Password=my_postgres_password;Host=10.0.0.2;Port=5432;Database=TaskyProjectService;Pooling=false;"
+      Redis__Configuration : "10.0.0.2:6379,password=my_master_password"
+      AuthServer__Authority : "https://id.tasky.youtube.antosubash.com"
+      AuthServer__RequireHttpsMetadata : "false"
+      AuthServer__SwaggerClientId : "IdentityService_Swagger"
+      AuthServer__SwaggerClientSecret : "1q2w3e*"
+      RabbitMQ__Connections__Default__HostName : "10.0.0.2"
+      RabbitMQ__Connections__EventBus__ClientName : "TaskyIdentityService"
+      RabbitMQ__Connections__EventBus__ExchangeName : "Tasky"
+      Serilog__WriteTo__[0]__Name : "Seq"
+      Serilog__WriteTo__[0]__Args__serverUrl : "https://seq.youtube.antosubash.com"
+
+  saasservice:
+    image: registry.youtube.antosubash.com/saas:dev
+    ports:
+      - target: 80
+        published: 7003
+        protocol: tcp
+        mode: host
+    environment:
+      App__CorsOrigins: http://10.0.0.2:7000
+      ConnectionStrings__SaaSService: "User ID=postgres;Password=my_postgres_password;Host=10.0.0.2;Port=5432;Database=TaskySaaSService;Pooling=false;"
+      ConnectionStrings__IdentityService: "User ID=postgres;Password=my_postgres_password;Host=10.0.0.2;Port=5432;Database=TaskyIdentityService;Pooling=false;"
+      ConnectionStrings__AdministrationService : "User ID=postgres;Password=my_postgres_password;Host=10.0.0.2;Port=5432;Database=TaskyAdministrationService;Pooling=false;"
+      ConnectionStrings__ProjectService : "User ID=postgres;Password=my_postgres_password;Host=10.0.0.2;Port=5432;Database=TaskyProjectService;Pooling=false;"
+      Redis__Configuration : "10.0.0.2:6379,password=my_master_password"
+      AuthServer__Authority : "https://id.tasky.youtube.antosubash.com"
+      AuthServer__RequireHttpsMetadata : "false"
+      AuthServer__SwaggerClientId : "IdentityService_Swagger"
+      AuthServer__SwaggerClientSecret : "1q2w3e*"
+      RabbitMQ__Connections__Default__HostName : "10.0.0.2"
+      RabbitMQ__Connections__EventBus__ClientName : "TaskyIdentityService"
+      RabbitMQ__Connections__EventBus__ExchangeName : "Tasky"
+      Serilog__WriteTo__[0]__Name : "Seq"
+      Serilog__WriteTo__[0]__Args__serverUrl : "https://seq.youtube.antosubash.com"
+
+  projectservice:
+    image: registry.youtube.antosubash.com/project:dev
+    ports:
+      - target: 80
+        published: 7004
+        protocol: tcp
+        mode: host
+    environment:
+      App__CorsOrigins: http://10.0.0.2:7000
+      ConnectionStrings__SaaSService: "User ID=postgres;Password=my_postgres_password;Host=10.0.0.2;Port=5432;Database=TaskySaaSService;Pooling=false;"
+      ConnectionStrings__IdentityService: "User ID=postgres;Password=my_postgres_password;Host=10.0.0.2;Port=5432;Database=TaskyIdentityService;Pooling=false;"
+      ConnectionStrings__AdministrationService : "User ID=postgres;Password=my_postgres_password;Host=10.0.0.2;Port=5432;Database=TaskyAdministrationService;Pooling=false;"
+      ConnectionStrings__ProjectService : "User ID=postgres;Password=my_postgres_password;Host=10.0.0.2;Port=5432;Database=TaskyProjectService;Pooling=false;"
+      Redis__Configuration : "10.0.0.2:6379,password=my_master_password"
+      AuthServer__Authority : "https://id.tasky.youtube.antosubash.com"
+      AuthServer__RequireHttpsMetadata : "false"
+      AuthServer__SwaggerClientId : "IdentityService_Swagger"
+      AuthServer__SwaggerClientSecret : "1q2w3e*"
+      RabbitMQ__Connections__Default__HostName : "10.0.0.2"
+      RabbitMQ__Connections__EventBus__ClientName : "TaskyIdentityService"
+      RabbitMQ__Connections__EventBus__ExchangeName : "Tasky"
+      Serilog__WriteTo__[0]__Name : "Seq"
+      Serilog__WriteTo__[0]__Args__serverUrl : "https://seq.youtube.antosubash.com"
+
+networks:
+  traefik-public:
+    external: true
+```
+
+

@@ -1,0 +1,146 @@
+---
+title: "ABP Getting Started With .Net Core and EF Core. ABP Part 1"
+excerpt: "This is an introduction to the ABP Application framework with .Net core and EF core. I have created a Todo App with a CRUD function."
+date: "2021-03-05"
+videoId: m8pjAtmpmBI
+series: "ABP Framework - Getting started"
+part: 1
+tags:
+  - abp
+---
+## Table of contents
+
+## Intro
+
+In this post we will see how to create a CRUD API in ABP Application framework with dotnet core and ef core. It will be simple Todo api.
+
+You can watch the videos or continue with the post.
+
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/m8pjAtmpmBI/0.jpg)](https://www.youtube.com/watch?v=m8pjAtmpmBI)
+
+## Preparing the Project
+
+Use the Getting started at https://docs.abp.io/en/abp/latest/getting-started?ui=mvc&db=ef&tiered=no guide to setup the basic abp application
+
+## 1. Create an [Entity](https://docs.abp.io/en/abp/latest/Entities)
+
+First step is to create an Entity. Create the Entity in the `Domain` project
+
+```cs
+public class Todo : Entity<Guid>
+{
+    public string Content { get; set; }
+    public bool IsDone { get; set; }
+}
+```
+
+## 2. Add Entity to [ef core](https://docs.abp.io/en/abp/latest/Entity-Framework-Core)
+
+Next is to add Entity to the EF Core. you will find the DbContext in the `EntityFrameworkCore` project. Add the DbSet to the DbContext
+
+```cs
+public DbSet<Todo> Todos { get; set; }
+```
+
+## 3. Configure Entity in [ef core](https://docs.abp.io/en/abp/latest/Entity-Framework-Core#configurebyconvention-method)
+
+Configuration is done in the `DbContextModelCreatingExtensions` class. This should be available in the `EntityFrameworkCore` project
+
+```cs
+builder.Entity<Todo>(b =>
+{
+    b.ToTable(TodosConsts.DbTablePrefix + "Todos", TodosConsts.DbSchema);
+    b.ConfigureByConvention(); //auto configure for the base class props
+});
+```
+
+## 4. Adding Migrations
+
+Now the Entity is configured we can add the migrations.
+
+Go the `EntityFrameworkCore.DbMigrations` project in the terminal and create migrations.
+
+To create migration run this command:
+
+```bash
+dotnet ef migrations add created_todo
+```
+
+Verify the migrations created in the migrations folder.
+
+To update the database run this command
+
+```bash
+dotnet ef database update
+```
+
+## 5. Create a Entity Dto
+
+Dto are placed in `Contracts` project
+
+```cs
+public class TodoDto : EntityDto<Guid>
+{
+    public string Content { get; set; }
+    public bool IsDone { get; set; }
+}
+```
+
+## 6. Map Entity to Dto
+
+Abp uses AutoMapper to map Entity to Dto. you can find the `ApplicationAutoMapperProfile` file which is used by the AutoMapper in the `Application` project.
+
+```cs
+CreateMap<Todo, TodoDto>();
+CreateMap<TodoDto, Todo>();
+```
+
+## 7. Create an [Application Services](https://docs.abp.io/en/abp/latest/Application-Services)
+
+Application service are created in the `Application` project
+
+```cs
+public class TodoAppService : YourProjectAppService
+{
+    private readonly IRepository<Todo, Guid> todoRepository;
+
+    public TodoAppService(IRepository<Todo, Guid> todoRepository)
+    {
+        this.todoRepository = todoRepository;
+    }
+
+    public async Task<List<TodoDto>> GetAll()
+    {
+        return ObjectMapper.Map<List<Todo>, List<TodoDto>>(await todoRepository.GetListAsync());
+    }
+
+    public async Task<TodoDto> CreateAsync(TodoDto todoDto)
+    {
+        var todo = ObjectMapper.Map<TodoDto, Todo>(todoDto);
+        var createdTodo = await todoRepository.InsertAsync(todo);
+        return ObjectMapper.Map<Todo, TodoDto>(createdTodo);
+    }
+
+    public async Task<TodoDto> UpdateAsync(TodoDto todoDto)
+    {
+        var todo = ObjectMapper.Map<TodoDto, Todo>(todoDto);
+        var createdTodo = await todoRepository.UpdateAsync(todo);
+        return ObjectMapper.Map<Todo, TodoDto>(createdTodo);
+    }
+
+    public async Task<bool> DeleteAsync(Guid id)
+    {
+        var todo = await todoRepository.FirstOrDefaultAsync(x=> x.Id == id);
+        if(todo != null)
+        {
+            await todoRepository.DeleteAsync(todo);
+            return true;
+        }
+        return false;
+    }
+}
+```
+
+Once you created the Application configuration ABP can automatically configure your service as API controllers by conventions.
+
+## Github Repo Link : https://github.com/antosubash/Todos
