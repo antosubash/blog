@@ -2,7 +2,7 @@
 const siteMetadata = {
   title: 'Anto Subash',
   author: 'Anto Subash',
-  headerTitle: 'Anto Subash personal blog',
+  headerTitle: 'Anto Subash',
   description: 'Anto Subash personal blog',
   language: 'en-us',
   theme: 'system', // system, dark or light

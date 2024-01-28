@@ -1,7 +1,7 @@
 console.log('convert-array-to-list.js');
 var path = require('path');
 var fs = require('fs');
-const postsDirectory = path.join(process.cwd(), "_posts");
+const postsDirectory = path.join("C:\\repos\\GitHub\\blog\\v2\\data", "_posts");
 
 const getAllFiles = function (dirPath, arrayOfFiles) {
     files = fs.readdirSync(dirPath)
