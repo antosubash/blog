@@ -3,14 +3,14 @@ const siteMetadata = {
   title: 'Anto Subash',
   author: 'Anto Subash',
   headerTitle: 'Anto Subash',
-  description: 'Anto Subash personal blog',
+  description: 'Learn about web development, programming, and more.',
   language: 'en-us',
   theme: 'system', // system, dark or light
   siteUrl: 'https://blog.antosubash.com',
-  siteRepo: 'https://github.com/timlrx/tailwind-nextjs-starter-blog',
+  siteRepo: 'https://github.com/antosubash/blog',
   siteLogo: '/static/images/logo.png',
   socialBanner: '/static/images/twitter-card.png',
-  mastodon: 'https://mastodon.social/@mastodonuser',
+  mastodon: 'https://mastodon.social/@antosubash',
   email: 'antosubash@live.com',
   github: 'https://github.com/antosubash',
   twitter: 'https://twitter.com/antosubash',
@@ -82,14 +82,6 @@ const siteMetadata = {
     kbarConfig: {
       searchDocumentsPath: 'search.json', // path to load documents to search
     },
-    // provider: 'algolia',
-    // algoliaConfig: {
-    //   // The application ID provided by Algolia
-    //   appId: 'R2IYF7ETH7',
-    //   // Public API key: it is safe to commit it
-    //   apiKey: '599cec31baffa4868cae4e79f180729b',
-    //   indexName: 'docsearch',
-    // },
   },
 }
 

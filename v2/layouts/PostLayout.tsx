@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 import { CoreContent } from 'pliny/utils/contentlayer'
-import type { Blog, Authors } from 'contentlayer/generated'
+import type { Posts, Authors } from 'contentlayer/generated'
 import Comments from '@/components/Comments'
 import Link from '@/components/Link'
 import PageTitle from '@/components/PageTitle'
@@ -22,16 +22,16 @@ const postDateTemplate: Intl.DateTimeFormatOptions = {
 }
 
 interface LayoutProps {
-  content: CoreContent<Blog>
+  content: CoreContent<Posts>
   authorDetails: CoreContent<Authors>[]
-  next?: { path: string; title: string }
-  prev?: { path: string; title: string }
+  next?: { postUrl: string; title: string }
+  prev?: { postUrl: string; title: string }
   children: ReactNode
 }
 
 export default function PostLayout({ content, authorDetails, next, prev, children }: LayoutProps) {
-  const { filePath, path, slug, date, title, tags } = content
-  const basePath = path.split('/')[0]
+  const { filePath, postUrl, slug, date, title, tags } = content
+  const basePath = postUrl.split('/')[0]
 
   return (
     <SectionContainer>
@@ -94,7 +94,7 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
             <div className="divide-y divide-gray-200 dark:divide-gray-700 xl:col-span-3 xl:row-span-2 xl:pb-0">
               <div className="prose max-w-none pb-8 pt-10 dark:prose-invert">{children}</div>
               <div className="pb-6 pt-6 text-sm text-gray-700 dark:text-gray-300">
-                <Link href={discussUrl(path)} rel="nofollow">
+                <Link href={discussUrl(postUrl)} rel="nofollow">
                   Discuss on Twitter
                 </Link>
                 {` • `}
@@ -125,23 +125,23 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                 )}
                 {(next || prev) && (
                   <div className="flex justify-between py-4 xl:block xl:space-y-8 xl:py-8">
-                    {prev && prev.path && (
+                    {prev && prev.postUrl && (
                       <div>
                         <h2 className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
                           Previous Article
                         </h2>
                         <div className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400">
-                          <Link href={`/${prev.path}`}>{prev.title}</Link>
+                          <Link href={`${prev.postUrl}`}>{prev.title}</Link>
                         </div>
                       </div>
                     )}
-                    {next && next.path && (
+                    {next && next.postUrl && (
                       <div>
                         <h2 className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
                           Next Article
                         </h2>
                         <div className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400">
-                          <Link href={`/${next.path}`}>{next.title}</Link>
+                          <Link href={`${next.postUrl}`}>{next.title}</Link>
                         </div>
                       </div>
                     )}

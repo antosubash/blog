@@ -2,7 +2,7 @@ import { ReactNode } from 'react'
 import Image from '@/components/Image'
 import Bleed from 'pliny/ui/Bleed'
 import { CoreContent } from 'pliny/utils/contentlayer'
-import type { Blog } from 'contentlayer/generated'
+import type { Posts } from 'contentlayer/generated'
 import Comments from '@/components/Comments'
 import Link from '@/components/Link'
 import PageTitle from '@/components/PageTitle'
@@ -11,10 +11,10 @@ import siteMetadata from '@/data/siteMetadata'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 
 interface LayoutProps {
-  content: CoreContent<Blog>
+  content: CoreContent<Posts>
   children: ReactNode
-  next?: { path: string; title: string }
-  prev?: { path: string; title: string }
+  next?: { postUrl: string; title: string }
+  prev?: { postUrl: string; title: string }
 }
 
 export default function PostMinimal({ content, next, prev, children }: LayoutProps) {
@@ -47,10 +47,10 @@ export default function PostMinimal({ content, next, prev, children }: LayoutPro
           )}
           <footer>
             <div className="flex flex-col text-sm font-medium sm:flex-row sm:justify-between sm:text-base">
-              {prev && prev.path && (
+              {prev && prev.postUrl && (
                 <div className="pt-4 xl:pt-8">
                   <Link
-                    href={`/${prev.path}`}
+                    href={`${prev.postUrl}`}
                     className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
                     aria-label={`Previous post: ${prev.title}`}
                   >
@@ -58,10 +58,10 @@ export default function PostMinimal({ content, next, prev, children }: LayoutPro
                   </Link>
                 </div>
               )}
-              {next && next.path && (
+              {next && next.postUrl && (
                 <div className="pt-4 xl:pt-8">
                   <Link
-                    href={`/${next.path}`}
+                    href={`${next.postUrl}`}
                     className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
                     aria-label={`Next post: ${next.title}`}
                   >
