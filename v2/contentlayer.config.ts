@@ -1,5 +1,4 @@
 import { defineDocumentType, ComputedFields, makeSource } from 'contentlayer/source-files'
-import { writeFileSync } from 'fs'
 import readingTime from 'reading-time'
 import GithubSlugger from 'github-slugger'
 import path from 'path'
@@ -33,7 +32,7 @@ const computedFields: ComputedFields = {
   },
   path: {
     type: 'string',
-    resolve: (doc) => doc._raw.flattenedPath,
+    resolve: (doc) => `posts/${doc._raw.sourceFileName.replace(/\.mdx?$/, '')}`,
   },
   filePath: {
     type: 'string',
@@ -44,20 +43,6 @@ const computedFields: ComputedFields = {
     resolve: (doc) => `/posts/${doc._raw.sourceFileName.replace(/\.mdx?$/, '')}`,
   },
   toc: { type: 'string', resolve: (doc) => extractTocHeadings(doc.body.raw) },
-}
-
-function createSearchIndex(allBlogs) {
-  console.log('Generating local search index...')
-  if (
-    siteMetadata?.search?.provider === 'kbar' &&
-    siteMetadata.search.kbarConfig.searchDocumentsPath
-  ) {
-    var searchFile = `public/search-index.json`
-    searchFile = path.join(root, searchFile)
-    console.log(searchFile)
-    // writeFileSync(searchFile, JSON.stringify(allCoreContent(sortPosts(allBlogs))))
-    console.log('Local search index generated...')
-  }
 }
 
 export const Posts = defineDocumentType(() => ({
@@ -138,10 +123,5 @@ export default makeSource({
       [rehypePrismPlus, { defaultLanguage: 'js', ignoreMissing: true }],
       rehypePresetMinify,
     ],
-  },
-  onSuccess: async (importData) => {
-    // const { allDocuments } = await importData()
-
-    // createSearchIndex(allPosts)
-  },
+  }
 })
