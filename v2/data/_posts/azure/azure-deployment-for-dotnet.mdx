@@ -110,25 +110,6 @@ Cloudflare proves the api to manage the DNS. So we will use the Cloudflare api t
 
 We will be using GitHub Actions to build and push the Docker image to Azure Container Registry. So you need to create a GitHub account from [here](https://github.com). Once you create a GitHub account, you need to create a GitHub repository. You can create a GitHub repository by clicking on the `New` button on the GitHub dashboard. You can name the repository anything you want. I will be naming the repository `azure-deployment-for-dotnet`. You can leave the repository as public and click on the `Create repository` button.
 
-## What does this series cover?
-
-I want to cover the start to finish of deploying a .Net application to Azure. I will be using GitHub Actions to build and push the Docker image to Azure Container Registry. I will be using Terraform to create the AKS cluster and deploy the .Net application to AKS.
-
-Part 0 - [Prerequisites](/posts/azure-deployment-for-dotnet)
-
-Part 1 - [Setup Terraform to create Azure Kubernetes Service (AKS) Cluster and Container Registry](/posts/terraform-to-create-azure-kubernetes-service-aks-cluster-and-container-registry)
-
-Part 2 - [Setup K8s to deploy CertManager, Nginx Ingress Controller with Static IP](/posts/certmanager-nginx-ingress-controller-with-static-ip-in-aks)
-
-Part 3 - [Setup CloudFlare DNS for Azure Kubernetes Service (AKS) Cluster](/posts/cloudflare-dns-for-aks-cluster-with-terraform)
-
-Part 4 - [Deploy a sample whoami application with HTTPS enabled](/posts/deploy-a-sample-whoami-application-with-https-enabled)
-
-Part 5 - [Setup GitHub Actions to build, Version and push Docker image to Azure Container Registry](/posts/github-actions-build-version-push-docker-image-to-azure-container-registry)
-
-Part 6 - [Setup GitHub Actions to deploy .Net application to Azure Kubernetes Service (AKS) Cluster](/posts/github-actions-to-deploy-dotnet-application-to-aks-cluster)
-
-
 ## Conclusion
 
 This is the introduction to the Azure Deployment for .Net series. In the next article, we will setup GitHub Actions to build, Version and push Docker image to Azure Container Registry. If you have any questions or feedback, please feel free to post them in the comments section.
