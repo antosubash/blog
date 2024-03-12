@@ -1,6 +1,6 @@
 import { allPosts } from 'contentlayer/generated'
 
-const Parts = (slug: any) => {
+const Parts = (slug: { data: string }) => {
   const post = allPosts.find((p) => p.slug === slug.data)
   const allPostInSeries = allPosts
     .filter((p) => p.series === post?.series)
@@ -10,7 +10,15 @@ const Parts = (slug: any) => {
       <div>Post in this Series</div>
       <ol>
         {allPostInSeries.map((blogPost) => {
-          return <li key={blogPost.slug}>{slug.data == blogPost.slug ? `${blogPost.title} (This post)` : <a href={`/posts/${blogPost.slug}`}>{blogPost.title}</a>}</li>
+          return (
+            <li key={blogPost.slug}>
+              {slug.data == blogPost.slug ? (
+                `${blogPost.title} (This post)`
+              ) : (
+                <a href={`/posts/${blogPost.slug}`}>{blogPost.title}</a>
+              )}
+            </li>
+          )
         })}
       </ol>
     </div>

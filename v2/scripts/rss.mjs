@@ -64,15 +64,15 @@ async function generateRSS(config, allBlogs, page = 'feed.xml') {
   // RSS for tags
   const tagData = getTagsWithCount()
 
-  tagData.forEach(tagItem => {
+  tagData.forEach((tagItem) => {
     const filteredPosts = allBlogs.filter((post) => post.tags.includes(tagItem.tag))
     const rss = generateRss(config, filteredPosts, `tags/${tagItem.tag}/${page}`)
-    if(tagItem.tag){
+    if (tagItem.tag) {
       const rssPath = path.join('public', 'tags', tagItem.tag)
       mkdirSync(rssPath, { recursive: true })
       writeFileSync(path.join(rssPath, page), rss)
     }
-  });
+  })
 
   // if (publishPosts.length > 0) {
   //   for (const tag of Object.keys(tagData)) {
