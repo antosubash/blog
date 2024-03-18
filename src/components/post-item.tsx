@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React from "react";
-import { format, parseISO } from "date-fns";
+import formatDate from "../lib/utils/formatDate";
 import Tag from "./tag";
 
 interface PostItemProps {
@@ -23,14 +23,12 @@ const PostItem = ({
   part,
 }: PostItemProps) => {
   return (
-    <Link href={`${slug}`}>
-      <div className="py-4 my-4 px-4 rounded-2xl border drop-shadow-lg border-gray-100 bg-white dark:border-gray-800 dark:bg-gray-950 hover:scale-110 transition-all">
+    <Link href={`/posts/${slug}`}>
+      <div className="py-4 my-4 px-4 rounded-2xl border drop-shadow-lg border-gray-100 bg-white dark:border-gray-800 dark:bg-gray-950">
         <div className="space-y-2 xl:grid xl:grid-cols-4 xl:space-y-0 xl:items-baseline">
           <div>
             <div className="text-base font-medium leading-6 ">
-              <time dateTime={date}>
-                {format(parseISO(date), "LLLL d, yyyy")}
-              </time>
+              <time dateTime={date}>{formatDate(date)}</time>
             </div>
             {series && (
               <div className="pt-4">

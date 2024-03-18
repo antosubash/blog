@@ -1,4 +1,3 @@
-"use client"
 import type { ComponentProps, ReactElement } from "react";
 import { useCallback, useRef } from "react";
 import { CopyToClipboard } from "./copy-to-clipboard";
@@ -13,7 +12,6 @@ export const Pre = ({
 }: ComponentProps<"pre"> & {
   filename?: string;
 }): ReactElement => {
-  console.log("src\\components\\pre.tsx:32:5")
   const preRef = useRef<HTMLPreElement | null>(null);
 
   const toggleWordWrap = useCallback(() => {
