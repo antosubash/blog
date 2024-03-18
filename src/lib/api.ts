@@ -4,7 +4,6 @@ import matter from "gray-matter";
 import getAllFilesRecursively from "./utils/files";
 import { MAX_DISPLAY } from "./constants";
 import { BlogPost } from "@blog/types/postType";
-import { count } from "console";
 
 const postsDirectory = join(process.cwd(), "_posts");
 

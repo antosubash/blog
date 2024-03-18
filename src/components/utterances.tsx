@@ -1,3 +1,4 @@
+"use client"
 import { useUtterances } from "../hooks/useUtterances";
 export const Utterances = ({ slug }: { slug: string }) => {
   const commentNodeId = "comments-" + slug;

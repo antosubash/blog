@@ -6,102 +6,12 @@
             <description>Anto Subash's Blog</description>
             <language>en</language>
             <item>
-          <title>Cert Manager and Nginx Ingress Controller on AKS Cluster with static IP</title>
-          <link>https://blog.antosubash.com/posts/certmanager-nginx-ingress-controller-with-static-ip-in-aks</link>
-          <guid>https://blog.antosubash.com/posts/certmanager-nginx-ingress-controller-with-static-ip-in-aks</guid>
-          <pubDate>Fri, 18 Aug 2023 11:53:48 GMT</pubDate>
-          <description>In this we will setup Cert Manager and Nginx Ingress Controller on AKS Cluster</description>
-          <content:encoded><![CDATA[<h2>Table of contents</h2>
-<h2>This series is a Work in Progress</h2>
-<h2>Introduction</h2>
-<p>In the previous article we have created AKS cluster using Terraform. In this article we will setup Cert Manager and Nginx Ingress Controller on AKS Cluster.</p>
-<h2>Prerequisite</h2>
-<p>Make sure you have completed the previous article and have AKS cluster ready.</p>
-<h2>Setup Cert Manager</h2>
-<p>Cert-Manager is a Kubernetes add-on to automate the management and issuance of TLS certificates from various issuing sources. It will ensure certificates are valid and up to date periodically, and attempt to renew certificates at an appropriate time before expiry.</p>
-<h3>Install Cert Manager</h3>
-<p>Cert Manager is deployed as a series of Kubernetes components, and we will install it using Helm.</p>
-<pre><code class="language-bash">helm repo add jetstack https://charts.jetstack.io
-helm repo update
-</code></pre>
-<h2>Prepare the terraform script</h2>
-<p>Update the terraform script to install cert manager.</p>
-<pre><code class="language-bash">resource &quot;azurerm_public_ip&quot; &quot;aks_static_ip&quot; {
-  depends_on          = [azurerm_kubernetes_cluster.aks]
-  name                = &quot;${local.name_suffix}-aks-static-ip&quot;
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_kubernetes_cluster.aks.node_resource_group
-  allocation_method   = &quot;Static&quot;
-  sku                 = &quot;Standard&quot;
-  tags                = var.resource_group_tags
-}
-</code></pre>
-<p>This will create a static IP address for the ingress controller.</p>
-<pre><code class="language-bash">locals {
-  aks_namespace = &quot;${var.resource_group_tags[&quot;project&quot;]}-${var.resource_group_tags[&quot;environment&quot;]}-ingress-nginx&quot;
-}
-</code></pre>
-<p>This will create a name based on the project and environment.</p>
-<pre><code class="language-bash">resource &quot;kubernetes_namespace&quot; &quot;ingress_namespace&quot; {
-  depends_on = [azurerm_kubernetes_cluster.aks]
-  metadata {
-    name = &quot;${local.aks_namespace}&quot;
-  }
-}
-</code></pre>
-<p>This will create a namespace for the ingress controller.</p>
-<pre><code class="language-bash">resource &quot;helm_release&quot; &quot;nginx_ingress&quot; {
-  depends_on = [azurerm_public_ip.aks_static_ip]
-  name       = &quot;nginx-ingress&quot;
-  repository = &quot;https://kubernetes.github.io/ingress-nginx&quot;
-  chart      = &quot;ingress-nginx&quot;
-  namespace  = &quot;${local.aks_namespace}&quot;
-  version    = &quot;4.7.0&quot;
-
-  set {
-    name  = &quot;controller.service.loadBalancerIP&quot;
-    value = azurerm_public_ip.aks_static_ip.ip_address
-  }
-
-  set {
-    name  = &quot;controller.service.externalTrafficPolicy&quot;
-    value = &quot;Local&quot;
-  }
-}
-</code></pre>
-<p>This will install the nginx ingress controller. we are setting the static IP address for the ingress controller.</p>
-<pre><code class="language-bash">resource &quot;helm_release&quot; &quot;cert_manager&quot; {
-  depends_on = [azurerm_kubernetes_cluster.aks]
-  name       = &quot;cert-manager&quot;
-  repository = &quot;https://charts.jetstack.io&quot;
-  chart      = &quot;cert-manager&quot;
-  namespace  = &quot;${local.aks_namespace}&quot;
-  version    = &quot;1.12.0&quot;
-
-  set {
-    name  = &quot;installCRDs&quot;
-    value = true
-  }
-}
-</code></pre>
-<p>This will install the cert manager.</p>
-<h2>Plan and Apply the terraform script with tfvars</h2>
-<pre><code class="language-bash">terraform plan -var-file=&quot;dev.tfvars&quot;
-</code></pre>
-<p>This will show the plan for the terraform script.</p>
-<pre><code class="language-bash">terraform apply -var-file=&quot;dev.tfvars&quot; -auto-approve
-</code></pre>
-<p>This will apply the terraform script.</p>
-<h2>Conclusion</h2>
-<p>In this article we have setup Cert Manager and Nginx Ingress Controller on AKS Cluster. It will help us to manage the certificates and ingress controller. In the next article we will see how to use cloudflare for DNS and setup the DNS records automatically using Terraform.</p>]]></content:encoded>
-          </item><item>
           <title>Create AKS cluster and ACR with Terraform</title>
           <link>https://blog.antosubash.com/posts/terraform-to-create-azure-kubernetes-service-aks-cluster-and-container-registry</link>
           <guid>https://blog.antosubash.com/posts/terraform-to-create-azure-kubernetes-service-aks-cluster-and-container-registry</guid>
           <pubDate>Wed, 16 Aug 2023 11:53:48 GMT</pubDate>
           <description>In this we will create Azure Kubernetes (AKS) cluster and Azure Container Registry (ACR).</description>
           <content:encoded><![CDATA[<h2>Table of contents</h2>
-<h2>This series is a Work in Progress</h2>
 <h2>Terraform</h2>
 <p>Terraform is an open-source infrastructure as code software tool created by HashiCorp. It enables users to define and provision a datacenter infrastructure using a high-level configuration language known as Hashicorp Configuration Language (HCL), or optionally JSON. Terraform supports a number of cloud infrastructure providers such as Amazon Web Services Google Cloud Platform, Linode, Microsoft Azure, Oracle Cloud Infrastructure, Hetzner or VMware vSphere as well as OpenStack.</p>
 <h2>Install terraform</h2>
@@ -348,6 +258,14 @@ resource_group_tags = {
 <pre><code class="language-bash">terraform destroy -var-file=&quot;dev.tfvars&quot; -auto-approve
 </code></pre>
 <p>This will destroy all the resources. I recommend you create and destroy the resources few times to and get familiar with terraform.</p>
+<h2>Parts in this series</h2>
+<p>Part 0 - <a href="/posts/azure-deployment-for-dotnet">Prerequisites</a></p>
+<p>Part 1 - <a href="/posts/terraform-to-create-azure-kubernetes-service-aks-cluster-and-container-registry">Setup Terraform to create Azure Kubernetes Service (AKS) Cluster and Container Registry</a></p>
+<p>Part 2 - <a href="/posts/certmanager-nginx-ingress-controller-with-static-ip-in-aks">Setup K8s to deploy CertManager, Nginx Ingress Controller with Static IP</a></p>
+<p>Part 3 - <a href="/posts/cloudflare-dns-for-aks-cluster-with-terraform">Setup CloudFlare DNS for Azure Kubernetes Service (AKS) Cluster</a></p>
+<p>Part 4 - <a href="/posts/deploy-a-sample-whoami-application-with-https-enabled">Deploy a sample whoami application with HTTPS enabled</a></p>
+<p>Part 5 - <a href="/posts/github-actions-build-version-push-docker-image-to-azure-container-registry">Setup GitHub Actions to build, Version and push Docker image to Azure Container Registry</a></p>
+<p>Part 6 - <a href="/posts/github-actions-to-deploy-dotnet-application-to-aks-cluster">Setup GitHub Actions to deploy .Net application to Azure Kubernetes Service (AKS) Cluster</a></p>
 <h1>Conclusion</h1>
 <p>If you are new to terraform I recommend you to go through the <a href="https://www.terraform.io/docs/index.html">official documentation</a>. This will give you a good understanding of terraform. In the next post we prepare the aks cluster for deployment.</p>]]></content:encoded>
           </item><item>
@@ -362,7 +280,7 @@ resource_group_tags = {
 <h2>Why?</h2>
 <p>Most of the time, I deploy my .Net apps to Hetzner Cloud. I have written a collection of articles on how to deploy .Net apps to Hetzner Cloud. But When I do consulting work, I deploy the apps to Azure because most of my clients are using Azure. So I thought it would be a good idea to write a collection of articles on how to deploy .Net apps to Azure.</p>
 <h2>Who is this for?</h2>
-<p>This is for anyone who wants to deploy their .Net application to Azure. I will be using GitHub Actions to build and push the Docker image to Azure Container Registry. I will be using Terraform to create the AKS cluster and deploy the .Net application to AKS. So you should have some basic knowledge of Docker, GitHub Actions, and Terraform.</p>
+<p>This is for anyone who wants to deploy their .Net application to Azure. I will be using GitHub Actions to build and push the Docker image to Azure Container Registry. I will be using Terraform to create the AKS cluster and deploy the .Net application to AKS. So you should have some basic knowledge of Docker, GitHub Actions, and Terraform. Keep in mind that this is simple aks deployment. We will not be using any advanced features of AKS like autoscaling, etc. If you want to learn more about AKS, you can check out the official documentation <a href="https://docs.microsoft.com/en-us/azure/aks/">here</a>.</p>
 <h2>Prerequisites</h2>
 <ul>
 <li><a href="https://azure.microsoft.com/en-us/free/">Azure Account</a></li>
@@ -410,10 +328,10 @@ resource_group_tags = {
 <p>Part 0 - <a href="/posts/azure-deployment-for-dotnet">Prerequisites</a></p>
 <p>Part 1 - <a href="/posts/terraform-to-create-azure-kubernetes-service-aks-cluster-and-container-registry">Setup Terraform to create Azure Kubernetes Service (AKS) Cluster and Container Registry</a></p>
 <p>Part 2 - <a href="/posts/certmanager-nginx-ingress-controller-with-static-ip-in-aks">Setup K8s to deploy CertManager, Nginx Ingress Controller with Static IP</a></p>
-<p>Part 3 - Setup CloudFlare DNS for Azure Kubernetes Service (AKS) Cluster</p>
-<p>Part 4 - Deploy a sample whoami application with HTTPS enabled</p>
-<p>Part 5 - Setup GitHub Actions to build, Version and push Docker image to Azure Container Registry</p>
-<p>Part 6 - Setup GitHub Actions to deploy .Net application to Azure Kubernetes Service (AKS) Cluster</p>
+<p>Part 3 - <a href="/posts/cloudflare-dns-for-aks-cluster-with-terraform">Setup CloudFlare DNS for Azure Kubernetes Service (AKS) Cluster</a></p>
+<p>Part 4 - <a href="/posts/deploy-a-sample-whoami-application-with-https-enabled">Deploy a sample whoami application with HTTPS enabled</a></p>
+<p>Part 5 - <a href="/posts/github-actions-build-version-push-docker-image-to-azure-container-registry">Setup GitHub Actions to build, Version and push Docker image to Azure Container Registry</a></p>
+<p>Part 6 - <a href="/posts/github-actions-to-deploy-dotnet-application-to-aks-cluster">Setup GitHub Actions to deploy .Net application to Azure Kubernetes Service (AKS) Cluster</a></p>
 <h2>Conclusion</h2>
 <p>This is the introduction to the Azure Deployment for .Net series. In the next article, we will setup GitHub Actions to build, Version and push Docker image to Azure Container Registry. If you have any questions or feedback, please feel free to post them in the comments section.</p>]]></content:encoded>
           </item><item>
@@ -2373,7 +2291,7 @@ spec:
 <ul>
 <li>Hetzner Account</li>
 </ul>
-<p>I&#x27;m going to use hetzner cloud to create this machine if you don&#x27;t have one then you can use the referral link <a href="https://hetzner.cloud/?ref=ENhA4rCZ5JUM">https://hetzner.cloud/?ref=ENhA4rCZ5JUM</a> and get 20€ for free to try it out.</p>
+<p>I&#x27;m going to use hetzner cloud to create this machine if you don&#x27;t have one then you can use the referral link <a href="here">https://hetzner.cloud/?ref=ENhA4rCZ5JUM</a> and get 20€ for free to try it out.</p>
 <h3>Creating a project</h3>
 <p>Once you have the hetzner account. login and create a project.</p>
 <p><img src="https://raw.githubusercontent.com/antosubash/images/main/assets/posts/microk8s/microk8s1.gif" alt="Create Project"/></p>
@@ -9608,6 +9526,20 @@ CreateMap&lt;TodoDto, Todo&gt;();
 </code></pre>
 <p>Once you created the Application configuration ABP can automatically configure your service as API controllers by conventions.</p>
 <h2>Github Repo Link : https://github.com/antosubash/Todos</h2>]]></content:encoded>
+          </item><item>
+          <title>undefined</title>
+          <link>https://blog.antosubash.com/posts/deploy-a-sample-whoami-application-with-https-enabled</link>
+          <guid>https://blog.antosubash.com/posts/deploy-a-sample-whoami-application-with-https-enabled</guid>
+          <pubDate>Invalid Date</pubDate>
+          <description>undefined</description>
+          <content:encoded><![CDATA[]]></content:encoded>
+          </item><item>
+          <title>undefined</title>
+          <link>https://blog.antosubash.com/posts/github-actions-to-deploy-dotnet-application-to-aks-cluster</link>
+          <guid>https://blog.antosubash.com/posts/github-actions-to-deploy-dotnet-application-to-aks-cluster</guid>
+          <pubDate>Invalid Date</pubDate>
+          <description>undefined</description>
+          <content:encoded><![CDATA[]]></content:encoded>
           </item><item>
           <title>Docker swarm setup for localhost</title>
           <link>https://blog.antosubash.com/posts/docker-swarm-localhost</link>
