@@ -9,9 +9,11 @@ import { Metadata } from 'next'
 
 export async function generateMetadata({ params }: { params: { tag: string } }): Promise<Metadata> {
   const tag = decodeURI(params.tag)
+  const ogImage = siteMetadata.siteUrl + '/og/' + tag + '.png'
   return genPageMetadata({
     title: tag,
     description: `${siteMetadata.title} ${tag} tagged content`,
+    image: ogImage,
     alternates: {
       canonical: './',
       types: {
