@@ -17,6 +17,7 @@
     "@tailwindcss/typography": "^0.5.10",
     "autoprefixer": "^10.4.13",
     "contentlayer": "0.3.4",
+    "date-fns": "^3.6.0",
     "esbuild": "0.20.0",
     "github-slugger": "^1.5.0",
     "gray-matter": "^4.0.3",
