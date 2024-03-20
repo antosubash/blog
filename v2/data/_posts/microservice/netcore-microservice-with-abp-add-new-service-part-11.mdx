@@ -1,9 +1,9 @@
 ---
-title: "Add New Service"
-excerpt: "In this post we will see how to add docker support and create a CI/CD with github actions"
-date: "2022-04-07T00:00:00.000Z"
+title: 'Add New Service'
+excerpt: 'In this post we will see how to add docker support and create a CI/CD with github actions'
+date: '2022-04-07T00:00:00.000Z'
 videoId: i_MwyAYOknk
-series: ".NET Microservice with ABP"
+series: '.NET Microservice with ABP'
 part: 11
 tags:
   - dotnet
@@ -38,7 +38,6 @@ This is the part 11 of the series: [.NET Microservice with ABP](/posts/abp-micro
 Part 11. Add a New service (this post)
 
 [Part 12. Central Logging](/posts/netcore-microservice-with-abp-add-central-logging-part-12)
-
 
 <TOCInline toc={props.toc} asDisclosure />
 
@@ -281,7 +280,7 @@ Add the Feature package
 <PackageReference Include="Volo.Abp.Features" Version="5.2.0" />
 ```
 
-Create `ProjectServiceFeatures` for the constants 
+Create `ProjectServiceFeatures` for the constants
 
 ```cs
 public class ProjectServiceFeatures
@@ -304,8 +303,8 @@ public class ProjectServiceFeaturesDefinitionProvider : FeatureDefinitionProvide
     {
         var myGroup = context.AddGroup(ProjectServiceFeatures.GroupName);
         myGroup.AddFeature(
-            ProjectServiceFeatures.Project.Default, 
-            defaultValue: "false",            
+            ProjectServiceFeatures.Project.Default,
+            defaultValue: "false",
             displayName: L("Project"),
             valueType: new ToggleStringValueType());
     }
@@ -389,7 +388,7 @@ public class ProjectAppService : ProjectServiceAppService, IProjectAppService
         this.repository = repository;
     }
 
-    [Authorize(ProjectServicePermissions.Project.Default)]    
+    [Authorize(ProjectServicePermissions.Project.Default)]
     public async Task<List<ProjectDto>> GetAllAsync()
     {
         var projects = await repository.GetListAsync();
@@ -429,8 +428,8 @@ public class ProjectController : ProjectServiceController, IProjectAppService
         return await _projectService.GetAllAsync();
     }
 
-    
-    [HttpPost]    
+
+    [HttpPost]
     public async Task<ProjectDto> Create(ProjectDto projectDto)
     {
         return await _projectService.Create(projectDto);
@@ -454,7 +453,7 @@ typeof(ProjectServiceEntityFrameworkCoreModule),
 typeof(ProjectServiceApplicationContractsModule)
 ```
 
-Update the `MigrateAllDatabasesAsync` function in the  `TaskyDbMigrationService` file
+Update the `MigrateAllDatabasesAsync` function in the `TaskyDbMigrationService` file
 
 ```cs
 await MigrateDatabaseAsync<ProjectServiceDbContext>(cancellationToken);
@@ -488,34 +487,17 @@ Update the `appsettings.json`
     {
       "ClientId": "Tasky_Web",
       "ClientSecret": "1q2w3e*",
-      "RootUrls": [
-        "https://localhost:5000"
-      ],
-      "Scopes": [
-        "SaaSService",
-        "IdentityService",
-        "AdministrationService",
-        "ProjectService"
-      ],
-      "GrantTypes": [
-        "hybrid"
-      ],
-      "RedirectUris": [
-        "https://localhost:5000/signin-oidc"
-      ],
-      "PostLogoutRedirectUris": [
-        "https://localhost:5000/signout-callback-oidc"
-      ],
-      "AllowedCorsOrigins": [
-        "https://localhost:5000"
-      ]
+      "RootUrls": ["https://localhost:5000"],
+      "Scopes": ["SaaSService", "IdentityService", "AdministrationService", "ProjectService"],
+      "GrantTypes": ["hybrid"],
+      "RedirectUris": ["https://localhost:5000/signin-oidc"],
+      "PostLogoutRedirectUris": ["https://localhost:5000/signout-callback-oidc"],
+      "AllowedCorsOrigins": ["https://localhost:5000"]
     },
     {
       "ClientId": "Tasky_App",
       "ClientSecret": "1q2w3e*",
-      "RootUrls": [
-        "http://localhost:4200"
-      ],
+      "RootUrls": ["http://localhost:4200"],
       "Scopes": [
         "AuthServer",
         "SaaSService",
@@ -523,118 +505,50 @@ Update the `appsettings.json`
         "AdministrationService",
         "ProjectService"
       ],
-      "GrantTypes": [
-        "authorization_code"
-      ],
-      "RedirectUris": [
-        "http://localhost:4200"
-      ],
-      "PostLogoutRedirectUris": [
-        "http://localhost:4200"
-      ],
-      "AllowedCorsOrigins": [
-        "http://localhost:4200"
-      ]
+      "GrantTypes": ["authorization_code"],
+      "RedirectUris": ["http://localhost:4200"],
+      "PostLogoutRedirectUris": ["http://localhost:4200"],
+      "AllowedCorsOrigins": ["http://localhost:4200"]
     },
     {
       "ClientId": "AdministrationService_Swagger",
       "ClientSecret": "1q2w3e*",
-      "RootUrls": [
-        "https://localhost:7001"
-      ],
-      "Scopes": [
-        "SaaSService",
-        "IdentityService",
-        "AdministrationService",
-        "ProjectService"
-      ],
-      "GrantTypes": [
-        "authorization_code"
-      ],
-      "RedirectUris": [
-        "https://localhost:7001/swagger/oauth2-redirect.html"
-      ],
-      "PostLogoutRedirectUris": [
-        "https://localhost:7001/signout-callback-oidc"
-      ],
-      "AllowedCorsOrigins": [
-        "https://localhost:7001"
-      ]
+      "RootUrls": ["https://localhost:7001"],
+      "Scopes": ["SaaSService", "IdentityService", "AdministrationService", "ProjectService"],
+      "GrantTypes": ["authorization_code"],
+      "RedirectUris": ["https://localhost:7001/swagger/oauth2-redirect.html"],
+      "PostLogoutRedirectUris": ["https://localhost:7001/signout-callback-oidc"],
+      "AllowedCorsOrigins": ["https://localhost:7001"]
     },
     {
       "ClientId": "IdentityService_Swagger",
       "ClientSecret": "1q2w3e*",
-      "RootUrls": [
-        "https://localhost:7002"
-      ],
-      "Scopes": [
-        "SaaSService",
-        "IdentityService",
-        "AdministrationService",
-        "ProjectService"
-      ],
-      "GrantTypes": [
-        "authorization_code"
-      ],
-      "RedirectUris": [
-        "https://localhost:7002/swagger/oauth2-redirect.html"
-      ],
-      "PostLogoutRedirectUris": [
-        "https://localhost:7002"
-      ],
-      "AllowedCorsOrigins": [
-        "https://localhost:7002"
-      ]
+      "RootUrls": ["https://localhost:7002"],
+      "Scopes": ["SaaSService", "IdentityService", "AdministrationService", "ProjectService"],
+      "GrantTypes": ["authorization_code"],
+      "RedirectUris": ["https://localhost:7002/swagger/oauth2-redirect.html"],
+      "PostLogoutRedirectUris": ["https://localhost:7002"],
+      "AllowedCorsOrigins": ["https://localhost:7002"]
     },
     {
       "ClientId": "SaaSService_Swagger",
       "ClientSecret": "1q2w3e*",
-      "RootUrls": [
-        "https://localhost:7003"
-      ],
-      "Scopes": [
-        "SaaSService",
-        "IdentityService",
-        "AdministrationService",
-        "ProjectService"
-      ],
-      "GrantTypes": [
-        "authorization_code"
-      ],
-      "RedirectUris": [
-        "https://localhost:7003/swagger/oauth2-redirect.html"
-      ],
-      "PostLogoutRedirectUris": [
-        "https://localhost:7003"
-      ],
-      "AllowedCorsOrigins": [
-        "https://localhost:7003"
-      ]
+      "RootUrls": ["https://localhost:7003"],
+      "Scopes": ["SaaSService", "IdentityService", "AdministrationService", "ProjectService"],
+      "GrantTypes": ["authorization_code"],
+      "RedirectUris": ["https://localhost:7003/swagger/oauth2-redirect.html"],
+      "PostLogoutRedirectUris": ["https://localhost:7003"],
+      "AllowedCorsOrigins": ["https://localhost:7003"]
     },
     {
       "ClientId": "ProjectService_Swagger",
       "ClientSecret": "1q2w3e*",
-      "RootUrls": [
-        "https://localhost:7004"
-      ],
-      "Scopes": [
-        "SaaSService",
-        "IdentityService",
-        "AdministrationService",
-        "ProjectService"
-      ],
-      "GrantTypes": [
-        "authorization_code"
-      ],
-      "RedirectUris": [
-        "https://localhost:7004/swagger/oauth2-redirect.html"
-      ],
-      "PostLogoutRedirectUris": [
-        "https://localhost:7004"
-      ],
-      "AllowedCorsOrigins": [
-        "https://localhost:7004"
-      ]
+      "RootUrls": ["https://localhost:7004"],
+      "Scopes": ["SaaSService", "IdentityService", "AdministrationService", "ProjectService"],
+      "GrantTypes": ["authorization_code"],
+      "RedirectUris": ["https://localhost:7004/swagger/oauth2-redirect.html"],
+      "PostLogoutRedirectUris": ["https://localhost:7004"],
+      "AllowedCorsOrigins": ["https://localhost:7004"]
     }
   ]
 }

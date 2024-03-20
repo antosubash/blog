@@ -57,8 +57,8 @@ export const Posts = defineDocumentType(() => ({
     draft: { type: 'boolean' },
     isDraft: { type: 'boolean' },
     excerpt: { type: 'string' },
-    videoId : { type: 'string' },
-    series : { type: 'string' },
+    videoId: { type: 'string' },
+    series: { type: 'string' },
     part: { type: 'number' },
     images: { type: 'json' },
     authors: { type: 'list', of: { type: 'string' } },
@@ -123,5 +123,5 @@ export default makeSource({
       [rehypePrismPlus, { defaultLanguage: 'js', ignoreMissing: true }],
       rehypePresetMinify,
     ],
-  }
+  },
 })

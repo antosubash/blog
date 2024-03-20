@@ -1,13 +1,14 @@
 ---
-title: "Orchard core. Getting started - Part 1"
-excerpt: "In this post we will see how to get started with the orchard core."
-date: "2021-11-01"
+title: 'Orchard core. Getting started - Part 1'
+excerpt: 'In this post we will see how to get started with the orchard core.'
+date: '2021-11-01'
 videoId: ItfKWbKxPAw
-series: "Orchard Core - Getting Started"
+series: 'Orchard Core - Getting Started'
 part: 1
 tags:
   - orchard-core
 ---
+
 <TOCInline toc={props.toc} asDisclosure />
 
 ## Intro
@@ -75,20 +76,12 @@ Now visit content items to create a new content.
 create a `Pages` folder and create `todo.cshtml` file inside the `Pages` folder
 
 ```html
-@page "/todos"
-@inject OrchardCore.IOrchardHelper Orchard
-@{
-    var todos = await Orchard.GetRecentContentItemsByContentTypeAsync("Todos");
-}
-@Orchard.ConsoleLog(todos)
+@page "/todos" @inject OrchardCore.IOrchardHelper Orchard @{ var todos = await
+Orchard.GetRecentContentItemsByContentTypeAsync("Todos"); } @Orchard.ConsoleLog(todos)
 <h1>List all Todos</h1>
 @foreach (var todo in todos) {
-    <p>
-        @todo.DisplayText
-    </p>
-    <p>
-        @todo.Content.Todos.IsDone.Value
-    </p>
+<p>@todo.DisplayText</p>
+<p>@todo.Content.Todos.IsDone.Value</p>
 }
 ```
 

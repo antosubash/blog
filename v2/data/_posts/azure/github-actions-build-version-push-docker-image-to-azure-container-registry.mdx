@@ -1,10 +1,10 @@
 ---
-title: "Build, Version and Publish .Net Application to ACR using GitHub Actions"
-excerpt: "In this article, we will see how to build, version and publish .Net application to Azure Container Registry (ACR) using GitHub Actions."
-date: "2023-08-20T11:53:48.157Z"
+title: 'Build, Version and Publish .Net Application to ACR using GitHub Actions'
+excerpt: 'In this article, we will see how to build, version and publish .Net application to Azure Container Registry (ACR) using GitHub Actions.'
+date: '2023-08-20T11:53:48.157Z'
 videoId:
 isDraft: true
-series: "Azure Kubernetes (AKS) Deployment for .Net"
+series: 'Azure Kubernetes (AKS) Deployment for .Net'
 part: 5
 tags:
   - aks
@@ -18,7 +18,7 @@ tags:
 
 <TOCInline toc={props.toc} asDisclosure />
 
-<Parts data={props.slug}/>
+<Parts data={props.slug} />
 
 ## Build
 
@@ -40,7 +40,7 @@ dotnet sln src/Tasky.sln add src/TaskyWebApi/TaskyWebApi.csproj
 
 Add a new Dockerfile with the name `Dockerfile` under `src/TaskyWebApi` folder.
 
-````bash
+```bash
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 80
@@ -61,7 +61,7 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "TaskyWebApi.dll"]
-````
+```
 
 ### Add github action env variables
 
@@ -214,7 +214,7 @@ jobs:
         id: set-context
         uses: azure/aks-set-context@v3
         with:
-          resource-group: '${{ secrets.RESOURCE_GROUP }}' 
+          resource-group: '${{ secrets.RESOURCE_GROUP }}'
           cluster-name: '${{ secrets.CLUSTER_NAME }}'
       - name: Setup kubectl
         if: steps.versionize.outcome == 'success'
@@ -235,7 +235,7 @@ jobs:
         with:
           namespace: '${{ secrets.NAMESPACE }}'
           manifests: |
-             src/k8s/tasky.yaml
+            src/k8s/tasky.yaml
           images: '${{ secrets.REGISTRY_SERVER }}/tasky:${{ github.sha }}'
           pull-images: false
 ```

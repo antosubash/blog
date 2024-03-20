@@ -1,12 +1,13 @@
 ---
-title: "Blazor state management with Fluxor"
-excerpt: "In this post we will see how to setup fluxor in Blazor Wasm App"
-date: "2022-06-01"
+title: 'Blazor state management with Fluxor'
+excerpt: 'In this post we will see how to setup fluxor in Blazor Wasm App'
+date: '2022-06-01'
 videoId: yM9F8rxo8L8
 tags:
   - blazor
   - fluxor
 ---
+
 <TOCInline toc={props.toc} asDisclosure />
 
 ## What is Fluxor
@@ -98,7 +99,7 @@ public class IncrementCounterAction
 }
 ```
 
-Enforcing that every change is described as an action lets us have a clear understanding of what’s going on in the app. If something changed, we know why it changed. Actions are like breadcrumbs of what has happened. 
+Enforcing that every change is described as an action lets us have a clear understanding of what’s going on in the app. If something changed, we know why it changed. Actions are like breadcrumbs of what has happened.
 
 ### Reducers
 
@@ -118,24 +119,20 @@ public static class Reducers
 To use the state management we will update the `counter` page which comes with the default app.
 
 ```html
-@page "/counter"
-@using FluxorWithBlazor.State.Counter
-@inject IDispatcher dispatcher
-@inject IState<CounterState> counterState
-<PageTitle>Counter</PageTitle>
+@page "/counter" @using FluxorWithBlazor.State.Counter @inject IDispatcher dispatcher @inject
+IState<CounterState>
+  counterState
+  <PageTitle>Counter</PageTitle>
 
-<h1>Counter</h1>
+  <h1>Counter</h1>
 
-<p role="status">Current count: @counterState.Value.ClickCount</p>
+  <p role="status">Current count: @counterState.Value.ClickCount</p>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+  <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
-@code {
-    private void IncrementCount()
-    {
-        dispatcher.Dispatch(new IncrementCounterAction());
-    }
-}
+  @code { private void IncrementCount() { dispatcher.Dispatch(new IncrementCounterAction()); }
+  }</CounterState
+>
 ```
 
 In the `IncrementCount` method we are dispatching an action and the current count is displayed buy injecting the state.
@@ -242,53 +239,40 @@ public class Effects
 We need to update the fetch data page to use the weather state.
 
 ```html
-@page "/fetchdata"
-@inject IDispatcher dispatcher
-@inject IState<WeatherState> weather
-@inherits Fluxor.Blazor.Web.Components.FluxorComponent
-<PageTitle>Weather forecast</PageTitle>
+@page "/fetchdata" @inject IDispatcher dispatcher @inject IState<WeatherState>
+  weather @inherits Fluxor.Blazor.Web.Components.FluxorComponent
+  <PageTitle>Weather forecast</PageTitle>
 
-<h1>Weather forecast</h1>
+  <h1>Weather forecast</h1>
 
-<p>This component demonstrates fetching data from the server.</p>
+  <p>This component demonstrates fetching data from the server.</p>
 
-@if (weather.Value.IsLoading)
-{
-	<p><em>Loading...</em></p>
-}
-else
-{
-	<table class="table">
-		<thead>
-			<tr>
-				<th>Date</th>
-				<th>Temp. (C)</th>
-				<th>Temp. (F)</th>
-				<th>Summary</th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach (var forecast in weather.Value.Forecasts)
-			{
-			<tr>
-				<td>@forecast.Date.ToShortDateString()</td>
-				<td>@forecast.TemperatureC</td>
-				<td>@forecast.TemperatureF</td>
-				<td>@forecast.Summary</td>
-			</tr>
-			}
-		</tbody>
-	</table>
-}
-
-@code {
-
-	protected override void OnInitialized()
-	{
-		base.OnInitialized();
-		dispatcher.Dispatch(new FetchDataAction());
-	}
-}
+  @if (weather.Value.IsLoading) {
+  <p><em>Loading...</em></p>
+  } else {
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Temp. (C)</th>
+        <th>Temp. (F)</th>
+        <th>Summary</th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var forecast in weather.Value.Forecasts) {
+      <tr>
+        <td>@forecast.Date.ToShortDateString()</td>
+        <td>@forecast.TemperatureC</td>
+        <td>@forecast.TemperatureF</td>
+        <td>@forecast.Summary</td>
+      </tr>
+      }
+    </tbody>
+  </table>
+  } @code { protected override void OnInitialized() { base.OnInitialized(); dispatcher.Dispatch(new
+  FetchDataAction()); } }</WeatherState
+>
 ```
 
 Repo : https://github.com/antosubash/blazor-state-management-with-fluxor

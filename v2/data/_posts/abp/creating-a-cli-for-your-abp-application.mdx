@@ -1,8 +1,8 @@
 ---
-title: "Creating a Cli for your ABP Application."
-excerpt: "I this post we will see how to create a cli for you .ABP application."
-date: "2023-03-30T10:46:07.099Z"
-videoId: 
+title: 'Creating a Cli for your ABP Application.'
+excerpt: 'I this post we will see how to create a cli for you .ABP application.'
+date: '2023-03-30T10:46:07.099Z'
+videoId:
 isDraft: true
 tags:
   - abp
@@ -15,7 +15,7 @@ tags:
 
 ## Introduction
 
-I this post we will see how to create a cli for you .Net application. 
+I this post we will see how to create a cli for you .Net application.
 
 ## Why?
 
@@ -23,7 +23,7 @@ Sometimes when I am working on a project and I need to do some repetitive tasks,
 
 ## Installation
 
-First we need to install the .net template. 
+First we need to install the .net template.
 
 ```bash
 dotnet new install Anto.Cli.Template
@@ -37,17 +37,17 @@ Now we can create a new project using the template.
 dotnet new cli-template -o MyProject --api myabpproject.com
 ```
 
-this will create a new project in the MyProject folder. The default project comes with few sample commands. 
+this will create a new project in the MyProject folder. The default project comes with few sample commands.
 
 ## Adding a new command
 
-you can use the plop generator to add a new command. 
+you can use the plop generator to add a new command.
 
 ```bash
-plop        
+plop
 ```
 
-this will ask you for the command name. make sure you install the npm packages before running the plop command. 
+this will ask you for the command name. make sure you install the npm packages before running the plop command.
 
 ```bash
 npm install
@@ -55,14 +55,13 @@ npm install
 
 ## Running the project
 
-you can run the project using the following command. 
+you can run the project using the following command.
 
 ```bash
 dotnet run -- --help
 ```
 
 This will show you the list of commands.
-
 
 ## Data Seeding
 
@@ -71,10 +70,3 @@ I have created 2 data seeding commands. one for the users and one for the tenant
 ## Conclusion
 
 This is a very simple template. you can add more commands to it. I will add more commands to it in the future. I created this template to seed some data to my application after I login. I hope you find this useful. let me know if you have any questions.
-
-
-
-
-
-
-

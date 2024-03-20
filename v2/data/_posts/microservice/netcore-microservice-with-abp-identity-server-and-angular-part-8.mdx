@@ -1,9 +1,9 @@
 ---
-title: "IdentityServer and Angular"
-excerpt: "In this post we will see how to get the IdentityServer and the Angular App working with other services"
-date: "2022-03-20T00:00:00.000Z"
-videoId: w2dZokfRxe0 
-series: ".NET Microservice with ABP"
+title: 'IdentityServer and Angular'
+excerpt: 'In this post we will see how to get the IdentityServer and the Angular App working with other services'
+date: '2022-03-20T00:00:00.000Z'
+videoId: w2dZokfRxe0
+series: '.NET Microservice with ABP'
 part: 8
 tags:
   - dotnet
@@ -41,7 +41,6 @@ Part 8. Identity server and Angular App (this post)
 [Part 11. Add a New service](/posts/netcore-microservice-with-abp-add-new-service-part-11)
 
 [Part 12. Central Logging](/posts/netcore-microservice-with-abp-add-central-logging-part-12)
-
 
 <TOCInline toc={props.toc} asDisclosure />
 
@@ -128,9 +127,9 @@ This should launch the identity server and it should be running in the port `700
 angular app in abp is a self contained app. there is not dependency to any other abp project. so to run the we just have to point the angular app in the correct direction and it should work. We need to change 2 things in the angular app. one is the `OAuthConfig` so that it know where is the identity server is running and the `API` endpoint which is the reverse proxy in our case which has all the endpoints. you will be able to find the `environment.ts` file in `apps\angular\src\environments`.
 
 ```ts
-import { Environment } from '@abp/ng.core';
+import { Environment } from '@abp/ng.core'
 
-const baseUrl = 'http://localhost:4200';
+const baseUrl = 'http://localhost:4200'
 
 export const environment = {
   production: false,
@@ -144,16 +143,17 @@ export const environment = {
     redirectUri: baseUrl,
     clientId: 'Tasky_App',
     responseType: 'code',
-    scope: 'offline_access IdentityService AdministrationService SaaSService role email openid profile',
-    requireHttps: true
+    scope:
+      'offline_access IdentityService AdministrationService SaaSService role email openid profile',
+    requireHttps: true,
   },
   apis: {
     default: {
       url: 'https://localhost:7500',
       rootNamespace: 'Tasky',
-    }
+    },
   },
-} as Environment;
+} as Environment
 ```
 
 ### Run

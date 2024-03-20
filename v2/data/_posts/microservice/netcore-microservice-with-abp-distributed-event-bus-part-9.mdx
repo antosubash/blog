@@ -1,9 +1,9 @@
 ---
-title: "Distributed Event Bus"
-excerpt: "In this post we will see how to get the RabbitMQ working for service to service communication"
-date: "2022-03-25T00:00:00.000Z"
-videoId: gCBZUXbyOJo 
-series: ".NET Microservice with ABP"
+title: 'Distributed Event Bus'
+excerpt: 'In this post we will see how to get the RabbitMQ working for service to service communication'
+date: '2022-03-25T00:00:00.000Z'
+videoId: gCBZUXbyOJo
+series: '.NET Microservice with ABP'
 part: 9
 tags:
   - dotnet
@@ -39,7 +39,6 @@ Part 9. Distributed event bus (this post)
 [Part 11. Add a New service](/posts/netcore-microservice-with-abp-add-new-service-part-11)
 
 [Part 12. Central Logging](/posts/netcore-microservice-with-abp-add-central-logging-part-12)
-
 
 <TOCInline toc={props.toc} asDisclosure />
 
@@ -238,7 +237,7 @@ public class TenantCreatedEventHandler : IDistributedEventHandler<TenantCreatedE
         {
             using (_currentTenant.Change(eventData.Id))
             {
-                
+
                 _logger.LogInformation($"Creating admin user for tenant {eventData.Id}...");
                 await _identityDataSeeder.SeedAsync(
                     eventData.Properties.GetOrDefault(IdentityDataSeedContributor.AdminEmailPropertyName) ?? "admin@abp.io",

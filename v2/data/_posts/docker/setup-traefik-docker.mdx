@@ -1,11 +1,12 @@
 ---
-title: "Traefik setup with docker swarm"
-excerpt: "In this post you will see how to setup traefik with docker swarm. Along with that we will also setup Portainer and Swarmpit so that it is easy to manage the docker swarm."
-date: "2020-09-17T05:35:07.322Z"
+title: 'Traefik setup with docker swarm'
+excerpt: 'In this post you will see how to setup traefik with docker swarm. Along with that we will also setup Portainer and Swarmpit so that it is easy to manage the docker swarm.'
+date: '2020-09-17T05:35:07.322Z'
 tags:
   - docker
   - traefik
 ---
+
 <TOCInline toc={props.toc} asDisclosure />
 
 ## Docker swarm init
@@ -58,11 +59,11 @@ mkdir /mnt/volume2/portainer
 Sample yml
 
 ```yml
-version: "3.3"
+version: '3.3'
 
 services:
   traefik:
-    image: "traefik:v2.1.4"
+    image: 'traefik:v2.1.4'
     command:
       - --log.level=INFO
       - --entrypoints.web.address=:80
@@ -80,35 +81,35 @@ services:
       - --certificatesresolvers.leresolver.acme.storage=/le/acme.json
       - --certificatesresolvers.leresolver.acme.tlschallenge=true
     ports:
-      - "80:80"
-      - "443:443"
+      - '80:80'
+      - '443:443'
     networks:
       - traefik-public
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
       # Make sure the volume folder is created
-      - "/home/docker-login/data/traefik/acme.json:/le/acme.json"
+      - '/home/docker-login/data/traefik/acme.json:/le/acme.json'
     deploy:
       labels:
         # Dashboard
-        - "traefik.enable=true"
+        - 'traefik.enable=true'
         # Change the host url here
-        - "traefik.http.routers.traefik.rule=Host(`traefik.example.com`)"
-        - "traefik.http.routers.traefik.service=api@internal"
-        - "traefik.http.services.traefik.loadbalancer.server.port=8080"
-        - "traefik.http.routers.traefik.tls.certresolver=leresolver"
-        - "traefik.http.routers.traefik.entrypoints=websecure"
-        - "traefik.http.routers.traefik.middlewares=authtraefik"
+        - 'traefik.http.routers.traefik.rule=Host(`traefik.example.com`)'
+        - 'traefik.http.routers.traefik.service=api@internal'
+        - 'traefik.http.services.traefik.loadbalancer.server.port=8080'
+        - 'traefik.http.routers.traefik.tls.certresolver=leresolver'
+        - 'traefik.http.routers.traefik.entrypoints=websecure'
+        - 'traefik.http.routers.traefik.middlewares=authtraefik'
         # Change the auth password here
-        - "traefik.http.middlewares.authtraefik.basicauth.users=admin:yournewpassword" # user/password
+        - 'traefik.http.middlewares.authtraefik.basicauth.users=admin:yournewpassword' # user/password
 
         # global redirect to https
-        - "traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)"
-        - "traefik.http.routers.http-catchall.entrypoints=web"
-        - "traefik.http.routers.http-catchall.middlewares=redirect-to-https"
+        - 'traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)'
+        - 'traefik.http.routers.http-catchall.entrypoints=web'
+        - 'traefik.http.routers.http-catchall.middlewares=redirect-to-https'
 
         # middleware redirect
-        - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+        - 'traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https'
 
   my-app:
     image: containous/whoami:v1.3.0
@@ -118,16 +119,16 @@ services:
       - --port=8082 # Our service listens on 8082
     deploy:
       labels:
-        - "traefik.enable=true"
+        - 'traefik.enable=true'
         # Change the host url here
-        - "traefik.http.routers.my-app.rule=Host(`whoami.example.com`)"
-        - "traefik.http.services.my-app.loadbalancer.server.port=8082"
-        - "traefik.http.routers.my-app.middlewares=auth"
-        - "traefik.http.routers.my-app.entrypoints=websecure"
-        - "traefik.http.routers.my-app.tls=true"
-        - "traefik.http.routers.my-app.tls.certresolver=leresolver"
+        - 'traefik.http.routers.my-app.rule=Host(`whoami.example.com`)'
+        - 'traefik.http.services.my-app.loadbalancer.server.port=8082'
+        - 'traefik.http.routers.my-app.middlewares=auth'
+        - 'traefik.http.routers.my-app.entrypoints=websecure'
+        - 'traefik.http.routers.my-app.tls=true'
+        - 'traefik.http.routers.my-app.tls.certresolver=leresolver'
         # Change the password here
-        - "traefik.http.middlewares.auth.basicauth.users=admin:changeme" # user/password
+        - 'traefik.http.middlewares.auth.basicauth.users=admin:changeme' # user/password
 
 networks:
   traefik-public:
@@ -139,7 +140,7 @@ networks:
 Make sure the service name for swarmpit is "app"
 
 ```yml
-version: "3.3"
+version: '3.3'
 
 services:
   app:
@@ -153,19 +154,19 @@ services:
       - traefik-public
     deploy:
       labels:
-        - "traefik.enable=true"
+        - 'traefik.enable=true'
         # change the host name here
-        - "traefik.http.routers.app.rule=Host(`swarm.example.com`)"
-        - "traefik.http.services.app.loadbalancer.server.port=8080"
-        - "traefik.http.routers.app.tls=true"
-        - "traefik.http.routers.app.tls.certresolver=leresolver"
-        - "traefik.docker.network=traefik-public"
+        - 'traefik.http.routers.app.rule=Host(`swarm.example.com`)'
+        - 'traefik.http.services.app.loadbalancer.server.port=8080'
+        - 'traefik.http.routers.app.tls=true'
+        - 'traefik.http.routers.app.tls.certresolver=leresolver'
+        - 'traefik.docker.network=traefik-public'
       resources:
         limits:
-          cpus: "0.50"
+          cpus: '0.50'
           memory: 1024M
         reservations:
-          cpus: "0.25"
+          cpus: '0.25'
           memory: 512M
       placement:
         constraints:
@@ -181,10 +182,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.30"
+          cpus: '0.30'
           memory: 256M
         reservations:
-          cpus: "0.15"
+          cpus: '0.15'
           memory: 128M
 
   influxdb:
@@ -197,10 +198,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.60"
+          cpus: '0.60'
           memory: 512M
         reservations:
-          cpus: "0.30"
+          cpus: '0.30'
           memory: 128M
 
   agent:
@@ -214,13 +215,13 @@ services:
     deploy:
       mode: global
       labels:
-        swarmpit.agent: "true"
+        swarmpit.agent: 'true'
       resources:
         limits:
-          cpus: "0.10"
+          cpus: '0.10'
           memory: 64M
         reservations:
-          cpus: "0.05"
+          cpus: '0.05'
           memory: 32M
 
 networks:
@@ -231,7 +232,7 @@ networks:
 ## Portainer
 
 ```yml
-version: "3.2"
+version: '3.2'
 
 services:
   agent:
@@ -257,13 +258,13 @@ services:
       - traefik-public
     deploy:
       labels:
-        - "traefik.enable=true"
+        - 'traefik.enable=true'
         # change the host here
-        - "traefik.http.routers.portainer.rule=Host(`admin.example.com`)"
-        - "traefik.http.services.portainer.loadbalancer.server.port=9000"
-        - "traefik.http.routers.portainer.entrypoints=websecure"
-        - "traefik.http.routers.portainer.tls=true"
-        - "traefik.http.routers.portainer.tls.certresolver=leresolver"
+        - 'traefik.http.routers.portainer.rule=Host(`admin.example.com`)'
+        - 'traefik.http.services.portainer.loadbalancer.server.port=9000'
+        - 'traefik.http.routers.portainer.entrypoints=websecure'
+        - 'traefik.http.routers.portainer.tls=true'
+        - 'traefik.http.routers.portainer.tls.certresolver=leresolver'
       mode: replicated
       placement:
         constraints: [node.role == manager]

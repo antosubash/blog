@@ -1,8 +1,8 @@
 ---
-title: "Abp Dockerfile"
-excerpt: "In this post we will see how to create proper docker file for your abp application."
-date: "2023-03-19T21:52:11.973Z"
-videoId: 
+title: 'Abp Dockerfile'
+excerpt: 'In this post we will see how to create proper docker file for your abp application.'
+date: '2023-03-19T21:52:11.973Z'
+videoId:
 tags:
   - abp
   - dotnet
@@ -18,7 +18,7 @@ In this post we will see how to create proper docker file for your abp applicati
 ## What is the problem?
 
 If you are using abp framework for your application, you might have noticed that abp framework stoped including the "libs" folder in the application template. This was done to reduce the size of the application. It is a good practice to not include the "libs" folder in the sorces control. But if you are using docker, you need to include the "libs" folder in the docker image.
-This is a problem when you are doing CI/CD. 
+This is a problem when you are doing CI/CD.
 
 We will see what are the ways to solve this problem.
 
@@ -193,7 +193,3 @@ Here is the repo for the application. [AbpTemplate](https://github.com/antosubas
 ## Conclusion
 
 In this post we saw how to create a docker file which will install the npm packages for your abp application. This will help you to create a docker image which will have the "libs" folder for your CI/CD pipeline. Hope this helps. Fell free to leave a comment if you have any questions.
-
-
-
-

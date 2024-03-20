@@ -1,10 +1,10 @@
 ---
-title: "Deploy redis, rabbitmq, seq, registry and postgres in docker swarm"
-excerpt: "In this post we will see how to deploy redis, rabbitmq, postgres and registry."
-date: "2022-06-21"
+title: 'Deploy redis, rabbitmq, seq, registry and postgres in docker swarm'
+excerpt: 'In this post we will see how to deploy redis, rabbitmq, postgres and registry.'
+date: '2022-06-21'
 part: 3
 videoId: J2m6QrMpBm4
-series: "Docker Deployment"
+series: 'Docker Deployment'
 tags:
   - docker
   - redis
@@ -71,13 +71,13 @@ services:
       - /mnt/registry:/var/lib/registry
     deploy:
       labels:
-        - "traefik.enable=true"
-        - "traefik.http.routers.registry.rule=Host(`registry.yourdomain.com`)"
-        - "traefik.http.services.registry.loadbalancer.server.port=5000"
-        - "traefik.http.routers.registry.entrypoints=websecure"
-        - "traefik.http.routers.registry.tls=true"
-        - "traefik.http.routers.registry.tls.certresolver=leresolver"
-        
+        - 'traefik.enable=true'
+        - 'traefik.http.routers.registry.rule=Host(`registry.yourdomain.com`)'
+        - 'traefik.http.services.registry.loadbalancer.server.port=5000'
+        - 'traefik.http.routers.registry.entrypoints=websecure'
+        - 'traefik.http.routers.registry.tls=true'
+        - 'traefik.http.routers.registry.tls.certresolver=leresolver'
+
 networks:
   traefik-public:
     external: true
@@ -96,13 +96,13 @@ mkdir /mnt/redis
 ### Redis docker compose
 
 ```yml
-version: "3"
-  
+version: '3'
+
 services:
   redis-master:
-    image: "bitnami/redis:latest"
+    image: 'bitnami/redis:latest'
     ports:
-      - "6379:6379"
+      - '6379:6379'
     environment:
       - REDIS_REPLICATION_MODE=master
       - REDIS_PASSWORD=my_master_password
@@ -123,7 +123,7 @@ mkdir /mnt/postgres
 ### Postgres docker compose
 
 ```yml
-version: "3.2"
+version: '3.2'
 
 services:
   postgres:
@@ -136,7 +136,7 @@ services:
       POSTGRES_DB: test
       POSTGRES_USER: postgres
       POSTGRES_PASS: my_postgres_password
-      --auth: "md5"
+      --auth: 'md5'
       POSTGRES_MULTIPLE_EXTENSIONS: postgis,hstore,postgis_topology
 ```
 
@@ -154,8 +154,8 @@ services:
     container_name: rabbitmq
     image: rabbitmq:management-alpine
     ports:
-      - "15672:15672"
-      - "5672:5672"
+      - '15672:15672'
+      - '5672:5672'
 ```
 
 ## Deploy seq
@@ -179,18 +179,18 @@ services:
     networks:
       - traefik-public
     environment:
-      ACCEPT_EULA: "Y"
+      ACCEPT_EULA: 'Y'
     volumes:
       - /mnt/seq:/data
     deploy:
       labels:
-        - "traefik.enable=true"
-        - "traefik.http.routers.seq.rule=Host(`seq.yourdomain.com`)"
-        - "traefik.http.services.seq.loadbalancer.server.port=80"
-        - "traefik.http.routers.seq.entrypoints=websecure"
-        - "traefik.http.routers.seq.tls=true"
-        - "traefik.http.routers.seq.tls.certresolver=leresolver"
-        
+        - 'traefik.enable=true'
+        - 'traefik.http.routers.seq.rule=Host(`seq.yourdomain.com`)'
+        - 'traefik.http.services.seq.loadbalancer.server.port=80'
+        - 'traefik.http.routers.seq.entrypoints=websecure'
+        - 'traefik.http.routers.seq.tls=true'
+        - 'traefik.http.routers.seq.tls.certresolver=leresolver'
+
 networks:
   traefik-public:
     external: true

@@ -1,9 +1,9 @@
 ---
-title: "Initial setup"
-excerpt: "In this post we will see how to do the initial setup for a abp microservice application."
-date: "2022-03-18"
-videoId: e95p53tDPis 
-series: ".NET Microservice with ABP"
+title: 'Initial setup'
+excerpt: 'In this post we will see how to do the initial setup for a abp microservice application.'
+date: '2022-03-18'
+videoId: e95p53tDPis
+series: '.NET Microservice with ABP'
 part: 1
 tags:
   - dotnet
@@ -70,7 +70,7 @@ abp new "$name" -t app -u angular -dbms PostgreSQL -m none --separate-identity-s
 Move-Item -Path ".\temp\$name\angular\" -Destination .\apps\angular
 Move-Item -Path ".\temp\$name\aspnet-core\src\$name.DbMigrator" -Destination .\shared\ -Force
 Move-Item -Path ".\temp\$name\aspnet-core\src\$name.IdentityServer" -Destination .\apps\ -Force
-Remove-Item -Recurse -Force .\temp\ 
+Remove-Item -Recurse -Force .\temp\
 dotnet sln ".\$name.sln" remove (Get-ChildItem -r **/*.Installer.csproj)
 dotnet sln ".\$name.sln" remove (Get-ChildItem -r **/*.Host.Shared.csproj)
 dotnet sln ".\$name.sln" remove (Get-ChildItem -r **/*.MongoDB.csproj)

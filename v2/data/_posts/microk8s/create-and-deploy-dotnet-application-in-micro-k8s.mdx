@@ -1,9 +1,9 @@
 ---
-title: "Create and deploy .Net application in MicroK8s"
-excerpt: "In this post we will create a simple abp application and deploy it in the microk8s instance."
-date: "2022-09-14T19:55:43.277Z"
+title: 'Create and deploy .Net application in MicroK8s'
+excerpt: 'In this post we will create a simple abp application and deploy it in the microk8s instance.'
+date: '2022-09-14T19:55:43.277Z'
 videoId: a_LuE43YaWc
-series: "MicroK8s - Getting Started"
+series: 'MicroK8s - Getting Started'
 part: 4
 tags:
   - abp
@@ -88,8 +88,8 @@ lets update the `tye.yaml` file with the following code.
 name: todoapp
 registry: registry.kdev.antosubash.com
 services:
-- name: todoapp
-  project: TodoApp/TodoApp.csproj
+  - name: todoapp
+    project: TodoApp/TodoApp.csproj
 ```
 
 lets add the version to the `TodoApp.csproj` file.
@@ -149,32 +149,31 @@ spec:
         app.kubernetes.io/part-of: 'todoapp'
     spec:
       imagePullSecrets:
-      - name: regcred
+        - name: regcred
       containers:
-      - name: todoapp
-        image: registry.kdev.antosubash.com/todoapp:1.0.4
-        imagePullPolicy: Always
-        resources:
-          limits:
-            cpu: "1"
-            memory: 1Gi
-          requests:
-            cpu: "0.5"
-            memory: 1Gi
-        env:
-        - name: ASPNETCORE_URLS
-          value: 'http://*'
-        - name: PORT
-          value: '80'
-        - name: CONNECTIONSTRINGS__Default
-          value: 'Host=postgres.default.svc.cluster.local;Port=5432;Database=TodoApp;User ID=postgres;Password=my_postgres_password;'
-        - name: ASPNETCORE_ENVIRONMENT
-          value: 'Production'
-        - name: App__SelfUrl
-          value: 'https://todoapp.kdev.antosubash.com'
-        ports:
-        - containerPort: 80
-...
+        - name: todoapp
+          image: registry.kdev.antosubash.com/todoapp:1.0.4
+          imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: '1'
+              memory: 1Gi
+            requests:
+              cpu: '0.5'
+              memory: 1Gi
+          env:
+            - name: ASPNETCORE_URLS
+              value: 'http://*'
+            - name: PORT
+              value: '80'
+            - name: CONNECTIONSTRINGS__Default
+              value: 'Host=postgres.default.svc.cluster.local;Port=5432;Database=TodoApp;User ID=postgres;Password=my_postgres_password;'
+            - name: ASPNETCORE_ENVIRONMENT
+              value: 'Production'
+            - name: App__SelfUrl
+              value: 'https://todoapp.kdev.antosubash.com'
+          ports:
+            - containerPort: 80
 ---
 kind: Service
 apiVersion: v1
@@ -188,39 +187,37 @@ spec:
     app.kubernetes.io/name: todoapp
   type: ClusterIP
   ports:
-  - name: http
-    protocol: TCP
-    port: 80
-    targetPort: 80
-...
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 80
 ---
 kind: Ingress
 apiVersion: networking.k8s.io/v1
 metadata:
   name: http-ingress-todoapp
   annotations:
-    cert-manager.io/cluster-issuer: "lets-encrypt"
-    kubernetes.io/ingress.class: "public"
+    cert-manager.io/cluster-issuer: 'lets-encrypt'
+    kubernetes.io/ingress.class: 'public'
     nginx.ingress.kubernetes.io/rewrite-target: '/$2'
   labels:
     app.kubernetes.io/part-of: 'todoapp'
 spec:
   tls:
-  - hosts:
-    - todoapp.kdev.antosubash.com
-    secretName: todoapp-tls
+    - hosts:
+        - todoapp.kdev.antosubash.com
+      secretName: todoapp-tls
   rules:
-  - host: todoapp.kdev.antosubash.com
-    http:
-      paths:
-      - backend:
-          service:
-            name: todoapp
-            port:
-              number: 80
-        pathType: Prefix
-        path: /()(.*)
-...
+    - host: todoapp.kdev.antosubash.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: todoapp
+                port:
+                  number: 80
+            pathType: Prefix
+            path: /()(.*)
 ```
 
 lets deploy the application to the microk8s instance.

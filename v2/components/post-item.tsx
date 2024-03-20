@@ -1,43 +1,33 @@
-import Link from "next/link";
-import React from "react";
-import { format, parseISO } from "date-fns";
-import Tag from "./Tag";
+import Link from 'next/link'
+import React from 'react'
+import { format, parseISO } from 'date-fns'
+import Tag from './Tag'
 
 interface PostItemProps {
-  slug: string;
-  date: string;
-  title: string;
-  summary: string;
-  tags: string[];
-  series?: string;
-  part?: number;
+  slug: string
+  date: string
+  title: string
+  summary: string
+  tags: string[]
+  series?: string
+  part?: number
 }
 
-const PostItem = ({
-  slug,
-  date,
-  title,
-  summary,
-  series,
-  tags,
-  part,
-}: PostItemProps) => {
+const PostItem = ({ slug, date, title, summary, series, tags, part }: PostItemProps) => {
   return (
     <Link href={`/posts/${slug}`}>
-      <div className="py-4 my-4 px-4 rounded-2xl border drop-shadow-lg border-gray-100 bg-white dark:border-gray-800 dark:bg-gray-950 hover:scale-110 transition-all">
-        <div className="space-y-2 xl:grid xl:grid-cols-4 xl:space-y-0 xl:items-baseline">
+      <div className="my-4 rounded-2xl border border-gray-100 bg-white px-4 py-4 drop-shadow-lg transition-all hover:scale-110 dark:border-gray-800 dark:bg-gray-950">
+        <div className="space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
           <div>
             <div className="text-base font-medium leading-6 ">
-              <time dateTime={date}>
-                {format(parseISO(date), "LLLL d, yyyy")}
-              </time>
+              <time dateTime={date}>{format(parseISO(date), 'LLLL d, yyyy')}</time>
             </div>
             {series && (
               <div className="pt-4">
                 <div className="flex flex-col text-xl font-bold leading-6">
-                  {series}{" "}
+                  {series}{' '}
                   {part ? (
-                    <div className="pt-4 lg:block lg:px-0 text-xl font-bold leading-6">
+                    <div className="pt-4 text-xl font-bold leading-6 lg:block lg:px-0">
                       Part : {part}
                     </div>
                   ) : null}
@@ -56,7 +46,7 @@ const PostItem = ({
             </div>
             <div className="text-base font-medium leading-6">
               <div
-                className="text-primary-800 dark:text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                className="text-primary-800 hover:text-primary-600 dark:text-primary-500 dark:hover:text-primary-400"
                 aria-label={`Read "${title}"`}
               >
                 Read more &rarr;
@@ -73,7 +63,7 @@ const PostItem = ({
         </div>
       </div>
     </Link>
-  );
-};
+  )
+}
 
-export default PostItem;
+export default PostItem

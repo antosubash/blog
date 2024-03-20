@@ -33,7 +33,7 @@ const siteMetadata = {
       label: 'Comment 💬', // label (optional): Comment 💬
       theme: 'github-light',
       darkTheme: 'github-dark',
-    }
+    },
   },
   search: {
     provider: 'kbar', // kbar or algolia

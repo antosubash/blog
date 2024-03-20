@@ -1,30 +1,27 @@
 const ConsultingPage = () => {
   return (
     <div>
-      <h1 className="text-4xl text-center font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100">
+      <h1 className="text-center text-4xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100">
         Consulting
       </h1>
-      <p className="text-lg text-center leading-7 pt-4">
-        I am available for consulting work. I have worked with a few companies
-        and individuals on various projects as a freelancer. If you are
-        interested in working with me, please contact me at{" "}
-        <a
-          className="text-blue-700 dark:text-yellow-400"
-          href="mailto:antosubash@outlook.com"
-        >
+      <p className="pt-4 text-center text-lg leading-7">
+        I am available for consulting work. I have worked with a few companies and individuals on
+        various projects as a freelancer. If you are interested in working with me, please contact
+        me at{' '}
+        <a className="text-blue-700 dark:text-yellow-400" href="mailto:antosubash@outlook.com">
           antosubash@outlook.com
         </a>
       </p>
-      <h2 className="text-2xl text-center font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 pt-10">
+      <h2 className="pt-10 text-center text-2xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100">
         ABP
       </h2>
-      <p className="text-lg text-center leading-7 pt-4">
-        I'm a ABP Expert. I have worked with ABP framework extensively and have
-        built many ABP applications. I can help you build your ABP application
-        from scratch or help you with your existing ABP application.
+      <p className="pt-4 text-center text-lg leading-7">
+        I'm a ABP Expert. I have worked with ABP framework extensively and have built many ABP
+        applications. I can help you build your ABP application from scratch or help you with your
+        existing ABP application.
       </p>
 
-      <div className="h-52 pt-4 flex justify-center items-center">
+      <div className="flex h-52 items-center justify-center pt-4">
         <svg
           width="500"
           height="500"
@@ -50,14 +47,7 @@ const ConsultingPage = () => {
             fill="#2B2A2A"
           />
           <g filter="url(#filter0_d_4490_9554)">
-            <rect
-              x="15"
-              y="991"
-              width="2413"
-              height="600"
-              rx="50"
-              fill="#6457C1"
-            />
+            <rect x="15" y="991" width="2413" height="600" rx="50" fill="#6457C1" />
             <path
               d="M15 1041C15 1013.39 37.3858 991 65 991H1262V1591H65C37.3858 1591 15 1568.61 15 1541V1041Z"
               fill="#5144AE"
@@ -123,10 +113,7 @@ const ConsultingPage = () => {
               <feOffset dy="64" />
               <feGaussianBlur stdDeviation="7.5" />
               <feComposite in2="hardAlpha" operator="out" />
-              <feColorMatrix
-                type="matrix"
-                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0"
-              />
+              <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0" />
               <feBlend
                 mode="normal"
                 in2="BackgroundImageFix"
@@ -143,46 +130,35 @@ const ConsultingPage = () => {
         </svg>
       </div>
       <div className="container py-8 md:py-20" id="about">
-        <h2 className="text-center font-header text-2xl font-semibold text-primary sm:text-5xl lg:text-3xl">
-          You can find my expert link at{" "}
+        <h2 className="font-header text-primary text-center text-2xl font-semibold sm:text-5xl lg:text-3xl">
+          You can find my expert link at{' '}
           <a href="https://abp.io/expert/antosubash" target="_blank">
             https://abp.io/expert/antosubash
           </a>
         </h2>
       </div>
 
-      <h2 className="text-center font-header text-2xl font-semibold uppercase text-primary sm:text-5xl lg:text-3xl">
-        Partnership with{" "}
+      <h2 className="font-header text-primary text-center text-2xl font-semibold uppercase sm:text-5xl lg:text-3xl">
+        Partnership with{' '}
         <a href="https://www.spatial-focus.net">
-          <img
-            src="/assets/sf.png"
-            alt="spatial focus logo"
-            className="mx-auto pt-8"
-          />
+          <img src="/assets/sf.png" alt="spatial focus logo" className="mx-auto pt-8" />
         </a>
       </h2>
 
-      <p className="text-center pt-4 text-grey text-lg">
-        I'm part of the{" "}
-        <a
-          className="text-blue-500 dark:text-yellow-400"
-          href="https://www.spatial-focus.net/"
-        >
+      <p className="text-grey pt-4 text-center text-lg">
+        I'm part of the{' '}
+        <a className="text-blue-500 dark:text-yellow-400" href="https://www.spatial-focus.net/">
           Spatial Focus
-        </a>{" "}
-        team, a company that provides software services based in Vienna. We are
-        Microsoft partners and specialized in .NET development for web and
-        mobile (ASP.NET Core frontend & backend, Blazor, MAUI). If you are
-        interested in working with us, please contact us at{" "}
-        <a
-          className="text-blue-600 dark:text-yellow-400"
-          href="mailto:office@spatial-focus.net"
-        >
+        </a>{' '}
+        team, a company that provides software services based in Vienna. We are Microsoft partners
+        and specialized in .NET development for web and mobile (ASP.NET Core frontend & backend,
+        Blazor, MAUI). If you are interested in working with us, please contact us at{' '}
+        <a className="text-blue-600 dark:text-yellow-400" href="mailto:office@spatial-focus.net">
           office@spatial—focus.net
         </a>
       </p>
     </div>
-  );
-};
+  )
+}
 
-export default ConsultingPage;
+export default ConsultingPage

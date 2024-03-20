@@ -1,9 +1,9 @@
 ---
-title: "SPA Authentication using Next.js, ABP and IdentityServer4. Part 2"
-excerpt: "In this post we will implement the SPA authentication for the Nexjs.js app as the frontend and ABP with IdentityServer as Backend"
-date: "2021-03-06"
+title: 'SPA Authentication using Next.js, ABP and IdentityServer4. Part 2'
+excerpt: 'In this post we will implement the SPA authentication for the Nexjs.js app as the frontend and ABP with IdentityServer as Backend'
+date: '2021-03-06'
 videoId: b5SglxXoa7w
-series: "ABP Framework - Getting started"
+series: 'ABP Framework - Getting started'
 part: 2
 tags:
   - abp
@@ -12,6 +12,7 @@ tags:
   - identity-server
   - openid
 ---
+
 <TOCInline toc={props.toc} asDisclosure />
 
 ## Intro
@@ -94,16 +95,16 @@ NODE_TLS_REJECT_UNAUTHORIZED=0
 create a `/pages/api/auth/[...nextauth].js` and add the following
 
 ```js
-import NextAuth from "next-auth";
-import Providers from "next-auth/providers";
+import NextAuth from 'next-auth'
+import Providers from 'next-auth/providers'
 
 export default NextAuth({
   // Configure one or more authentication providers
   providers: [
     Providers.IdentityServer4({
-      id: "identity-server4",
-      name: "IdentityServer4",
-      scope: "openid profile email Todos offline_access", // Allowed Scopes
+      id: 'identity-server4',
+      name: 'IdentityServer4',
+      scope: 'openid profile email Todos offline_access', // Allowed Scopes
       domain: process.env.IdentityServer4_Domain,
       clientId: process.env.IdentityServer4_CLIENT_ID,
       clientSecret: process.env.IdentityServer4_CLIENT_SECRET,
@@ -118,35 +119,35 @@ export default NextAuth({
      */
     async session(session, token) {
       // Add property to session, like an access_token from a provider.
-      session.accessToken = token.accessToken;
-      return session;
+      session.accessToken = token.accessToken
+      return session
     },
 
     async jwt(token, user, account, profile, isNewUser) {
       // Add access_token to the token right after signin
       if (account?.accessToken) {
-        token.accessToken = account.accessToken;
+        token.accessToken = account.accessToken
       }
-      return token;
+      return token
     },
   },
-});
+})
 ```
 
 ## 6. Create login Component
 
 ```js
-import React from "react";
-import { signIn, signOut, useSession } from "next-auth/client";
+import React from 'react'
+import { signIn, signOut, useSession } from 'next-auth/client'
 function Login() {
-  const [session, loading] = useSession();
+  const [session, loading] = useSession()
 
   return (
     <>
       {!session && (
         <>
           Not signed in <br />
-          <button onClick={() => signIn("identity-server4")}>Sign in</button>
+          <button onClick={() => signIn('identity-server4')}>Sign in</button>
         </>
       )}
       {session && (
@@ -156,10 +157,10 @@ function Login() {
         </>
       )}
     </>
-  );
+  )
 }
 
-export default Login;
+export default Login
 ```
 
 ## 7. Render the login component

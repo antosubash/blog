@@ -1,9 +1,9 @@
 ---
-title: "Setup Nginx and cert-manager in MicroK8s"
-excerpt: "In this post we will see how to setup nginx reverse proxy and cert-manager in microk8s"
-date: "2022-09-14T19:51:51.590Z"
+title: 'Setup Nginx and cert-manager in MicroK8s'
+excerpt: 'In this post we will see how to setup nginx reverse proxy and cert-manager in microk8s'
+date: '2022-09-14T19:51:51.590Z'
 videoId: Wq0KQ0m_3lE
-series: "MicroK8s - Getting Started"
+series: 'MicroK8s - Getting Started'
 part: 2
 tags:
   - ngnix
@@ -68,17 +68,17 @@ lets create a production issuer which can be used to get the ssl certificate fro
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
- name: lets-encrypt
+  name: lets-encrypt
 spec:
- acme:
-   email:  username@yourdomain.com # Change the email here
-   server: https://acme-v02.api.letsencrypt.org/directory
-   privateKeySecretRef:
-     name: lets-encrypt-prod
-   solvers:
-   - http01:
-       ingress:
-         class: public
+  acme:
+    email: username@yourdomain.com # Change the email here
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: lets-encrypt-prod
+    solvers:
+      - http01:
+          ingress:
+            class: public
 ```
 
 ### Staging issuer
@@ -87,17 +87,17 @@ spec:
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
- name: lets-encrypt-staging
+  name: lets-encrypt-staging
 spec:
- acme:
-   server: https://acme-staging-v02.api.letsencrypt.org/directory
-   email: username@yourdomain.com # Change the email here
-   privateKeySecretRef:
-     name: lets-encrypt-staging
-   solvers:
-   - http01:
-       ingress:
-         class:  public
+  acme:
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    email: username@yourdomain.com # Change the email here
+    privateKeySecretRef:
+      name: lets-encrypt-staging
+    solvers:
+      - http01:
+          ingress:
+            class: public
 ```
 
 ## Setup nginx
@@ -158,11 +158,11 @@ spec:
             - containerPort: 80
           resources:
             requests:
-              memory: "100Mi"
-              cpu: "250m"
+              memory: '100Mi'
+              cpu: '250m'
             limits:
-              memory: "200Mi"
-              cpu: "500m"
+              memory: '200Mi'
+              cpu: '500m'
 
 ---
 apiVersion: v1
@@ -182,24 +182,24 @@ kind: Ingress
 metadata:
   name: http-ingress-whoami
   annotations:
-    cert-manager.io/cluster-issuer: "lets-encrypt"
-    kubernetes.io/ingress.class: "public"
+    cert-manager.io/cluster-issuer: 'lets-encrypt'
+    kubernetes.io/ingress.class: 'public'
 spec:
   tls:
     - hosts:
-      -  whoami.kdev.antosubash.com
+        - whoami.kdev.antosubash.com
       secretName: whoami-tls
   rules:
-  - host: "whoami.kdev.antosubash.com"
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service: 
-            name: whoami-service
-            port: 
-              number: 80
+    - host: 'whoami.kdev.antosubash.com'
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: whoami-service
+                port:
+                  number: 80
 ```
 
 you can also find this file in the repo [here](https://github.com/antosubash/microk8s-hetzner-deployment/blob/main/whoami/whoami.yaml)

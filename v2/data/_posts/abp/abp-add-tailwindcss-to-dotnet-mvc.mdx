@@ -1,13 +1,14 @@
 ---
-title: "Add tailwindcss to your ABP MVC UI"
-excerpt: "In this post we will see how to add tailwind css to your ABP MVC UI."
-date: "2022-01-11"
+title: 'Add tailwindcss to your ABP MVC UI'
+excerpt: 'In this post we will see how to add tailwind css to your ABP MVC UI.'
+date: '2022-01-11'
 videoId: bD7h4jiJXts
 tags:
   - abp
   - dotnet
   - tailwind
 ---
+
 <TOCInline toc={props.toc} asDisclosure />
 
 ## Intro
@@ -64,10 +65,7 @@ This will create tailwind config file `tailwind.config.js` and postcss config fi
 
 ```js
 module.exports = {
-  content: [
-    '!**/{bin,obj,node_modules}/**',
-    '**/*.{cshtml,html}',
-  ],
+  content: ['!**/{bin,obj,node_modules}/**', '**/*.{cshtml,html}'],
   theme: {
     extend: {},
   },
@@ -94,8 +92,8 @@ We need to create 2 `css` files
 Update the input file with the `imports`
 
 ```css
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 ```
 
 ### Update the package.json

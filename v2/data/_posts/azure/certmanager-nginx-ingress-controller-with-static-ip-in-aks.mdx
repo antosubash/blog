@@ -1,9 +1,9 @@
 ---
-title: "Cert Manager and Nginx Ingress Controller on AKS Cluster with static IP"
-excerpt: "In this we will setup Cert Manager and Nginx Ingress Controller on AKS Cluster"
-date: "2023-08-18T11:53:48.157Z"
+title: 'Cert Manager and Nginx Ingress Controller on AKS Cluster with static IP'
+excerpt: 'In this we will setup Cert Manager and Nginx Ingress Controller on AKS Cluster'
+date: '2023-08-18T11:53:48.157Z'
 videoId:
-series: "Azure Kubernetes (AKS) Deployment for .Net"
+series: 'Azure Kubernetes (AKS) Deployment for .Net'
 part: 2
 tags:
   - aks
@@ -15,15 +15,15 @@ tags:
 
 <TOCInline toc={props.toc} asDisclosure />
 
-<Parts data={props.slug}/>
+<Parts data={props.slug} />
 
 ## Introduction
 
-In the previous article we have created AKS cluster using Terraform. In this article we will setup Cert Manager and Nginx Ingress Controller on AKS Cluster. 
+In the previous article we have created AKS cluster using Terraform. In this article we will setup Cert Manager and Nginx Ingress Controller on AKS Cluster.
 
 ## Prerequisite
 
-Make sure you have completed the previous article and have AKS cluster ready. 
+Make sure you have completed the previous article and have AKS cluster ready.
 
 ## Setup Cert Manager
 
@@ -31,7 +31,7 @@ Cert-Manager is a Kubernetes add-on to automate the management and issuance of T
 
 ### Install Cert Manager
 
-Cert Manager is deployed as a series of Kubernetes components, and we will install it using Helm. 
+Cert Manager is deployed as a series of Kubernetes components, and we will install it using Helm.
 
 ```bash
 helm repo add jetstack https://charts.jetstack.io
@@ -40,7 +40,7 @@ helm repo update
 
 ## Prepare the terraform script
 
-Update the terraform script to install cert manager. 
+Update the terraform script to install cert manager.
 
 ```bash
 resource "azurerm_public_ip" "aks_static_ip" {
@@ -54,7 +54,7 @@ resource "azurerm_public_ip" "aks_static_ip" {
 }
 ```
 
-This will create a static IP address for the ingress controller. 
+This will create a static IP address for the ingress controller.
 
 ```bash
 locals {
@@ -73,7 +73,7 @@ resource "kubernetes_namespace" "ingress_namespace" {
 }
 ```
 
-This will create a namespace for the ingress controller. 
+This will create a namespace for the ingress controller.
 
 ```bash
 resource "helm_release" "nginx_ingress" {
@@ -114,7 +114,7 @@ resource "helm_release" "cert_manager" {
 }
 ```
 
-This will install the cert manager. 
+This will install the cert manager.
 
 ## Plan and Apply the terraform script with tfvars
 
@@ -122,7 +122,7 @@ This will install the cert manager.
 terraform plan -var-file="dev.tfvars"
 ```
 
-This will show the plan for the terraform script. 
+This will show the plan for the terraform script.
 
 ```bash
 terraform apply -var-file="dev.tfvars" -auto-approve

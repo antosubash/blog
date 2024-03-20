@@ -1,9 +1,9 @@
 ---
-title: "Docker and CI/CD"
-excerpt: "In this post we will see how to add docker support and create a CI/CD with github actions"
-date: "2022-03-26T00:00:00.000Z"
-videoId: zUD2xPpvTVg 
-series: ".NET Microservice with ABP"
+title: 'Docker and CI/CD'
+excerpt: 'In this post we will see how to add docker support and create a CI/CD with github actions'
+date: '2022-03-26T00:00:00.000Z'
+videoId: zUD2xPpvTVg
+series: '.NET Microservice with ABP'
 part: 10
 tags:
   - dotnet
@@ -39,7 +39,6 @@ Part 10. Docker and CI/CD (this post)
 [Part 11. Add a New service](/posts/netcore-microservice-with-abp-add-new-service-part-11)
 
 [Part 12. Central Logging](/posts/netcore-microservice-with-abp-add-central-logging-part-12)
-
 
 <TOCInline toc={props.toc} asDisclosure />
 
@@ -78,26 +77,24 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Build the Gateway Docker image
-      run: docker build . --file gateway/Tasky.Gateway/Dockerfile --tag gateway:dev
-    - name: Build the IdentityServer Docker image
-      run: docker build . --file apps/Tasky.IdentityServer/Dockerfile --tag identityserver:dev
-    - name: Build the Administration Docker image
-      run: docker build . --file services/administration/host/Tasky.AdministrationService.HttpApi.Host/Dockerfile --tag administration:dev
-    - name: Build the IdentityService Docker image
-      run: docker build . --file services/identity/host/Tasky.IdentityService.HttpApi.Host/Dockerfile --tag identityservice:dev
-    - name: Build the SaaS Docker image
-      run: docker build . --file services/saas/host/Tasky.SaaSService.HttpApi.Host/Dockerfile --tag saas:dev
+      - uses: actions/checkout@v2
+      - name: Build the Gateway Docker image
+        run: docker build . --file gateway/Tasky.Gateway/Dockerfile --tag gateway:dev
+      - name: Build the IdentityServer Docker image
+        run: docker build . --file apps/Tasky.IdentityServer/Dockerfile --tag identityserver:dev
+      - name: Build the Administration Docker image
+        run: docker build . --file services/administration/host/Tasky.AdministrationService.HttpApi.Host/Dockerfile --tag administration:dev
+      - name: Build the IdentityService Docker image
+        run: docker build . --file services/identity/host/Tasky.IdentityService.HttpApi.Host/Dockerfile --tag identityservice:dev
+      - name: Build the SaaS Docker image
+        run: docker build . --file services/saas/host/Tasky.SaaSService.HttpApi.Host/Dockerfile --tag saas:dev
 ```

@@ -1,9 +1,9 @@
 ---
-title: "Deploy docker registry and postgres database in MicroK8s"
-excerpt: "In this post we will see how to deploy and secure the registry along with deploying a postgres database in microk8s"
-date: "2022-09-14T19:53:18.980Z"
+title: 'Deploy docker registry and postgres database in MicroK8s'
+excerpt: 'In this post we will see how to deploy and secure the registry along with deploying a postgres database in microk8s'
+date: '2022-09-14T19:53:18.980Z'
 videoId: pxPARH8bF2s
-series: "MicroK8s - Getting Started"
+series: 'MicroK8s - Getting Started'
 part: 3
 tags:
   - postgres
@@ -15,7 +15,7 @@ tags:
 
 ## Introduction
 
-In this post we will see how to deploy and secure the registry along with deploying a postgres database in microk8s. We will also see how to connect to the created registry. We will also see how to create a secret in kubernetes and use it in the deployment. We will also see how to create a persistent volume and use it in the deployment.  
+In this post we will see how to deploy and secure the registry along with deploying a postgres database in microk8s. We will also see how to connect to the created registry. We will also see how to create a secret in kubernetes and use it in the deployment. We will also see how to create a persistent volume and use it in the deployment.
 
 ## Parts
 
@@ -71,7 +71,7 @@ Now we have the auth-secret created. lets create the secret for the docker regis
 
 ```yml
 kubectl create secret docker-registry regcred -n default --docker-server=registry.yourdomain.com --docker-username=youruser --docker-password=yourpassword --docker-email=myemail@something.com
-````
+```
 
 > make sure to replace the `yourdomain.com` with your domain name. also replace the `youruser` and `yourpassword` with the username and password you created earlier. also replace the `registry.yourdomain.com` with your domain name.
 
@@ -109,53 +109,53 @@ spec:
         app: registry
     spec:
       containers:
-      - name: registry
-        resources:
-          requests:
-            memory: "100Mi"
-            cpu: "250m"
-          limits:
-            memory: "200Mi"
-            cpu: "500m"
-        image: registry:2
-        ports:
-        - containerPort: 5000
-        volumeMounts:
-        - name: repo-vol
-          mountPath: "/var/lib/registry"
-        - name: certs-vol
-          mountPath: "/certs"
-          readOnly: true
-        - name: auth-vol
-          mountPath: "/auth"
-          readOnly: true
-        env:
-        - name: REGISTRY_AUTH
-          value: "htpasswd"
-        - name: REGISTRY_AUTH_HTPASSWD_REALM
-          value: "Registry Realm"
-        - name: REGISTRY_AUTH_HTPASSWD_PATH
-          value: "/auth/registry.password"
-        - name: REGISTRY_HTTP_TLS_CERTIFICATE
-          value: "/certs/tls.crt"
-        - name: REGISTRY_HTTP_TLS_KEY
-          value: "/certs/tls.key"
-        - name: VIRTUAL_HOST
-          value: "registry.kdev.antosubash.com"
-     
+        - name: registry
+          resources:
+            requests:
+              memory: '100Mi'
+              cpu: '250m'
+            limits:
+              memory: '200Mi'
+              cpu: '500m'
+          image: registry:2
+          ports:
+            - containerPort: 5000
+          volumeMounts:
+            - name: repo-vol
+              mountPath: '/var/lib/registry'
+            - name: certs-vol
+              mountPath: '/certs'
+              readOnly: true
+            - name: auth-vol
+              mountPath: '/auth'
+              readOnly: true
+          env:
+            - name: REGISTRY_AUTH
+              value: 'htpasswd'
+            - name: REGISTRY_AUTH_HTPASSWD_REALM
+              value: 'Registry Realm'
+            - name: REGISTRY_AUTH_HTPASSWD_PATH
+              value: '/auth/registry.password'
+            - name: REGISTRY_HTTP_TLS_CERTIFICATE
+              value: '/certs/tls.crt'
+            - name: REGISTRY_HTTP_TLS_KEY
+              value: '/certs/tls.key'
+            - name: VIRTUAL_HOST
+              value: 'registry.kdev.antosubash.com'
+
       volumes:
-      - name: repo-vol
-        hostPath:
-          # directory location on host
-          path: /mnt/registry
-          # this field is optional
-          type: Directory
-      - name: certs-vol
-        secret:
-          secretName: registry-tls-secret
-      - name: auth-vol
-        secret:
-          secretName: auth-secret
+        - name: repo-vol
+          hostPath:
+            # directory location on host
+            path: /mnt/registry
+            # this field is optional
+            type: Directory
+        - name: certs-vol
+          secret:
+            secretName: registry-tls-secret
+        - name: auth-vol
+          secret:
+            secretName: auth-secret
 ---
 apiVersion: v1
 kind: Service
@@ -166,8 +166,8 @@ spec:
   selector:
     app: registry
   ports:
-  - port: 5000
-    targetPort: 5000
+    - port: 5000
+      targetPort: 5000
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -177,25 +177,25 @@ metadata:
   labels:
     app: registry
   annotations:
-    cert-manager.io/cluster-issuer: "lets-encrypt"
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    cert-manager.io/cluster-issuer: 'lets-encrypt'
+    nginx.ingress.kubernetes.io/backend-protocol: 'HTTPS'
     nginx.ingress.kubernetes.io/proxy-body-size: 1024m
 spec:
   tls:
-  - hosts:
-    - registry.kdev.antosubash.com
-    secretName: registry-tls-secret
+    - hosts:
+        - registry.kdev.antosubash.com
+      secretName: registry-tls-secret
   rules:
-  - host: registry.kdev.antosubash.com
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: docker-registry
-            port:
-              number: 5000   
+    - host: registry.kdev.antosubash.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: docker-registry
+                port:
+                  number: 5000
 ```
 
 > make sure to replace the `registry.kdev.antosubash.com` with your domain name.
@@ -287,22 +287,22 @@ spec:
             - containerPort: 5432
           env:
             - name: POSTGRES_DB
-              value: "test"
+              value: 'test'
             - name: POSTGRES_USER
               value: postgres
             - name: POSTGRES_PASS
-              value: "my_postgres_password"
+              value: 'my_postgres_password'
             - name: --auth
-              value: "md5"
+              value: 'md5'
             - name: POSTGRES_MULTIPLE_EXTENSIONS
-              value: "postgis,hstore,postgis_topology"
+              value: 'postgis,hstore,postgis_topology'
           resources:
             requests:
-              memory: "100Mi"
-              cpu: "250m"
+              memory: '100Mi'
+              cpu: '250m'
             limits:
-              memory: "200Mi"
-              cpu: "500m"
+              memory: '200Mi'
+              cpu: '500m'
           volumeMounts:
             - name: postgres-data
               mountPath: /var/lib/postgresql
@@ -372,14 +372,14 @@ spec:
         app: pgweb
     spec:
       containers:
-      - name: pgweb
-        image: adminer
-        resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
-        ports:
-        - containerPort: 8080
+        - name: pgweb
+          image: adminer
+          resources:
+            limits:
+              memory: '128Mi'
+              cpu: '500m'
+          ports:
+            - containerPort: 8080
 ---
 apiVersion: v1
 kind: Service
@@ -389,8 +389,8 @@ spec:
   selector:
     app: pgweb
   ports:
-  - port: 8080
-    targetPort: 8080
+    - port: 8080
+      targetPort: 8080
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -399,24 +399,24 @@ metadata:
   labels:
     name: pgweb-ingress
   annotations:
-    kubernetes.io/ingress.class: "public"
-    cert-manager.io/cluster-issuer: "lets-encrypt"
+    kubernetes.io/ingress.class: 'public'
+    cert-manager.io/cluster-issuer: 'lets-encrypt'
 spec:
   tls:
     - hosts:
-      - pgweb.kdev.antosubash.com
+        - pgweb.kdev.antosubash.com
       secretName: pgweb-tls
   rules:
-  - host: pgweb.kdev.antosubash.com
-    http:
-      paths:
-      - pathType: Prefix
-        path: "/"
-        backend:
-          service:
-            name: pgweb-service
-            port: 
-              number: 8080
+    - host: pgweb.kdev.antosubash.com
+      http:
+        paths:
+          - pathType: Prefix
+            path: '/'
+            backend:
+              service:
+                name: pgweb-service
+                port:
+                  number: 8080
 ```
 
 apply the deployment.

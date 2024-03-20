@@ -1,9 +1,9 @@
 ---
-title: "Administration Services"
-excerpt: "In this post we will see how to do the create Administration service for our microservice application"
-date: "2022-03-19T01:00:00.000Z"
+title: 'Administration Services'
+excerpt: 'In this post we will see how to do the create Administration service for our microservice application'
+date: '2022-03-19T01:00:00.000Z'
 videoId: Pwnz_t7IK80
-series: ".NET Microservice with ABP"
+series: '.NET Microservice with ABP'
 part: 3
 tags:
   - dotnet
@@ -39,7 +39,6 @@ Part 3. Administration Service (this post)
 [Part 11. Add a New service](/posts/netcore-microservice-with-abp-add-new-service-part-11)
 
 [Part 12. Central Logging](/posts/netcore-microservice-with-abp-add-central-logging-part-12)
-
 
 <TOCInline toc={props.toc} asDisclosure />
 
@@ -204,7 +203,7 @@ public class AdministrationServiceEntityFrameworkCoreModule : AbpModule
         {
             options.UseNpgsql();
         });
-        
+
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         context.Services.AddAbpDbContext<AdministrationServiceDbContext>(options =>
         {

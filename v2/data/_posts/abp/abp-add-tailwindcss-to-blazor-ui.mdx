@@ -1,13 +1,14 @@
 ---
-title: "Add tailwindcss to your ABP Blazor UI"
-excerpt: "In this post we will see how to add tailwind css to your ABP Blazor UI."
-date: "2022-01-05"
+title: 'Add tailwindcss to your ABP Blazor UI'
+excerpt: 'In this post we will see how to add tailwind css to your ABP Blazor UI.'
+date: '2022-01-05'
 videoId: _3kK8qWGD2w
 tags:
   - abp
   - blazor
   - tailwind
 ---
+
 <TOCInline toc={props.toc} asDisclosure />
 
 ## Intro
@@ -74,10 +75,7 @@ This will create tailwind config file `tailwind.config.js` and postcss config fi
 
 ```js
 module.exports = {
-  content: [
-    '!**/{bin,obj,node_modules}/**',
-    '**/*.{razor,html}',
-  ],
+  content: ['!**/{bin,obj,node_modules}/**', '**/*.{razor,html}'],
   theme: {
     extend: {},
   },
@@ -105,8 +103,8 @@ We need to create 2 `css` files
 Update the input file with the `imports`
 
 ```css
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 ```
 
 ### Update the package.json
@@ -135,7 +133,7 @@ The Index page is the `index.html` file inside the `wwwroot` folder.
 We have add our generated css file to the blazor.
 
 ```html
-<link href="tailwind.css" rel="stylesheet"/>
+<link href="tailwind.css" rel="stylesheet" />
 ```
 
 ### Update csproj

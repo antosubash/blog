@@ -1,13 +1,14 @@
 ---
-title: "Minimal Api with ABP - Swagger and CRUD - Part 3"
-excerpt: "In this post we will see how to use minimal api with the ABP application to create a CRUD app."
-date: "2021-12-31"
+title: 'Minimal Api with ABP - Swagger and CRUD - Part 3'
+excerpt: 'In this post we will see how to use minimal api with the ABP application to create a CRUD app.'
+date: '2021-12-31'
 videoId: H_GYXKJuCTA
 tags:
   - dotnet
   - abp
   - crud
 ---
+
 <TOCInline toc={props.toc} asDisclosure />
 
 ## Intro
@@ -31,7 +32,7 @@ To add the required packages use the `dotnet add package` command.
 ```bash
 dotnet add package Volo.Abp.Autofac
 dotnet add package Volo.Abp.AspNetCore.Mvc
-dotnet add package Swashbuckle.AspNetCore 
+dotnet add package Swashbuckle.AspNetCore
 dotnet add package Volo.Abp.EntityFrameworkCore.Sqlite
 dotnet add package Microsoft.EntityFrameworkCore.Design
 ```
@@ -96,13 +97,13 @@ This db context will configure the entity and also seed the database with one da
 public class MinimalModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
-    {  
+    {
         context.Services.AddEndpointsApiExplorer();
-        context.Services.AddSwaggerGen();   
+        context.Services.AddSwaggerGen();
         context.Services.AddAbpDbContext<MyDbContext>(options =>
         {
             options.AddDefaultRepositories(includeAllEntities: true);
-        }); 
+        });
         Configure<AbpDbContextOptions>(options =>
         {
             options.UseSqlite();

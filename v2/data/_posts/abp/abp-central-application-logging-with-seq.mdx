@@ -1,15 +1,16 @@
 ---
-title: "Centralized logging for .net core ABP microservices app using Seq. Part 8"
-excerpt: "In this post we will see how to implement a central logging system for your ABP app using Seq."
-date: "2021-09-26"
+title: 'Centralized logging for .net core ABP microservices app using Seq. Part 8'
+excerpt: 'In this post we will see how to implement a central logging system for your ABP app using Seq.'
+date: '2021-09-26'
 videoId: B-NXJvZ77i8
-series: "ABP Framework - Getting started"
+series: 'ABP Framework - Getting started'
 part: 8
 tags:
   - abp
   - seq
   - dotnet
 ---
+
 <TOCInline toc={props.toc} asDisclosure />
 
 ## Intro
@@ -27,7 +28,7 @@ docker swarm init
 Create the docker-compose file `seq_stack.yaml`
 
 ```yaml
-version: "3.2"
+version: '3.2'
 
 services:
   seq:
@@ -38,7 +39,7 @@ services:
     volumes:
       - D:\docker\data\seq:/data
     environment:
-      ACCEPT_EULA: "Y"
+      ACCEPT_EULA: 'Y'
 ```
 
 ### To deploy the stack
