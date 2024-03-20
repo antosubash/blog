@@ -105,7 +105,6 @@ export default async function Page({ params }: { params: { slug: string[] } }) {
   })
 
   const Layout = layouts[post.layout || defaultLayout]
-
   return (
     <>
       <script
@@ -118,6 +117,7 @@ export default async function Page({ params }: { params: { slug: string[] } }) {
           components={components}
           toc={post.toc}
           slug={post.slug}
+          videoId={post.videoId}
           series={post.series}
         />
       </Layout>

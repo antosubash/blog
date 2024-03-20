@@ -1,24 +1,47 @@
 const ConsultingPage = () => {
   return (
     <div>
-      <h1 className="text-center text-4xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100">
-        Consulting
-      </h1>
-      <p className="pt-4 text-center text-lg leading-7">
-        I am available for consulting work. I have worked with a few companies and individuals on
-        various projects as a freelancer. If you are interested in working with me, please contact
-        me at{' '}
-        <a className="text-blue-700 dark:text-yellow-400" href="mailto:antosubash@outlook.com">
+      <h1 className="mb-4 text-center text-3xl font-bold">Consulting Services</h1>
+      <p className="mb-6">
+        Are you seeking expert guidance and support for your projects? Look no further! I offer
+        professional consulting services tailored to your specific needs. With a proven track record
+        of assisting both companies and individuals, I bring a wealth of experience and expertise to
+        the table.
+      </p>
+
+      <div className="mb-8">
+        <h2 className="mb-2 text-2xl font-bold">Services Offered:</h2>
+        <ul className="list-disc pl-6">
+          <li className="mb-2">
+            Application Development: From conceptualization to execution, I can help you build
+            robust ABP applications from scratch, ensuring scalability, efficiency, and adherence to
+            industry best practices.
+          </li>
+          <li className="mb-2">
+            Customization and Optimization: If you have an existing ABP application that requires
+            fine-tuning or optimization, I offer expert guidance to enhance its performance and
+            functionality, aligning it with your evolving requirements.
+          </li>
+          <li className="mb-2">
+            Problem Solving and Troubleshooting: Encounter a roadblock or technical challenge within
+            your ABP project? I excel in identifying and resolving issues efficiently, minimizing
+            downtime and maximizing productivity.
+          </li>
+          <li className="mb-2">
+            Training and Knowledge Transfer: Empower your team with the skills and insights
+            necessary to leverage ABP effectively. I provide customized training sessions and
+            knowledge transfer initiatives tailored to your organizational needs.
+          </li>
+        </ul>
+      </div>
+
+      <p className="mb-6">
+        Collaborate with me to unlock the full potential of your ABP projects. For inquiries or to
+        discuss your requirements further, feel free to reach out to me at{' '}
+        <a href="mailto:antosubash@outlook.com" className="text-blue-500">
           antosubash@outlook.com
         </a>
-      </p>
-      <h2 className="pt-10 text-center text-2xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100">
-        ABP
-      </h2>
-      <p className="pt-4 text-center text-lg leading-7">
-        I'm a ABP Expert. I have worked with ABP framework extensively and have built many ABP
-        applications. I can help you build your ABP application from scratch or help you with your
-        existing ABP application.
+        .
       </p>
 
       <div className="flex h-52 items-center justify-center pt-4">
@@ -137,26 +160,6 @@ const ConsultingPage = () => {
           </a>
         </h2>
       </div>
-
-      <h2 className="font-header text-primary text-center text-2xl font-semibold uppercase sm:text-5xl lg:text-3xl">
-        Partnership with{' '}
-        <a href="https://www.spatial-focus.net">
-          <img src="/assets/sf.png" alt="spatial focus logo" className="mx-auto pt-8" />
-        </a>
-      </h2>
-
-      <p className="text-grey pt-4 text-center text-lg">
-        I'm part of the{' '}
-        <a className="text-blue-500 dark:text-yellow-400" href="https://www.spatial-focus.net/">
-          Spatial Focus
-        </a>{' '}
-        team, a company that provides software services based in Vienna. We are Microsoft partners
-        and specialized in .NET development for web and mobile (ASP.NET Core frontend & backend,
-        Blazor, MAUI). If you are interested in working with us, please contact us at{' '}
-        <a className="text-blue-600 dark:text-yellow-400" href="mailto:office@spatial-focus.net">
-          office@spatial—focus.net
-        </a>
-      </p>
     </div>
   )
 }
