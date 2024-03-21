@@ -1,9 +1,0 @@
-# *
-User-agent: *
-Allow: /
-
-# Host
-Host: https://blog.antosubash.com
-
-# Sitemaps
-Sitemap: https://blog.antosubash.com/sitemap.xml
