@@ -1,1 +1,5 @@
-pnpm test
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+# pre-commit hook
+
+pnpm lint-staged
