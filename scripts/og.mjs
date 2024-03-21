@@ -3,7 +3,7 @@ import { allPosts } from '../.contentlayer/generated/index.mjs'
 import { writeFileSync, existsSync, mkdirSync } from 'fs'
 import path from 'path'
 
-export async function generateAllOgImagesIfNeeded() {
+async function generateAllOgImagesIfNeeded() {
   const posts = allPosts.map((post) => ({
     slug: post.slug,
     title: post.title,
@@ -96,4 +96,4 @@ const createImage = async ({ title }) => {
   return canvas.toBuffer('image/png')
 }
 
-export default generateAllOgImagesIfNeeded
+generateAllOgImagesIfNeeded()
