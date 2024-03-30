@@ -1,10 +1,11 @@
 'use client'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useTheme } from 'next-themes'
 const REPO_NAME = 'antosubash/blog-comments'
 export default function Comments({ slug }: { slug: string }) {
   const commentNodeId = 'comments-' + slug
   const { theme } = useTheme()
+  const ref = useRef<HTMLDivElement>(null)
   const utterancesTheme = theme === 'light' ? 'github-light' : 'photon-dark'
 
   useEffect(() => {
@@ -20,13 +21,17 @@ export default function Comments({ slug }: { slug: string }) {
     script.setAttribute('label', 'comment :speech_balloon:')
     script.setAttribute('theme', utterancesTheme)
     script.setAttribute('crossorigin', 'anonymous')
-
-    scriptParentNode.appendChild(script)
-
-    return () => {
-      // cleanup - remove the older script with previous theme
-      scriptParentNode.removeChild(scriptParentNode.firstChild as Node)
+    script.onload = () => {
+      console.log('utterances script has loaded')
+      const commentElement = document.getElementById(commentNodeId)
+      if (commentElement && commentElement.childNodes.length > 0) {
+        //@ts-ignore
+        commentElement.children[1].style.display = 'none'
+      }
     }
-  }, [commentNodeId, utterancesTheme])
-  return <div className="pt-8" id={commentNodeId} />
+
+    ref?.current?.appendChild(script)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  return <div ref={ref} className="pt-8" id={commentNodeId} />
 }
