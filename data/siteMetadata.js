@@ -5,7 +5,7 @@ const siteMetadata = {
   headerTitle: 'Anto Subash',
   description: 'Learn about web development, programming, and more.',
   language: 'en-us',
-  theme: 'system', // system, dark or light
+  theme: 'dark', // system, dark or light
   siteUrl: 'https://blog.antosubash.com',
   siteRepo: 'https://github.com/antosubash/blog',
   siteLogo: '/static/images/logo.png',

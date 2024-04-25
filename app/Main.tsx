@@ -17,12 +17,12 @@ export default function Home({ posts }) {
             {siteMetadata.description}
           </p>
         </div>
-        <ul className="">
+        <div>
           {!posts.length && 'No posts found.'}
           {posts.slice(0, MAX_DISPLAY).map((post) => {
             const { slug, date, title, excerpt, tags, series, part } = post
             return (
-              <li key={slug} className="py-1">
+              <div key={slug} className="py-1">
                 <PostItem
                   slug={slug}
                   date={date}
@@ -32,10 +32,10 @@ export default function Home({ posts }) {
                   series={series}
                   part={part}
                 />
-              </li>
+              </div>
             )
           })}
-        </ul>
+        </div>
       </div>
       {posts.length > MAX_DISPLAY && (
         <div className="flex justify-end text-base font-medium leading-6">
