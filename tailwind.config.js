@@ -1,5 +1,5 @@
 // @ts-check
-const { fontFamily } = require('tailwindcss/defaultTheme')
+const defaultTheme = require('tailwindcss/defaultTheme')
 const colors = require('tailwindcss/colors')
 
 /** @type {import("tailwindcss/types").Config } */
@@ -22,7 +22,7 @@ module.exports = {
         14: '3.5rem',
       },
       fontFamily: {
-        sans: ['var(--font-space-grotesk)', ...fontFamily.sans],
+        sans: ['InterVariable', ...defaultTheme.fontFamily.sans],
       },
       colors: {
         primary: colors.teal,
