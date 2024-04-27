@@ -1,11 +1,13 @@
 import { MetadataRoute } from 'next'
 import { allPosts } from 'contentlayer/generated'
 import siteMetadata from '@/data/siteMetadata'
+import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const siteUrl = siteMetadata.siteUrl
 
-  const blogRoutes = allPosts
+  const blogRoutes = allCoreContent(sortPosts(allPosts))
+    .filter((post) => !post.draft)
     .filter((post) => !post.draft)
     .map((post) => ({
       url: `${siteUrl}/${post.path}`,
