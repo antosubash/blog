@@ -8,7 +8,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const blogRoutes = allCoreContent(sortPosts(allPosts))
     .filter((post) => !post.draft)
-    .filter((post) => !post.draft)
     .map((post) => ({
       url: `${siteUrl}/${post.path}`,
       lastModified: post.lastmod || post.date,
