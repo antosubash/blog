@@ -5,7 +5,7 @@ const headerNavLinks = [
   { href: '/consulting', title: 'Consulting' },
   // { href: '/tags', title: 'Tags' },
   { href: '/projects', title: 'Projects' },
-  { href: '/about', title: 'About' },
+  // { href: '/about', title: 'About' },
 ]
 
 export default headerNavLinks
