@@ -38,7 +38,7 @@ const PostItem = ({ slug, date, title, summary, series, tags, part }: PostItemPr
           <div className="space-y-6">
             <div>
               <h2 className="text-2xl font-bold leading-8 tracking-tight text-gray-900 dark:text-gray-100">
-                {title}
+                <Link href={`/posts/${slug}`}>{title}</Link>
               </h2>
             </div>
             <div>{summary}</div>
