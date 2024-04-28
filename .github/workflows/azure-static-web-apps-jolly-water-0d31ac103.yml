@@ -30,7 +30,9 @@ jobs:
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
           app_location: "/" # App source code path
           api_location: "" # Api source code path - optional
-          output_location: "" # Built app content directory - optional
+          output_location: ""
+          app_build_command: "pnpm install && pnpm build" # The build command for your app
+          is_static_export: true
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
