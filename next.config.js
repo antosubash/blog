@@ -13,7 +13,7 @@ const ContentSecurityPolicy = `
   media-src *.s3.amazonaws.com;
   connect-src *;
   font-src 'self';
-  frame-src www.youtube-nocookie.com www.youtube.com;
+  frame-src utteranc.es www.youtube-nocookie.com www.youtube.com;
 `
 
 const securityHeaders = [
