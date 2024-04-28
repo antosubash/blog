@@ -25,8 +25,8 @@ const siteMetadata = {
       googleAnalyticsId: process.env.NEXT_GOOGLE_ANALYTICS_ID, // e.g. G-XXXXXXX
     },
     umamiAnalytics: {
-      umamiAnalyticsId: process.env.NEXT_PUBLIC_UMAMI_ANALYTICS_ID, // e.g. 8f3b2f8e-0b1b-4d1d-8e9d-9b7f3d1e0b0f
-      umamiAnalyticsUrl: process.env.NEXT_PUBLIC_UMAMI_ANALYTICS_URL, // e.g. https://umami.antosubash.com/script.js
+      umamiWebsiteId: process.env.NEXT_PUBLIC_UMAMI_ANALYTICS_ID, // e.g. 8f3b2f8e-0b1b-4d1d-8e9d-9b7f3d1e0b0f
+      src: process.env.NEXT_PUBLIC_UMAMI_ANALYTICS_URL, // e.g. https://umami.antosubash.com/script.js
     },
   },
   comments: {
