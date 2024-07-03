@@ -88,12 +88,6 @@ variable "location" {
   type        = string
 }
 
-variable "resource_group_name" {
-  default     = "projectname-dev-rg"
-  description = "The name of the resource group in which all resources should be created."
-  type        = string
-}
-
 variable "resource_group_tags" {
   default = {
     environment = "dev",
@@ -280,7 +274,6 @@ resource "azurerm_role_assignment" "aks_acr_role_assignment" {
 
 ```bash
 location = "westeurope"
-resource_group_name = "projectname-dev-rg"
 resource_group_tags = {
   environment = "dev"
   project     = "projectname"
