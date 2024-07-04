@@ -36,8 +36,6 @@ There are few libraries that support OpenID Connect and OAuth for the react app.
 
 To implement OpenID Connect with Next.js, we will use the [openid-client](https://github.com/panva/node-openid-client) library. This library is a certified OpenID Connect client library for node.js. This library is used by many projects and is well maintained. for the cookies we will use [iron-session](https://github.com/vvo/iron-session) library. This library is a simple session middleware for Next.js.
 
-We will also use the [io-redis](https://github.com/redis/ioredis) library to store the refresh tokens in the redis. This way we can refresh the tokens without the user logging in again.
-
 ## Lets get started
 
 First, lets create a new Next.js app
@@ -150,6 +148,8 @@ export async function getClient() {
 }
 ```
 
+### Session endpoint
+
 This file contains the configuration for the OpenID Connect server and the session configuration. It also contains the functions to get the session and the client.
 
 Let's create a new file for the session endpoint `app/session/route.ts`
@@ -174,6 +174,8 @@ export async function GET() {
 ```
 
 This file contains the session endpoint. This endpoint will return the session data. This way we can check if the user is logged in or not. this endpoint will be used by the client components to check if the user is logged in or not.
+
+### Login, Logout and Callback endpoints
 
 Now lets create the login endpoint `app/auth/login/route.ts`
 
@@ -254,6 +256,8 @@ export async function GET(request: IncomingMessage) {
 
 This file contains the callback endpoint. This endpoint will be called by the OpenID Connect server after the user is authenticated. This endpoint will save the tokens in the session and redirect the user to the home page.
 
+### Login component
+
 Now lets create the login component `components/Login.tsx`
 
 ```tsx
@@ -292,6 +296,8 @@ const Login = () => {
 export default Login
 ```
 
+### useSession hook
+
 This component will show the login button if the user is not logged in. If the user is logged in, it will show the logout button.
 
 Now lets create the useSession hook `hooks/useSession.ts`
@@ -322,6 +328,8 @@ export default function useSession() {
 ```
 
 This hook will fetch the session data from the server. This way we can check if the user is logged in or not. This will be used to show the login or logout status in the client components.
+
+### Putting it all together
 
 Now lets update the `app/page.tsx` file
 
