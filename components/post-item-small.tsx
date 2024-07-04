@@ -18,7 +18,7 @@ const PostItemSmall = (props: Props) => {
   return (
     <li
       key={slug}
-      className="my-2 rounded-2xl bg-slate-50  px-4 py-2 transition-all hover:scale-110 dark:border-gray-800 dark:bg-gray-950"
+      className="my-2 rounded-2xl bg-slate-50 px-4 py-2 transition-all hover:scale-110 dark:border-gray-800 dark:bg-gray-950"
     >
       <Link href={`/posts/${slug}`} className="cursor-pointer">
         <article className="xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">

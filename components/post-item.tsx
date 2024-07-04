@@ -18,7 +18,7 @@ const PostItem = ({ slug, date, title, summary, series, tags, part }: PostItemPr
     <div className="my-4 rounded-2xl border border-gray-100 bg-white px-4 py-4 drop-shadow-lg transition-all hover:scale-110 dark:border-gray-800 dark:bg-gray-950">
       <div className="space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
         <div>
-          <div className="text-base font-medium leading-6 ">
+          <div className="text-base font-medium leading-6">
             <time dateTime={date}>{format(parseISO(date), 'LLLL d, yyyy')}</time>
           </div>
           {series && (
