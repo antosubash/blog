@@ -32,25 +32,6 @@ Most of my backend services are written in .Net. So I have Openiddict as my Open
 
 There are few libraries that support OpenID Connect and OAuth for the react app. Most notable one is [oidc-client-ts](https://github.com/authts/oidc-client-ts) and [react-oidc-context](https://github.com/authts/react-oidc-context). They are great options if you are using react. But I wanted something which will not store the tokens in the local storage. I wanted something which will store the tokens in the cookies.
 
-## How does this work?
-
-Hee is the sequence diagram of how this works
-
-```mermaid
-sequenceDiagram
-    participant NEXT as Next.js
-    participant AS as OIDC Server
-    participant API as API
-
-    NEXT->>AS: 1. Prepare the login request
-    AS->>NEXT: 2. Get tokens and store in cookies
-    NEXT->>AS: 3. Get the user info request
-    AS->>NEXT: 4. Return the user info response and store in cookies
-    NEXT->>API: 5. Use the tokens to call the API
-```
-
-As you can see, we are storing the tokens in the cookies and using the same tokens to call the API. This way we can use the same tokens for the backend services.
-
 ## How to implement OpenID Connect with Next.js?
 
 To implement OpenID Connect with Next.js, we will use the [openid-client](https://github.com/panva/node-openid-client) library. This library is a certified OpenID Connect client library for node.js. This library is used by many projects and is well maintained. for the cookies we will use [iron-session](https://github.com/vvo/iron-session) library. This library is a simple session middleware for Next.js.

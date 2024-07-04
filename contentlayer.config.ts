@@ -18,7 +18,6 @@ import rehypeKatex from 'rehype-katex'
 import rehypeCitation from 'rehype-citation'
 import rehypePrismPlus from 'rehype-prism-plus'
 import rehypePresetMinify from 'rehype-preset-minify'
-import { remarkMermaid } from '@theguild/remark-mermaid'
 import siteMetadata from './data/siteMetadata'
 
 const root = process.cwd()
@@ -114,7 +113,6 @@ export default makeSource({
       remarkCodeTitles,
       remarkMath,
       remarkImgToJsx,
-      remarkMermaid,
     ],
     rehypePlugins: [
       rehypeSlug,
