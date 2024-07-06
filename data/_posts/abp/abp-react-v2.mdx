@@ -1,0 +1,89 @@
+---
+title: 'ABP React Template V2'
+excerpt: 'Version 2 of React Starter Template for ABP application with Next.js, Tailwind CSS, and shadcn-ui.'
+date: '2024-07-06T12:54:31.904Z'
+videoId:
+tags:
+  - react
+  - nextjs
+  - abp
+  - dotnet
+  - tailwindcss
+  - radixui
+  - shadcn
+---
+
+<TOCInline toc={props.toc} asDisclosure />
+
+## Introduction
+
+V2 of the React Starter Template for ABP application with Next.js, Tailwind CSS, and shadcn-ui is ready to use. You can use this template to start your next project. This template uses the Next.js App Directory Structure. It is easy to use and extend.
+
+## Removed DaisyUI
+
+I have removed DaisyUI from the template. I have added shadcn-ui instead of DaisyUI. shadcn-ui provides a lot of components out of the box. You can find the documentation [here](https://ui.shadcn.com/).
+
+## Getting Started
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/en/)
+- [pnpm](https://pnpm.js.org/en/installation)
+- [ABP Framework](https://abp.io/)
+
+### Installing Template
+
+Install the ABP React .Net Template
+
+```bash
+dotnet new install Anto.Abp.React.Template
+```
+
+> Note: This only creates React Application. You need to create an ABP application separately. You can find the documentation [here](https://docs.abp.io/en/abp/latest/Getting-Started).
+
+### Creating a new project
+
+Create a new project using the template
+
+```bash
+dotnet new abp-react -o my-project-name
+```
+
+> Note: You can use any name for the project. I used `my-project-name` for this example. keep in mind that the project name should be in kebab case (all lowercase and words separated by hyphens) because it will be used as the name of the packages org name.
+
+### Running the project
+
+```bash
+cd my-project-name
+pnpm install
+pnpm dev
+```
+
+> Note: You can use any other package manager instead of pnpm. But I recommend using pnpm. It's fast and reliable. Make sure you have ABP application is running before running the app.
+
+## Demo Application
+
+You can find the demo application [here](https://abpreact.antosubash.com/). You can use the following credentials to login.
+
+- Username: admin
+- Password: 1q2w3E\*
+
+## Source Code
+
+You can find the source code on [GitHub](https://github.com/antosubash/abpreact).
+
+> If you find this template useful, please consider starring the repository. It will help others to find it easily.
+
+## Major Changes
+
+- Removed DaisyUI
+- Added shadcn-ui
+- Removed turbo repo
+- Simplified the template
+- Added more components sample components based on shadcn-ui
+- cookie based authentication
+- Better tenant management
+
+## Conclusion
+
+This template is a good starting point for your next project. You can use it to create any kind of application. It supports SSR, CSR, and static pages. You can use it to create a dashboard, portal, or a public website. If you have any questions or suggestions, feel free to write them in the comments below.
