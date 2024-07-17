@@ -1,0 +1,183 @@
+---
+title: 'Migrating Tye to Aspire'
+excerpt: 'In this post we will see how to migrate the Tye to Aspire'
+date: '2022-07-17T20:59:17.487Z'
+videoId:
+series: '.NET Microservice with ABP'
+part: 14
+tags:
+  - abp
+  - aspire
+---
+
+<YoutubeVideo videoId={props.videoId} />
+
+<TOCInline toc={props.toc} asDisclosure />
+
+## Introduction
+
+This is the part 14 of the series: [.NET Microservice with ABP](/posts/abp-microservice-series). When I started this series I used Tye to manage the run the services because that was the only viable option at that time but Tye is abandoned by Microsoft and it is not recommended to use it for the new projects. The recommended migration path from Tye is to use Aspire. In this post, we will see how to migrate the Tye to Aspire.
+
+## What is Aspire?
+
+.NET Aspire is an opinionated, cloud ready stack for building observable, production ready, distributed applications. .NET Aspire is delivered through a collection of NuGet packages that handle specific cloud-native concerns. Cloud-native apps often consist of small, interconnected pieces or microservices rather than a single, monolithic code base. Cloud-native apps generally consume a large number of services, such as databases, messaging, and caching.
+
+## Why use Aspire?
+
+We have few dependency for running the microservice application locally. I usually use docker-compose to run the services locally. But with Aspire, we can run the services without docker-compose with code.
+
+## Migrating Tye to Aspire
+
+Tye is yaml based configuration and Aspire is code based configuration. We need to convert the yaml configuration to code based configuration. Aspire comes with some starter templates to get started with the Aspire. We can use the starter template to create the Aspire configuration.
+
+## Getting start with Aspire
+
+To get started with the Aspire, we need to install the Aspire CLI. We can install the Aspire workload using the following command.
+
+```bash
+dotnet workload update
+```
+
+This will update the workload once the workload is updated we can install the Aspire workload using the following command.
+
+```bash
+dotnet workload install aspire
+```
+
+To check the aspire is installed correctly we can run the following command.
+
+```bash
+dotnet new list aspire
+```
+
+If the installation is successful we can see the aspire template which are installed.
+
+> From this point open your microservice solution in the terminal to continue.
+
+## Create the Aspire projects
+
+We need to create 2 new projects for the Aspire. One is for the AppHost and another one is for the service defaults. We can create the projects using the following command.
+
+```bash
+dotnet new aspire-apphost -o Tasky.AppHost
+dotnet new aspire-servicedefaults -o ./shared/Tasky.ServiceDefaults
+```
+
+This will create the Aspire projects in the solution. We can see the Aspire projects in the solution.
+
+### Add the project to the solution
+
+We need to add the Aspire projects to the solution. We can add the projects using the following command.
+
+```bash
+dotnet sln ./Tasky.sln add ./Tasky.AppHost/Tasky.AppHost.csproj
+dotnet sln ./Tasky.sln add ./shared/Tasky.ServiceDefaults/Tasky.ServiceDefaults.csproj
+```
+
+This will add the Aspire projects to the solution.
+
+### Update the project reference
+
+We need to add the reference to the service reference to the shared hosting project.
+
+```bash
+dotnet add ./shared/Tasky.Hosting.Shared/Tasky.Hosting.Shared.csproj reference ./shared/Tasky.ServiceDefaults/Tasky.ServiceDefaults.csproj
+```
+
+We need to add the reference to all the host project in the AppHost.
+
+```bash
+Get-ChildItem -Path . -Recurse -Filter *.HttpApi.Host.csproj | ForEach-Object { dotnet add ./Tasky.AppHost/Tasky.AppHost.csproj reference $_.FullName }
+```
+
+This will add the service host.
+
+We also need to update the Application project to use the Aspire.
+
+```bash
+Get-ChildItem -Path ./apps -Recurse -Filter *.csproj | ForEach-Object { dotnet add ./Tasky.AppHost/Tasky.AppHost.csproj reference $_.FullName }
+```
+
+Add the service defaults to the apps
+
+```bash
+Get-ChildItem -Path ./apps -Recurse -Filter *.csproj | ForEach-Object { dotnet add $_.FullName reference ./shared/Tasky.ServiceDefaults/Tasky.ServiceDefaults.csproj }
+```
+
+This will add the reference to the application project.
+
+We also need to update the Gateway project to use the Aspire.
+
+```bash
+Get-ChildItem -Path ./gateway -Recurse -Filter *.csproj | ForEach-Object { dotnet add ./Tasky.AppHost/Tasky.AppHost.csproj reference $_.FullName }
+```
+
+This will add the reference to the gateway project.
+
+Add the service defaults to the gateway
+
+```bash
+dotnet add ./gateway/Tasky.Gateway/Tasky.Gateway.csproj reference ./shared/Tasky.ServiceDefaults/Tasky.ServiceDefaults.csproj
+```
+
+This will add the reference to the gateway project.
+
+### Update the builder configuration
+
+Now we need to update the builder configuration to use the service defaults in all the projects we have added the service defaults.
+
+```csharp
+builder.AddServiceDefaults();
+```
+
+This will add the service defaults to the builder configuration.
+
+### Update the AppHost configuration
+
+We have added the all the projects to the AppHost. We need to add project to the AppHost configuration.
+
+```csharp
+var builder = DistributedApplication.CreateBuilder(args);
+
+builder.AddProject<Projects.Tasky_AuthServer>("tasky-authserver", launchProfileName: "Tasky.AuthServer");
+
+builder.AddProject<Projects.Tasky_Administration_HttpApi_Host>("tasky-administration-httpapi-host", launchProfileName: "Tasky.Administration.Host");
+
+builder.AddProject<Projects.Tasky_IdentityService_HttpApi_Host>("tasky-identityservice-httpapi-host", launchProfileName: "Tasky.IdentityService.Host");
+
+builder.AddProject<Projects.Tasky_Projects_HttpApi_Host>("tasky-projects-httpapi-host", launchProfileName: "Tasky.Projects.Host");
+
+builder.AddProject<Projects.Tasky_SaaS_HttpApi_Host>("tasky-saas-httpapi-host", launchProfileName: "Tasky.SaaS.Host");
+
+builder.AddProject<Projects.Tasky_Gateway>("tasky-gateway", launchProfileName: "Tasky.Gateway");
+
+builder.AddProject<Projects.Tasky_Blazor_Server>("tasky-blazor-server", launchProfileName: "Tasky.Blazor.Server");
+
+builder.AddProject<Projects.Tasky_Blazor>("tasky-blazor", launchProfileName: "Tasky.Blazor");
+
+builder.Build().Run();
+```
+
+This will add the project to the AppHost configuration.
+
+## Run the Aspire AppHost
+
+Now we are ready to run the Aspire AppHost. We can run the Aspire AppHost using the following command.
+
+```bash
+dotnet run --project ./Tasky.AppHost/Tasky.AppHost.csproj
+```
+
+This will run the Aspire AppHost.
+
+## Delete the Tye yaml
+
+We can delete the Tye yaml configuration from the solution.
+
+```bash
+remove-item .\tye.yaml
+```
+
+## Conclusion
+
+In this post, we have seen how to migrate the Tye to Aspire. Aspire is the recommended way to run the services locally. This will be helpful during the development phase. I will continue to use the Aspire in the future posts. if you have any questions please let me know in the comments below.
