@@ -6,6 +6,7 @@ import { allPosts } from 'contentlayer/generated'
 import { getTagsWithCount } from '@/lib/tag-utils'
 import { genPageMetadata } from 'app/seo'
 import { Metadata } from 'next'
+import { count } from 'console'
 
 export async function generateMetadata({ params }: { params: { tag: string } }): Promise<Metadata> {
   const tag = decodeURI(params.tag)
@@ -25,9 +26,9 @@ export async function generateMetadata({ params }: { params: { tag: string } }):
 
 export const generateStaticParams = async () => {
   const tagCounts = getTagsWithCount()
-  const tagKeys = Object.keys(tagCounts)
-  const paths = tagKeys.map((tag) => ({
-    tag: encodeURI(tag),
+  const paths = tagCounts.map((tagWithCount) => ({
+    tag: encodeURI(tagWithCount.tag),
+    count: tagWithCount.count,
   }))
   return paths
 }
