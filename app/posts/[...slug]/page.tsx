@@ -11,6 +11,8 @@ import PostBanner from '@/layouts/PostBanner'
 import { Metadata } from 'next'
 import siteMetadata from '@/data/siteMetadata'
 import { notFound } from 'next/navigation'
+import { getRelatedPosts } from '@/lib/tag-utils'
+import RelatedPost from '@/components/related-posts'
 
 const defaultLayout = 'PostSimple'
 const layouts = {
@@ -106,6 +108,9 @@ export default async function Page({ params }: { params: { slug: string[] } }) {
   })
 
   const Layout = layouts[post.layout || defaultLayout]
+
+  const relatedPosts = getRelatedPosts(post.slug)
+
   return (
     <>
       <script
@@ -121,6 +126,7 @@ export default async function Page({ params }: { params: { slug: string[] } }) {
           videoId={post.videoId}
           series={post.series}
         />
+        <RelatedPost posts={relatedPosts} />
       </Layout>
     </>
   )

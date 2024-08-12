@@ -24,3 +24,24 @@ export function getTagsWithCount() {
 
   return allMappedTags
 }
+
+export function getRelatedPosts(slug: string) {
+  // get 3 the related posts based on the slug
+  const post = allPosts.find((p) => p.slug === slug)
+  if (!post) return []
+
+  // check if the post is part of the series filter by latest 3
+  if (post.series) {
+    const seriesPosts = allPosts
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      .filter((p) => p.series === post.series)
+    return seriesPosts.filter((p) => p.slug !== slug).slice(0, 3)
+  }
+
+  const relatedPosts = allPosts
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .filter((p) => p.slug !== slug && p.tags.some((tag) => post.tags.includes(tag)))
+    .slice(0, 3)
+
+  return relatedPosts
+}
