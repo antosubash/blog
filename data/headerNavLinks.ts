@@ -2,9 +2,9 @@ const headerNavLinks = [
   { href: '/', title: 'Home' },
   { href: '/posts', title: 'Posts' },
   { href: '/series', title: 'Series' },
-  { href: '/consulting', title: 'Consulting' },
+  { href: '/consulting', title: 'Consulting', track: true },
   // { href: '/tags', title: 'Tags' },
-  { href: '/projects', title: 'Projects' },
+  { href: '/projects', title: 'Projects', track: true },
   // { href: '/about', title: 'About' },
 ]
 

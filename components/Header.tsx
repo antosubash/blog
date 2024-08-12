@@ -24,15 +24,30 @@ const Header = () => {
       <div className="flex items-center space-x-4 leading-5 sm:space-x-6">
         {headerNavLinks
           .filter((link) => link.href !== '/')
-          .map((link) => (
-            <Link
-              key={link.title}
-              href={link.href}
-              className="hidden font-medium text-gray-900 dark:text-gray-100 sm:block"
-            >
-              {link.title}
-            </Link>
-          ))}
+          .map((link) => {
+            if (link.track) {
+              return (
+                <a
+                  key={link.title}
+                  href={link.href}
+                  className="hidden font-medium text-gray-900 dark:text-gray-100 sm:block"
+                  data-umami-event={`header_${link.title.toLowerCase()}`}
+                >
+                  {link.title}
+                </a>
+              )
+            } else {
+              return (
+                <Link
+                  key={link.title}
+                  href={link.href}
+                  className="hidden font-medium text-gray-900 dark:text-gray-100 sm:block"
+                >
+                  {link.title}
+                </Link>
+              )
+            }
+          })}
         <SearchButton />
         <ThemeSwitch />
         <MobileNav />
