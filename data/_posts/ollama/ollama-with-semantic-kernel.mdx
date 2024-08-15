@@ -1,0 +1,273 @@
+---
+title: 'Getting started with Ollama and Semantic Kernel with C#'
+excerpt: 'In this post, we will learn how to get started with Ollama and Semantic Kernel with C#.'
+date: '2024-08-15'
+videoId:
+tags:
+  - ollama
+  - semantic-kernel
+  - getting-started
+  - Llama
+  - llm
+  - dotnet
+---
+
+<YoutubeVideo videoId={props.videoId} />
+
+<TOCInline toc={props.toc} asDisclosure />
+
+## Introduction
+
+In this post, we will learn how to get started with Ollama and Semantic Kernel. We will learn how to install Ollama and get the LLM running on your machine and then we will learn how to use the Semantic Kernel with C# to interact with the LLM.
+
+## Prerequisites
+
+Before we start, make sure you have the following installed on your machine:
+
+- [Ollama](https://ollama.com)
+- [dotnet](https://dotnet.microsoft.com/download)
+
+## What is Ollama?
+
+Ollama helps you to get up and running with the Open sourced LLM (Large Language Model) like Llama, Mistral, Gemma and more. It provides a simple and easy to use interface to interact with the LLM. It also provides a Open AI like API to interact with the LLM. Ollama has sdk for python and javascript. you can find more about Ollama [here](https://ollama.com)
+
+## What is Semantic Kernel?
+
+Semantic Kernel is an SDK that integrates Large Language Models (LLMs) like OpenAI, Azure OpenAI, and Hugging Face with conventional programming languages like C#, Python, and Java. Semantic Kernel achieves this by allowing you to define plugins that can be chained together in just a few lines of code. You can find more about Semantic Kernel [here](https://github.com/microsoft/semantic-kernel)
+
+## Why Ollama and Semantic Kernel?
+
+Ollama running on your machine and help you to interact with multiple LLMs with ease. Semantic Kernel helps you to integrate LLMs with your conventional programming languages like C#, Python, and Java. With Ollama and Semantic Kernel, you can easily interact with LLMs and build powerful applications. Semantic Kernel official connector for Ollama will be released soon. Stay tuned for more updates.
+
+## Getting Started
+
+Let's get started with Ollama and Semantic Kernel.
+
+## Install Ollama and get the LLM running
+
+### Step 1: Install Ollama
+
+First, you need to install Ollama on your machine. You can find the installation instructions [here](https://ollama.com/download)
+
+Once you have installed Ollama, you can check if it is installed correctly by running the following command in your terminal:
+
+```bash
+ollama --version
+```
+
+You should see the version of Ollama installed on your machine.
+
+### Step 2: Get the LLM
+
+Next, you need to get the LLM running on your machine. You can do this by running the following command in your terminal:
+
+```bash
+ollama run llama3.1
+```
+
+This will pull the LLM image from the Ollama registry and start the LLM on your machine.
+
+> Note: You can replace `llama3.1` with any other LLM you want to run. It might take some time to download the LLM image and start the LLM on your machine.
+
+### Step 3: Check if the API is running
+
+Once the LLM is running, you can check if the API is running by opening the following URL in your browser:
+
+```bash
+curl http://localhost:11434
+```
+
+You should see the API response which means the LLM is running successfully.
+
+## Use Semantic Kernel with C# to interact with the LLM
+
+Now that you have the LLM running on your machine, you can use the Semantic Kernel with C# to interact with the LLM.
+
+### Step 1: Create a new C# project
+
+First, lets create a simple console application in C#. You can do this by running the following command in your terminal:
+
+```bash
+dotnet new console -n OllamaExample
+cd OllamaExample
+```
+
+This will create a new console application in C#.
+
+### Step 2: Install the Semantic Kernel SDK
+
+Next, you need to install the Semantic Kernel SDK for C#. You can do this by running the following command in your terminal:
+
+```bash
+dotnet add package Microsoft.SemanticKernel
+```
+
+This will install the Semantic Kernel SDK for C# in your project.
+
+### Step 3: Install OllamaSharp
+
+Next, you need to install the OllamaSharp. You can do this by running the following command in your terminal:
+
+```bash
+dotnet add package OllamaSharp
+```
+
+This will install the OllamaSharp in your project.
+
+### Step 4: Update the Program.cs file
+
+Next, you need to update the Program.cs file in your project with the following code:
+
+```csharp
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.ChatCompletion;
+using OllamaSharp;
+
+var builder = Kernel.CreateBuilder();
+
+builder.Services.AddScoped<IOllamaApiClient>(_ => new OllamaApiClient("http://localhost:11434"));
+
+builder.Services.AddScoped<IChatCompletionService, OllamaChatCompletionService>();
+
+var kernel = builder.Build();
+
+var chatService = kernel.GetRequiredService<IChatCompletionService>();
+
+var history = new ChatHistory();
+history.AddSystemMessage("You are help full assistant that will help you with your questions.");
+
+while (true)
+{
+    Console.Write("You: ");
+    var userMessage = Console.ReadLine();
+
+    if (string.IsNullOrWhiteSpace(userMessage))
+    {
+        break;
+    }
+
+    history.AddUserMessage(userMessage);
+
+    var response = await chatService.GetChatMessageContentAsync(history);
+
+    Console.WriteLine($"Bot: {response.Content}");
+
+    history.AddMessage(response.Role, response.Content ?? string.Empty);
+}
+```
+
+### Step 5: Create a OllamaChatCompletionService class
+
+Next, you need to create a OllamaChatCompletionService class in your project with the following code:
+
+```csharp
+using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.ChatCompletion;
+using OllamaSharp;
+using OllamaSharp.Models.Chat;
+
+public class OllamaChatCompletionService : IChatCompletionService
+{
+    private readonly IOllamaApiClient ollamaApiClient;
+
+    public OllamaChatCompletionService(IOllamaApiClient ollamaApiClient)
+    {
+        this.ollamaApiClient = ollamaApiClient;
+    }
+
+    public IReadOnlyDictionary<string, object?> Attributes => new Dictionary<string, object?>();
+
+    public async Task<IReadOnlyList<ChatMessageContent>> GetChatMessageContentsAsync(
+        ChatHistory chatHistory,
+        PromptExecutionSettings? executionSettings = null,
+        Kernel? kernel = null,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var request = CreateChatRequest(chatHistory);
+
+        var response = await ollamaApiClient.Chat(request, cancellationToken);
+
+        return
+        [
+            new ChatMessageContent
+            {
+                Role = GetAuthorRole(response.Message.Role) ?? AuthorRole.Assistant,
+                Content = response.Message.Content,
+                InnerContent = response,
+                ModelId = "llama3.1"
+            }
+        ];
+    }
+
+    public async IAsyncEnumerable<StreamingChatMessageContent> GetStreamingChatMessageContentsAsync(
+        ChatHistory chatHistory,
+        PromptExecutionSettings? executionSettings = null,
+        Kernel? kernel = null,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var request = CreateChatRequest(chatHistory);
+
+        await foreach (var response in ollamaApiClient.StreamChat(request, cancellationToken))
+        {
+            yield return new StreamingChatMessageContent(
+                role: GetAuthorRole(response.Message.Role) ?? AuthorRole.Assistant,
+                content: response.Message.Content,
+                innerContent: response,
+                modelId: "llama3.1"
+            );
+            ;
+        }
+    }
+
+    private static AuthorRole? GetAuthorRole(ChatRole? role)
+    {
+        return role?.ToString().ToUpperInvariant() switch
+        {
+            "USER" => AuthorRole.User,
+            "ASSISTANT" => AuthorRole.Assistant,
+            "SYSTEM" => AuthorRole.System,
+            _ => null
+        };
+    }
+
+    private static ChatRequest CreateChatRequest(ChatHistory chatHistory)
+    {
+        var messages = new List<Message>();
+
+        foreach (var message in chatHistory)
+        {
+            messages.Add(
+                new Message
+                {
+                    Role =
+                        message.Role == AuthorRole.User
+                            ? ChatRole.User
+                            : ChatRole.System,
+                    Content = message.Content,
+                }
+            );
+        }
+
+        return new ChatRequest { Messages = messages, Stream = true, Model = "llama3.1" };
+    }
+}
+```
+
+> Note: You can replace `llama3.1` with any other LLM you want to use.
+
+### Step 6: Run the application
+
+Now that you have updated the Program.cs file and created the OllamaChatCompletionService class, you can run the application by running the following command in your terminal:
+
+```bash
+dotnet run
+```
+
+This will start the console application and you can start interacting with the LLM using the Semantic Kernel and C#.
+
+## Conclusion
+
+In this post, we learned how to get started with Ollama and Semantic Kernel. We learned how to install Ollama and get the LLM running on your machine and then we learned how to use the Semantic Kernel with C# to interact with the LLM. We also learned how to create a simple console application in C# and interact with the LLM using the Semantic Kernel. With Ollama and Semantic Kernel, you can easily interact with LLMs and build powerful applications. This is just the beginning, you can explore more features of Ollama and Semantic Kernel and build amazing applications.
