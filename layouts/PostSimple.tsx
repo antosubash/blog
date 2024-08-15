@@ -8,6 +8,7 @@ import PageTitle from '@/components/PageTitle'
 import SectionContainer from '@/components/SectionContainer'
 import siteMetadata from '@/data/siteMetadata'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
+import Tag from '@/components/Tag'
 
 interface LayoutProps {
   content: CoreContent<Posts>
@@ -17,11 +18,9 @@ interface LayoutProps {
 }
 
 const editUrl = (path) => `${siteMetadata.siteRepo}/blob/main/data/${path}`
-const discussUrl = (path) =>
-  `https://mobile.twitter.com/search?q=${encodeURIComponent(`${siteMetadata.siteUrl}/${path}`)}`
 
 export default function PostLayout({ content, next, prev, children }: LayoutProps) {
-  const { filePath, postUrl, slug, date, title } = content
+  const { filePath, slug, date, title, tags, readingTime } = content
 
   return (
     <SectionContainer>
@@ -29,7 +28,7 @@ export default function PostLayout({ content, next, prev, children }: LayoutProp
       <article>
         <div>
           <header>
-            <div className="space-y-1 border-b border-gray-200 pb-10 text-center dark:border-gray-700">
+            <div className="space-y-1 border-b border-gray-200 pb-6 text-center dark:border-gray-700">
               <dl>
                 <div>
                   <dt className="sr-only">Published on</dt>
@@ -41,6 +40,14 @@ export default function PostLayout({ content, next, prev, children }: LayoutProp
               <div>
                 <PageTitle>{title}</PageTitle>
               </div>
+              <div className="flex justify-center pt-4">
+                {tags.map((tag) => (
+                  <Tag key={tag} text={tag} />
+                ))}
+              </div>
+              <div className="pt-6 text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
+                {readingTime.text}
+              </div>
             </div>
           </header>
           <div className="grid-rows-[auto_1fr] divide-y divide-gray-200 pb-8 dark:divide-gray-700 xl:divide-y-0">
@@ -48,10 +55,6 @@ export default function PostLayout({ content, next, prev, children }: LayoutProp
               <div className="prose max-w-none pb-8 pt-10 dark:prose-invert">{children}</div>
             </div>
             <div className="pb-6 pt-6 text-sm text-gray-700 dark:text-gray-300">
-              <Link href={discussUrl(postUrl)} rel="nofollow">
-                Discuss on Twitter
-              </Link>
-              {` • `}
               <Link href={editUrl(filePath)}>View on GitHub</Link>
             </div>
             {siteMetadata.comments && (
