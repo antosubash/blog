@@ -37,10 +37,10 @@ export default function PostLayout({ content, next, prev, children }: LayoutProp
                   </dd>
                 </div>
               </dl>
-              <div>
+              <div className="pb-3">
                 <PageTitle>{title}</PageTitle>
               </div>
-              <div className="flex justify-center pt-4">
+              <div className="flex flex-row flex-wrap space-y-1">
                 {tags.map((tag) => (
                   <Tag key={tag} text={tag} />
                 ))}
