@@ -157,6 +157,8 @@ while (true)
 }
 ```
 
+In the above code, we are creating a new instance of the Kernel and adding the OllamaApiClient and OllamaChatCompletionService to the services collection. We are then getting the IChatCompletionService from the Kernel and using it to interact with the LLM. We are creating a ChatHistory object to keep track of the chat history and then we are starting a loop to interact with the LLM. We are taking the user input and adding it to the chat history and then getting the response from the LLM using the IChatCompletionService. We are then printing the response to the console and adding it to the chat history.
+
 ### Step 5: Create a OllamaChatCompletionService class
 
 Next, you need to create a OllamaChatCompletionService class in your project with the following code:
@@ -257,6 +259,8 @@ public class OllamaChatCompletionService : IChatCompletionService
 ```
 
 > Note: You can replace `llama3.1` with any other LLM you want to use.
+
+In the above code, we are creating a new class called OllamaChatCompletionService that implements the IChatCompletionService interface. We are injecting the IOllamaApiClient into the class and using it to interact with the LLM. We are then implementing the GetChatMessageContentsAsync and GetStreamingChatMessageContentsAsync methods to interact with the LLM. We are creating a ChatRequest object from the chat history and sending it to the LLM using the IOllamaApiClient. We are then creating a ChatMessageContent object from the response and returning it to the caller.
 
 ### Step 6: Run the application
 
