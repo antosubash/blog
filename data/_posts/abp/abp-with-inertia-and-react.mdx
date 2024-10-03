@@ -1,0 +1,291 @@
+---
+title: 'ABP-Powered Web App with Inertia.js, React, and Vite'
+excerpt: 'Building a web application with ABP Framework, Inertia.js, React, and Vite.'
+date: '2024-10-03T12:54:31.904Z'
+videoId: 
+tags:
+  - react
+  - abp
+  - dotnet
+  - inertiajs
+  - vite
+---
+
+<YoutubeVideo videoId={props.videoId} />
+
+<TOCInline toc={props.toc} asDisclosure />
+
+## ABP Framework
+
+The ABP framework is a robust, open-source framework built on ASP.NET Core. It’s designed to help developers create modern web applications with features like modularity, multi-tenancy, domain-driven design (DDD), and various pre-built functionalities such as identity management, audit logging, and localization. ABP offers templates to build layered and microservice-based architectures while integrating with common frontend frameworks like Angular or Blazor, which provides flexibility for building full-stack applications efficiently. It also supports multiple database providers and deployment options, making it suitable for a wide range of projects. you can find more information about ABP [here](https://abp.io/).
+
+## Inertia.js
+
+Inertia.js is a library that helps build single-page applications (SPAs) using traditional server-side frameworks like Laravel, Rails, or ASP.NET without needing to build an API. Instead of using client-side routing and APIs to handle data, Inertia bridges the gap between server-side routing and modern JavaScript frameworks like React, Vue, and Svelte. It sends page components and data directly from the server to the client, allowing the server-side logic to remain intact while making the frontend reactive and dynamic, creating a modern monolith architecture. Inertia.js is a great choice for developers who prefer server-side rendering and want to leverage the benefits of modern frontend frameworks. you can find more information about Inertia.js [here](https://inertiajs.com/).
+
+## React
+
+React is a popular JavaScript library for building user interfaces, especially for single-page applications. Created by Facebook, it allows developers to create reusable components, making it easier to build complex UIs efficiently. React is known for its fast performance due to its virtual DOM and component-based architecture, which encourages a declarative way of programming. React integrates well with other tools like Inertia.js to build dynamic applications that combine both client-side and server-side logic. React is widely used in the industry and has a large community, making it easy to find resources and support. you can find more information about React [here](https://reactjs.org/).
+
+## Vite
+
+Vite is a fast, modern build tool and development server for frontend projects, especially with frameworks like React, Vue, and Svelte. It provides a better alternative to traditional bundlers like Webpack by offering near-instant hot module replacement (HMR) during development, making it much faster to start a project and get immediate feedback. Vite also simplifies the process of building for production by focusing on ES modules and targeting modern browsers. It has a very lightweight configuration, which makes it easy to integrate into existing projects like those using Inertia.js and React. Vite is a great choice for developers who value speed and simplicity in their frontend workflow. you can find more information about Vite [here](https://vitejs.dev/).
+
+## Working code
+
+You can find the working code for this tutorial [here](https://github.com/antosubash/abp-inertiajs-react) on GitHub. Feel free to explore the code and use it as a reference for your projects. if you have any questions or feedback, please file an issue on the repository. I'm happy to help you with your queries. if you like the code, please give it a star on GitHub.
+
+
+### 1. **Creating the ABP Project**
+```bash
+abp new InertiaDemo -t app-nolayers -dbms SQLite --theme leptonx-lite -csf
+```
+- **Command Breakdown**:
+  - `abp new InertiaDemo`: This initializes a new ABP project named `InertiaDemo`.
+  - `-t app-nolayers`: This specifies the template type for the project. The `app-nolayers` template is a lightweight template without layered architecture, ideal for smaller or simpler applications.
+  - `-dbms SQLite`: Specifies **SQLite** as the database management system.
+  - `--theme leptonx-lite`: Integrates the **LeptonX Lite** theme for UI elements, providing a consistent, responsive design.
+  - `-csf`: Enables **cross-site forgery protection (CSRF)**, a security feature to protect from CSRF attacks.
+
+This command sets up a minimal ABP application with SQLite and the LeptonX theme. The result is a backend project that’s immediately ready for development with ABP’s built-in features, such as identity and role management.
+
+---
+
+### 2. **Creating the Client-Side Application**
+```bash
+mkdir ClientApp
+cd ClientApp
+npm create vite@latest .
+```
+- **Command Breakdown**:
+  - `mkdir ClientApp`: Creates a directory named `ClientApp`, where your frontend project will reside.
+  - `cd ClientApp`: Changes the current directory to the newly created `ClientApp` folder.
+  - `npm create vite@latest .`: This initializes a **Vite** project inside the current directory (denoted by `.`).
+
+---
+
+### 3. **Installing Inertia.js and Laravel Vite Plugin**
+```bash
+npm add -D laravel-vite-plugin @inertiajs/react @types/node
+```
+- **Command Breakdown**:
+  - `laravel-vite-plugin`: This plugin is used to integrate Vite with backend frameworks like Laravel or ASP.NET.
+  - `@inertiajs/react`: This is the **React adapter** for Inertia.js, allowing you to build Inertia.js apps using React.
+  - `@types/node`: This adds type definitions for Node.js to ensure that you get proper typing and autocompletion when working in TypeScript.
+
+This installs the required dependencies for Inertia.js and Vite to communicate and function seamlessly in a React environment. Inertia.js will act as the bridge between your backend and frontend components.
+
+---
+
+### 4. **Creating the `.env` File**
+```env
+APP_URL=https://localhost:44374
+```
+- **Purpose**: The `.env` file is used to store environment variables for the project. In this case, `APP_URL` points to the development server for your backend, which runs on `https://localhost:44374`. This URL is used by Vite to correctly link your frontend and backend during development.
+
+---
+
+### 5. **Updating the `App.tsx` File**
+```typescript
+import { createRoot } from "react-dom/client";
+import { createInertiaApp } from "@inertiajs/react";
+import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
+
+const appName = window.document.getElementsByTagName("title")[0]?.innerText || "Inertia";
+
+createInertiaApp({
+  title: (title) => `${title} - ${appName}`,
+  resolve: (name) => resolvePageComponent(`./Pages/${name}.tsx`, import.meta.glob("./Pages/**/*.tsx")),
+  setup({ el, App, props }) {
+    const root = createRoot(el);
+    root.render(<App {...props} />);
+  },
+});
+```
+- **Explanation**:
+  - `createInertiaApp`: This is the primary method used to initialize an Inertia.js application. It renders the components for different pages.
+  - `resolvePageComponent`: This helper function dynamically resolves page components based on the requested page name. This leverages Vite's `import.meta.glob`, which efficiently imports all components from the `Pages` folder.
+  - `createRoot(el)`: Part of React 18’s API, it is used to mount the React component tree to a root element (`el`).
+  - `App {...props}`: The `App` component receives any props passed by the server, making it easier to manage server-side data within your React components.
+
+This sets up the root of your Inertia.js React app and ties the frontend to your server-side rendered pages.
+
+---
+
+### 6. **Creating the `Index.tsx` Page**
+```typescript
+import { Head } from "@inertiajs/react";
+
+export default function Index(props: { name: string }) {
+  return (
+    <>
+      <h1>Home</h1>
+      <Head>
+        <title>Your page title</title>
+        <meta name="description" content="Your page description" />
+      </Head>
+      <p>Welcome to your Inertia app!</p>
+      <div>name is {props.name}</div>
+    </>
+  );
+}
+```
+- **Explanation**:
+  - `Head`: Inertia’s component for managing the document `<head>`. It dynamically updates the page’s title and meta tags.
+  - `props`: The data passed from the backend to the frontend, which is used to render the page’s content. In this case, `props.name` is being displayed on the page.
+
+This file defines a simple **React** component rendered on the homepage, with server-side props.
+
+---
+
+### 7. **Vite Configuration**
+```typescript
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import laravel from "laravel-vite-plugin";
+import path from "path";
+import { mkdirSync } from "fs";
+
+const outDir = "../wwwroot/build";
+mkdirSync(outDir, { recursive: true });
+
+export default defineConfig({
+  plugins: [
+    laravel({
+      input: ["src/App.tsx"],
+      publicDirectory: outDir,
+      refresh: true,
+    }),
+    react(),
+  ],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "src"),
+    },
+  },
+  build: {
+    outDir,
+    emptyOutDir: true,
+  },
+});
+```
+- **Explanation**:
+  - `laravel-vite-plugin`: This plugin helps integrate Vite with your backend. It ensures Vite's output is placed in the correct public folder (e.g., `wwwroot/build`) for serving in production.
+  - `input: ["src/App.tsx"]`: Specifies the entry point for the Vite build process.
+  - `build.outDir`: Defines the output directory for the build, which in this case is `wwwroot/build`.
+
+This configuration file sets up Vite to build the frontend and places the build output in the ABP backend’s `wwwroot` directory.
+
+---
+
+### 8. **Inertia Setup in ABP Backend**
+```bash
+dotnet add package AspNetCore.InertiaCore
+```
+- **Explanation**: This command adds the **InertiaCore** NuGet package, which provides helpers and middleware to integrate Inertia.js into the **ASP.NET Core** pipeline.
+
+---
+
+### 9. **Updating `.csproj` File**
+```xml
+<SpaRoot>ClientApp\</SpaRoot>
+<DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
+...
+```
+- **Explanation**:
+  - `SpaRoot`: Defines the root directory for the frontend app (in this case, `ClientApp`).
+  - `DefaultItemExcludes`: Ensures that the `node_modules` folder is not included in the build or publish process, as it's not needed.
+
+This setup ensures the ABP project is configured to include the frontend files during the build and publish processes.
+
+---
+
+### 10. **Program.cs Configuration**
+```csharp
+builder.Services.AddInertia(options =>
+{
+    options.RootView = "~/Views/App.cshtml";
+});
+builder.Services.AddViteHelper(options =>
+{
+    options.PublicDirectory = "wwwroot";
+    options.BuildDirectory = "build";
+    options.ManifestFilename = "manifest.json";
+});
+
+app.UseInertia();
+```
+- **Explanation**:
+  - `AddInertia`: Registers Inertia.js in the service container and specifies the root view for Inertia (in this case, `App.cshtml`).
+  - `AddViteHelper`: Adds support for serving Vite assets and ensures the correct directories and manifest file are used.
+
+This configures **ASP.NET Core** to use Inertia and serve the Vite-built assets from the `wwwroot` folder.
+
+---
+
+### 11. **Creating `App.cshtml`**
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title inertia>My App</title>
+</head>
+<body>
+    @Vite.ReactRefresh()
+    @await Inertia.Html(Model)
+    @Vite.Input("src/App.tsx")
+</body>
+</html>
+```
+- **Explanation**:
+  - `@Vite.ReactRefresh()`: Enables React Fast Refresh for hot reloading during development.
+  - `@await Inertia.Html(Model)`: Renders the Inertia page component, using the `Model` passed from the server.
+  - `@Vite.Input
+
+```html
+    @Vite.Input("src/App.tsx")`: Loads the main entry point of your React app (`App.tsx`).
+``` 
+
+This file acts as the main HTML template for your Inertia.js application, integrating the React app with Vite’s asset management. It sets up the necessary elements to serve your page and handles dynamic content via Inertia.
+
+---
+
+### 12. **Adding the Contoller and Action**
+```csharp
+public class HomeController : Controller
+{
+    public IActionResult Index()
+    {
+        return Inertia.Render(new { name = "John Doe" });
+    }
+}
+```
+
+- **Explanation**:
+  - `Index`: This action method returns an Inertia response, passing the `name` property as data to the frontend. This data can be used to render the page content dynamically.
+
+This controller action serves as the entry point for the Inertia.js application, providing the initial data to be displayed on the homepage.
+
+---
+
+### 13. **Running the Application**
+
+we need to run the backend and frontend separately. To run the backend, use the following command:
+```bash
+dotnet run
+```
+
+To run the frontend, you should navigate to the `ClientApp` directory and run the following command:
+```bash
+npm run dev
+```
+
+This will start the Vite development server and compile your React app. You can access the application at `https://localhost:44374` and see the Inertia.js React app in action.
+
+---
+
+### Conclusion
+
+By combining the power of ABP Framework, Inertia.js, React, and Vite, you can build modern web applications that leverage server-side rendering, dynamic frontend components, and efficient development workflows. This stack provides a robust foundation for creating feature-rich applications with a seamless user experience. Whether you’re building a new project or enhancing an existing one, this tech stack offers flexibility, performance, and scalability to meet your development needs. I'm exploring this stack for my next project and I have found it to be a great combination for building web applications with ABP Framework. Give it a try and see how it can enhance your development process!
