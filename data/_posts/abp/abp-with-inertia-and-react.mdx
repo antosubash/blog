@@ -36,7 +36,7 @@ Vite is a fast, modern build tool and development server for frontend projects, 
 You can find the working code for this tutorial [here](https://github.com/antosubash/abp-inertiajs-react) on GitHub. Feel free to explore the code and use it as a reference for your projects. if you have any questions or feedback, please file an issue on the repository. I'm happy to help you with your queries. if you like the code, please give it a star on GitHub.
 
 
-### 1. **Creating the ABP Project**
+## 1. **Creating the ABP Project**
 ```bash
 abp new InertiaDemo -t app-nolayers -dbms SQLite --theme leptonx-lite -csf
 ```
@@ -51,7 +51,7 @@ This command sets up a minimal ABP application with SQLite and the LeptonX theme
 
 ---
 
-### 2. **Creating the Client-Side Application**
+## 2. **Creating the Client-Side Application**
 ```bash
 mkdir ClientApp
 cd ClientApp
@@ -64,7 +64,7 @@ npm create vite@latest .
 
 ---
 
-### 3. **Installing Inertia.js and Laravel Vite Plugin**
+## 3. **Installing Inertia.js and Laravel Vite Plugin**
 ```bash
 npm add -D laravel-vite-plugin @inertiajs/react @types/node
 ```
@@ -77,7 +77,7 @@ This installs the required dependencies for Inertia.js and Vite to communicate a
 
 ---
 
-### 4. **Creating the `.env` File**
+## 4. **Creating the `.env` File**
 ```env
 APP_URL=https://localhost:44374
 ```
@@ -85,7 +85,7 @@ APP_URL=https://localhost:44374
 
 ---
 
-### 5. **Updating the `App.tsx` File**
+## 5. **Updating the `App.tsx` File**
 ```typescript
 import { createRoot } from "react-dom/client";
 import { createInertiaApp } from "@inertiajs/react";
@@ -112,7 +112,7 @@ This sets up the root of your Inertia.js React app and ties the frontend to your
 
 ---
 
-### 6. **Creating the `Index.tsx` Page**
+## 6. **Creating the `Index.tsx` Page**
 ```typescript
 import { Head } from "@inertiajs/react";
 
@@ -138,7 +138,7 @@ This file defines a simple **React** component rendered on the homepage, with se
 
 ---
 
-### 7. **Vite Configuration**
+## 7. **Vite Configuration**
 ```typescript
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
@@ -178,7 +178,7 @@ This configuration file sets up Vite to build the frontend and places the build 
 
 ---
 
-### 8. **Inertia Setup in ABP Backend**
+## 8. **Inertia Setup in ABP Backend**
 ```bash
 dotnet add package AspNetCore.InertiaCore
 ```
@@ -186,7 +186,7 @@ dotnet add package AspNetCore.InertiaCore
 
 ---
 
-### 9. **Updating `.csproj` File**
+## 9. **Updating `.csproj` File**
 ```xml
 <!-- Add this as a part of the  PropertyGroup-->
 <SpaRoot>ClientApp\</SpaRoot>
@@ -218,7 +218,7 @@ This setup ensures the ABP project is configured to include the frontend files d
 
 ---
 
-### 10. **Program.cs Configuration**
+## 10. **Program.cs Configuration**
 ```csharp
 builder.Services.AddInertia(options =>
 {
@@ -241,7 +241,7 @@ This configures **ASP.NET Core** to use Inertia and serve the Vite-built assets 
 
 ---
 
-### 11. **Creating `App.cshtml`**
+## 11. **Creating `App.cshtml`**
 ```html
 <!DOCTYPE html>
 <html>
@@ -270,7 +270,7 @@ This file acts as the main HTML template for your Inertia.js application, integr
 
 ---
 
-### 12. **Adding the Contoller and Action**
+## 12. **Adding the Contoller and Action**
 ```csharp
 public class HomeController : Controller
 {
@@ -288,7 +288,7 @@ This controller action serves as the entry point for the Inertia.js application,
 
 ---
 
-### 13. **Running the Application**
+## 13. **Running the Application**
 
 we need to run the backend and frontend separately. To run the backend, use the following command:
 ```bash
@@ -304,6 +304,6 @@ This will start the Vite development server and compile your React app. You can 
 
 ---
 
-### Conclusion
+## Conclusion
 
 By combining the power of ABP Framework, Inertia.js, React, and Vite, you can build modern web applications that leverage server-side rendering, dynamic frontend components, and efficient development workflows. This stack provides a robust foundation for creating feature-rich applications with a seamless user experience. Whether you’re building a new project or enhancing an existing one, this tech stack offers flexibility, performance, and scalability to meet your development needs. I'm exploring this stack for my next project and I have found it to be a great combination for building web applications with ABP Framework. Give it a try and see how it can enhance your development process!
