@@ -188,13 +188,31 @@ dotnet add package AspNetCore.InertiaCore
 
 ### 9. **Updating `.csproj` File**
 ```xml
+<!-- Add this as a part of the  PropertyGroup-->
 <SpaRoot>ClientApp\</SpaRoot>
 <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
-...
+<!--End of PropertyGroup-->
+
+<Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+    <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build" />
+
+    <!-- Include the newly-built files in the publish output -->
+    <ItemGroup>
+      <DistFiles Include="$(SpaRoot)build\**" />
+      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+        <RelativePath>wwwroot\%(RecursiveDir)%(FileName)%(Extension)</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+</Target>
 ```
 - **Explanation**:
   - `SpaRoot`: Defines the root directory for the frontend app (in this case, `ClientApp`).
   - `DefaultItemExcludes`: Ensures that the `node_modules` folder is not included in the build or publish process, as it's not needed.
+  - `PublishRunWebpack`: A custom target that runs the `npm install` and `npm run build` commands to build the frontend assets during the publish process.
 
 This setup ensures the ABP project is configured to include the frontend files during the build and publish processes.
 
