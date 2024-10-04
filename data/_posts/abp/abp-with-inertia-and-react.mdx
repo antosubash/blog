@@ -15,6 +15,14 @@ tags:
 
 <TOCInline toc={props.toc} asDisclosure />
 
+## Why ABP with Inertia.js, React, and Vite?
+
+Most of the ABP UI are built using traditional server-side rendering with Razor Pages or MVC. Most of the new things also uses Blazor and all these play well with each other. But for me it has always been a challenge to customize the UI and make it part of our design system. Most of my frontend is built using React and I wanted to use the same for my ABP Application. I can easily convert Figma designs into React components and the react ecosystem is vast and I can easily find components that I can use in my application. There is also a Lots of AI based tools that can help me in building the frontend faster. This was my main motivation to find a way to put React in ABP. Inertia.js is a great way to do that. It allows me to use React components in my ABP application without having to build an API. Vite is a great build tool that can help me in building the frontend faster and it has a great hot module replacement that can help me in building the frontend faster. This stack is a great combination for building web applications with ABP Framework.
+
+---
+
+if you are new to any of these technologies, here is a brief overview of each:
+
 ## ABP Framework
 
 The ABP framework is a robust, open-source framework built on ASP.NET Core. It’s designed to help developers create modern web applications with features like modularity, multi-tenancy, domain-driven design (DDD), and various pre-built functionalities such as identity management, audit logging, and localization. ABP offers templates to build layered and microservice-based architectures while integrating with common frontend frameworks like Angular or Blazor, which provides flexibility for building full-stack applications efficiently. It also supports multiple database providers and deployment options, making it suitable for a wide range of projects. you can find more information about ABP [here](https://abp.io/).
@@ -30,6 +38,8 @@ React is a popular JavaScript library for building user interfaces, especially f
 ## Vite
 
 Vite is a fast, modern build tool and development server for frontend projects, especially with frameworks like React, Vue, and Svelte. It provides a better alternative to traditional bundlers like Webpack by offering near-instant hot module replacement (HMR) during development, making it much faster to start a project and get immediate feedback. Vite also simplifies the process of building for production by focusing on ES modules and targeting modern browsers. It has a very lightweight configuration, which makes it easy to integrate into existing projects like those using Inertia.js and React. Vite is a great choice for developers who value speed and simplicity in their frontend workflow. you can find more information about Vite [here](https://vitejs.dev/).
+
+---
 
 ## Working code
 
