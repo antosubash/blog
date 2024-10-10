@@ -33,3 +33,7 @@ input:-webkit-autofill:focus {
 .katex-display {
   overflow: auto hidden;
 }
+
+lite-youtube {
+  max-width: 100% !important;
+}
