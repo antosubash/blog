@@ -2,7 +2,7 @@
 title: 'ABP-Powered Web App with Inertia.js, React, and Vite'
 excerpt: 'Building a web application with ABP Framework, Inertia.js, React, and Vite.'
 date: '2024-10-03T12:54:31.904Z'
-videoId: 
+videoId: AVxHrWtHzSw
 tags:
   - react
   - abp
@@ -45,11 +45,12 @@ Vite is a fast, modern build tool and development server for frontend projects, 
 
 You can find the working code for this tutorial [here](https://github.com/antosubash/abp-inertiajs-react) on GitHub. Feel free to explore the code and use it as a reference for your projects. if you have any questions or feedback, please file an issue on the repository. I'm happy to help you with your queries. if you like the code, please give it a star on GitHub.
 
-
 ## 1. **Creating the ABP Project**
+
 ```bash
 abp new InertiaDemo -t app-nolayers -dbms SQLite --theme leptonx-lite -csf
 ```
+
 - **Command Breakdown**:
   - `abp new InertiaDemo`: This initializes a new ABP project named `InertiaDemo`.
   - `-t app-nolayers`: This specifies the template type for the project. The `app-nolayers` template is a lightweight template without layered architecture, ideal for smaller or simpler applications.
@@ -62,11 +63,13 @@ This command sets up a minimal ABP application with SQLite and the LeptonX theme
 ---
 
 ## 2. **Creating the Client-Side Application**
+
 ```bash
 mkdir ClientApp
 cd ClientApp
 npm create vite@latest .
 ```
+
 - **Command Breakdown**:
   - `mkdir ClientApp`: Creates a directory named `ClientApp`, where your frontend project will reside.
   - `cd ClientApp`: Changes the current directory to the newly created `ClientApp` folder.
@@ -75,9 +78,11 @@ npm create vite@latest .
 ---
 
 ## 3. **Installing Inertia.js and Laravel Vite Plugin**
+
 ```bash
 npm add -D laravel-vite-plugin @inertiajs/react @types/node
 ```
+
 - **Command Breakdown**:
   - `laravel-vite-plugin`: This plugin is used to integrate Vite with backend frameworks like Laravel or ASP.NET.
   - `@inertiajs/react`: This is the **React adapter** for Inertia.js, allowing you to build Inertia.js apps using React.
@@ -88,14 +93,17 @@ This installs the required dependencies for Inertia.js and Vite to communicate a
 ---
 
 ## 4. **Creating the `.env` File**
+
 ```env
 APP_URL=https://localhost:44374
 ```
+
 - **Purpose**: The `.env` file is used to store environment variables for the project. In this case, `APP_URL` points to the development server for your backend, which runs on `https://localhost:44374`. This URL is used by Vite to correctly link your frontend and backend during development.
 
 ---
 
 ## 5. **Updating the `App.tsx` File**
+
 ```typescript
 import { createRoot } from "react-dom/client";
 import { createInertiaApp } from "@inertiajs/react";
@@ -112,6 +120,7 @@ createInertiaApp({
   },
 });
 ```
+
 - **Explanation**:
   - `createInertiaApp`: This is the primary method used to initialize an Inertia.js application. It renders the components for different pages.
   - `resolvePageComponent`: This helper function dynamically resolves page components based on the requested page name. This leverages Vite's `import.meta.glob`, which efficiently imports all components from the `Pages` folder.
@@ -123,6 +132,7 @@ This sets up the root of your Inertia.js React app and ties the frontend to your
 ---
 
 ## 6. **Creating the `Index.tsx` Page**
+
 ```typescript
 import { Head } from "@inertiajs/react";
 
@@ -140,6 +150,7 @@ export default function Index(props: { name: string }) {
   );
 }
 ```
+
 - **Explanation**:
   - `Head`: Inertia’s component for managing the document `<head>`. It dynamically updates the page’s title and meta tags.
   - `props`: The data passed from the backend to the frontend, which is used to render the page’s content. In this case, `props.name` is being displayed on the page.
@@ -149,20 +160,21 @@ This file defines a simple **React** component rendered on the homepage, with se
 ---
 
 ## 7. **Vite Configuration**
-```typescript
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import laravel from "laravel-vite-plugin";
-import path from "path";
-import { mkdirSync } from "fs";
 
-const outDir = "../wwwroot/build";
-mkdirSync(outDir, { recursive: true });
+```typescript
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import laravel from 'laravel-vite-plugin'
+import path from 'path'
+import { mkdirSync } from 'fs'
+
+const outDir = '../wwwroot/build'
+mkdirSync(outDir, { recursive: true })
 
 export default defineConfig({
   plugins: [
     laravel({
-      input: ["src/App.tsx"],
+      input: ['src/App.tsx'],
       publicDirectory: outDir,
       refresh: true,
     }),
@@ -170,15 +182,16 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "src"),
+      '@': path.resolve(__dirname, 'src'),
     },
   },
   build: {
     outDir,
     emptyOutDir: true,
   },
-});
+})
 ```
+
 - **Explanation**:
   - `laravel-vite-plugin`: This plugin helps integrate Vite with your backend. It ensures Vite's output is placed in the correct public folder (e.g., `wwwroot/build`) for serving in production.
   - `input: ["src/App.tsx"]`: Specifies the entry point for the Vite build process.
@@ -189,14 +202,17 @@ This configuration file sets up Vite to build the frontend and places the build 
 ---
 
 ## 8. **Inertia Setup in ABP Backend**
+
 ```bash
 dotnet add package AspNetCore.InertiaCore
 ```
+
 - **Explanation**: This command adds the **InertiaCore** NuGet package, which provides helpers and middleware to integrate Inertia.js into the **ASP.NET Core** pipeline.
 
 ---
 
 ## 9. **Updating `.csproj` File**
+
 ```xml
 <!-- Add this as a part of the  PropertyGroup-->
 <SpaRoot>ClientApp\</SpaRoot>
@@ -219,6 +235,7 @@ dotnet add package AspNetCore.InertiaCore
     </ItemGroup>
 </Target>
 ```
+
 - **Explanation**:
   - `SpaRoot`: Defines the root directory for the frontend app (in this case, `ClientApp`).
   - `DefaultItemExcludes`: Ensures that the `node_modules` folder is not included in the build or publish process, as it's not needed.
@@ -229,6 +246,7 @@ This setup ensures the ABP project is configured to include the frontend files d
 ---
 
 ## 10. **Program.cs Configuration**
+
 ```csharp
 builder.Services.AddInertia(options =>
 {
@@ -243,6 +261,7 @@ builder.Services.AddViteHelper(options =>
 
 app.UseInertia();
 ```
+
 - **Explanation**:
   - `AddInertia`: Registers Inertia.js in the service container and specifies the root view for Inertia (in this case, `App.cshtml`).
   - `AddViteHelper`: Adds support for serving Vite assets and ensures the correct directories and manifest file are used.
@@ -252,35 +271,36 @@ This configures **ASP.NET Core** to use Inertia and serve the Vite-built assets 
 ---
 
 ## 11. **Creating `App.cshtml`**
+
 ```html
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
+  <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title inertia>My App</title>
-</head>
-<body>
-    @Vite.ReactRefresh()
-    @await Inertia.Html(Model)
-    @Vite.Input("src/App.tsx")
-</body>
+  </head>
+  <body>
+    @Vite.ReactRefresh() @await Inertia.Html(Model) @Vite.Input("src/App.tsx")
+  </body>
 </html>
 ```
+
 - **Explanation**:
   - `@Vite.ReactRefresh()`: Enables React Fast Refresh for hot reloading during development.
   - `@await Inertia.Html(Model)`: Renders the Inertia page component, using the `Model` passed from the server.
   - `@Vite.Input
 
 ```html
-    @Vite.Input("src/App.tsx")`: Loads the main entry point of your React app (`App.tsx`).
-``` 
+@Vite.Input("src/App.tsx")`: Loads the main entry point of your React app (`App.tsx`).
+```
 
 This file acts as the main HTML template for your Inertia.js application, integrating the React app with Vite’s asset management. It sets up the necessary elements to serve your page and handles dynamic content via Inertia.
 
 ---
 
 ## 12. **Adding the Contoller and Action**
+
 ```csharp
 public class HomeController : Controller
 {
@@ -301,11 +321,13 @@ This controller action serves as the entry point for the Inertia.js application,
 ## 13. **Running the Application**
 
 we need to run the backend and frontend separately. To run the backend, use the following command:
+
 ```bash
 dotnet run
 ```
 
 To run the frontend, you should navigate to the `ClientApp` directory and run the following command:
+
 ```bash
 npm run dev
 ```
