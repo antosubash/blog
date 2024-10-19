@@ -1,5 +1,5 @@
 ---
-title: 'Ollama with Semantic Kernel Connector with C#'
+title: 'Ollama Semantic Kernel Connector With C#: Console App & API Guide'
 excerpt: 'In this post, we will learn how to use the Ollama Semantic Kernel Connector with C#.'
 date: '2024-10-19'
 videoId:
@@ -16,69 +16,79 @@ tags:
 
 <TOCInline toc={props.toc} asDisclosure />
 
-## Introduction
+# Integrating Ollama Semantic Kernel Connector with C#: Console App & Minimal API
 
-In this post, we’ll explore how to use the Ollama Semantic Kernel Connector with C#. We will cover two different implementations: a Console Application and a Minimal API using ASP.NET Core. With the official integration of OllamaSharp by the Semantic Kernel team, developers can now easily connect with Ollama to build AI-driven conversational solutions.
+In this post, we'll explore how to integrate the **Ollama Semantic Kernel Connector** with **C#**, demonstrating two practical implementations: a **Console Application** and a **Minimal API** using **ASP.NET Core**. With the release of **OllamaSharp** by the **Semantic Kernel** team, developers can easily integrate large language models (LLMs) into their applications for building AI-driven conversational solutions.
 
-> SemanticKernel connector for Ollama is currently in alpha stage. It is not recommended to use it in production.
+> ⚠️ **Note**: The Ollama Semantic Kernel Connector is currently in alpha. It’s not recommended for production use yet.
 
 ## Prerequisites
 
-Before we start, make sure you have the following installed on your machine:
+Before we get started, ensure you have the following installed on your machine:
 
-- [Ollama](https://ollama.com)
-- [dotnet](https://dotnet.microsoft.com/download)
+- [**Ollama**](https://ollama.com) – A platform for interacting with various open-source LLMs.
+- [**.NET SDK**](https://dotnet.microsoft.com/download) – To build and run the C# applications.
 
 ## What is Ollama?
 
-Ollama helps you to get up and running with the Open sourced LLM (Large Language Model) like Llama, Mistral, Gemma and more. It provides a simple and easy to use interface to interact with the LLM. It also provides a Open AI like API to interact with the LLM. Ollama has sdk for python and javascript. you can find more about Ollama [here](https://ollama.com)
+Ollama simplifies interactions with **open-source large language models** (LLMs) like Llama, Mistral, and Gemma. It provides a user-friendly interface and an OpenAI-like API, making it easy to integrate LLMs into your applications. Ollama supports SDKs for multiple languages such as Python and JavaScript. You can learn more about Ollama [here](https://ollama.com).
 
 ## What is Semantic Kernel?
 
-Semantic Kernel is an SDK that integrates Large Language Models (LLMs) like OpenAI, Azure OpenAI, and Hugging Face with conventional programming languages like C#, Python, and Java. Semantic Kernel achieves this by allowing you to define plugins that can be chained together in just a few lines of code. You can find more about Semantic Kernel [here](https://github.com/microsoft/semantic-kernel)
+**Semantic Kernel (SK)** is an SDK that bridges the gap between traditional programming languages (like C#, Python, and Java) and powerful **LLMs** from platforms like **OpenAI**, **Azure OpenAI**, and **Hugging Face**. With Semantic Kernel, developers can define and chain plugins, enabling them to integrate advanced AI capabilities into their apps with just a few lines of code. More details about Semantic Kernel can be found [here](https://github.com/microsoft/semantic-kernel).
 
-## Why Ollama and Semantic Kernel?
+## Why Combine Ollama and Semantic Kernel?
 
-Ollama running on your machine and help you to interact with multiple LLMs with ease. Semantic Kernel helps you to integrate LLMs with your conventional programming languages like C#, Python, and Java. With Ollama and Semantic Kernel, you can easily interact with LLMs and build powerful applications. Semantic Kernel official connector for Ollama will be released soon. Stay tuned for more updates.
+By running **Ollama** locally, you can seamlessly interact with a variety of LLMs, while **Semantic Kernel** simplifies the integration of these LLMs into traditional programming environments. Together, these tools enable you to build powerful AI applications that interact with LLMs in real-time. As the official Semantic Kernel connector for Ollama is still in alpha, expect even more streamlined integrations soon.
+
+---
 
 ## Building a Console Application with Ollama Semantic Kernel Connector
 
-First, lets create a new C# console application.
+### Step 1: Create a New Console Application
+
+First, create a new C# console application:
 
 ```bash
 dotnet new console -n OllamaSemanticKernelConnector
 cd OllamaSemanticKernelConnector
 ```
 
-Next, lets add the SemanticKernel and SemanticKernel connector packages to our project.
+### Step 2: Add the Required NuGet Packages
+
+Next, install the **Semantic Kernel** and **Ollama connector** packages:
 
 ```bash
 dotnet add package Microsoft.SemanticKernel --version 1.24.1
 dotnet add package Microsoft.SemanticKernel.Connectors.Ollama --version 1.24.1-alpha
 ```
 
-Now, lets remove the alpha warning from our project. you need to add this in your `.csproj` file.
+> **Note**: The version numbers may vary. I have pinned them to the latest version at the time of writing.
+
+### Step 3: Remove the Alpha Warning
+
+Since the connector is in alpha, you'll need to suppress the alpha warnings. Add the following line to your `.csproj` file:
 
 ```xml
 <NoWarn>SKEXP0070</NoWarn>
 ```
 
-Now, lets update the `Program.cs` file with the following code.
+### Step 4: Update the `Program.cs` File
+
+Now, let’s update the `Program.cs` file with the code to build a simple chatbot using Ollama and Semantic Kernel.
 
 ```csharp
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 
 var builder = Kernel.CreateBuilder();
-
 builder.AddOllamaChatCompletion("llama3.1:latest", new Uri("http://localhost:11434"));
 
 var kernel = builder.Build();
-
 var chatService = kernel.GetRequiredService<IChatCompletionService>();
 
 var history = new ChatHistory();
-history.AddSystemMessage("You are help full assistant that will help you with your questions.");
+history.AddSystemMessage("You are a helpful assistant.");
 
 while (true)
 {
@@ -100,49 +110,68 @@ while (true)
 }
 ```
 
-Now, lets run the application.
+### Step 5: Run the Application
+
+Now, you can run the application and interact with the LLM through the console:
 
 ```bash
 dotnet run
 ```
 
-Now, you can interact with the LLM using the console application. You can ask questions and get responses from the LLM.
+You can ask questions in the console, and the LLM will respond. The system keeps track of the conversation history to provide context in responses.
+
+---
 
 ## Building a Minimal API with Ollama Semantic Kernel Connector
 
-In this part, we will take the integration of the Ollama Semantic Kernel Connector further by building a Minimal API. This API will allow us to interact with Ollama through HTTP endpoints, making it easy to create web-based chatbot services.
+In this section, we’ll create a **Minimal API** that interacts with the Ollama Semantic Kernel Connector. This API will expose an HTTP endpoint where users can send a message and receive responses from the LLM.
 
-First, lets create a new C# minimal API.
+### Step 1: Create a New Minimal API Project
+
+To start, create a new **Minimal API** project using .NET:
 
 ```bash
 dotnet new web -n OllamaSemanticKernelConnectorAPI
 cd OllamaSemanticKernelConnectorAPI
 ```
 
-Next, lets add the SemanticKernel and SemanticKernel connector packages to our project.
+### Step 2: Add the Required NuGet Packages
+
+Add the same Semantic Kernel and Ollama connector packages to your API project:
 
 ```bash
 dotnet add package Microsoft.SemanticKernel --version 1.24.1
 dotnet add package Microsoft.SemanticKernel.Connectors.Ollama --version 1.24.1-alpha
 ```
 
-Now, lets remove the alpha warning from our project. you need to add this in your `.csproj` file.
+> **Note**: The version numbers may vary. I have pinned them to the latest version at the time of writing.
+
+### Step 3: Remove the Alpha Warning
+
+Just as with the console application, you need to suppress the alpha warning:
 
 ```xml
 <NoWarn>SKEXP0070</NoWarn>
 ```
 
-Now, lets update the `Program.cs` file with the following code.
+### Step 4: Update the `Program.cs` File
+
+Here’s the updated `Program.cs` file for creating a simple chat API:
 
 ```csharp
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOllamaChatCompletion("llama3.1:latest", new Uri("http://localhost:11434"));
+
 var app = builder.Build();
+
 var history = new ChatHistory();
-history.AddSystemMessage("You are help full assistant that will help you with your questions.");
+history.AddSystemMessage("You are a helpful assistant.");
+
 app.MapGet("/", () => "Hello World!");
+
 app.MapPost("/chat", async (ChatRequest chatRequest, IChatCompletionService chatCompletionService) =>
 {
     history.AddUserMessage(chatRequest.Message);
@@ -150,6 +179,7 @@ app.MapPost("/chat", async (ChatRequest chatRequest, IChatCompletionService chat
     history.AddMessage(response.Role, response.Content ?? string.Empty);
     return response.Content;
 });
+
 app.Run();
 
 public class ChatRequest
@@ -158,15 +188,19 @@ public class ChatRequest
 }
 ```
 
-Now, lets run the application.
+### Step 5: Run the API
+
+Run the Minimal API project:
 
 ```bash
 dotnet run
 ```
 
-Now, you can interact with the LLM using the minimal API. You can send a POST request to the `/chat` endpoint with the message in the body to get the response from the LLM.
+The API is now running, and you can interact with it via HTTP requests. For example, you can send a POST request to the `/chat` endpoint to get responses from the LLM.
 
-Lets test the API using the HTTP request.
+### Example API Request
+
+Here’s an example of how to test the API using an HTTP POST request:
 
 ```bash
 POST http://localhost:5119/chat
@@ -177,8 +211,12 @@ Content-Type: application/json
 }
 ```
 
-You will get the response from the LLM in the response body.
+The LLM will respond with an appropriate answer.
+
+---
 
 ## Conclusion
 
-In this post, we learned how to use the Ollama Semantic Kernel Connector with C#. We built a Console Application and a Minimal API using ASP.NET Core to interact with the LLM. With the official integration of OllamaSharp by the Semantic Kernel team, developers can now easily connect with Ollama to build AI-driven conversational solutions. Stay tuned for more updates on the official release of the Ollama connector for Semantic Kernel. if you have any questions, feel free to ask in the comments below.
+In this post, we explored how to integrate the **Ollama Semantic Kernel Connector** with **C#** through both a **Console Application** and a **Minimal API**. With the help of **OllamaSharp** and **Semantic Kernel**, developers can now leverage powerful LLMs to build conversational AI applications easily. While the Ollama connector is still in alpha, it offers a promising glimpse into the future of AI development.
+
+Stay tuned for the official release, and feel free to ask questions in the comments section below!
