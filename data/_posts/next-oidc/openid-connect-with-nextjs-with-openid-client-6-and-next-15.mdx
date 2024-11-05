@@ -1,0 +1,493 @@
+---
+title: 'OpenID Connect with Next.js 15 and openid-client 6'
+excerpt: 'A guide to implementing secure authentication using OpenID Connect in Next.js 15 with the openid-client library version 6'
+date: '2024-11-05'
+videoId:
+tags:
+  - nextjs
+  - auth
+  - oidc
+  - openid-connect
+  - iron-session
+  - openid-client
+  - openid
+  - security
+---
+
+<YoutubeVideo videoId={props.videoId} />
+
+<TOCInline toc={props.toc} asDisclosure />
+
+## Introduction
+
+This guide demonstrates how to implement secure authentication using OpenID Connect in Next.js 15 with the `openid-client` library version 6. We'll use `iron-session` for secure token storage in cookies and implement PKCE (Proof Key for Code Exchange) for enhanced security.
+
+## Prerequisites
+
+- Node.js 18 or later
+- Basic understanding of Next.js and authentication concepts
+- An OpenID Connect provider (we'll use ABP template as an example)
+
+## Project Setup
+
+First, create a new Next.js application and install the required dependencies:
+
+```bash
+npx create-next-app@latest next-oidc-sample
+```
+
+Next, lets install the required libraries
+
+```bash
+npm install openid-client iron-session
+```
+
+lets create some files
+
+```bash
+new-item -f src/app/auth/login/route.ts
+new-item -f src/app/auth/logout/route.ts
+new-item -f src/app/auth/openiddict/route.ts
+new-item -f src/app/session/route.ts
+new-item -f src/components/Login.tsx
+new-item -f src/hooks/useSession.ts
+new-item src/lib.ts
+new-item src/.env
+```
+
+These are the files we will be creating. I have used the `new-item` command to create the files. You can use any editor to create the files.
+
+## Security Considerations
+
+Before we dive into the implementation, let's review important security aspects:
+
+1. **PKCE Flow**: We implement PKCE to prevent authorization code interception attacks
+2. **Secure Session Storage**: Using iron-session for encrypted cookie storage
+3. **State Parameter**: Preventing CSRF attacks with state verification
+4. **Token Storage**: Securely storing tokens in encrypted cookies instead of localStorage
+
+## Implementation
+
+### 1. Environment Configuration
+
+Create a `.env` file with your OIDC configuration:
+
+```bash
+NEXT_PUBLIC_API_URL=https://abp.antosubash.com
+NEXT_PUBLIC_CLIENT_ID=AbpReact_Next_App
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_SCOPE='openid profile email AbpTemplate offline_access'
+```
+
+In the above code, I'm using the ABP template as my OpenID Connect server. You can use any OpenID Connect server.
+
+### 2. Core Authentication Logic
+
+The authentication flow consists of three main parts:
+
+- Login initiation with PKCE
+- Callback handling
+- Session management
+
+### Core Library Configuration (lib.ts)
+
+The `lib.ts` file serves as our configuration hub. Here's what each part does:
+
+1. `clientConfig`: Contains all OIDC-related configuration including:
+
+   - URLs for authentication endpoints
+   - Client credentials
+   - PKCE settings
+   - Redirect URIs
+
+2. `SessionData` interface: Defines the structure of our session data:
+   - `isLoggedIn`: Current authentication status
+   - `access_token`: The JWT token for API calls
+   - `code_verifier`: PKCE verification code
+   - `state`: Anti-CSRF token
+   - `userInfo`: Cached user information
+
+Now lets create `lib.ts` file
+
+```ts
+import { IronSession, SessionOptions, getIronSession } from 'iron-session'
+import { cookies } from 'next/headers'
+import * as client from 'openid-client'
+
+export const clientConfig = {
+  url: process.env.NEXT_PUBLIC_API_URL,
+  audience: process.env.NEXT_PUBLIC_API_URL,
+  client_id: process.env.NEXT_PUBLIC_CLIENT_ID,
+  scope: process.env.NEXT_PUBLIC_SCOPE,
+  redirect_uri: `${process.env.NEXT_PUBLIC_APP_URL}/auth/openiddict`,
+  post_logout_redirect_uri: `${process.env.NEXT_PUBLIC_APP_URL}`,
+  response_type: 'code',
+  grant_type: 'authorization_code',
+  post_login_route: `${process.env.NEXT_PUBLIC_APP_URL}`,
+  code_challenge_method: 'S256',
+}
+
+export interface SessionData {
+  isLoggedIn: boolean
+  access_token?: string
+  code_verifier?: string
+  state?: string
+  userInfo?: {
+    sub: string
+    name: string
+    email: string
+    email_verified: boolean
+  }
+}
+
+export const defaultSession: SessionData = {
+  isLoggedIn: false,
+  access_token: undefined,
+  code_verifier: undefined,
+  state: undefined,
+  userInfo: undefined,
+}
+
+export const sessionOptions: SessionOptions = {
+  password: 'complex_password_at_least_32_characters_long',
+  cookieName: 'next_js_session',
+  cookieOptions: {
+    // secure only works in `https` environments
+    // if your localhost is not on `https`, then use: `secure: process.env.NODE_ENV === "production"`
+    secure: process.env.NODE_ENV === 'production',
+  },
+  ttl: 60 * 60 * 24 * 7, // 1 week
+}
+
+export async function getSession(): Promise<IronSession<SessionData>> {
+  const cookiesList = await cookies()
+  let session = await getIronSession<SessionData>(cookiesList, sessionOptions)
+  if (!session.isLoggedIn) {
+    session.access_token = defaultSession.access_token
+    session.userInfo = defaultSession.userInfo
+  }
+  return session
+}
+
+export async function getClientConfig() {
+  return await client.discovery(new URL(clientConfig.url!), clientConfig.client_id!)
+}
+```
+
+### Session Management (session/route.ts)
+
+The session endpoint provides a way for client-side components to check authentication status. It:
+
+1. Retrieves the current session state
+2. Returns only necessary user information
+3. Handles error cases gracefully
+4. Never exposes sensitive tokens to the client
+
+Let's create a new file for the session endpoint `app/session/route.ts`
+
+```ts
+import { defaultSession, getSession } from '@/lib'
+
+export async function GET() {
+  try {
+    const session = await getSession()
+    if (!session) {
+      return Response.json({ defaultSession })
+    }
+    return Response.json({
+      isLoggedIn: session.isLoggedIn,
+      userInfo: session.userInfo,
+    })
+  } catch (e) {
+    return Response.json({ error: e }, { status: 500 })
+  }
+}
+```
+
+### Authentication Flow
+
+#### Login Endpoint (auth/login/route.ts)
+
+Now lets create the login endpoint `app/auth/login/route.ts`
+
+The login route implements the PKCE flow:
+
+1. Generates a random code verifier
+2. Creates a code challenge using SHA-256
+3. Stores the verifier in the session
+4. Redirects to the OIDC provider with proper parameters
+
+```ts
+import { getClientConfig, getSession, clientConfig } from '@/lib'
+import * as client from 'openid-client'
+
+export async function GET() {
+  const session = await getSession()
+  let code_verifier = client.randomPKCECodeVerifier()
+  let code_challenge = await client.calculatePKCECodeChallenge(code_verifier)
+  const openIdClientConfig = await getClientConfig()
+  let parameters: Record<string, string> = {
+    redirect_uri: clientConfig.redirect_uri,
+    scope: clientConfig.scope!,
+    code_challenge,
+    code_challenge_method: clientConfig.code_challenge_method,
+  }
+  let state!: string
+  if (!openIdClientConfig.serverMetadata().supportsPKCE()) {
+    state = client.randomState()
+    parameters.state = state
+  }
+  let redirectTo = client.buildAuthorizationUrl(openIdClientConfig, parameters)
+  session.code_verifier = code_verifier
+  session.state = state
+  await session.save()
+  return Response.redirect(redirectTo.href)
+}
+```
+
+This file contains the login endpoint. This endpoint will redirect the user to the OpenID Connect server. The OpenID Connect server will authenticate the user and redirect the user back to the callback endpoint.
+
+#### Logout Endpoint (auth/logout/route.ts)
+
+The logout process:
+
+1. Builds the end session URL
+2. Clears all session data
+3. Redirects to the OIDC provider's logout endpoint
+4. Handles token revocation if supported
+
+Now lets create the callback endpoint `app/auth/logout/route.ts`
+
+```ts
+import { defaultSession, getClientConfig, getSession, clientConfig } from '@/lib'
+import * as client from 'openid-client'
+
+export async function GET() {
+  const session = await getSession()
+  const openIdClientConfig = await getClientConfig()
+  const endSessionUrl = client.buildEndSessionUrl(openIdClientConfig, {
+    post_logout_redirect_uri: clientConfig.post_logout_redirect_uri,
+    id_token_hint: session.access_token!,
+  })
+  session.isLoggedIn = defaultSession.isLoggedIn
+  session.access_token = defaultSession.access_token
+  session.userInfo = defaultSession.userInfo
+  session.code_verifier = defaultSession.code_verifier
+  session.state = defaultSession.state
+  await session.save()
+  return Response.redirect(endSessionUrl.href)
+}
+```
+
+This file contains the logout endpoint. This endpoint will redirect the user to the OpenID Connect server to logout the user. The OpenID Connect server will clear the session and redirect the user back to the callback endpoint.
+
+#### Callback Endpoint (auth/openiddict/route.ts)
+
+This is the most important part of the authentication flow. The callback endpoint:
+
+1. Validates the authentication response
+2. Exchanges the code for tokens
+3. Verifies PKCE and state parameters
+4. Fetches user information
+5. Establishes the session
+
+Now lets create the callback endpoint `app/auth/openiddict/route.ts`
+
+```ts
+import { getClientConfig, getSession, clientConfig } from '@/lib'
+import { headers } from 'next/headers'
+import { NextRequest } from 'next/server'
+import * as client from 'openid-client'
+export async function GET(request: NextRequest) {
+  const session = await getSession()
+  const openIdClientConfig = await getClientConfig()
+  const headerList = await headers()
+  const host = headerList.get('x-forwarded-host') || headerList.get('host') || 'localhost'
+  const protocol = headerList.get('x-forwarded-proto') || 'https'
+  const currentUrl = new URL(
+    `${protocol}://${host}${request.nextUrl.pathname}${request.nextUrl.search}`
+  )
+  const tokenSet = await client.authorizationCodeGrant(openIdClientConfig, currentUrl, {
+    pkceCodeVerifier: session.code_verifier,
+    expectedState: session.state,
+  })
+  const { access_token } = tokenSet
+  session.isLoggedIn = true
+  session.access_token = access_token
+  let claims = tokenSet.claims()!
+  const { sub } = claims
+  // call userinfo endpoint to get user info
+  const userinfo = await client.fetchUserInfo(openIdClientConfig, access_token, sub)
+  // store userinfo in session
+  session.userInfo = {
+    sub: userinfo.sub,
+    name: userinfo.given_name!,
+    email: userinfo.email!,
+    email_verified: userinfo.email_verified!,
+  }
+
+  await session.save()
+  return Response.redirect(clientConfig.post_login_route)
+}
+```
+
+This file contains the callback endpoint. This endpoint will be called by the OpenID Connect server after the user is authenticated. This endpoint will save the tokens in the session and redirect the user to the home page.
+
+### UI Components and Hooks
+
+#### Login component
+
+A simple login component that:
+
+1. Uses the useSession hook
+2. Shows loading state
+3. Toggles between login/logout buttons
+4. Handles authentication state changes
+
+Now lets create the login component `components/Login.tsx`
+
+```tsx
+'use client'
+import useSession from '@/hooks/useSession'
+
+const Login = () => {
+  const { session, loading } = useSession()
+  if (loading) {
+    return <div>Loading...</div>
+  }
+  if (session?.isLoggedIn) {
+    return (
+      <button
+        className="inline-flex h-10 items-center justify-center rounded-md bg-blue-600 px-6 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-400"
+        onClick={() => {
+          window.location.href = '/auth/logout'
+        }}
+      >
+        Logout
+      </button>
+    )
+  }
+  return (
+    <button
+      className="inline-flex h-10 items-center justify-center rounded-md bg-blue-600 px-6 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-400"
+      onClick={() => {
+        window.location.href = '/auth/login'
+      }}
+    >
+      Login
+    </button>
+  )
+}
+
+export default Login
+```
+
+#### useSession hook
+
+A custom React hook that:
+
+1. Manages session state client-side
+2. Handles loading states
+3. Provides real-time session updates
+4. Implements error handling
+
+Now lets create the useSession hook `hooks/useSession.ts`
+
+```ts
+import { SessionData } from '@/lib'
+import { useEffect, useState } from 'react'
+
+export default function useSession() {
+  const [session, setSession] = useState<SessionData | null>(null)
+  const [loading, setLoading] = useState(true)
+  useEffect(() => {
+    const fetchSession = async () => {
+      try {
+        const response = await fetch('/session')
+        if (response.ok) {
+          const session = (await response.json()) as SessionData
+          setSession(session)
+        }
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchSession()
+  }, [])
+  return { session, loading }
+}
+```
+
+This hook will fetch the session data from the server. This way we can check if the user is logged in or not. This will be used to show the login or logout status in the client components.
+
+### Putting it all together
+
+The main page demonstrates:
+
+1. Server-side session access
+2. Integration with the Login component
+3. Display of session information
+4. Proper TypeScript typing
+
+Now lets update the `app/page.tsx` file
+
+```tsx
+import Login from '@/components/Login'
+import { getSession } from '@/lib'
+
+export default async function Home() {
+  const session = await getSession()
+  return (
+    <main className="flex min-h-[100dvh] items-center justify-center bg-gray-100 px-4 dark:bg-gray-900">
+      <div className="w-full max-w-md space-y-4 text-center">
+        <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-50">
+          Welcome back
+        </h1>
+        <p className="text-gray-500 dark:text-gray-400">Sign in to your account to continue.</p>
+        <div>
+          <pre>{JSON.stringify(session, null, 2)}</pre>
+        </div>
+        <Login />
+      </div>
+    </main>
+  )
+}
+```
+
+This file will show the session data and the login component. This way we can check if the user is logged in or not.
+
+### Running the Application
+
+To run the application, use the following command:
+
+```bash
+npm run dev
+```
+
+This will start the Next.js application. You can now access the application at `http://localhost:3000`.
+
+## Testing the Implementation
+
+1. **Login**: Click the login button and authenticate with your OpenID Connect provider.
+2. **Logout**: Click the logout button to clear the session and log out.
+3. **Session**: Check the session data in the UI to verify the authentication status.
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Invalid Redirect URI**: Ensure your redirect URI matches the one configured in your OIDC provider.
+2. **Session Not Persisting**: Check your cookie settings and ensure they are correctly configured.
+3. **Large Cookies**: Cookies have a size limit of 4KB. Ensure your session data is within this limit.
+
+With this, we have implemented OpenID Connect with Next.js. This is a simple implementation. You can extend this implementation to support more features like refresh tokens, silent renew, etc. You can find the code for this post in the [github repo](https://github.com/antosubash/nextjs-oidc-sample).
+
+## Conclusion
+
+This implementation provides a secure foundation for OpenID Connect authentication in Next.js applications. Key benefits include:
+
+- PKCE support for enhanced security
+- Secure token storage using encrypted cookies
+- Type-safe implementation
+
+By following this guide, you can build secure and scalable applications with Next.js and OpenID Connect. If you have any questions or feedback, feel free to add a comment below.
