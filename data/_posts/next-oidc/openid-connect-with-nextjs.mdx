@@ -16,6 +16,10 @@ tags:
 
 <TOCInline toc={props.toc} asDisclosure />
 
+## Outdated
+
+This post is outdated. This post was written for Next.js 14 and openid-client 5.x. If you are using Next.js 14 and openid-client 5.x, you can follow this post. If you are using Next.js 15 and openid-client 6.x, you can check out the updated post [here](/posts/openid-connect-with-nextjs-with-openid-client-6-and-next-15).
+
 ## Introduction
 
 Most of the time, I use next-auth for authentication in my Next.js apps. But the problem with next-auth is that it does not support Multitenancy for self-hosted apps. If you want to know more about this you can check out the [issue](https://github.com/nextauthjs/next-auth/issues/600). So I thought it would be a good idea to write a post on how to implement OpenID Connect with Next.js. if you have only one tenant or you are hosting your app on Vercel, you can use Next-auth. But if you have multiple tenants or you are hosting your app on your own server, then you need a flexible solution where you have full control over the authentication process.
