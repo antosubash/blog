@@ -1,113 +1,278 @@
 ---
-title: '.Net OpenAPI with Scalar'
-excerpt: 'In this post we will see how to use scalar with OpenAPI in .Net'
+title: 'Modern API Documentation in .NET with Scalar and OpenAPI'
+excerpt: 'Learn how to implement beautiful API documentation using Scalar and OpenAPI in .NET 9.0'
 date: '2025-01-15'
 videoId:
 tags:
   - dotnet
   - openapi
   - scalar
-  - httpclient
+  - api-documentation
+  - aspnetcore
 ---
 
 ## Introduction
 
-There were some changes in the OpenAPI document generation in .Net 9.0. In this post we will see how to use the new OpenAPI document generation package and how to use scalar with OpenAPI instead swashbuckle.
+.NET 9.0 introduces significant improvements to API documentation with first-class support for OpenAPI. This post will guide you through creating beautiful, interactive API documentation that developers will love to use.
 
-### **Why use OpenAPI?**
+## Understanding OpenAPI and Scalar
 
-- **API Documentation**: Generate interactive API documentation
-- **Client SDKs**: Automatically generate client SDKs for your API
-- **Mock Servers**: Create mock servers for testing
-- **API Testing**: Test your API endpoints
+### What is Scalar?
 
-## Setting Up OpenAPI Document Generation
+Scalar is a modern API documentation tool that replaces Swashbuckle. It provides:
 
-First, lets create a new .Net 9.0 project.
+- 🎨 Modern, responsive UI
+- 🚀 Better performance
+- 📱 Mobile-friendly interface
+- 🔍 Enhanced search capabilities
+- 🎭 Dark/light theme support
+
+you can find more info about Scalar [here](https://github.com/scalar/scalar).
+
+### Why Choose OpenAPI with Scalar?
+
+- **Developer Experience**: Interactive documentation with try-it-now functionality
+- **Code Generation**: Automatic client SDK generation
+- **Testing**: Built-in request builder and mock servers
+- **Standards**: Industry-standard API specification format
+
+## Implementation Guide
+
+### 1. Project Setup
+
+Create a new .NET 9.0 project:
 
 ```bash
-dotnet new webapi -n OpenApiWithScalar
-cd OpenApiWithScalar
+dotnet new web -n ModernApiDocs
+cd ModernApiDocs
 ```
 
-Next, add the OpenAPI document generation package:
+Install required packages:
 
 ```bash
 dotnet add package Microsoft.AspNetCore.OpenApi
 dotnet add package Scalar.AspNetCore
 ```
 
-Add the following code to `Program.cs`:
+### 2. Basic Configuration
+
+Add this to your `Program.cs`:
 
 ```csharp
 using Scalar.AspNetCore;
+using Microsoft.OpenApi.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
- builder.Services.AddOpenApi(opt =>
+// Configure OpenAPI
+builder.Services.AddOpenApi(options =>
+{
+    options.AddDocumentTransformer((document, context, _) =>
     {
-        opt.AddDocumentTransformer(
-            (document, context, cancellationToken) =>
+        document.Info = new()
+        {
+            Title = "Product Catalog API",
+            Version = "v1",
+            Description = """
+                Modern API for managing product catalogs.
+                Supports JSON and XML responses.
+                Rate limited to 1000 requests per hour.
+                """,
+            Contact = new()
             {
-                document.Info = new()
-                {
-                    Title = "This is a test API",
-                    Version = "v1",
-                    Description = "API for testing OpenAPI document generation",
-                    Contact = new() { Name = "Anto Subash" },
-                };
-                return Task.CompletedTask;
+                Name = "API Support",
+                Email = "api@example.com",
+                Url = new Uri("https://api.example.com/support")
             }
-        );
-
+        };
+        return Task.CompletedTask;
     });
+});
 
 var app = builder.Build();
 
+// Enable OpenAPI and Scalar
 app.MapOpenApi().CacheOutput();
+app.MapScalarApiReference();
 
- app.MapScalarApiReference();
-
-app.MapGet("/", () => Results.Redirect("/scalar/v1")).ExcludeFromDescription();
-
-app.MapGet("/test", () => "Hello World")
-    .Produces<string>(200)
-    .WithName("This is a test endpoint")
-    .WithSummary("This is a test endpoint to test the OpenAPI document generation")
-    .WithDescription("This is a test endpoint to test the OpenAPI document generation")
+// Redirect root to Scalar UI
+app.MapGet("/", () => Results.Redirect("/scalar/v1"))
+   .ExcludeFromDescription();
 
 app.Run();
 ```
 
-This code sets up the OpenAPI document generation and adds a test endpoint. The `MapOpenApi().CacheOutput()` method caches the OpenAPI document to improve performance. The `MapScalarApiReference()` method generates the Scalar API reference.
+### 3. Sample API Endpoints
 
-Run the application:
+Here's a practical example with a product catalog API:
+
+```csharp
+// Product model
+public record Product(int Id, string Name, decimal Price);
+
+app.MapGet("/products", (int? pageSize, int? page) =>
+{
+    var products = GetProducts(pageSize ?? 10, page ?? 1);
+    return Results.Ok(products);
+})
+.Produces<List<Product>>(200)
+.Produces(400)
+.WithName("GetProducts")
+.WithTags("Products")
+.WithSummary("Retrieve a list of products")
+.WithDescription("""
+    Returns a paginated list of products.
+    Default page size is 10.
+    Use page parameter for pagination.
+    """);
+
+app.MapPost("/products", (Product product) =>
+{
+    // Add product logic here
+    return Results.Created($"/products/{product.Id}", product);
+})
+.Produces<Product>(201)
+.Produces(400)
+.WithName("CreateProduct")
+.WithTags("Products")
+.WithSummary("Create a new product")
+.WithDescription("Add a new product to the catalog.");
+```
+
+## Advanced Features
+
+### Custom Response Examples
+
+```csharp
+app.MapGet("/products/{id}", (int id) =>
+{
+    var product = GetProduct(id);
+    return product is null ? Results.NotFound() : Results.Ok(product);
+})
+.Produces<Product>(200)
+.Produces(404)
+.WithOpenApi(operation => {
+    operation.Responses["200"].Content["application/json"].Example =
+        new Product(1, "Sample Product", 29.99m);
+    return operation;
+});
+```
+
+### Authentication Configuration
+
+For JWT auth with OpenAPI, you need the JWT bearer package:
+
+```bash
+dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer
+```
+
+Update your `Program.cs`:
+
+```csharp
+builder
+        .Services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options =>
+        {
+            options.Authority = builder.Configuration["Jwt:Authority"];
+            options.Audience = builder.Configuration["Jwt:Audience"];
+            options.RequireHttpsMetadata = true;
+            options.TokenValidationParameters =
+                new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = builder.Configuration["Jwt:Authority"],
+                };
+        });
+
+
+builder.Services.AddOpenApi(opt =>
+{
+    opt.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
+});
+
+
+// Placeholder for missing code snippets
+
+
+// Add authentication middleware
+app.UseAuthentication();
+app.UseAuthorization();
+
+internal sealed class BearerSecuritySchemeTransformer(
+    IAuthenticationSchemeProvider authenticationSchemeProvider
+) : IOpenApiDocumentTransformer
+{
+    public async Task TransformAsync(
+        OpenApiDocument document,
+        OpenApiDocumentTransformerContext context,
+        CancellationToken cancellationToken
+    )
+    {
+        var authenticationSchemes = await authenticationSchemeProvider.GetAllSchemesAsync();
+        if (authenticationSchemes.Any(authScheme => authScheme.Name == "Bearer"))
+        {
+            var requirements = new Dictionary<string, OpenApiSecurityScheme>
+            {
+                ["Bearer"] = new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer", // "bearer" refers to the header name here
+                    In = ParameterLocation.Header,
+                    BearerFormat = "Json Web Token",
+                },
+            };
+            document.Components ??= new OpenApiComponents();
+            document.Components.SecuritySchemes = requirements;
+        }
+    }
+}
+```
+
+## Best Practices
+
+1. **Documentation Organization**
+
+   - Group related endpoints using tags
+   - Provide clear summaries and descriptions
+   - Include request/response examples
+
+2. **Security**
+
+   - Document authentication requirements
+   - Specify rate limits
+   - Include error responses
+
+3. **Performance**
+   - Enable response caching
+   - Use appropriate HTTP methods
+   - Document pagination
+
+## Testing Your API Documentation
+
+1. Run your application:
 
 ```bash
 dotnet run
 ```
 
-Navigate to `https://localhost:5001` to view the OpenAPI document.
+2. Access the documentation:
+   - Scalar UI: `http://localhost:5175/scalar/v1`
+   - Raw OpenAPI JSON: `http://localhost:5175/openapi/v1.json`
 
-## Best Practices
+## Sample GitHub Repository
 
-### **API Documentation**
-
-- **Use Descriptive Titles**: Provide a clear and concise title for your API
-- **Versioning**: Include the API version in the document
-- **Contact Information**: Add contact information for API support
-
-### **API Endpoints**
-
-- **Use Descriptive Names**: Name your endpoints clearly
-- **Add Descriptions**: Provide detailed descriptions for each endpoint
-- **Include Response Types**: Specify the response types for each endpoint
-
-### **Security**
-
-- **Authentication**: Secure your API with authentication
-- **Authorization**: Implement authorization to control access
-- **Rate Limiting**: Add rate limiting to prevent abuse
+You can find the complete source code for this guide in the [ModernApiDocs](https://github.com/antosubash/ModernApiDocs) repository.
 
 ## Conclusion
 
-In this post, we saw how to use the new OpenAPI document generation package in .Net 9.0. We also learned how to use Scalar with OpenAPI to generate API documentation. OpenAPI is a powerful tool for documenting and testing APIs, and the new package makes it easier to integrate with .Net applications.
+Scalar with OpenAPI provides a modern, developer-friendly way to document your .NET APIs. By following these practices, you'll create documentation that helps developers understand and integrate with your API efficiently.
+
+## Resources
+
+- [Official Scalar Documentation](https://guides.scalar.com/scalar/scalar-api-references/net-integration)
+- [OpenAPI Specification](https://swagger.io/specification/)
+- [.NET API Documentation Guidelines](https://learn.microsoft.com/aspnet/core/web-api/advanced/conventions)
