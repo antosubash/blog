@@ -1,0 +1,306 @@
+---
+title: 'Building an AI-Powered .NET API with Ollama and Microsoft.Extensions.AI'
+excerpt: 'Learn how to create an intelligent .NET API using Ollama, Microsoft.Extensions.AI, and implement function calling capabilities with Large Language Models.'
+date: '2025-01-15'
+videoId:
+tags:
+  - ollama
+  - Llama
+  - llm
+  - dotnet
+  - function-calling
+  - ai-extension
+  - microsoft-extensions-ai
+---
+
+<YoutubeVideo videoId={props.videoId} />
+
+<TOCInline toc={props.toc} asDisclosure />
+
+## Introduction
+
+The integration of AI capabilities into .NET applications has become more accessible with Microsoft's release of the Microsoft.Extensions.AI package. This tutorial demonstrates how to build an intelligent API that leverages Ollama's Large Language Models (LLMs) and implements custom function calling.
+
+## Prerequisites
+
+Before starting, ensure you have:
+
+- .NET 9.0 SDK installed
+- Ollama installed and running locally
+- Basic understanding of .NET Web APIs
+- A code editor (Visual Studio or VS Code recommended)
+
+## Understanding the Components
+
+### Ollama
+
+Ollama is an open-source platform that simplifies running and managing Large Language Models locally. It supports various models including:
+
+- Llama 2
+- Mistral
+- Gemma
+- Code Llama
+- And many more
+
+Key benefits:
+
+- Local execution for privacy
+- OpenAI-compatible API
+- Low resource requirements
+- Active community and updates
+
+### Microsoft.Extensions.AI
+
+This new framework provides:
+
+- Unified abstractions for AI services
+- Seamless integration with .NET dependency injection
+- Support for multiple AI providers
+- Built-in function calling capabilities
+
+## Getting Started
+
+First, create a new .Net API project using the following command:
+
+```bash
+dotnet new web -n OllamaWithExtensionAndFunctionCalling
+```
+
+Next, install the required packages:
+
+```bash
+dotnet add package Microsoft.Extensions.AI --prerelease
+dotnet add package Microsoft.Extensions.AI.Ollama --prerelease
+dotnet add package Scalar.AspNetCore
+dotnet add package Microsoft.AspNetCore.OpenApi
+```
+
+At the time of writing this post, the Microsoft.Extensions.AI package is in preview, so you need to add the `--prerelease` flag to install the package. please check the latest version of the package before installing.
+
+## Project Setup in Detail
+
+Let's break down the implementation into smaller, manageable steps:
+
+### 1. Basic API Structure
+
+```csharp
+// Initial Program.cs setup
+var builder = WebApplication.CreateBuilder(args);
+var app = builder.Build();
+
+// Configure base routes
+app.MapGet("/", () => "Hello from AI-powered API!");
+```
+
+### 2. Ollama Integration
+
+```csharp
+// Configuration setup
+var ollamaEndpoint = builder.Configuration["AI__Ollama__Endpoint"] ?? "http://localhost:11434";
+var chatModel = builder.Configuration["AI__Ollama__ChatModel"] ?? "llama3.2";
+
+// Create and configure Ollama client
+IChatClient client = new OllamaChatClient(ollamaEndpoint, modelId: chatModel)
+    .AsBuilder()
+    .UseFunctionInvocation()
+    .Build();
+```
+
+### 3. Implementing AI Functions
+
+```csharp
+[Description("Gets the weather")]
+string GetWeather() => Random.Shared.NextDouble() > 0.5 ? "It's sunny" : "It's raining";
+
+[Description("Gets the location")]
+string GetLocation() => "Vienna, Austria";
+
+[Description("Gets the weather and location")]
+string GetWeatherAndLocation() => $"{GetWeather()} in {GetLocation()}";
+
+var chatOptions = new ChatOptions
+{
+    Tools =
+    [
+        AIFunctionFactory.Create(GetWeather),
+        AIFunctionFactory.Create(GetLocation),
+        AIFunctionFactory.Create(GetWeatherAndLocation)
+    ]
+};
+```
+
+Next, add the following code to the `Program.cs` file:
+
+```csharp
+using System.ComponentModel;
+using Microsoft.Extensions.AI;
+using Scalar.AspNetCore;
+
+var builder = WebApplication.CreateBuilder(args);
+
+var ollamaEndpoint = builder.Configuration["AI__Ollama__Endpoint"] ?? "http://localhost:11434";
+var chatModel = builder.Configuration["AI__Ollama__ChatModel"] ?? "llama3.2";
+
+IChatClient client = new OllamaChatClient(ollamaEndpoint, modelId: chatModel)
+    .AsBuilder()
+    .UseFunctionInvocation()
+    .Build();
+
+[Description("Gets the weather")]
+string GetWeather() => Random.Shared.NextDouble() > 0.5 ? "It's sunny" : "It's raining";
+
+[Description("Gets the location")]
+string GetLocation() => "Vienna, Austria";
+
+[Description("Gets the weather and location")]
+string GetWeatherAndLocation() => $"{GetWeather()} in {GetLocation()}";
+
+var chatOptions = new ChatOptions
+{
+    Tools =
+    [
+        AIFunctionFactory.Create(GetWeather),
+        AIFunctionFactory.Create(GetLocation),
+        AIFunctionFactory.Create(GetWeatherAndLocation)
+    ]
+};
+
+builder.Services.AddChatClient(client);
+
+builder.Services.AddOpenApi();
+
+var app = builder.Build();
+
+app.MapOpenApi().CacheOutput();
+
+app.MapScalarApiReference();
+
+app.MapGet("/", () => Results.Redirect("/scalar/v1")).ExcludeFromDescription();
+
+app.MapPost(
+    "/chat",
+    async (IChatClient client, string message) =>
+        await client.CompleteAsync(message, chatOptions, cancellationToken: default)
+);
+
+app.Run();
+```
+
+In the above code, we first create a new `WebApplication` using the `WebApplication.CreateBuilder` method. Next, we read the Ollama endpoint and chat model from the configuration. We then create a new `OllamaChatClient` instance and configure it to use function invocation.
+
+Next, we define three functions: `GetWeather`, `GetLocation`, and `GetWeatherAndLocation`. These functions are used to demonstrate how to call a function from the Ollama AI extension.
+
+We then create a new `ChatOptions` instance and add the three functions to the `Tools` property using the `AIFunctionFactory.Create` method.
+
+Finally, we add the `OllamaChatClient` and `OpenApi` services to the service collection and configure the API routes. The `/chat` endpoint is used to handle chat requests, and the `CompleteAsync` method is called with the message and chat options.
+
+I'm reading the Ollama endpoint and chat model from the configuration. You can set these values in the `appsettings.json` file:
+
+```json
+{
+  "AI": {
+    "Ollama": {
+      "Endpoint": "http://localhost:11434",
+      "ChatModel": "llama3.2"
+    }
+  }
+}
+```
+
+if they are not available in the configuration, the default values will be used.
+
+## Advanced Usage
+
+### Error Handling
+
+Add robust error handling to your chat endpoint:
+
+```csharp
+app.MapPost("/chat", async (IChatClient client, ChatRequest request) =>
+{
+    try
+    {
+        var response = await client.CompleteAsync(
+            request.Message,
+            chatOptions,
+            cancellationToken: default);
+
+        return Results.Ok(new { response });
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem(
+            title: "Chat completion failed",
+            detail: ex.Message);
+    }
+});
+```
+
+### Performance Optimization
+
+Consider adding caching for frequent queries:
+
+```csharp
+builder.Services.AddOutputCache(options =>
+{
+    options.AddBasePolicy(builder =>
+        builder.Cache()
+               .Expire(TimeSpan.FromMinutes(5)));
+});
+```
+
+## Testing the Implementation
+
+Here are some example queries to test your API:
+
+```bash
+# Basic weather query
+curl -X POST "http://localhost:5000/chat?message=Where am I? and how is the weather?"
+
+# Combined query
+curl -X POST "http://localhost:5000/chat?message=Give me a weather report for my location"
+```
+
+## Best Practices and Tips
+
+1. **Model Selection**: Choose the appropriate Ollama model based on your needs:
+
+   - Llama3 for general purpose
+   - CodeLlama for code-related tasks
+   - Mistral for balanced performance
+
+2. **Performance Optimization**:
+
+   - Implement request caching
+   - Use appropriate model sizes
+   - Consider batch processing for multiple requests
+
+3. **Security Considerations**:
+   - Validate all inputs
+   - Implement rate limiting
+   - Use appropriate authentication
+
+## Troubleshooting
+
+Common issues and solutions:
+
+1. **Ollama Connection Failed**
+
+   - Verify Ollama is running
+   - Check endpoint configuration
+   - Ensure firewall permissions
+
+2. **Model Loading Issues**
+   - Confirm model is downloaded
+   - Check available system resources
+   - Verify model name spelling
+
+## Conclusion
+
+This implementation demonstrates the power of combining .NET's new AI extensions with Ollama's capabilities. The resulting API can understand natural language queries and execute appropriate functions, making it a valuable addition to any AI-powered application.
+
+## Additional Resources
+
+- [Microsoft.Extensions.AI Documentation](https://learn.microsoft.com/dotnet/ai)
+- [Ollama GitHub Repository](https://github.com/ollama/ollama)
+- [.NET 9 Documentation](https://learn.microsoft.com/dotnet)
