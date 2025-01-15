@@ -1,0 +1,112 @@
+---
+title: 'Automating Image Cleanup in Azure Container Registry with ACR Tasks'
+excerpt: 'Learn how to automate image cleanup in Azure Container Registry using ACR Tasks and implement best practices for container image management.'
+date: '2025-01-16'
+videoId:
+tags:
+  - azure
+  - docker
+  - azure-container-registry
+  - devops
+---
+
+<YoutubeVideo videoId={props.videoId} />
+
+<TOCInline toc={props.toc} asDisclosure />
+
+## Introduction
+
+Container registries can quickly become cluttered with outdated and unused images, leading to increased costs and management overhead. This guide demonstrates how to implement automated cleanup in Azure Container Registry (ACR) using ACR tasks, along with best practices for image management.
+
+### **Why Automate Image Cleanup?**
+
+- **Cost Optimization**: Reduce storage costs by removing unused images
+- **Performance**: Improve registry performance with fewer images to index
+- **Compliance**: Maintain governance by enforcing image retention policies
+- **Security**: Reduce attack surface by removing potentially vulnerable old images
+
+## Setting Up Automated Cleanup
+
+### **Basic Cleanup Task**
+
+Here's a simple task to get started:
+
+```bash
+az acr task create \
+  --registry <your-registry-name> \
+  --name PurgeOldImagesTask \
+  --cmd "acr purge --filter '.*:.*' --ago 30d --untagged --keep 10" \
+  --schedule "0 0 * * *" \
+  --context /dev/null \
+  --commit-trigger-enabled false
+```
+
+### **Advanced Cleanup Scenarios**
+
+For more granular control, consider these examples:
+
+```bash
+# Clean specific repositories
+az acr task create \
+  --registry <your-registry-name> \
+  --name CleanupProdImages \
+  --cmd "acr purge --filter 'prod/.*:.*' --ago 60d --keep 5" \
+  --schedule "0 1 * * *"
+
+# Multiple cleanup rules
+az acr task create \
+  --registry <your-registry-name> \
+  --name ComplexCleanup \
+  --cmd "acr purge --filter 'dev/.*:.*' --ago 7d --keep 3 && \
+        acr purge --filter 'test/.*:.*' --ago 14d --keep 5 && \
+        acr purge --filter 'prod/.*:.*' --ago 90d --keep 10" \
+  --schedule "0 2 * * *"
+```
+
+## Best Practices
+
+### **Image Tagging Strategy**
+
+- Use semantic versioning (e.g., `v1.2.3`)
+- Include build information (e.g., `v1.2.3-build.123`)
+- Add environment tags (e.g., `v1.2.3-prod`)
+
+### **Retention Policies**
+
+- Development: 7-14 days retention
+- Staging: 30 days retention
+- Production: 90+ days retention
+- Keep at least 3 versions per environment
+
+## Monitoring and Troubleshooting
+
+### **Monitor Cleanup Tasks**
+
+```bash
+# View task execution history
+az acr task list-runs --registry <your-registry-name>
+
+# Get detailed logs for a run
+az acr task logs --registry <your-registry-name> --run-id <run-id>
+```
+
+### **Common Issues**
+
+1. **Task fails to delete images**
+
+   - Verify service principal permissions
+   - Check image locks and repository policies
+
+2. **Missing important images**
+   - Adjust `--keep` parameter
+   - Implement image locking for critical versions
+
+## Conclusion
+
+A well-maintained container registry is crucial for efficient DevOps operations. By implementing automated cleanup with ACR tasks and following these best practices, you can maintain a clean, cost-effective, and secure registry.
+
+### **Additional Resources**
+
+- [ACR Tasks Overview](https://learn.microsoft.com/en-us/azure/container-registry/container-registry-tasks-overview)
+- [ACR Pricing](https://azure.microsoft.com/pricing/details/container-registry/)
+- [Image Tag Best Practices](https://learn.microsoft.com/en-us/azure/container-registry/container-registry-image-tag-version)
