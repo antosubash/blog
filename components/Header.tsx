@@ -4,6 +4,7 @@ import Link from './Link'
 import MobileNav from './MobileNav'
 import ThemeSwitch from './ThemeSwitch'
 import SearchButton from './SearchButton'
+import FeedButton from './FeedButton'
 
 const Header = () => {
   return (
@@ -48,6 +49,7 @@ const Header = () => {
               )
             }
           })}
+        <FeedButton />
         <SearchButton />
         <ThemeSwitch />
         <MobileNav />
