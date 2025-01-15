@@ -1,0 +1,113 @@
+---
+title: '.Net OpenAPI with Scalar'
+excerpt: 'In this post we will see how to use scalar with OpenAPI in .Net'
+date: '2025-01-15'
+videoId:
+tags:
+  - dotnet
+  - openapi
+  - scalar
+  - httpclient
+---
+
+## Introduction
+
+There were some changes in the OpenAPI document generation in .Net 9.0. In this post we will see how to use the new OpenAPI document generation package and how to use scalar with OpenAPI instead swashbuckle.
+
+### **Why use OpenAPI?**
+
+- **API Documentation**: Generate interactive API documentation
+- **Client SDKs**: Automatically generate client SDKs for your API
+- **Mock Servers**: Create mock servers for testing
+- **API Testing**: Test your API endpoints
+
+## Setting Up OpenAPI Document Generation
+
+First, lets create a new .Net 9.0 project.
+
+```bash
+dotnet new webapi -n OpenApiWithScalar
+cd OpenApiWithScalar
+```
+
+Next, add the OpenAPI document generation package:
+
+```bash
+dotnet add package Microsoft.AspNetCore.OpenApi
+dotnet add package Scalar.AspNetCore
+```
+
+Add the following code to `Program.cs`:
+
+```csharp
+using Scalar.AspNetCore;
+var builder = WebApplication.CreateBuilder(args);
+
+ builder.Services.AddOpenApi(opt =>
+    {
+        opt.AddDocumentTransformer(
+            (document, context, cancellationToken) =>
+            {
+                document.Info = new()
+                {
+                    Title = "This is a test API",
+                    Version = "v1",
+                    Description = "API for testing OpenAPI document generation",
+                    Contact = new() { Name = "Anto Subash" },
+                };
+                return Task.CompletedTask;
+            }
+        );
+
+    });
+
+var app = builder.Build();
+
+app.MapOpenApi().CacheOutput();
+
+ app.MapScalarApiReference();
+
+app.MapGet("/", () => Results.Redirect("/scalar/v1")).ExcludeFromDescription();
+
+app.MapGet("/test", () => "Hello World")
+    .Produces<string>(200)
+    .WithName("This is a test endpoint")
+    .WithSummary("This is a test endpoint to test the OpenAPI document generation")
+    .WithDescription("This is a test endpoint to test the OpenAPI document generation")
+
+app.Run();
+```
+
+This code sets up the OpenAPI document generation and adds a test endpoint. The `MapOpenApi().CacheOutput()` method caches the OpenAPI document to improve performance. The `MapScalarApiReference()` method generates the Scalar API reference.
+
+Run the application:
+
+```bash
+dotnet run
+```
+
+Navigate to `https://localhost:5001` to view the OpenAPI document.
+
+## Best Practices
+
+### **API Documentation**
+
+- **Use Descriptive Titles**: Provide a clear and concise title for your API
+- **Versioning**: Include the API version in the document
+- **Contact Information**: Add contact information for API support
+
+### **API Endpoints**
+
+- **Use Descriptive Names**: Name your endpoints clearly
+- **Add Descriptions**: Provide detailed descriptions for each endpoint
+- **Include Response Types**: Specify the response types for each endpoint
+
+### **Security**
+
+- **Authentication**: Secure your API with authentication
+- **Authorization**: Implement authorization to control access
+- **Rate Limiting**: Add rate limiting to prevent abuse
+
+## Conclusion
+
+In this post, we saw how to use the new OpenAPI document generation package in .Net 9.0. We also learned how to use Scalar with OpenAPI to generate API documentation. OpenAPI is a powerful tool for documenting and testing APIs, and the new package makes it easier to integrate with .Net applications.
