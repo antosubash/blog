@@ -5,12 +5,12 @@ ENV HUSKY=0
 RUN corepack enable
 # RUN npm install -g pnpm
 RUN npm install husky -g
-RUN npm install cross-env -g
+# RUN npm install cross-env -g
 COPY . /app
 WORKDIR /app
 
 FROM base AS build
-RUN pnpm install --prod --frozen-lockfile
+RUN pnpm install
 RUN pnpm run build
 
 FROM base AS runner
