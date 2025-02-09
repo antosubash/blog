@@ -5,6 +5,7 @@ ENV HUSKY=0
 RUN corepack enable
 # RUN npm install -g pnpm
 RUN npm install husky -g
+RUN npm install cross-env -g
 COPY . /app
 WORKDIR /app
 
