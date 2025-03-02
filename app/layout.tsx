@@ -72,6 +72,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fff" />
       <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000" />
       <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
+      {process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ACCOUNT && (
+        <meta
+          name="google-adsense-account"
+          content={process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ACCOUNT}
+        />
+      )}
       <body className="bg-gradient-to-l from-gray-100 via-gray-300 to-gray-100 text-gray-800 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800 dark:text-gray-200">
         <ThemeProviders>
           <Analytics analyticsConfig={siteMetadata.analytics as AnalyticsConfig} />
