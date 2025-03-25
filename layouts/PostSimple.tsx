@@ -27,7 +27,7 @@ export default function PostLayout({ content, next, prev, children }: LayoutProp
       <ScrollTopAndComment />
       <article>
         <div>
-          <header>
+          <header className="pt-10">
             <div className="space-y-1 border-b border-gray-200 pb-6 text-center dark:border-gray-700">
               <dl>
                 <div>
@@ -37,15 +37,10 @@ export default function PostLayout({ content, next, prev, children }: LayoutProp
                   </dd>
                 </div>
               </dl>
-              <div className="pb-3">
+              <div className="pb-1">
                 <PageTitle>{title}</PageTitle>
               </div>
-              <div className="flex flex-row flex-wrap justify-center">
-                {tags.map((tag) => (
-                  <Tag key={tag} text={tag} />
-                ))}
-              </div>
-              <div className="pt-6 text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
+              <div className="pt-3 text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
                 {readingTime.text}
               </div>
             </div>

@@ -1,5 +1,5 @@
 import { Authors, allAuthors } from 'contentlayer/generated'
-import { MDXLayoutRenderer } from 'pliny/mdx-components'
+import CustomMDXLayoutRenderer from '@/components/CustomMDXLayoutRenderer'
 import AuthorLayout from '@/layouts/AuthorLayout'
 import { coreContent } from 'pliny/utils/contentlayer'
 import { genPageMetadata } from 'app/seo'
@@ -13,7 +13,7 @@ export default function Page() {
   return (
     <>
       <AuthorLayout content={mainContent}>
-        <MDXLayoutRenderer code={author.body.code} />
+        <CustomMDXLayoutRenderer code={author.body.code} />
       </AuthorLayout>
     </>
   )

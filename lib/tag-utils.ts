@@ -1,17 +1,17 @@
 import { allPosts } from 'contentlayer/generated'
 export function getAllTags() {
-  const allTags = allPosts.flatMap((post) => post.tags)
+  const allTags = allPosts.flatMap((post) => post.tags).filter((tag) => tag)
   const tags = allTags.filter((item, index) => allTags.indexOf(item) === index)
   return tags as string[]
 }
 
 export function getTagsWithCount() {
-  const tags = allPosts.flatMap((post) => post.tags)
+  const tags = allPosts.flatMap((post) => post.tags).filter((tag) => tag)
   let allMappedTags = tags
     .map((tag) => {
       return {
         tag: tag,
-        count: allPosts.filter((post) => post.tags.includes(tag)).length,
+        count: allPosts.filter((post) => post.tags?.filter((t) => t).includes(tag)).length,
       } as { tag: string; count: number }
     })
     .sort((a, b) => b.count - a.count)
@@ -40,7 +40,11 @@ export function getRelatedPosts(slug: string) {
 
   const relatedPosts = allPosts
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-    .filter((p) => p.slug !== slug && p.tags.some((tag) => post.tags.includes(tag)))
+    .filter(
+      (p) =>
+        p.slug !== slug &&
+        p.tags?.filter((tag) => tag).some((tag) => post.tags?.filter((t) => t).includes(tag))
+    )
     .slice(0, 3)
 
   return relatedPosts

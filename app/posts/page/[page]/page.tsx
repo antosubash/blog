@@ -1,8 +1,8 @@
-import ListLayout from '@/layouts/ListLayoutWithTags'
+import EnhancedListLayout from '@/layouts/EnhancedListLayout'
 import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer'
 import { allPosts } from 'contentlayer/generated'
 
-const POSTS_PER_PAGE = 5
+const POSTS_PER_PAGE = 8
 
 export const generateStaticParams = async () => {
   const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE)
@@ -11,9 +11,10 @@ export const generateStaticParams = async () => {
   return paths
 }
 
-export default function Page({ params }: { params: { page: string } }) {
+export default async function Page({ params }: { params: Promise<{ page: string }> }) {
+  const { page } = await params
   const posts = allCoreContent(sortPosts(allPosts)).filter((post) => !post.draft)
-  const pageNumber = parseInt(params.page as string)
+  const pageNumber = parseInt(page as string)
   const initialDisplayPosts = posts.slice(
     POSTS_PER_PAGE * (pageNumber - 1),
     POSTS_PER_PAGE * pageNumber
@@ -24,11 +25,11 @@ export default function Page({ params }: { params: { page: string } }) {
   }
 
   return (
-    <ListLayout
+    <EnhancedListLayout
       posts={posts}
       initialDisplayPosts={initialDisplayPosts}
       pagination={pagination}
-      title="All Posts"
+      title="Blog"
     />
   )
 }

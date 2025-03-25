@@ -1,9 +1,17 @@
+'use client'
+
 import React from 'react'
 import { YouTubeEmbed } from '@next/third-parties/google'
-const YoutubeVideo = ({ videoId }) => {
+
+interface YoutubeVideoProps {
+  videoId: string
+}
+
+const YoutubeVideo = ({ videoId }: YoutubeVideoProps) => {
   if (!videoId) {
     return null
   }
   return <YouTubeEmbed videoid={videoId} />
 }
+
 export default YoutubeVideo

@@ -23,6 +23,34 @@
   @apply -mx-4 block border-l-4 border-transparent pl-4 pr-4;
 }
 
+/* Enhanced code block container */
+pre[class*='language-'] {
+  @apply rounded-lg border border-gray-700 bg-gray-900 p-6 shadow-lg;
+  font-size: 1rem;
+  line-height: 1.6;
+  overflow-x: auto;
+  position: relative;
+}
+
+/* Code block with title */
+.remark-code-title + div > pre {
+  @apply mt-0 rounded-t-none border-t-0;
+}
+
+/* Inline code */
+:not(pre) > code[class*='language-'] {
+  @apply rounded bg-gray-100 px-1.5 py-0.5 font-mono text-sm text-gray-800 dark:bg-gray-700 dark:text-gray-200;
+}
+
+/* Copy button styles */
+.code-copy-button {
+  @apply absolute right-2 top-2 rounded bg-gray-700 px-2 py-1 text-xs text-white opacity-0 transition-opacity hover:bg-gray-600 dark:bg-gray-600 dark:hover:bg-gray-500;
+}
+
+pre[class*='language-']:hover .code-copy-button {
+  @apply opacity-100;
+}
+
 .code-line.inserted {
   @apply bg-green-500 bg-opacity-20;
 }
@@ -40,63 +68,64 @@
   content: attr(line);
 }
 
-/* Token styles */
+/* Token styles - Enhanced for better readability */
 /**
  * MIT License
  * Copyright (c) 2018 Sarah Drasner
  * Sarah Drasner's[@sdras] Night Owl
  * Ported by Sara vieria [@SaraVieira]
  * Added by Souvik Mandal [@SimpleIndian]
+ * Enhanced for better contrast and readability
  */
 .token.comment,
 .token.prolog,
 .token.cdata {
-  color: rgb(99, 119, 119);
+  color: #6b7280;
   font-style: italic;
 }
 
 .token.punctuation {
-  color: rgb(199, 146, 234);
+  color: #8b5cf6;
 }
 
 .namespace {
-  color: rgb(178, 204, 214);
+  color: #3b82f6;
 }
 
 .token.deleted {
-  color: rgba(239, 83, 80, 0.56);
+  color: #ef4444;
   font-style: italic;
 }
 
 .token.symbol,
 .token.property {
-  color: rgb(128, 203, 196);
+  color: #10b981;
 }
 
 .token.tag,
 .token.operator,
 .token.keyword {
-  color: rgb(127, 219, 202);
+  color: #06b6d4;
 }
 
 .token.boolean {
-  color: rgb(255, 88, 116);
+  color: #f59e0b;
 }
 
 .token.number {
-  color: rgb(247, 140, 108);
+  color: #f97316;
 }
 
 .token.constant,
 .token.function,
 .token.builtin,
 .token.char {
-  color: rgb(130, 170, 255);
+  color: #3b82f6;
 }
 
 .token.selector,
 .token.doctype {
-  color: rgb(199, 146, 234);
+  color: #8b5cf6;
   font-style: italic;
 }
 

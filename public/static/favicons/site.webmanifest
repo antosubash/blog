@@ -1,19 +1,19 @@
 {
-    "name": "Anto Subash",
-    "short_name": "Anto Subash",
-    "icons": [
-        {
-            "src": "/android-chrome-192x192.png",
-            "sizes": "192x192",
-            "type": "image/png"
-        },
-        {
-            "src": "/android-chrome-512x512.png",
-            "sizes": "512x512",
-            "type": "image/png"
-        }
-    ],
-    "theme_color": "#ffffff",
-    "background_color": "#ffffff",
-    "display": "standalone"
+  "name": "Anto Subash",
+  "short_name": "Anto Subash",
+  "icons": [
+    {
+      "src": "/static/favicons/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/static/favicons/android-chrome.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ],
+  "theme_color": "#06b6d4",
+  "background_color": "#ffffff",
+  "display": "standalone"
 }

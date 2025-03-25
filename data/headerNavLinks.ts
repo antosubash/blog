@@ -5,6 +5,7 @@ const headerNavLinks = [
   { href: '/consulting', title: 'Consulting', track: true },
   // { href: '/tags', title: 'Tags' },
   { href: '/projects', title: 'Projects', track: true },
+  { href: '/contact', title: 'Contact' },
   // { href: '/about', title: 'About' },
 ]
 

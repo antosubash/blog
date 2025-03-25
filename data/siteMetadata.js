@@ -3,7 +3,8 @@ const siteMetadata = {
   title: 'Anto Subash',
   author: 'Anto Subash',
   headerTitle: 'Anto Subash',
-  description: 'Learn about web development, programming, and more.',
+  description:
+    'Full-stack developer passionate about web technologies, microservices, and modern software development. Sharing insights on .NET, React, Docker, Kubernetes, and cloud-native solutions.',
   language: 'en-us',
   theme: 'system', // system, dark or light
   siteUrl: 'https://blog.antosubash.com',

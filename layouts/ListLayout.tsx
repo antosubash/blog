@@ -68,7 +68,8 @@ export default function ListLayout({
 }: ListLayoutProps) {
   const [searchValue, setSearchValue] = useState('')
   const filteredBlogPosts = posts.filter((post) => {
-    const searchContent = post.title + post.excerpt + post.tags?.join(' ')
+    const searchContent =
+      post.title + post.excerpt + (post.tags?.filter((tag) => tag).join(' ') || '')
     return searchContent.toLowerCase().includes(searchValue.toLowerCase())
   })
 
@@ -131,7 +132,7 @@ export default function ListLayout({
                         </Link>
                       </h3>
                       <div className="flex flex-wrap">
-                        {tags?.map((tag) => <Tag key={tag} text={tag} />)}
+                        {tags?.filter((tag) => tag).map((tag) => <Tag key={tag} text={tag} />)}
                       </div>
                     </div>
                     <div className="prose max-w-none text-gray-500 dark:text-gray-400">

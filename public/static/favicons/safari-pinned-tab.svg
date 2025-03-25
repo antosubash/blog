@@ -1,20 +1,8 @@
-<?xml version="1.0" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
- "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
-<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
- width="700.000000pt" height="700.000000pt" viewBox="0 0 700.000000 700.000000"
- preserveAspectRatio="xMidYMid meet">
-<metadata>
-Created by potrace 1.14, written by Peter Selinger 2001-2017
-</metadata>
-<g transform="translate(0.000000,700.000000) scale(0.100000,-0.100000)"
-fill="#000000" stroke="none">
-<path d="M985 5671 c-84 -23 -140 -55 -202 -117 -63 -62 -109 -154 -119 -234
--4 -30 -8 -747 -8 -1592 0 -1059 -3 -1538 -11 -1539 -5 0 -82 -1 -171 0 -178
-0 -218 -10 -242 -60 -12 -27 -18 -390 -7 -454 22 -125 109 -246 222 -308 109
--59 -90 -55 2964 -53 l2804 1 57 23 c134 54 230 156 269 284 20 63 22 95 22
-279 0 292 4 287 -257 286 -106 0 -171 4 -175 11 -3 6 -6 702 -6 1549 1 1224
--2 1550 -12 1596 -37 163 -167 295 -328 333 -39 8 -626 11 -2396 11 -2125 0
--2350 -1 -2404 -16z"/>
-</g>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+  <g stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="m9 8 2-2-2-2"></path>
+    <path d="m3 4-2 2 2 2"></path>
+    <path d="m7.25 2-2.5 8"></path>
+  </g>
 </svg>

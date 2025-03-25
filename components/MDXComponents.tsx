@@ -1,20 +1,18 @@
-import TOCInline from 'pliny/ui/TOCInline'
-import Pre from 'pliny/ui/Pre'
-import BlogNewsletterForm from 'pliny/ui/BlogNewsletterForm'
 import type { MDXComponents } from 'mdx/types'
 import Image from './Image'
 import CustomLink from './Link'
 import TableWrapper from './TableWrapper'
 import Parts from './Parts'
 import YoutubeVideo from './YoutubeVideo'
+import CustomTOCInline from './CustomTOCInline'
+import EnhancedCodeBlock from './EnhancedCodeBlock'
 
 export const components: MDXComponents = {
   Image,
-  TOCInline,
+  TOCInline: CustomTOCInline,
   a: CustomLink,
-  pre: Pre,
+  pre: EnhancedCodeBlock,
   table: TableWrapper,
-  BlogNewsletterForm,
   Parts,
   YoutubeVideo,
 }

@@ -14,7 +14,13 @@ const generateRssItem = (config, post) => `
     ${post.excerpt && `<description>${escape(post.excerpt)}</description>`}
     <pubDate>${new Date(post.date).toUTCString()}</pubDate>
     <author>${config.email} (${config.author})</author>
-    ${post.tags && post.tags.map((t) => `<category>${t}</category>`).join('')}
+    ${
+      post.tags &&
+      post.tags
+        .filter((t) => t)
+        .map((t) => `<category>${t}</category>`)
+        .join('')
+    }
   </item>
 `
 
@@ -35,12 +41,12 @@ const generateRss = (config, posts, page = 'feed.xml') => `
 `
 
 export function getTagsWithCount() {
-  const tags = allPosts.flatMap((post) => post.tags)
+  const tags = allPosts.flatMap((post) => post.tags).filter((tag) => tag)
   let allMappedTags = tags
     .map((tag) => {
       return {
         tag: tag,
-        count: allPosts.filter((post) => post.tags.includes(tag)).length,
+        count: allPosts.filter((post) => post.tags?.filter((t) => t).includes(tag)).length,
       }
     })
     .sort((a, b) => b.count - a.count)
@@ -65,7 +71,9 @@ async function generateRSS(config, allBlogs, page = 'feed.xml') {
   const tagData = getTagsWithCount()
 
   tagData.forEach((tagItem) => {
-    const filteredPosts = allBlogs.filter((post) => post.tags.includes(tagItem.tag))
+    const filteredPosts = allBlogs.filter((post) =>
+      post.tags?.filter((t) => t).includes(tagItem.tag)
+    )
     const rss = generateRss(config, filteredPosts, `tags/${tagItem.tag}/${page}`)
     if (tagItem.tag) {
       const rssPath = path.join('public', 'tags', tagItem.tag)

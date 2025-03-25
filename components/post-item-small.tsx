@@ -49,7 +49,7 @@ const PostItemSmall = (props: Props) => {
             <div className="flex flex-wrap pb-4">
               {props.tags.map((tag) => (
                 <div className="mt-2" key={tag}>
-                  <Tag text={tag} />
+                  <Tag text={tag} asLink={false} />
                 </div>
               ))}
             </div>

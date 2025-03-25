@@ -1,11 +1,27 @@
-import ListLayout from '@/layouts/ListLayoutWithTags'
+import EnhancedListLayout from '@/layouts/EnhancedListLayout'
 import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer'
 import { allPosts } from 'contentlayer/generated'
 import { genPageMetadata } from 'app/seo'
 
-const POSTS_PER_PAGE = 5
+const POSTS_PER_PAGE = 8
 
-export const metadata = genPageMetadata({ title: 'Blog' })
+export const metadata = genPageMetadata({
+  title: 'Blog - Anto Subash',
+  description:
+    'Explore articles on web development, microservices, .NET, React, Docker, Kubernetes, and modern software development practices.',
+  keywords: ['blog', 'web development', 'microservices', '.NET', 'React', 'Docker', 'Kubernetes'],
+  openGraph: {
+    title: 'Blog - Anto Subash',
+    description:
+      'Explore articles on web development, microservices, .NET, React, Docker, Kubernetes, and modern software development practices.',
+    type: 'website',
+  },
+  twitter: {
+    title: 'Blog - Anto Subash',
+    description:
+      'Explore articles on web development, microservices, .NET, React, Docker, Kubernetes, and modern software development practices.',
+  },
+})
 
 export default function BlogPage() {
   const posts = allCoreContent(sortPosts(allPosts)).filter((post) => !post.draft)
@@ -20,11 +36,11 @@ export default function BlogPage() {
   }
 
   return (
-    <ListLayout
+    <EnhancedListLayout
       posts={posts}
       initialDisplayPosts={initialDisplayPosts}
       pagination={pagination}
-      title="All Posts"
+      title="Blog"
     />
   )
 }
