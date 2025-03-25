@@ -83,7 +83,7 @@ export const generateStaticParams = async () => {
 }
 
 export default async function Page({ params }: { params: { slug: string[] } }) {
-  const { slug } = params
+  const { slug } = await params
   const decodedSlug = decodeURI(slug.join('/'))
   // Filter out drafts in production
   const sortedCoreContents = allCoreContent(sortPosts(allPosts))
