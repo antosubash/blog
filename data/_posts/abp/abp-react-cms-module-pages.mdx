@@ -1,6 +1,6 @@
 ---
 title: 'ABP React CMS Module: Building Dynamic Pages with Puck Editor'
-excerpt: 'Learn how to integrate Puck visual editor with ABP Framework to create a powerful CMS system for React applications. Complete guide with code examples and best practices.'
+excerpt: 'ABP React CMS Kit is a React UI for the ABP CmsKit module.'
 date: '2025-08-07'
 videoId:
 tags:
@@ -18,882 +18,257 @@ tags:
 
 <TOCInline toc={props.toc} asDisclosure />
 
-## Introduction
+### Introduction
 
-Building a modern content management system (CMS) that combines the power of visual editing with enterprise-grade features can be challenging. In this comprehensive guide, we'll explore how to integrate **Puck Visual Editor** with **ABP Framework's CMS Module** to create a robust, scalable content management solution for React applications.
+The CMS feature lets non-developers build pages visually while the ABP CmsKit module handles persistence, permissions, and multi-tenancy. In the admin UI, Puck provides a drag‑and‑drop editor; its JSON output is saved to CmsKit via the generated TypeScript client. On the public site, pages are fetched by slug from CmsKit and rendered with Puck’s renderer. ABP’s policy system controls who can create/edit pages, and per‑page CSS is supported; inline scripts are intentionally disabled for security.
 
-### What You'll Learn
+## Motivation
 
-- How to set up ABP CMS Module with React
-- Integrating Puck visual editor for drag-and-drop page building
-- Implementing user authentication and permission systems
-- Building a complete page management workflow
-- Best practices for enterprise CMS development
+I’ve used [Orchard Core CMS](https://orchardcore.net/) for years and appreciate its simplicity and rich feature set. When ABP introduced its CMS module (CmsKit), I was excited to adopt it—but a few Orchard features I rely on weren’t yet available. Rather than switch tools, I looked for a way to pair ABP’s robust backend with a modern authoring experience. That’s where [Puck Editor](https://puckeditor.com/) fits: a lightweight, extensible visual page builder. This project shows how to combine ABP CmsKit for storage/permissions with Puck for visual editing, aiming to approximate my Orchard Core workflow while staying within the ABP ecosystem.
+
+### Feature overview
+
+- Visual page building with Puck (drag‑and‑drop blocks, editable fields)
+- Pages stored as JSON in ABP CmsKit
+- Public rendering by slug with safe defaults
+- Per‑page custom CSS support (script execution disabled by design)
+- ABP policy-based access for create/edit operations
 
 ### Prerequisites
 
-Before diving in, ensure you have:
+- ABP CmsKit module is enabled and configured on the API side (including required migrations and endpoints).
 
-- ABP Framework project with CMS Module installed
-- React application with TypeScript
-- Basic understanding of ABP Framework concepts
-- Node.js and npm/pnpm installed
+### How it works
 
-## Why ABP CMS + Puck Editor?
+- **Admin (create/edit)**: `/admin/cms/pages` → Create a page, then build content visually with Puck.
+  - Code: `src/src/app/admin/cms/pages/page.tsx` and `src/src/app/admin/cms/pages/create/page.tsx`
+- **Public (view)**: `/pages/[slug]` dynamically renders content.
+  - Code: `src/src/app/pages/[slug]/page.tsx` → `PageView` → Puck `Render`
+- **Puck configuration**: All available blocks and categories are registered in `src/src/components/puck/config.tsx`.
+- **Rendering**: `PageView` converts stored content (JSON) to Puck data and renders it.
+  - Code: `src/src/components/page/PageView.tsx`
 
-### The Challenge with Traditional CMS
+Notes
 
-Traditional CMS solutions often fall short in modern web development:
+- Content is saved as Puck JSON (stringified) to the backend via the generated client in the admin create/edit pages.
+- Custom CSS per page is supported; inline scripts are intentionally disabled for security in `PageView`.
 
-```typescript
-// Traditional CMS limitations
-const traditionalCMSIssues = {
-  rigidTemplates: 'Limited customization options',
-  poorDeveloperExperience: 'Complex theming systems',
-  lackOfModernFeatures: 'No visual editing capabilities',
-  scalabilityIssues: 'Performance problems at scale',
+### Where to look in the code
+
+- `src/src/components/puck/PuckEditor.tsx`: the in-app editor wrapper used in admin screens.
+- `src/src/components/puck/config.tsx`: block registry and categories.
+- `src/src/components/puck/components/*`: individual blocks (e.g., `TextBlock`, `HeadingBlock`, `Hero`, etc.).
+- `src/src/components/page/PageView.tsx`: safe rendering of stored content.
+
+### View blocks in Storybook
+
+You can browse and test all available blocks in Storybook with live controls (props) that mirror the Puck fields.
+
+- Run Storybook from the `src/` folder:
+  - `pnpm storybook` or `npm run storybook` or `yarn storybook`
+- Open `http://localhost:6006` and navigate to:
+  - `Puck Blocks/*` stories such as `HeadingBlock`, `TextBlock`, `GalleryBlock`, etc.
+- Stories live alongside components, for example:
+  - `src/src/components/puck/components/GalleryBlock/GalleryBlock.stories.tsx`
+
+### Documentation
+
+- Full docs site: [ABP React Documentation](https://antosubash.github.io/abp-react/)
+- CMS overview and admin UI: [Admin Interface → CMS](https://antosubash.github.io/abp-react/docs/fundamentals/admin-interface)
+- Components and development guides are available under the Docs navigation (Components, Fundamentals, Tutorials).
+
+## Add a new Puck block
+
+Blocks live under `src/src/components/puck/components/<YourBlock>/`. A minimal block consists of:
+
+- `YourBlock.tsx`: how it renders
+- `YourBlockProps.ts`: props type
+- `YourBlockDefaults.ts`: default props
+- `YourBlockFields.ts`: editor fields
+- `config.ts`: Puck config wrapper
+- `index.ts`: optional re-exports
+
+Below is a complete example for a simple "Callout" block.
+
+1. Create files under `src/src/components/puck/components/CalloutBlock/`:
+
+```ts
+// CalloutBlockProps.ts
+export type CalloutTone = 'info' | 'success' | 'warning' | 'danger'
+
+export interface CalloutBlockProps {
+  message: string
+  tone: CalloutTone
+  align: 'left' | 'center' | 'right'
+  padding: string
 }
 ```
 
-### The ABP + Puck Solution
+```tsx
+// CalloutBlock.tsx
+'use client'
+import type { CalloutBlockProps } from './CalloutBlockProps'
 
-ABP Framework provides the enterprise foundation, while Puck Editor delivers the visual editing experience:
-
-```typescript
-// ABP + Puck advantages
-const abpPuckAdvantages = {
-  enterpriseFeatures: {
-    multiTenancy: true,
-    permissionSystem: 'Granular access control',
-    auditLogging: 'Complete action tracking',
-    caching: 'Intelligent performance optimization',
-  },
-  visualEditing: {
-    dragAndDrop: 'Intuitive page building',
-    realTimePreview: 'Instant visual feedback',
-    componentLibrary: 'Reusable building blocks',
-    responsiveDesign: 'Mobile-first approach',
-  },
+const toneStyles: Record<CalloutBlockProps['tone'], React.CSSProperties> = {
+  info: { backgroundColor: '#eef2ff', color: '#1e3a8a', border: '1px solid #bfdbfe' },
+  success: { backgroundColor: '#ecfdf5', color: '#065f46', border: '1px solid #a7f3d0' },
+  warning: { backgroundColor: '#fffbeb', color: '#92400e', border: '1px solid #fde68a' },
+  danger: { backgroundColor: '#fef2f2', color: '#991b1b', border: '1px solid #fecaca' },
 }
-```
 
-## Setting Up ABP CMS Module
-
-### 1. Install Required Packages
-
-First, ensure your ABP project has the CMS module installed:
-
-```bash
-# Install ABP CMS Module
-abp add-module Volo.CmsKit
-
-# Install React UI dependencies
-npm install @abp/react.cms-kit
-```
-
-### 2. Configure CMS Module
-
-Update your `appsettings.json` to enable CMS features:
-
-```json
-{
-  "CmsKit": {
-    "Pages": {
-      "IsEnabled": true
-    },
-    "Comments": {
-      "IsEnabled": true
-    },
-    "Reactions": {
-      "IsEnabled": true
-    }
+export const CalloutBlock = ({
+  message,
+  tone = 'info',
+  align = 'left',
+  padding = '16px',
+}: CalloutBlockProps) => {
+  const style: React.CSSProperties = {
+    ...toneStyles[tone],
+    textAlign: align,
+    padding,
+    borderRadius: 8,
   }
+  return <div style={style}>{message || 'Callout message...'}</div>
 }
 ```
 
-### 3. Set Up Database Migrations
+```ts
+// CalloutBlockDefaults.ts
+import type { CalloutBlockProps } from './CalloutBlockProps'
 
-Run the database migrations to create CMS tables:
-
-```bash
-# Generate migration
-abp ef migrations add AddedCmsKit
-
-# Update database
-abp ef database update
+export const CalloutBlockDefaults: CalloutBlockProps = {
+  message: 'Heads up! This is a callout.',
+  tone: 'info',
+  align: 'left',
+  padding: '16px',
+}
 ```
 
-## Integrating Puck Visual Editor
+```ts
+// CalloutBlockFields.ts
+import type { Field } from '@measured/puck'
 
-### 1. Install Puck Editor
-
-Add Puck to your React application:
-
-```bash
-npm install @puckjs/core @puckjs/react
+export const CalloutBlockFields: Record<string, Field> = {
+  message: { type: 'text', label: 'Message' },
+  tone: {
+    type: 'select',
+    label: 'Tone',
+    options: [
+      { label: 'Info', value: 'info' },
+      { label: 'Success', value: 'success' },
+      { label: 'Warning', value: 'warning' },
+      { label: 'Danger', value: 'danger' },
+    ],
+  },
+  align: {
+    type: 'select',
+    label: 'Alignment',
+    options: [
+      { label: 'Left', value: 'left' },
+      { label: 'Center', value: 'center' },
+      { label: 'Right', value: 'right' },
+    ],
+  },
+  padding: { type: 'text', label: 'Padding (CSS)' },
+}
 ```
 
-### 2. Create Puck Configuration
+```ts
+// config.ts
+import { CalloutBlock } from './CalloutBlock'
+import { CalloutBlockDefaults } from './CalloutBlockDefaults'
+import { CalloutBlockFields } from './CalloutBlockFields'
 
-Set up Puck with your component library:
+export const CalloutBlockConfig = {
+  label: 'Callout',
+  fields: CalloutBlockFields,
+  defaultProps: CalloutBlockDefaults,
+  render: CalloutBlock,
+}
+```
 
-```typescript
-// puck.config.ts
-import { Config } from '@puckjs/core'
+```ts
+// index.ts
+export { CalloutBlockConfig } from './config'
+export { CalloutBlock } from './CalloutBlock'
+export { CalloutBlockDefaults } from './CalloutBlockDefaults'
+export { CalloutBlockFields } from './CalloutBlockFields'
+export type { CalloutBlockProps } from './CalloutBlockProps'
+```
 
-export const puckConfig: Config = {
+2. Register the block in `src/src/components/puck/config.tsx`:
+
+```ts
+// imports
+import { CalloutBlockConfig } from './components/CalloutBlock/config'
+import type { CalloutBlockProps } from './components/CalloutBlock/CalloutBlockProps'
+
+// extend Props
+type Props = {
+  // ...existing entries
+  CalloutBlock: CalloutBlockProps
+}
+
+export const config = {
   components: {
-    // Layout Components
-    Container: {
-      defaultProps: {
-        padding: '20px',
-        maxWidth: '1200px',
-        margin: '0 auto',
-      },
-      fields: {
-        padding: { type: 'text' },
-        maxWidth: { type: 'text' },
-        backgroundColor: { type: 'color' },
-      },
-    },
-
-    // Content Components
-    Heading: {
-      defaultProps: {
-        text: 'Heading',
-        level: 1,
-      },
-      fields: {
-        text: { type: 'text' },
-        level: { type: 'select', options: [1, 2, 3, 4, 5, 6] },
-      },
-    },
-
-    Text: {
-      defaultProps: {
-        text: 'Enter your text here...',
-      },
-      fields: {
-        text: { type: 'textarea' },
-      },
-    },
-
-    // Media Components
-    Image: {
-      defaultProps: {
-        src: '',
-        alt: '',
-        width: '100%',
-      },
-      fields: {
-        src: { type: 'text' },
-        alt: { type: 'text' },
-        width: { type: 'text' },
-      },
+    // ...existing entries
+    CalloutBlock: CalloutBlockConfig,
+  },
+  categories: {
+    // ...existing categories
+    content: {
+      title: 'Content',
+      components: [
+        // add it to a category so it shows up in the palette
+        'TextBlock',
+        'HeadingBlock',
+        /* ... */ 'CalloutBlock',
+      ],
     },
   },
-}
+} as const
 ```
 
-### 3. Create Puck Editor Component
+### Validation: register the component type
 
-Build a wrapper component for Puck integration:
+The editor validates component types via `validComponentTypes` inside `ensureValidPuckData`. If you add a new block, update this list or the component may be filtered out.
 
-```typescript
-// components/PuckEditor.tsx
-import React, { useState, useEffect } from 'react';
-import { Puck, Config } from '@puckjs/react';
-import { useCmsKit } from '@abp/ng.cms-kit';
-import { puckConfig } from '../puck.config';
+- File: `src/src/components/puck/utils.ts`
 
-interface PuckEditorProps {
-  pageId: string;
-  initialData?: any;
-  onSave: (data: any) => Promise<void>;
-}
-
-export const PuckEditor: React.FC<PuckEditorProps> = ({
-  pageId,
-  initialData,
-  onSave
-}) => {
-  const [data, setData] = useState(initialData || {});
-  const [isSaving, setIsSaving] = useState(false);
-
-  // Note: In a real implementation, you would use ABP's React hooks
-  // const { cmsKitService } = useCmsKit();
-
-  const handleSave = async (newData: any) => {
-    setIsSaving(true);
-    try {
-      await onSave(newData);
-      setData(newData);
-    } catch (error) {
-      console.error('Failed to save page:', error);
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
-  return (
-    <div className="puck-editor-container">
-      <Puck
-        config={puckConfig}
-        data={data}
-        onPublish={handleSave}
-        renderComponentList={() => (
-          <div className="component-library">
-            <h3>Components</h3>
-            {/* Component library UI */}
-          </div>
-        )}
-      />
-      {isSaving && (
-        <div className="saving-indicator">
-          Saving changes...
-        </div>
-      )}
-    </div>
-  );
-};
+```ts
+// inside ensureValidPuckData
+const validComponentTypes = [
+  'HeadingBlock',
+  'TextBlock',
+  'WelcomeBlock',
+  'Hero',
+  'ImageBlock',
+  'CardBlock',
+  'ButtonBlock',
+  'ContainerBlock',
+  'DividerBlock',
+  'FlexBlock',
+  'GridBlock',
+  'SpacerBlock',
+  'VideoBlock',
+  'GalleryBlock',
+  'CarouselBlock',
+  'ListBlock',
+  'QuoteBlock',
+  'TableBlock',
+  'TestimonialBlock',
+  'CalloutBlock', // add your new block here
+]
 ```
 
-## Building the Page Management System
+That’s it. The new block appears in the Puck editor palette, can be dragged onto the canvas, configured via its fields, and is rendered on public pages automatically.
 
-### 1. Create Page Management Service
+## Tips
 
-Implement a service to handle page operations:
-
-```typescript
-// services/PageManagementService.ts
-import { useState, useCallback } from 'react'
-
-export interface PageData {
-  id: string
-  title: string
-  slug: string
-  content: any
-  isHomePage: boolean
-  isPublished: boolean
-  createdAt: Date
-  updatedAt: Date
-}
-
-export const usePageManagement = () => {
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  const apiUrl = '/api/cms-kit/pages'
-
-  const makeRequest = useCallback(
-    async <T>(endpoint: string, options: RequestInit = {}): Promise<T> => {
-      setLoading(true)
-      setError(null)
-
-      try {
-        const response = await fetch(`${apiUrl}${endpoint}`, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          ...options,
-        })
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`)
-        }
-
-        return await response.json()
-      } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : 'An error occurred'
-        setError(errorMessage)
-        throw err
-      } finally {
-        setLoading(false)
-      }
-    },
-    [apiUrl]
-  )
-
-  const getPages = useCallback(async (): Promise<PageData[]> => {
-    return makeRequest<PageData[]>('')
-  }, [makeRequest])
-
-  const getPage = useCallback(
-    async (id: string): Promise<PageData> => {
-      return makeRequest<PageData>(`/${id}`)
-    },
-    [makeRequest]
-  )
-
-  const createPage = useCallback(
-    async (page: Partial<PageData>): Promise<PageData> => {
-      return makeRequest<PageData>('', {
-        method: 'POST',
-        body: JSON.stringify(page),
-      })
-    },
-    [makeRequest]
-  )
-
-  const updatePage = useCallback(
-    async (id: string, page: Partial<PageData>): Promise<PageData> => {
-      return makeRequest<PageData>(`/${id}`, {
-        method: 'PUT',
-        body: JSON.stringify(page),
-      })
-    },
-    [makeRequest]
-  )
-
-  const deletePage = useCallback(
-    async (id: string): Promise<void> => {
-      return makeRequest<void>(`/${id}`, {
-        method: 'DELETE',
-      })
-    },
-    [makeRequest]
-  )
-
-  const setHomePage = useCallback(
-    async (id: string): Promise<void> => {
-      return makeRequest<void>(`/${id}/set-home`, {
-        method: 'POST',
-      })
-    },
-    [makeRequest]
-  )
-
-  return {
-    getPages,
-    getPage,
-    createPage,
-    updatePage,
-    deletePage,
-    setHomePage,
-    loading,
-    error,
-  }
-}
-```
-
-### 2. Build Page Management Dashboard
-
-Create a comprehensive dashboard for page management:
-
-```typescript
-// components/PageManagementDashboard.tsx
-import React, { useState, useEffect } from 'react';
-import { usePageManagement } from '../hooks/usePageManagement';
-import { PageData } from '../services/PageManagementService';
-
-export const PageManagementDashboard: React.FC = () => {
-  const [pages, setPages] = useState<PageData[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filter, setFilter] = useState('all');
-
-  const {
-    getPages,
-    deletePage,
-    setHomePage,
-    loading: serviceLoading,
-    error: serviceError
-  } = usePageManagement();
-
-  useEffect(() => {
-    loadPages();
-  }, []);
-
-  const loadPages = async () => {
-    try {
-      const pageData = await getPages();
-      setPages(pageData);
-    } catch (error) {
-      console.error('Failed to load pages:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleDelete = async (pageId: string) => {
-    if (confirm('Are you sure you want to delete this page?')) {
-      try {
-        await deletePage(pageId);
-        await loadPages();
-      } catch (error) {
-        console.error('Failed to delete page:', error);
-      }
-    }
-  };
-
-  const handleSetHomePage = async (pageId: string) => {
-    try {
-      await setHomePage(pageId);
-      await loadPages();
-    } catch (error) {
-      console.error('Failed to set home page:', error);
-    }
-  };
-
-  const filteredPages = pages.filter(page => {
-    const matchesSearch = page.title.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter = filter === 'all' ||
-                         (filter === 'published' && page.isPublished) ||
-                         (filter === 'draft' && !page.isPublished);
-    return matchesSearch && matchesFilter;
-  });
-
-  if (loading) {
-    return <div className="loading">Loading pages...</div>;
-  }
-
-  return (
-    <div className="page-management-dashboard">
-      <div className="dashboard-header">
-        <h1>Page Management</h1>
-        <button className="btn btn-primary">
-          Create New Page
-        </button>
-      </div>
-
-      <div className="search-filter-bar">
-        <input
-          type="text"
-          placeholder="Search pages..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="search-input"
-        />
-        <select
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          className="filter-select"
-        >
-          <option value="all">All Pages</option>
-          <option value="published">Published</option>
-          <option value="draft">Drafts</option>
-        </select>
-      </div>
-
-      <div className="pages-table">
-        <table>
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Slug</th>
-              <th>Status</th>
-              <th>Home Page</th>
-              <th>Created</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredPages.map(page => (
-              <tr key={page.id}>
-                <td>{page.title}</td>
-                <td>{page.slug}</td>
-                <td>
-                  <span className={`status ${page.isPublished ? 'published' : 'draft'}`}>
-                    {page.isPublished ? 'Published' : 'Draft'}
-                  </span>
-                </td>
-                <td>
-                  {page.isHomePage && <span className="home-indicator">🏠</span>}
-                </td>
-                <td>{new Date(page.createdAt).toLocaleDateString()}</td>
-                <td className="actions">
-                  <button className="btn btn-sm btn-secondary">View</button>
-                  <button className="btn btn-sm btn-primary">Edit</button>
-                  <button
-                    className="btn btn-sm btn-danger"
-                    onClick={() => handleDelete(page.id)}
-                  >
-                    Delete
-                  </button>
-                  {!page.isHomePage && (
-                    <button
-                      className="btn btn-sm btn-outline"
-                      onClick={() => handleSetHomePage(page.id)}
-                    >
-                      Set as Home
-                    </button>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-};
-```
-
-## Implementing Comments System
-
-### 1. Comments Component
-
-Create a reusable comments component:
-
-```typescript
-// components/Comments.tsx
-import React, { useState, useEffect } from 'react';
-import { useComments } from '../hooks/useComments';
-import { Comment } from '../types/comment';
-
-interface CommentsProps {
-  entityType: string;
-  entityId: string;
-}
-
-export const Comments: React.FC<CommentsProps> = ({ entityType, entityId }) => {
-  const [comments, setComments] = useState<Comment[]>([]);
-  const [newComment, setNewComment] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  const {
-    getComments,
-    addComment,
-    deleteComment,
-    loading: commentsLoading,
-    error: commentsError
-  } = useComments();
-
-  useEffect(() => {
-    loadComments();
-  }, [entityType, entityId]);
-
-  const loadComments = async () => {
-    try {
-      const commentData = await getComments(entityType, entityId);
-      setComments(commentData);
-    } catch (error) {
-      console.error('Failed to load comments:', error);
-    }
-  };
-
-  const handleSubmitComment = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newComment.trim()) return;
-
-    setLoading(true);
-    try {
-      await addComment(entityType, entityId, newComment);
-      setNewComment('');
-      await loadComments();
-    } catch (error) {
-      console.error('Failed to add comment:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleDeleteComment = async (commentId: string) => {
-    if (confirm('Are you sure you want to delete this comment?')) {
-      try {
-        await deleteComment(commentId);
-        await loadComments();
-      } catch (error) {
-        console.error('Failed to delete comment:', error);
-      }
-    }
-  };
-
-  return (
-    <div className="comments-section">
-      <h3>Comments ({comments.length})</h3>
-
-      <form onSubmit={handleSubmitComment} className="comment-form">
-        <textarea
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-          placeholder="Write a comment..."
-          className="comment-input"
-          rows={3}
-        />
-        <button
-          type="submit"
-          disabled={loading || !newComment.trim()}
-          className="btn btn-primary"
-        >
-          {loading ? 'Posting...' : 'Post Comment'}
-        </button>
-      </form>
-
-      <div className="comments-list">
-        {comments.map(comment => (
-          <div key={comment.id} className="comment">
-            <div className="comment-header">
-              <span className="author">{comment.authorName}</span>
-              <span className="date">
-                {new Date(comment.creationTime).toLocaleDateString()}
-              </span>
-            </div>
-            <div className="comment-content">{comment.text}</div>
-            <button
-              onClick={() => handleDeleteComment(comment.id)}
-              className="btn btn-sm btn-danger"
-            >
-              Delete
-            </button>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-```
-
-## Advanced Features and Best Practices
-
-### 1. Custom Components for Puck
-
-Extend Puck with custom components specific to your needs:
-
-```typescript
-// components/puck/CustomHero.tsx
-import React from 'react';
-
-interface HeroProps {
-  title: string;
-  subtitle: string;
-  backgroundImage: string;
-  ctaText: string;
-  ctaLink: string;
-}
-
-export const CustomHero: React.FC<HeroProps> = ({
-  title,
-  subtitle,
-  backgroundImage,
-  ctaText,
-  ctaLink
-}) => {
-  return (
-    <div
-      className="hero-section"
-      style={{
-        backgroundImage: `url(${backgroundImage})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center'
-      }}
-    >
-      <div className="hero-content">
-        <h1>{title}</h1>
-        <p>{subtitle}</p>
-        <a href={ctaLink} className="cta-button">
-          {ctaText}
-        </a>
-      </div>
-    </div>
-  );
-};
-
-// Add to Puck config
-export const heroComponent = {
-  defaultProps: {
-    title: 'Welcome to Our Site',
-    subtitle: 'Discover amazing content',
-    backgroundImage: '/images/hero-bg.jpg',
-    ctaText: 'Get Started',
-    ctaLink: '/contact'
-  },
-  fields: {
-    title: { type: 'text' },
-    subtitle: { type: 'text' },
-    backgroundImage: { type: 'text' },
-    ctaText: { type: 'text' },
-    ctaLink: { type: 'text' }
-  }
-};
-```
-
-### 2. SEO Optimization
-
-Implement SEO features for your pages:
-
-```typescript
-// hooks/useSEO.ts
-import { useEffect } from 'react'
-
-interface SEOData {
-  title: string
-  description: string
-  keywords: string[]
-  ogImage: string
-  canonicalUrl: string
-}
-
-export const useSEO = (seoData: SEOData) => {
-  useEffect(() => {
-    // Update document title
-    document.title = seoData.title
-
-    // Update meta description
-    let metaDescription = document.querySelector('meta[name="description"]')
-    if (!metaDescription) {
-      metaDescription = document.createElement('meta')
-      metaDescription.setAttribute('name', 'description')
-      document.head.appendChild(metaDescription)
-    }
-    metaDescription.setAttribute('content', seoData.description)
-
-    // Update Open Graph tags
-    updateOpenGraphTags(seoData)
-
-    // Update canonical URL
-    let canonical = document.querySelector('link[rel="canonical"]')
-    if (!canonical) {
-      canonical = document.createElement('link')
-      canonical.setAttribute('rel', 'canonical')
-      document.head.appendChild(canonical)
-    }
-    canonical.setAttribute('href', seoData.canonicalUrl)
-  }, [seoData])
-}
-
-const updateOpenGraphTags = (seoData: SEOData) => {
-  const ogTags = {
-    'og:title': seoData.title,
-    'og:description': seoData.description,
-    'og:image': seoData.ogImage,
-    'og:url': seoData.canonicalUrl,
-  }
-
-  Object.entries(ogTags).forEach(([property, content]) => {
-    let meta = document.querySelector(`meta[property="${property}"]`)
-    if (!meta) {
-      meta = document.createElement('meta')
-      meta.setAttribute('property', property)
-      document.head.appendChild(meta)
-    }
-    meta.setAttribute('content', content)
-  })
-}
-```
-
-### 3. Performance Optimization
-
-Implement caching and performance optimizations:
-
-```typescript
-// hooks/useCache.ts
-import { useRef, useCallback } from 'react'
-
-interface CacheEntry {
-  data: any
-  timestamp: number
-}
-
-export const useCache = (duration: number = 5 * 60 * 1000) => {
-  const cache = useRef(new Map<string, CacheEntry>())
-
-  const set = useCallback((key: string, data: any): void => {
-    cache.current.set(key, {
-      data,
-      timestamp: Date.now(),
-    })
-  }, [])
-
-  const get = useCallback(
-    (key: string): any | null => {
-      const cached = cache.current.get(key)
-      if (!cached) return null
-
-      if (Date.now() - cached.timestamp > duration) {
-        cache.current.delete(key)
-        return null
-      }
-
-      return cached.data
-    },
-    [duration]
-  )
-
-  const clear = useCallback((): void => {
-    cache.current.clear()
-  }, [])
-
-  return { set, get, clear }
-}
-```
-
-## Deployment and Production Considerations
-
-### 1. Environment Configuration
-
-Set up proper environment configurations:
-
-```typescript
-// config/environment.ts
-export const environment = {
-  production: false,
-  apiUrl: process.env.REACT_APP_API_URL || 'http://localhost:44367',
-  cmsApiUrl: process.env.REACT_APP_CMS_API_URL || 'http://localhost:44367/api/cms-kit',
-  enableAnalytics: process.env.REACT_APP_ENABLE_ANALYTICS === 'true',
-  cacheEnabled: process.env.REACT_APP_CACHE_ENABLED !== 'false',
-}
-```
-
-### 2. Error Handling
-
-Implement comprehensive error handling:
-
-```typescript
-// utils/errorHandler.ts
-export class ErrorHandler {
-  static handle(error: any, context: string): void {
-    console.error(`Error in ${context}:`, error)
-
-    // Log to external service in production
-    if (process.env.NODE_ENV === 'production') {
-      // Send to error tracking service
-      this.logToService(error, context)
-    }
-
-    // Show user-friendly message
-    this.showUserMessage(error)
-  }
-
-  private static logToService(error: any, context: string): void {
-    // Implementation for error tracking service
-  }
-
-  private static showUserMessage(error: any): void {
-    // Show user-friendly error message
-  }
-}
-```
+- Keep `Props` explicit and reuse union types for strict editor options.
+- Use `defaultProps` generously so new blocks look good immediately when dropped.
+- Prefer simple inline styles for blocks unless you need shared styling.
 
 ## Conclusion
 
-The integration of **Puck Visual Editor** with **ABP Framework's CMS Module** creates a powerful, enterprise-grade content management solution. This combination provides:
-
-### Key Benefits
-
-✅ **Visual Page Building**: Intuitive drag-and-drop interface for content creation  
-✅ **Enterprise Features**: Multi-tenancy, permissions, audit logging  
-✅ **Developer Experience**: TypeScript support, auto-generated APIs  
-✅ **Performance**: Intelligent caching and optimization  
-✅ **Scalability**: Built for enterprise applications
-
-### Next Steps
-
-1. **Customize Components**: Extend Puck with your own components
-2. **Add Analytics**: Implement page analytics and user tracking
-3. **Optimize Performance**: Add CDN integration and caching strategies
-4. **Enhance SEO**: Implement advanced SEO features and structured data
-5. **Add Workflows**: Implement content approval workflows
-
-### Resources
-
-- [ABP Framework Documentation](https://docs.abp.io/)
-- [Puck Editor Documentation](https://puckeditor.com/docs)
-- [React Best Practices](https://react.dev/learn)
-- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
-
-This solution provides a modern, scalable foundation for building content-rich applications while maintaining the flexibility and power that developers and content creators need.
-
----
-
-_Ready to build your own CMS? Start with the code examples above and customize them for your specific needs. The combination of ABP Framework and Puck Editor gives you the best of both worlds: enterprise-grade features and modern visual editing capabilities._
+ABP CmsKit provides the backend foundation—storage, permissions, and multi‑tenancy—while Puck supplies an intuitive visual editor. Together they deliver a lightweight CMS that’s easy to extend: add a block, register it in the config, include it in validation, and you’re ready to build pages. This setup keeps authoring simple and code maintainable, without giving up ABP’s enterprise features.
