@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { ChevronUp, BookOpen, Clock, Eye, Share2 } from 'lucide-react'
+import { ChevronUp } from 'lucide-react'
 import Link from '@/components/Link'
 
 interface PostEnhancementsProps {
@@ -54,17 +54,6 @@ export default function PostEnhancements({
     }
   }
 
-  const getReadingTimeText = () => {
-    if (!readingTime) return null
-    if (typeof readingTime === 'string') return readingTime
-    return `${readingTime.minutes} min read`
-  }
-
-  // Format number consistently for SSR/CSR
-  const formatNumber = (num: number) => {
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-  }
-
   return (
     <>
       {/* Floating Action Buttons */}
@@ -79,24 +68,6 @@ export default function PostEnhancements({
             <ChevronUp className="h-5 w-5 text-gray-600 dark:text-gray-300" />
           </button>
         )}
-      </div>
-
-      {/* Reading Stats */}
-      <div className="mb-8 rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800">
-        <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-          {getReadingTimeText() && (
-            <div className="flex items-center space-x-1">
-              <Clock className="h-4 w-4" />
-              <span>{getReadingTimeText()}</span>
-            </div>
-          )}
-          {readingTime && typeof readingTime === 'object' && (
-            <div className="flex items-center space-x-1">
-              <BookOpen className="h-4 w-4" />
-              <span>{formatNumber(readingTime.words)} words</span>
-            </div>
-          )}
-        </div>
       </div>
 
       {/* Enhanced Tags */}

@@ -9,6 +9,7 @@ import SectionContainer from '@/components/SectionContainer'
 import siteMetadata from '@/data/siteMetadata'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 import Tag from '@/components/Tag'
+import { formatReadingTime, getReadingTimeDisplay } from '@/lib/reading-time'
 
 interface LayoutProps {
   content: CoreContent<Posts>
@@ -21,6 +22,9 @@ const editUrl = (path) => `${siteMetadata.siteRepo}/blob/main/data/${path}`
 
 export default function PostLayout({ content, next, prev, children }: LayoutProps) {
   const { filePath, slug, date, title, tags, readingTime } = content
+
+  // Get enhanced reading time display
+  const readingTimeDisplay = getReadingTimeDisplay(readingTime)
 
   return (
     <SectionContainer>
@@ -40,8 +44,9 @@ export default function PostLayout({ content, next, prev, children }: LayoutProp
               <div className="pb-1">
                 <PageTitle>{title}</PageTitle>
               </div>
-              <div className="pt-3 text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
-                {readingTime.text}
+              <div className="flex items-center justify-center gap-2 pt-3 text-base font-medium leading-6">
+                <span className={`${readingTimeDisplay.color}`}>{readingTimeDisplay.icon}</span>
+                <span className="text-gray-500 dark:text-gray-400">{readingTimeDisplay.text}</span>
               </div>
             </div>
           </header>
