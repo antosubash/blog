@@ -8,11 +8,14 @@
     "dev": "cross-env INIT_CWD=$PWD NODE_OPTIONS='--experimental-json-modules' next dev",
     "build": "cross-env INIT_CWD=$PWD NODE_OPTIONS='--experimental-json-modules' next build && cross-env NODE_OPTIONS='--experimental-json-modules' node ./scripts/postbuild.mjs",
     "serve": "next start",
-    "format": "prettier --write .",
+    "format": "biome format --write .",
     "analyze": "cross-env ANALYZE=true next build",
-    "lint": "next lint --fix --dir pages --dir app --dir components --dir lib --dir layouts --dir scripts",
+    "lint": "biome check --write .",
+    "lint:check": "biome check .",
     "generate-og-images": "cross-env INIT_CWD=$PWD NODE_OPTIONS='--experimental-json-modules' node ./scripts/og.mjs",
-    "prepare": "husky"
+    "prepare": "husky",
+    "knip": "knip",
+    "knip:fix": "knip --fix"
   },
   "dependencies": {
     "@next/bundle-analyzer": "15.2.4",
@@ -23,10 +26,7 @@
     "clsx": "^2.1.1",
     "contentlayer": "0.3.4",
     "date-fns": "^4.1.0",
-    "esbuild": "0.25.1",
     "github-slugger": "^2.0.0",
-    "gray-matter": "^4.0.3",
-    "image-size": "2.0.1",
     "lucide-react": "^0.537.0",
     "mermaid": "^11.9.0",
     "next": "15.2.4",
@@ -43,39 +43,28 @@
     "rehype-preset-minify": "7.0.1",
     "rehype-prism-plus": "^2.0.0",
     "rehype-slug": "^6.0.0",
-    "remark": "^15.0.1",
     "remark-gfm": "^3.0.1",
     "remark-math": "^6.0.0",
     "sharp": "^0.33.5",
     "tailwind-merge": "^3.3.1",
-    "tailwindcss": "^3.4.17",
-    "unist-util-visit": "^5.0.0"
+    "tailwindcss": "^3.4.17"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.2.2",
     "@playwright/test": "^1.51.1",
     "@svgr/webpack": "^8.1.0",
     "@types/mdx": "^2.0.13",
     "@types/node": "^22.13.13",
     "@types/react": "^19.0.12",
-    "@typescript-eslint/eslint-plugin": "^7.18.0",
-    "@typescript-eslint/parser": "^7.18.0",
     "cross-env": "^7.0.3",
-    "eslint": "^8.57.1",
-    "eslint-config-next": "15.2.4",
-    "eslint-config-prettier": "^10.1.1",
-    "eslint-plugin-prettier": "^5.2.5",
     "husky": "^9.1.7",
+    "knip": "4",
     "lint-staged": "^15.5.0",
-    "prettier": "^3.5.3",
-    "prettier-plugin-tailwindcss": "^0.6.11",
     "typescript": "^5.8.2"
   },
   "lint-staged": {
-    "*.+(js|jsx|ts|tsx)": [
-      "eslint --fix"
-    ],
     "*.+(js|jsx|ts|tsx|json|css|md|mdx)": [
-      "prettier --write"
+      "biome check --write"
     ]
   },
   "packageManager": "pnpm@9.0.6"

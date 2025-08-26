@@ -1,14 +1,14 @@
 'use client'
 
-import { useMemo } from 'react'
-import Link from 'next/link'
 import { format, parseISO } from 'date-fns'
+import { ArrowRight, BookOpen, Calendar, Clock, TrendingUp } from 'lucide-react'
+import Link from 'next/link'
+import { useMemo } from 'react'
 import Tag from '@/components/Tag'
-import { BookOpen, TrendingUp, Calendar, Clock, ArrowRight } from 'lucide-react'
-import { getAllSeries } from '@/lib/series-utils'
-import { designSystemUtils, themeColors } from '@/lib/design-system'
-import { Card } from '@/components/ui/Card'
 import Badge from '@/components/ui/Badge'
+import { Card } from '@/components/ui/Card'
+import { designSystemUtils, themeColors } from '@/lib/design-system'
+import { getAllSeries } from '@/lib/series-utils'
 
 const Series = () => {
   // Get all series posts and group them

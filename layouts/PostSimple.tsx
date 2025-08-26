@@ -1,15 +1,14 @@
-import { ReactNode } from 'react'
-import { formatDate } from 'pliny/utils/formatDate'
-import { CoreContent } from 'pliny/utils/contentlayer'
 import type { Posts } from 'contentlayer/generated'
+import type { CoreContent } from 'pliny/utils/contentlayer'
+import { formatDate } from 'pliny/utils/formatDate'
+import type { ReactNode } from 'react'
 import Comments from '@/components/Comments'
 import Link from '@/components/Link'
 import PageTitle from '@/components/PageTitle'
+import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 import SectionContainer from '@/components/SectionContainer'
 import siteMetadata from '@/data/siteMetadata'
-import ScrollTopAndComment from '@/components/ScrollTopAndComment'
-import Tag from '@/components/Tag'
-import { formatReadingTime, getReadingTimeDisplay } from '@/lib/reading-time'
+import { getReadingTimeDisplay } from '@/lib/reading-time'
 
 interface LayoutProps {
   content: CoreContent<Posts>

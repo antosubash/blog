@@ -1,6 +1,6 @@
+import { Search } from 'lucide-react'
 import { KBarButton } from 'pliny/search/KBarButton'
 import siteMetadata from '@/data/siteMetadata'
-import { Search } from 'lucide-react'
 
 const SearchButton = () => {
   if (siteMetadata.search && siteMetadata.search.provider === 'kbar') {

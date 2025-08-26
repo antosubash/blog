@@ -1,7 +1,7 @@
 'use client'
 
-import { ReactNode, useState } from 'react'
-import { Copy, Check } from 'lucide-react'
+import { Check, Copy } from 'lucide-react'
+import { type ReactNode, useState } from 'react'
 import Mermaid from './Mermaid'
 
 interface EnhancedCodeBlockProps {

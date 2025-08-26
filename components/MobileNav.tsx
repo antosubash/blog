@@ -1,10 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import Link from './Link'
+import { Briefcase, FileText, Heart, Home, Layers, Mail, Menu, X } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import headerNavLinks from '@/data/headerNavLinks'
-import { Menu, X, Home, FileText, Layers, Briefcase, Mail, Heart } from 'lucide-react'
 import siteMetadata from '@/data/siteMetadata'
+import Link from './Link'
 
 const MobileNav = () => {
   const [navShow, setNavShow] = useState(false)

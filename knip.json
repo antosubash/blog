@@ -1,0 +1,27 @@
+{
+  "entry": [
+    "app/layout.tsx",
+    "app/page.tsx",
+    "app/posts/page.tsx",
+    "app/posts/[...slug]/page.tsx",
+    "app/posts/page/[page]/page.tsx",
+    "app/tags/page.tsx",
+    "app/tags/[tag]/page.tsx",
+    "app/series/page.tsx",
+    "app/projects/page.tsx",
+    "app/about/page.tsx",
+    "app/contact/page.tsx",
+    "app/consulting/page.tsx",
+    "app/api/contact/route.ts",
+    "scripts/*.mjs",
+    "next.config.js",
+    "contentlayer.config.ts",
+    "tailwind.config.js",
+    "postcss.config.js",
+    "prettier.config.js",
+    "playwright.config.ts"
+  ],
+  "project": ["**/*.{ts,tsx,js,jsx,mjs}", "**/*.config.{js,ts,mjs}"],
+  "ignoreDependencies": ["@svgr/webpack"],
+  "ignoreBinaries": ["playwright"]
+}

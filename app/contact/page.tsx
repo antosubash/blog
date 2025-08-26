@@ -1,8 +1,8 @@
-import { Metadata } from 'next'
-import { Mail, MapPin, Phone, Github, Twitter, Linkedin } from 'lucide-react'
-import siteMetadata from '@/data/siteMetadata'
-import SectionContainer from '@/components/SectionContainer'
+import { Github, Linkedin, Mail, MapPin, Phone, Twitter } from 'lucide-react'
+import type { Metadata } from 'next'
 import ContactForm from '@/components/ContactForm'
+import SectionContainer from '@/components/SectionContainer'
+import siteMetadata from '@/data/siteMetadata'
 import { genPageMetadata } from '../seo'
 
 export const metadata: Metadata = genPageMetadata({ title: 'Contact' })

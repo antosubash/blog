@@ -1,6 +1,7 @@
 'use client'
-import { useEffect, useRef } from 'react'
 import { useTheme } from 'next-themes'
+import { useEffect, useRef } from 'react'
+
 const REPO_NAME = 'antosubash/blog-comments'
 export default function Comments({ slug }: { slug: string }) {
   const commentNodeId = 'comments-' + slug

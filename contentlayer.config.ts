@@ -1,23 +1,23 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { defineDocumentType, ComputedFields, makeSource } from 'contentlayer/source-files'
-import readingTime from 'reading-time'
+import { type ComputedFields, defineDocumentType, makeSource } from 'contentlayer/source-files'
 import path from 'path'
+import {
+  extractTocHeadings,
+  remarkCodeTitles,
+  remarkExtractFrontmatter,
+  remarkImgToJsx,
+} from 'pliny/mdx-plugins/index.js'
+import readingTime from 'reading-time'
+import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+import rehypeCitation from 'rehype-citation'
+import rehypeKatex from 'rehype-katex'
+import rehypePresetMinify from 'rehype-preset-minify'
+import rehypePrismPlus from 'rehype-prism-plus'
+// Rehype packages
+import rehypeSlug from 'rehype-slug'
 // Remark packages
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
-import {
-  remarkExtractFrontmatter,
-  remarkCodeTitles,
-  remarkImgToJsx,
-  extractTocHeadings,
-} from 'pliny/mdx-plugins/index.js'
-// Rehype packages
-import rehypeSlug from 'rehype-slug'
-import rehypeAutolinkHeadings from 'rehype-autolink-headings'
-import rehypeKatex from 'rehype-katex'
-import rehypeCitation from 'rehype-citation'
-import rehypePrismPlus from 'rehype-prism-plus'
-import rehypePresetMinify from 'rehype-preset-minify'
 import siteMetadata from './data/siteMetadata'
 
 const root = process.cwd()

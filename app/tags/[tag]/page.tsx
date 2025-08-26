@@ -1,11 +1,11 @@
+import { genPageMetadata } from 'app/seo'
+import { allPosts } from 'contentlayer/generated'
 import { slug } from 'github-slugger'
+import type { Metadata } from 'next'
 import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer'
 import siteMetadata from '@/data/siteMetadata'
 import EnhancedListLayout from '@/layouts/EnhancedListLayout'
-import { allPosts } from 'contentlayer/generated'
 import { getTagsWithCount } from '@/lib/tag-utils'
-import { genPageMetadata } from 'app/seo'
-import { Metadata } from 'next'
 
 export async function generateMetadata({
   params,

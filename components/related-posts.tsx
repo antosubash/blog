@@ -1,7 +1,7 @@
-import { Posts } from 'contentlayer/generated'
-import Link from 'next/link'
+import type { Posts } from 'contentlayer/generated'
 import { format, parseISO } from 'date-fns'
-import { Calendar, BookOpen, ArrowRight, TrendingUp } from 'lucide-react'
+import { ArrowRight, BookOpen, Calendar, TrendingUp } from 'lucide-react'
+import Link from 'next/link'
 import Tag from './Tag'
 
 const RelatedPost = ({ posts }: { posts: Posts[] }) => {

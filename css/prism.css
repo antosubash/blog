@@ -23,7 +23,7 @@
 }
 
 /* Enhanced code block container with theme support */
-pre[class*='language-'] {
+pre[class*="language-"] {
   @apply rounded-lg border p-6 shadow-lg;
   @apply border-gray-200 bg-gray-50 text-gray-900;
   @apply dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100;
@@ -40,7 +40,7 @@ pre[class*='language-'] {
 }
 
 /* Inline code with theme support */
-:not(pre) > code[class*='language-'] {
+:not(pre) > code[class*="language-"] {
   @apply rounded px-1.5 py-0.5 font-mono text-sm;
   @apply bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200;
 }
@@ -52,7 +52,7 @@ pre[class*='language-'] {
   @apply dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white;
 }
 
-pre[class*='language-']:hover .code-copy-button {
+pre[class*="language-"]:hover .code-copy-button {
   @apply opacity-100;
 }
 
@@ -269,32 +269,32 @@ pre[class*='language-']:hover .code-copy-button {
 }
 
 /* Enhanced scrollbar styling for code blocks */
-pre[class*='language-']::-webkit-scrollbar {
+pre[class*="language-"]::-webkit-scrollbar {
   height: 8px;
 }
 
-pre[class*='language-']::-webkit-scrollbar-track {
+pre[class*="language-"]::-webkit-scrollbar-track {
   @apply bg-gray-100 dark:bg-gray-800;
   border-radius: 4px;
 }
 
-pre[class*='language-']::-webkit-scrollbar-thumb {
+pre[class*="language-"]::-webkit-scrollbar-thumb {
   @apply bg-gray-300 dark:bg-gray-600;
   border-radius: 4px;
 }
 
-pre[class*='language-']::-webkit-scrollbar-thumb:hover {
+pre[class*="language-"]::-webkit-scrollbar-thumb:hover {
   @apply bg-gray-400 dark:bg-gray-500;
 }
 
 /* Focus states for better accessibility */
-pre[class*='language-']:focus-within {
+pre[class*="language-"]:focus-within {
   @apply ring-2 ring-primary-500 ring-opacity-50;
   outline: none;
 }
 
 /* Smooth transitions for theme switching */
-pre[class*='language-'],
+pre[class*="language-"],
 .token,
 .code-copy-button,
 .remark-code-title {

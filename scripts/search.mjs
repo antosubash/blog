@@ -1,6 +1,6 @@
 import { writeFileSync } from 'fs'
+import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer.js'
 import { allPosts } from '../.contentlayer/generated/index.mjs'
-import { sortPosts, allCoreContent } from 'pliny/utils/contentlayer.js'
 
 const generateIndex = (allPosts) => {
   var searchFile = `./public/search.json`

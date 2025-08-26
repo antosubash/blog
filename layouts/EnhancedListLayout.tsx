@@ -1,15 +1,15 @@
 'use client'
 
-import { useState, useMemo } from 'react'
-import { usePathname } from 'next/navigation'
-import { CoreContent } from 'pliny/utils/contentlayer'
 import type { Posts } from 'contentlayer/generated'
-import Tag from '@/components/Tag'
-import PostItem from '@/components/post-item'
-import PostSearch from '@/components/PostSearch'
-import EnhancedPagination from '@/components/EnhancedPagination'
-import { getTagsWithCount } from '@/lib/tag-utils'
 import { BookOpen, Filter, Grid, List, Sparkles } from 'lucide-react'
+import { usePathname } from 'next/navigation'
+import type { CoreContent } from 'pliny/utils/contentlayer'
+import { useMemo, useState } from 'react'
+import EnhancedPagination from '@/components/EnhancedPagination'
+import PostSearch from '@/components/PostSearch'
+import PostItem from '@/components/post-item'
+import Tag from '@/components/Tag'
+import { getTagsWithCount } from '@/lib/tag-utils'
 
 interface PaginationProps {
   totalPages: number

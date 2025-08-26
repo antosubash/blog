@@ -1,8 +1,8 @@
-import Link from '@/components/Link'
-import siteMetadata from '@/data/siteMetadata'
+import { ArrowRight, BookOpen, Calendar, Code2, FileText, Rocket, Users } from 'lucide-react'
 import NewsletterForm from 'pliny/ui/NewsletterForm'
+import Link from '@/components/Link'
 import PostItem from '@/components/post-item'
-import { ArrowRight, BookOpen, Code2, Rocket, FileText, Users, Calendar } from 'lucide-react'
+import siteMetadata from '@/data/siteMetadata'
 
 const MAX_DISPLAY = 6
 

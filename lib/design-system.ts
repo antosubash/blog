@@ -1,7 +1,7 @@
 // Design System Configuration
-// This file contains all design tokens, component variants, and utility functions
+// This file contains component variants and utility functions
 
-export const designTokens = {
+const designTokens = {
   // Color Palette
   colors: {
     primary: {
@@ -156,7 +156,7 @@ export const designTokens = {
 }
 
 // Component Variants
-export const componentVariants = {
+const componentVariants = {
   // Button Variants
   button: {
     base: 'inline-flex items-center justify-center rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed',
@@ -219,7 +219,7 @@ export const componentVariants = {
 }
 
 // Utility Functions
-export const designSystemUtils = {
+const designSystemUtils = {
   // Generate button classes
   button: (
     variant: keyof typeof componentVariants.button.variants = 'primary',
@@ -280,7 +280,7 @@ export const designSystemUtils = {
 }
 
 // Theme-aware color utilities
-export const themeColors = {
+const themeColors = {
   // Background colors
   bg: {
     primary: 'bg-white dark:bg-secondary-900',
@@ -305,11 +305,5 @@ export const themeColors = {
   },
 }
 
-const designSystem = {
-  designTokens,
-  componentVariants,
-  designSystemUtils,
-  themeColors,
-}
-
-export default designSystem
+// Export only the used utilities
+export { componentVariants, designSystemUtils, themeColors }

@@ -1,14 +1,14 @@
-import { ReactNode } from 'react'
-import { CoreContent } from 'pliny/utils/contentlayer'
-import type { Posts, Authors } from 'contentlayer/generated'
+import type { Authors, Posts } from 'contentlayer/generated'
+import type { CoreContent } from 'pliny/utils/contentlayer'
+import type { ReactNode } from 'react'
 import Comments from '@/components/Comments'
+import Image from '@/components/Image'
 import Link from '@/components/Link'
 import PageTitle from '@/components/PageTitle'
+import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 import SectionContainer from '@/components/SectionContainer'
-import Image from '@/components/Image'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
-import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 
 const editUrl = (path) => `${siteMetadata.siteRepo}/blob/main/data/${path}`
 const discussUrl = (path) =>
@@ -117,7 +117,11 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                       Tags
                     </h2>
                     <div className="flex flex-wrap">
-                      {tags?.filter((tag) => tag).map((tag) => <Tag key={tag} text={tag} />)}
+                      {tags
+                        ?.filter((tag) => tag)
+                        .map((tag) => (
+                          <Tag key={tag} text={tag} />
+                        ))}
                     </div>
                   </div>
                 )}

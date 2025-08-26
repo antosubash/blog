@@ -1,11 +1,11 @@
 import type { MDXComponents } from 'mdx/types'
-import Image from './Image'
-import CustomLink from './Link'
-import TableWrapper from './TableWrapper'
-import Parts from './Parts'
-import YoutubeVideo from './YoutubeVideo'
 import CustomTOCInline from './CustomTOCInline'
 import EnhancedCodeBlock from './EnhancedCodeBlock'
+import Image from './Image'
+import CustomLink from './Link'
+import Parts from './Parts'
+import TableWrapper from './TableWrapper'
+import YoutubeVideo from './YoutubeVideo'
 
 export const components: MDXComponents = {
   Image,

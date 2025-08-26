@@ -1,7 +1,7 @@
-import Link from './Link'
-import siteMetadata from '@/data/siteMetadata'
-import SocialIcon from '@/components/social-icons'
 import { Heart } from 'lucide-react'
+import SocialIcon from '@/components/social-icons'
+import siteMetadata from '@/data/siteMetadata'
+import Link from './Link'
 
 export default function Footer() {
   return (

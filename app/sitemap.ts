@@ -1,7 +1,7 @@
-import { MetadataRoute } from 'next'
 import { allPosts } from 'contentlayer/generated'
-import siteMetadata from '@/data/siteMetadata'
+import type { MetadataRoute } from 'next'
 import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer'
+import siteMetadata from '@/data/siteMetadata'
 import { getTagsWithCount } from '@/lib/tag-utils'
 
 export default function sitemap(): MetadataRoute.Sitemap {

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { type NextRequest, NextResponse } from 'next/server'
 
 // Ensure Node.js runtime so process.env is available reliably
 export const runtime = 'nodejs'

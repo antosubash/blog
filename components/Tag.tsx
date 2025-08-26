@@ -1,6 +1,6 @@
-import Link from 'next/link'
 import { slug as createSlug } from 'github-slugger'
-import { designSystemUtils, componentVariants } from '@/lib/design-system'
+import Link from 'next/link'
+import { type componentVariants, designSystemUtils } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
 
 interface TagProps {

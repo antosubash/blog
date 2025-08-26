@@ -1,6 +1,6 @@
+import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { ChevronLeft, ChevronRight, MoreHorizontal, ArrowLeft, ArrowRight } from 'lucide-react'
 
 interface PaginationProps {
   totalPages: number

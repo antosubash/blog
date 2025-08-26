@@ -1,14 +1,14 @@
-import { ReactNode } from 'react'
-import Image from '@/components/Image'
-import Bleed from 'pliny/ui/Bleed'
-import { CoreContent } from 'pliny/utils/contentlayer'
 import type { Posts } from 'contentlayer/generated'
+import Bleed from 'pliny/ui/Bleed'
+import type { CoreContent } from 'pliny/utils/contentlayer'
+import type { ReactNode } from 'react'
 import Comments from '@/components/Comments'
+import Image from '@/components/Image'
 import Link from '@/components/Link'
 import PageTitle from '@/components/PageTitle'
+import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 import SectionContainer from '@/components/SectionContainer'
 import siteMetadata from '@/data/siteMetadata'
-import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 
 interface LayoutProps {
   content: CoreContent<Posts>

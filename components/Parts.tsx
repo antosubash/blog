@@ -1,8 +1,8 @@
 'use client'
 
+import { ArrowLeft, ArrowRight, CheckCircle, ChevronRight, Circle, TrendingUp } from 'lucide-react'
 import Link from 'next/link'
-import { getSeriesProgress, getSeriesByName } from '@/lib/series-utils'
-import { TrendingUp, ChevronRight, CheckCircle, Circle, ArrowLeft, ArrowRight } from 'lucide-react'
+import { getSeriesByName, getSeriesProgress } from '@/lib/series-utils'
 
 interface PartsProps {
   data: string

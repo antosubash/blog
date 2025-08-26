@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import { ChevronUp } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import Link from '@/components/Link'
 
 interface PostEnhancementsProps {

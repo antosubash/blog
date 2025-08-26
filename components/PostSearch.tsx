@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { Search, Filter, X, Tag as TagIcon, Sparkles } from 'lucide-react'
+import { Filter, Search, Sparkles, Tag as TagIcon, X } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import Tag from './Tag'
 
 interface PostSearchProps {

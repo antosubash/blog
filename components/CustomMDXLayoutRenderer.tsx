@@ -1,9 +1,9 @@
 'use client'
 
+import type { MDXComponents } from 'mdx/types'
 import { useMDXComponent } from 'next-contentlayer/hooks'
-import { MDXComponents } from 'mdx/types'
+import { useEffect, useState } from 'react'
 import CustomTOCInline from './CustomTOCInline'
-import { useState, useEffect } from 'react'
 
 interface CustomMDXLayoutRendererProps {
   code: string

@@ -1,6 +1,6 @@
 import { allPosts } from 'contentlayer/generated'
 
-export interface SeriesPost {
+interface SeriesPost {
   slug: string
   date: string
   title: string

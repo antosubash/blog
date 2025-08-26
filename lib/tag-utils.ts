@@ -1,9 +1,4 @@
 import { allPosts } from 'contentlayer/generated'
-export function getAllTags() {
-  const allTags = allPosts.flatMap((post) => post.tags).filter((tag) => tag)
-  const tags = allTags.filter((item, index) => allTags.indexOf(item) === index)
-  return tags as string[]
-}
 
 export function getTagsWithCount() {
   const tags = allPosts.flatMap((post) => post.tags).filter((tag) => tag)
