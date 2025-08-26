@@ -47,7 +47,7 @@ export default function PostMinimal({ content, next, prev, children }: LayoutPro
           )}
           <footer>
             <div className="flex flex-col text-sm font-medium sm:flex-row sm:justify-between sm:text-base">
-              {prev && prev.postUrl && (
+              {prev?.postUrl && (
                 <div className="pt-4 xl:pt-8">
                   <Link
                     href={`${prev.postUrl}`}
@@ -58,7 +58,7 @@ export default function PostMinimal({ content, next, prev, children }: LayoutPro
                   </Link>
                 </div>
               )}
-              {next && next.postUrl && (
+              {next?.postUrl && (
                 <div className="pt-4 xl:pt-8">
                   <Link
                     href={`${next.postUrl}`}

@@ -5,18 +5,11 @@ import { useEffect, useState } from 'react'
 import Link from '@/components/Link'
 
 interface PostEnhancementsProps {
-  slug: string
   title: string
-  readingTime?: string | { text: string; minutes: number; time: number; words: number }
   tags?: string[]
 }
 
-export default function PostEnhancements({
-  slug,
-  title,
-  readingTime,
-  tags,
-}: PostEnhancementsProps) {
+export default function PostEnhancements({ title, tags }: PostEnhancementsProps) {
   const [showScrollTop, setShowScrollTop] = useState(false)
 
   // Scroll to top button visibility
@@ -37,7 +30,7 @@ export default function PostEnhancements({
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const sharePost = async () => {
+  const _sharePost = async () => {
     if (navigator.share) {
       try {
         await navigator.share({
@@ -61,6 +54,7 @@ export default function PostEnhancements({
         {/* Scroll to Top Button */}
         {showScrollTop && (
           <button
+            type="button"
             onClick={scrollToTop}
             className="flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-lg transition-all duration-200 hover:shadow-xl dark:bg-gray-800"
             title="Scroll to top"

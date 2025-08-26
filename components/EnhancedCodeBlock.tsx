@@ -13,7 +13,7 @@ const EnhancedCodeBlock = ({ children, className = '' }: EnhancedCodeBlockProps)
   const [copied, setCopied] = useState(false)
 
   // Check if this is a mermaid code block
-  if (className && className.includes('language-mermaid')) {
+  if (className?.includes('language-mermaid')) {
     // Extract the mermaid code from children
     let mermaidCode = ''
 
@@ -78,6 +78,7 @@ const EnhancedCodeBlock = ({ children, className = '' }: EnhancedCodeBlockProps)
 
         {/* Copy button */}
         <button
+          type="button"
           onClick={copyToClipboard}
           className="absolute right-2 top-2 rounded bg-gray-700 p-2 text-gray-300 opacity-0 transition-opacity duration-200 hover:bg-gray-600 hover:text-white group-hover:opacity-100"
           title="Copy code"

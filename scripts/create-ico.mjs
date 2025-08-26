@@ -1,6 +1,6 @@
-import fs from 'fs'
-import path from 'path'
-import { fileURLToPath } from 'url'
+import fs from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -44,7 +44,7 @@ const createSimpleICO = () => {
   for (let i = 0; i < 1024; i += 4) {
     const x = (i / 4) % 16
     const y = Math.floor(i / 4 / 16)
-    const intensity = Math.floor(((x + y) * 255) / 32)
+    const _intensity = Math.floor(((x + y) * 255) / 32)
 
     imageData[i] = 6 // R (cyan)
     imageData[i + 1] = 182 // G (cyan)

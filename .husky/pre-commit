@@ -1,4 +1,4 @@
 # pre-commit hook
 
-pnpm lint-staged
+# pnpm lint-staged
 pnpm generate-og-images

@@ -1,7 +1,7 @@
 'use client'
 
 import type { Posts } from 'contentlayer/generated'
-import { BookOpen, Filter, Grid, List, Sparkles } from 'lucide-react'
+import { Filter, Grid, List, Sparkles } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import type { CoreContent } from 'pliny/utils/contentlayer'
 import { useMemo, useState } from 'react'
@@ -29,8 +29,8 @@ export default function EnhancedListLayout({
   initialDisplayPosts = [],
   pagination,
 }: EnhancedListLayoutProps) {
-  const pathname = usePathname()
-  const tagsWithCount = getTagsWithCount()
+  const _pathname = usePathname()
+  const _tagsWithCount = getTagsWithCount()
 
   // State for search and filtering
   const [searchQuery, setSearchQuery] = useState('')
@@ -70,7 +70,7 @@ export default function EnhancedListLayout({
         (post) =>
           post.title.toLowerCase().includes(query) ||
           post.excerpt?.toLowerCase().includes(query) ||
-          post.tags?.some((tag) => tag && tag.toLowerCase().includes(query))
+          post.tags?.some((tag) => tag?.toLowerCase().includes(query))
       )
     }
 

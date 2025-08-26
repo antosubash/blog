@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react'
 
 const REPO_NAME = 'antosubash/blog-comments'
 export default function Comments({ slug }: { slug: string }) {
-  const commentNodeId = 'comments-' + slug
+  const commentNodeId = `comments-${slug}`
   const init = useRef(false)
   const { theme } = useTheme()
   const ref = useRef<HTMLDivElement>(null)
@@ -28,6 +28,6 @@ export default function Comments({ slug }: { slug: string }) {
     script.setAttribute('crossorigin', 'anonymous')
     ref?.current?.appendChild(script)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [commentNodeId, utterancesTheme])
   return <div ref={ref} className="pt-8" id={commentNodeId} />
 }

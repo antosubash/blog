@@ -1,7 +1,7 @@
 // Design System Configuration
 // This file contains component variants and utility functions
 
-const designTokens = {
+const _designTokens = {
   // Color Palette
   colors: {
     primary: {

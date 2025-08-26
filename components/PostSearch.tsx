@@ -2,7 +2,6 @@
 
 import { Filter, Search, Sparkles, Tag as TagIcon, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import Tag from './Tag'
 
 interface PostSearchProps {
   onSearch: (query: string) => void
@@ -66,6 +65,7 @@ export default function PostSearch({
           />
           {searchQuery && (
             <button
+              type="button"
               onClick={() => setSearchQuery('')}
               className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full p-1 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-700 dark:hover:text-gray-300"
             >
@@ -76,6 +76,7 @@ export default function PostSearch({
 
         {/* Filter Button */}
         <button
+          type="button"
           onClick={() => setIsTagFilterOpen(!isTagFilterOpen)}
           className={`inline-flex items-center space-x-2 rounded-xl border px-6 py-3.5 text-base font-medium transition-all duration-200 ${
             localSelectedTags.length > 0
@@ -95,6 +96,7 @@ export default function PostSearch({
         {/* Clear Filters */}
         {hasActiveFilters && (
           <button
+            type="button"
             onClick={clearAllFilters}
             className="inline-flex items-center space-x-2 rounded-xl border border-gray-300 bg-white/80 px-6 py-3.5 text-base font-medium text-gray-700 backdrop-blur-sm transition-all duration-200 hover:border-gray-400 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800/80 dark:text-gray-300 dark:hover:border-gray-500 dark:hover:bg-gray-700"
           >
@@ -117,6 +119,7 @@ export default function PostSearch({
           <div className="flex flex-wrap gap-3">
             {availableTags.map((tag) => (
               <button
+                type="button"
                 key={tag}
                 onClick={() => handleTagToggle(tag)}
                 className={`inline-flex items-center rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 ${
@@ -145,6 +148,7 @@ export default function PostSearch({
             <span className="inline-flex items-center rounded-full bg-gradient-to-r from-blue-100 to-indigo-100 px-4 py-2 text-sm font-medium text-blue-800 shadow-sm dark:from-blue-900 dark:to-indigo-900 dark:text-blue-200">
               <Search className="mr-2 h-3 w-3" />"{searchQuery}"
               <button
+                type="button"
                 onClick={() => setSearchQuery('')}
                 className="ml-2 rounded-full p-0.5 text-blue-600 transition-colors hover:bg-blue-200 hover:text-blue-800 dark:text-blue-400 dark:hover:bg-blue-800 dark:hover:text-blue-200"
               >
@@ -161,6 +165,7 @@ export default function PostSearch({
               <TagIcon className="mr-2 h-3 w-3" />
               {tag}
               <button
+                type="button"
                 onClick={() => handleTagToggle(tag)}
                 className="ml-2 rounded-full p-0.5 text-gray-500 transition-colors hover:bg-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-gray-200"
               >

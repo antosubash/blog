@@ -1,7 +1,7 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs'
-import path from 'path'
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import sharp from 'sharp'
-import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -73,7 +73,7 @@ function wrapText(text, maxWidth, fontSize) {
     const width = (currentLine.length + word.length + 1) * avgCharWidth
 
     if (width < maxWidth) {
-      currentLine += ' ' + word
+      currentLine += ` ${word}`
     } else {
       lines.push(currentLine)
       currentLine = word

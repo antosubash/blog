@@ -8,9 +8,7 @@ import CustomTOCInline from './CustomTOCInline'
 interface CustomMDXLayoutRendererProps {
   code: string
   components?: MDXComponents
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  toc?: any
-  slug?: string
+  toc?: unknown
   videoId?: string
   series?: string
 }
@@ -19,13 +17,12 @@ export default function CustomMDXLayoutRenderer({
   code,
   components = {},
   toc,
-  slug,
   videoId,
   series,
 }: CustomMDXLayoutRendererProps) {
   const MDXContent = useMDXComponent(code)
   const [mounted, setMounted] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [error, _setError] = useState<string | null>(null)
 
   // Ensure component is mounted on client side
   useEffect(() => {

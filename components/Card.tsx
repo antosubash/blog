@@ -1,7 +1,6 @@
-import { designSystemUtils } from '@/lib/design-system'
 import Image from './Image'
 import Link from './Link'
-import { CardContent, CardHeader, CardTitle, Card as UICard } from './ui/Card'
+import { CardContent, CardTitle, Card as UICard } from './ui/Card'
 
 const Card = ({ title, description, imgSrc, href }) => (
   <div className="md max-w-[544px] p-4 md:w-1/2">

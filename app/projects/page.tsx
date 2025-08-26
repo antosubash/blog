@@ -1,10 +1,13 @@
+'use client'
+
+import { useId } from 'react'
 import { genPageMetadata } from 'app/seo'
-import Card from '@/components/Card'
 import projectsData from '@/data/projectsData'
 
 export const metadata = genPageMetadata({ title: 'Projects' })
 
 export default function Projects() {
+  const featuredId = useId()
   const featuredProjects = projectsData.filter(
     (project) =>
       project.title.toLowerCase().includes('abp') ||
@@ -34,7 +37,7 @@ export default function Projects() {
                 View on GitHub
               </a>
               <a
-                href="#featured"
+                href={`#${featuredId}`}
                 className="inline-flex items-center rounded-lg border-2 border-primary-600 px-6 py-3 text-lg font-semibold text-primary-600 transition-all hover:bg-primary-600 hover:text-white dark:text-primary-400"
               >
                 Explore Projects
@@ -45,7 +48,7 @@ export default function Projects() {
       </div>
 
       {/* Featured Projects Section */}
-      <div id="featured" className="py-16 md:py-24">
+      <div id={featuredId} className="py-16 md:py-24">
         <div className="container mx-auto px-4">
           <div className="mb-16 text-center">
             <h2 className="mb-4 text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl">
@@ -97,7 +100,10 @@ export default function Projects() {
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
+                      role="img"
+                      aria-label="External link"
                     >
+                      <title>External link</title>
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"

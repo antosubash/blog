@@ -18,6 +18,72 @@ const Parts = (props: PartsProps) => {
 
   if (!series || !progress) return null
 
+  // Helper function to get post status
+  const getPostStatus = (
+    _blogPost: unknown,
+    isCurrentPost: boolean,
+    isCompleted: boolean,
+    isNext: boolean
+  ) => {
+    if (isCurrentPost) {
+      return {
+        borderClass: 'border-blue-300 bg-blue-50 dark:border-blue-600 dark:bg-blue-900/20',
+        badgeClass: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
+        titleClass: 'text-blue-900 dark:text-blue-100',
+      }
+    } else if (isCompleted) {
+      return {
+        borderClass:
+          'border-green-200 bg-green-50 hover:border-green-300 dark:border-green-700 dark:bg-green-900/20 dark:hover:border-green-600',
+        badgeClass: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+        titleClass: 'text-gray-900 dark:text-gray-100',
+      }
+    } else if (isNext) {
+      return {
+        borderClass:
+          'border-orange-200 bg-orange-50 hover:border-orange-300 dark:border-orange-700 dark:bg-orange-900/20 dark:hover:border-orange-600',
+        badgeClass: 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200',
+        titleClass: 'text-gray-900 dark:text-gray-100',
+      }
+    } else {
+      return {
+        borderClass:
+          'border-gray-200 bg-gray-50 hover:border-gray-300 dark:border-gray-700 dark:bg-gray-700/50 dark:hover:border-gray-600',
+        badgeClass: 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300',
+        titleClass: 'text-gray-900 dark:text-gray-100',
+      }
+    }
+  }
+
+  // Helper function to render status icon
+  const renderStatusIcon = (isCurrentPost: boolean, isCompleted: boolean) => {
+    if (isCurrentPost) {
+      return (
+        <div className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-500">
+          <div className="h-2 w-2 rounded-full bg-white" />
+        </div>
+      )
+    } else if (isCompleted) {
+      return <CheckCircle className="h-5 w-5 text-green-500" />
+    } else {
+      return <Circle className="h-5 w-5 text-gray-400" />
+    }
+  }
+
+  // Helper function to render status badges
+  const renderStatusBadges = (isCurrentPost: boolean, isNext: boolean) => {
+    return (
+      <>
+        {isCurrentPost && (
+          <span className="text-xs font-medium text-blue-600 dark:text-blue-400">Current</span>
+        )}
+        {isNext && (
+          <span className="text-xs font-medium text-orange-600 dark:text-orange-400">Next</span>
+        )}
+      </>
+    )
+  }
+
   return (
     <div className="my-8 rounded-2xl border border-gray-200 bg-white/80 p-6 shadow-lg backdrop-blur-sm dark:border-gray-700 dark:bg-gray-800/80">
       {/* Series Header */}
@@ -60,68 +126,28 @@ const Parts = (props: PartsProps) => {
             const isCurrentPost = props.data === blogPost.slug
             const isCompleted = blogPost.part < progress.currentPart
             const isNext = blogPost.part === progress.currentPart + 1
+            const status = getPostStatus(blogPost, isCurrentPost, isCompleted, isNext)
 
             return (
               <Link
                 key={blogPost.slug}
                 href={`/posts/${blogPost.slug}`}
-                className={`group flex items-center space-x-3 rounded-lg border p-3 transition-all duration-200 ${
-                  isCurrentPost
-                    ? 'border-blue-300 bg-blue-50 dark:border-blue-600 dark:bg-blue-900/20'
-                    : isCompleted
-                      ? 'border-green-200 bg-green-50 hover:border-green-300 dark:border-green-700 dark:bg-green-900/20 dark:hover:border-green-600'
-                      : isNext
-                        ? 'border-orange-200 bg-orange-50 hover:border-orange-300 dark:border-orange-700 dark:bg-orange-900/20 dark:hover:border-orange-600'
-                        : 'border-gray-200 bg-gray-50 hover:border-gray-300 dark:border-gray-700 dark:bg-gray-700/50 dark:hover:border-gray-600'
-                }`}
+                className={`group flex items-center space-x-3 rounded-lg border p-3 transition-all duration-200 ${status.borderClass}`}
               >
                 {/* Status Icon */}
-                <div className="flex-shrink-0">
-                  {isCurrentPost ? (
-                    <div className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-500">
-                      <div className="h-2 w-2 rounded-full bg-white" />
-                    </div>
-                  ) : isCompleted ? (
-                    <CheckCircle className="h-5 w-5 text-green-500" />
-                  ) : (
-                    <Circle className="h-5 w-5 text-gray-400" />
-                  )}
-                </div>
+                <div className="flex-shrink-0">{renderStatusIcon(isCurrentPost, isCompleted)}</div>
 
                 {/* Content */}
                 <div className="min-w-0 flex-1">
                   <div className="mb-1 flex items-center space-x-2">
                     <span
-                      className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-bold ${
-                        isCurrentPost
-                          ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
-                          : isCompleted
-                            ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                            : isNext
-                              ? 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200'
-                              : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300'
-                      }`}
+                      className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-bold ${status.badgeClass}`}
                     >
                       Part {blogPost.part}
                     </span>
-                    {isCurrentPost && (
-                      <span className="text-xs font-medium text-blue-600 dark:text-blue-400">
-                        Current
-                      </span>
-                    )}
-                    {isNext && (
-                      <span className="text-xs font-medium text-orange-600 dark:text-orange-400">
-                        Next
-                      </span>
-                    )}
+                    {renderStatusBadges(isCurrentPost, isNext)}
                   </div>
-                  <h4
-                    className={`line-clamp-2 text-sm font-medium ${
-                      isCurrentPost
-                        ? 'text-blue-900 dark:text-blue-100'
-                        : 'text-gray-900 dark:text-gray-100'
-                    }`}
-                  >
+                  <h4 className={`line-clamp-2 text-sm font-medium ${status.titleClass}`}>
                     {blogPost.title}
                   </h4>
                 </div>

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 // Global mermaid instance
-let mermaidInstance: any = null // eslint-disable-line @typescript-eslint/no-explicit-any
+let mermaidInstance: unknown = null
 
 interface MermaidProps {
   chart: string
@@ -118,7 +118,7 @@ const Mermaid = ({ chart, className = '' }: MermaidProps) => {
 
     return () => clearTimeout(timer)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chart, mounted, elementRef.current])
+  }, [chart, mounted])
 
   if (error) {
     return (
@@ -175,6 +175,7 @@ const Mermaid = ({ chart, className = '' }: MermaidProps) => {
       )}
 
       {svgContent && !error && !isLoading && (
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         <div className="flex justify-center" dangerouslySetInnerHTML={{ __html: svgContent }} />
       )}
     </div>

@@ -1,6 +1,6 @@
 import 'css/prism.css'
 import 'katex/dist/katex.css'
-import type { Authors, Posts } from 'contentlayer/generated'
+import type { Authors } from 'contentlayer/generated'
 import { allAuthors, allPosts } from 'contentlayer/generated'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
@@ -196,12 +196,14 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
   return (
     <>
       {/* Structured data */}
+      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
       {/* Breadcrumb structured data */}
+      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -234,12 +236,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
 
       <Layout content={mainContent} authorDetails={authorDetails} next={next} prev={prev}>
         {/* Post Enhancements */}
-        <PostEnhancements
-          slug={post.slug}
-          title={post.title}
-          readingTime={post.readingTime}
-          tags={post.tags}
-        />
+        <PostEnhancements title={post.title} tags={post.tags} />
 
         {/* Main Content */}
         <Suspense fallback={<PostLoading />}>

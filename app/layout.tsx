@@ -6,7 +6,6 @@ import { Analytics, type AnalyticsConfig } from 'pliny/analytics'
 import { type SearchConfig, SearchProvider } from 'pliny/search'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
-import SectionContainer from '@/components/SectionContainer'
 import siteMetadata from '@/data/siteMetadata'
 import { ThemeProviders } from './theme-providers'
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState, useId } from 'react'
 
 type SubmitStatus =
   | { state: 'idle' }
@@ -15,6 +15,13 @@ export default function ContactForm() {
   const [message, setMessage] = useState('')
   const [website, setWebsite] = useState('') // honeypot
   const [status, setStatus] = useState<SubmitStatus>({ state: 'idle' })
+
+  // Generate unique IDs for form elements
+  const websiteId = useId()
+  const nameId = useId()
+  const emailId = useId()
+  const subjectId = useId()
+  const messageId = useId()
 
   const isDisabled = useMemo(() => {
     return (
@@ -54,7 +61,7 @@ export default function ContactForm() {
         setEmail('')
         setSubject('')
         setMessage('')
-      } catch (err) {
+      } catch (_err) {
         setStatus({ state: 'error', message: 'Network error. Please try again.' })
       }
     },
@@ -65,9 +72,9 @@ export default function ContactForm() {
     <form className="space-y-4" onSubmit={handleSubmit} noValidate>
       {/* Honeypot field */}
       <div className="hidden">
-        <label htmlFor="website">Website</label>
+        <label htmlFor={websiteId}>Website</label>
         <input
-          id="website"
+          id={websiteId}
           name="website"
           type="text"
           autoComplete="off"
@@ -78,14 +85,14 @@ export default function ContactForm() {
 
       <div>
         <label
-          htmlFor="name"
+          htmlFor={nameId}
           className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
         >
           Name
         </label>
         <input
           type="text"
-          id="name"
+          id={nameId}
           name="name"
           required
           value={name}
@@ -97,14 +104,14 @@ export default function ContactForm() {
 
       <div>
         <label
-          htmlFor="email"
+          htmlFor={emailId}
           className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
         >
           Email
         </label>
         <input
           type="email"
-          id="email"
+          id={emailId}
           name="email"
           required
           value={email}
@@ -116,14 +123,14 @@ export default function ContactForm() {
 
       <div>
         <label
-          htmlFor="subject"
+          htmlFor={subjectId}
           className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
         >
           Subject
         </label>
         <input
           type="text"
-          id="subject"
+          id={subjectId}
           name="subject"
           required
           value={subject}
@@ -135,13 +142,13 @@ export default function ContactForm() {
 
       <div>
         <label
-          htmlFor="message"
+          htmlFor={messageId}
           className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
         >
           Message
         </label>
         <textarea
-          id="message"
+          id={messageId}
           name="message"
           rows={5}
           required

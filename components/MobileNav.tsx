@@ -1,7 +1,7 @@
 'use client'
 
 import { Briefcase, FileText, Heart, Home, Layers, Mail, Menu, X } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import headerNavLinks from '@/data/headerNavLinks'
 import siteMetadata from '@/data/siteMetadata'
 import Link from './Link'
@@ -21,10 +21,10 @@ const MobileNav = () => {
     })
   }
 
-  const closeNav = () => {
+  const closeNav = useCallback(() => {
     setNavShow(false)
     document.body.style.overflow = 'auto'
-  }
+  }, [])
 
   // Handle escape key to close menu
   useEffect(() => {
@@ -41,7 +41,7 @@ const MobileNav = () => {
     return () => {
       document.removeEventListener('keydown', handleEscape)
     }
-  }, [navShow])
+  }, [navShow, closeNav])
 
   // Close menu on window resize to larger screens
   useEffect(() => {
@@ -53,7 +53,7 @@ const MobileNav = () => {
 
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
-  }, [navShow])
+  }, [navShow, closeNav])
 
   // Cleanup on unmount
   useEffect(() => {
@@ -81,6 +81,7 @@ const MobileNav = () => {
   return (
     <>
       <button
+        type="button"
         aria-label="Toggle Menu"
         onClick={onToggleNav}
         className="inline-flex items-center justify-center rounded-lg p-2 text-gray-700 transition-all duration-200 hover:bg-blue-50 hover:text-blue-600 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-blue-400 md:hidden"
@@ -91,6 +92,7 @@ const MobileNav = () => {
       {/* Mobile Menu Overlay - Click outside to close */}
       {navShow && (
         <button
+          type="button"
           className="fixed inset-0 z-50 bg-black/40 transition-all duration-300 md:hidden"
           onClick={closeNav}
           onKeyDown={(e) => {
@@ -123,6 +125,7 @@ const MobileNav = () => {
               </div>
             </div>
             <button
+              type="button"
               aria-label="Close Menu"
               onClick={closeNav}
               className="inline-flex items-center justify-center rounded-xl p-2 text-gray-500 transition-all duration-200 hover:bg-red-50 hover:text-red-600 dark:text-gray-400 dark:hover:bg-red-900/20 dark:hover:text-red-400"

@@ -67,7 +67,10 @@ const CustomTOCInline = ({ toc }: TOCInlineProps) => {
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              role="img"
+              aria-label="Table of contents icon"
             >
+              <title>Table of Contents</title>
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -81,6 +84,7 @@ const CustomTOCInline = ({ toc }: TOCInlineProps) => {
           </h2>
         </div>
         <button
+          type="button"
           onClick={toggleCollapse}
           className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600"
         >
@@ -91,7 +95,10 @@ const CustomTOCInline = ({ toc }: TOCInlineProps) => {
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
+            role="img"
+            aria-label="Toggle collapse"
           >
+            <title>Toggle collapse</title>
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
         </button>
@@ -104,6 +111,7 @@ const CustomTOCInline = ({ toc }: TOCInlineProps) => {
               <li key={section.url || `toc-section-${index}`}>
                 <div className="flex items-center">
                   <button
+                    type="button"
                     onClick={() => toggleSection(section.url)}
                     className={`mr-2 flex h-5 w-5 items-center justify-center rounded transition-colors ${
                       section.children.length > 0
@@ -119,7 +127,10 @@ const CustomTOCInline = ({ toc }: TOCInlineProps) => {
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
+                      role="img"
+                      aria-label="Toggle section"
                     >
+                      <title>Toggle section</title>
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"

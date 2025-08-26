@@ -20,7 +20,7 @@ interface LayoutProps {
 const editUrl = (path) => `${siteMetadata.siteRepo}/blob/main/data/${path}`
 
 export default function PostLayout({ content, next, prev, children }: LayoutProps) {
-  const { filePath, slug, date, title, tags, readingTime } = content
+  const { filePath, slug, date, title, readingTime } = content
 
   // Get enhanced reading time display
   const readingTimeDisplay = getReadingTimeDisplay(readingTime)
@@ -57,13 +57,14 @@ export default function PostLayout({ content, next, prev, children }: LayoutProp
               <Link href={editUrl(filePath)}>View on GitHub</Link>
             </div>
             {siteMetadata.comments && (
+              // biome-ignore lint/correctness/useUniqueElementIds: comment id is unique
               <div className="pb-6 pt-6 text-center text-gray-700 dark:text-gray-300" id="comment">
                 <Comments slug={slug} />
               </div>
             )}
             <footer>
               <div className="flex flex-col text-sm font-medium sm:flex-row sm:justify-between sm:text-base">
-                {prev && prev.postUrl && (
+                {prev?.postUrl && (
                   <div className="pt-4 xl:pt-8">
                     <Link
                       href={`${prev.postUrl}`}
@@ -74,7 +75,7 @@ export default function PostLayout({ content, next, prev, children }: LayoutProp
                     </Link>
                   </div>
                 )}
-                {next && next.postUrl && (
+                {next?.postUrl && (
                   <div className="pt-4 xl:pt-8">
                     <Link
                       href={`${next.postUrl}`}

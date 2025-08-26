@@ -14,7 +14,7 @@ export const generateStaticParams = async () => {
 export default async function Page({ params }: { params: Promise<{ page: string }> }) {
   const { page } = await params
   const posts = allCoreContent(sortPosts(allPosts)).filter((post) => !post.draft)
-  const pageNumber = parseInt(page as string)
+  const pageNumber = parseInt(page as string, 10)
   const initialDisplayPosts = posts.slice(
     POSTS_PER_PAGE * (pageNumber - 1),
     POSTS_PER_PAGE * pageNumber

@@ -32,7 +32,7 @@ export function getAllSeries() {
       if (!seriesMap.has(seriesName)) {
         seriesMap.set(seriesName, [])
       }
-      seriesMap.get(seriesName)!.push({
+      seriesMap.get(seriesName)?.push({
         slug: post.slug,
         date: post.date,
         title: post.title,

@@ -11,10 +11,8 @@ export default function Page() {
   const mainContent = coreContent(author)
 
   return (
-    <>
-      <AuthorLayout content={mainContent}>
-        <CustomMDXLayoutRenderer code={author.body.code} />
-      </AuthorLayout>
-    </>
+    <AuthorLayout content={mainContent}>
+      <CustomMDXLayoutRenderer code={author.body.code} />
+    </AuthorLayout>
   )
 }

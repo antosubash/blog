@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react'
+import { ArrowLeft, ArrowRight, MoreHorizontal } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
@@ -102,7 +102,7 @@ export default function EnhancedPagination({
             if (page === '...') {
               return (
                 <span
-                  key={`ellipsis-${index}`}
+                  key={`ellipsis-${index}-${page}`}
                   className="inline-flex items-center px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-400"
                 >
                   <MoreHorizontal className="h-4 w-4" />

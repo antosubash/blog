@@ -4,6 +4,10 @@ import Link from '@/components/Link'
 export const metadata = genPageMetadata({ title: 'Consulting Services' })
 
 const ConsultingPage = () => {
+  // Generate unique IDs for sections
+  const servicesId = 'services-section'
+  const technologiesId = 'technologies-section'
+  const processId = 'process-section'
   const services = [
     {
       title: 'Application Development',
@@ -88,7 +92,7 @@ const ConsultingPage = () => {
                 Get Started Today
               </Link>
               <Link
-                href="#services"
+                href={`#${servicesId}`}
                 className="inline-flex items-center rounded-lg border-2 border-primary-600 px-6 py-3 text-lg font-semibold text-primary-600 transition-all hover:bg-primary-600 hover:text-white dark:text-primary-400"
               >
                 View Services
@@ -99,7 +103,7 @@ const ConsultingPage = () => {
       </div>
 
       {/* Services Section */}
-      <div id="services" className="py-16 md:py-24">
+      <div id={servicesId} className="py-16 md:py-24">
         <div className="container mx-auto px-4">
           <div className="mb-16 text-center">
             <h2 className="mb-4 text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl">
@@ -112,9 +116,9 @@ const ConsultingPage = () => {
           </div>
 
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-2">
-            {services.map((service, index) => (
+            {services.map((service) => (
               <div
-                key={index}
+                key={service.title}
                 className="group rounded-xl border border-gray-200 bg-white p-8 shadow-lg transition-all hover:shadow-xl dark:border-gray-700 dark:bg-gray-800"
               >
                 <div className="mb-6 text-4xl">{service.icon}</div>
@@ -123,9 +127,9 @@ const ConsultingPage = () => {
                 </h3>
                 <p className="mb-6 text-gray-600 dark:text-gray-300">{service.description}</p>
                 <ul className="space-y-2">
-                  {service.features.map((feature, featureIndex) => (
+                  {service.features.map((feature) => (
                     <li
-                      key={featureIndex}
+                      key={feature}
                       className="flex items-center text-sm text-gray-600 dark:text-gray-300"
                     >
                       <span className="mr-2 text-primary-600">✓</span>
@@ -140,7 +144,7 @@ const ConsultingPage = () => {
       </div>
 
       {/* Technologies Section */}
-      <div className="bg-gray-50 py-16 dark:bg-gray-900 md:py-24">
+      <div id={technologiesId} className="bg-gray-50 py-16 dark:bg-gray-900 md:py-24">
         <div className="container mx-auto px-4">
           <div className="mb-16 text-center">
             <h2 className="mb-4 text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl">
@@ -152,9 +156,9 @@ const ConsultingPage = () => {
           </div>
 
           <div className="grid grid-cols-2 gap-6 sm:grid-cols-4 lg:grid-cols-8">
-            {technologies.map((tech, index) => (
+            {technologies.map((tech) => (
               <div
-                key={index}
+                key={tech.name}
                 className="flex flex-col items-center rounded-lg bg-white p-6 shadow-md transition-all hover:shadow-lg dark:bg-gray-800"
               >
                 <div className="mb-3 text-3xl">{tech.icon}</div>
@@ -168,7 +172,7 @@ const ConsultingPage = () => {
       </div>
 
       {/* Process Section */}
-      <div className="py-16 md:py-24">
+      <div id={processId} className="py-16 md:py-24">
         <div className="container mx-auto px-4">
           <div className="mb-16 text-center">
             <h2 className="mb-4 text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl">
@@ -201,8 +205,8 @@ const ConsultingPage = () => {
                 title: 'Delivery',
                 description: 'Handing over with documentation and support',
               },
-            ].map((process, index) => (
-              <div key={index} className="text-center">
+            ].map((process) => (
+              <div key={process.step} className="text-center">
                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary-600 text-2xl font-bold text-white">
                   {process.step}
                 </div>

@@ -14,7 +14,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { tag } = await params
   const decodedTag = decodeURI(tag)
-  const ogImage = siteMetadata.siteUrl + '/og/' + decodedTag + '.png'
+  const ogImage = `${siteMetadata.siteUrl}/og/${decodedTag}.png`
   const title = decodedTag[0].toUpperCase() + decodedTag.split(' ').join('-').slice(1)
 
   return genPageMetadata({
@@ -65,13 +65,11 @@ export default async function TagPage({ params }: { params: Promise<{ tag: strin
   const title = decodedTag[0].toUpperCase() + decodedTag.split(' ').join('-').slice(1)
   const filteredPosts = allCoreContent(
     sortPosts(
-      allPosts.filter(
-        (post) =>
-          post.tags &&
-          post.tags
-            .filter((t) => t)
-            .map((t) => slug(t))
-            .includes(decodedTag)
+      allPosts.filter((post) =>
+        post.tags
+          ?.filter((t) => t)
+          .map((t) => slug(t))
+          .includes(decodedTag)
       )
     )
   )

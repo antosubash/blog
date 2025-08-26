@@ -1,35 +1,31 @@
-import { mkdirSync, writeFileSync } from 'fs'
-import GithubSlugger from 'github-slugger'
-import path from 'path'
+import { mkdirSync, writeFileSync } from 'node:fs'
+import path from 'node:path'
 import { sortPosts } from 'pliny/utils/contentlayer.js'
-import { escape } from 'pliny/utils/htmlEscaper.js'
+import { escape as escapeHtml } from 'pliny/utils/htmlEscaper.js'
 import { allPosts } from '../.contentlayer/generated/index.mjs'
 import siteMetadata from '../data/siteMetadata.js'
 
 const generateRssItem = (config, post) => `
   <item>
     <guid>${config.siteUrl}/posts/${post.slug}</guid>
-    <title>${escape(post.title)}</title>
+    <title>${escapeHtml(post.title)}</title>
     <link>${config.siteUrl}/posts/${post.slug}</link>
-    ${post.excerpt && `<description>${escape(post.excerpt)}</description>`}
+    ${post.excerpt && `<description>${escapeHtml(post.excerpt)}</description>`}
     <pubDate>${new Date(post.date).toUTCString()}</pubDate>
     <author>${config.email} (${config.author})</author>
-    ${
-      post.tags &&
-      post.tags
-        .filter((t) => t)
-        .map((t) => `<category>${t}</category>`)
-        .join('')
-    }
+    ${post.tags
+      ?.filter((t) => t)
+      .map((t) => `<category>${t}</category>`)
+      .join('')}
   </item>
 `
 
 const generateRss = (config, posts, page = 'feed.xml') => `
   <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
-      <title>${escape(config.title)}</title>
+      <title>${escapeHtml(config.title)}</title>
       <link>${config.siteUrl}</link>
-      <description>${escape(config.description)}</description>
+      <description>${escapeHtml(config.description)}</description>
       <language>${config.language}</language>
       <managingEditor>${config.email} (${config.author})</managingEditor>
       <webMaster>${config.email} (${config.author})</webMaster>

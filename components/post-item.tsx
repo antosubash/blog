@@ -1,7 +1,6 @@
 import { format, parseISO } from 'date-fns'
-import { ArrowRight, BookOpen, Calendar, Clock, Eye, TrendingUp } from 'lucide-react'
+import { ArrowRight, BookOpen, Calendar, Eye, TrendingUp } from 'lucide-react'
 import Link from 'next/link'
-import React from 'react'
 import Tag from './Tag'
 
 interface PostItemProps {

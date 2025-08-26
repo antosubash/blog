@@ -5,8 +5,7 @@ interface PageSEOProps {
   title: string
   description?: string
   image?: string
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: string]: any
+  [key: string]: string | string[] | undefined
 }
 
 export function genPageMetadata({ title, description, image, ...rest }: PageSEOProps): Metadata {

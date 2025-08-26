@@ -1,4 +1,4 @@
-import { ArrowRight, BookOpen, Calendar, Code2, FileText, Rocket, Users } from 'lucide-react'
+import { ArrowRight, BookOpen, Code2, Rocket } from 'lucide-react'
 import NewsletterForm from 'pliny/ui/NewsletterForm'
 import Link from '@/components/Link'
 import PostItem from '@/components/post-item'
@@ -10,10 +10,10 @@ export default function Home({ posts }) {
   const recentPosts = posts.slice(0, MAX_DISPLAY)
 
   // Calculate stats
-  const totalPosts = posts.length
-  const totalTags = [...new Set(posts.flatMap((post) => post.tags || []))].length
+  const _totalPosts = posts.length
+  const _totalTags = [...new Set(posts.flatMap((post) => post.tags || []))].length
   const currentYear = new Date().getFullYear()
-  const postsThisYear = posts.filter(
+  const _postsThisYear = posts.filter(
     (post) => new Date(post.date).getFullYear() === currentYear
   ).length
 

@@ -35,7 +35,7 @@ input:-webkit-autofill:focus {
 }
 
 lite-youtube {
-  max-width: 100% !important;
+  max-width: 100%;
 }
 
 /* Mermaid Diagram Styles */

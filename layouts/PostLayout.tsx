@@ -127,7 +127,7 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                 )}
                 {(next || prev) && (
                   <div className="flex justify-between py-4 xl:block xl:space-y-8 xl:py-8">
-                    {prev && prev.postUrl && (
+                    {prev?.postUrl && (
                       <div>
                         <h2 className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
                           Previous Article
@@ -137,7 +137,7 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                         </div>
                       </div>
                     )}
-                    {next && next.postUrl && (
+                    {next?.postUrl && (
                       <div>
                         <h2 className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
                           Next Article

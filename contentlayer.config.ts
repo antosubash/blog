@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
+import path from 'node:path'
 import { type ComputedFields, defineDocumentType, makeSource } from 'contentlayer/source-files'
-import path from 'path'
 import {
   extractTocHeadings,
   remarkCodeTitles,
@@ -21,7 +22,7 @@ import remarkMath from 'remark-math'
 import siteMetadata from './data/siteMetadata'
 
 const root = process.cwd()
-const isProduction = process.env.NODE_ENV === 'production'
+const _isProduction = process.env.NODE_ENV === 'production'
 
 const computedFields: ComputedFields = {
   readingTime: { type: 'json', resolve: (doc) => readingTime(doc.body.raw) },
@@ -108,7 +109,7 @@ export default makeSource({
   mdx: {
     cwd: process.cwd(),
     remarkPlugins: [
-      remarkExtractFrontmatter as any,
+      remarkExtractFrontmatter as unknown,
       remarkGfm,
       remarkCodeTitles,
       remarkMath,
@@ -117,7 +118,7 @@ export default makeSource({
     rehypePlugins: [
       rehypeSlug,
       rehypeAutolinkHeadings,
-      rehypeKatex as any,
+      rehypeKatex as unknown,
       [rehypeCitation, { path: path.join(root, 'data') }],
       [rehypePrismPlus, { defaultLanguage: 'js', ignoreMissing: true }],
       rehypePresetMinify,

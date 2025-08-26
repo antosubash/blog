@@ -49,7 +49,7 @@ const Series = () => {
 
         {/* Main Content */}
         <div className="w-full">
-          <div className={designSystemUtils.layout.grid['cards']}>
+          <div className={designSystemUtils.layout.grid.cards}>
             {seriesGroups.map((series) => (
               <Link
                 key={series.name}

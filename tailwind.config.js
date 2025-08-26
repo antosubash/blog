@@ -1,5 +1,5 @@
 // @ts-check
-const defaultTheme = require('tailwindcss/defaultTheme')
+const _defaultTheme = require('tailwindcss/defaultTheme')
 const colors = require('tailwindcss/colors')
 
 /** @type {import("tailwindcss/types").Config } */

@@ -1,4 +1,4 @@
-import { writeFileSync } from 'fs'
+import { writeFileSync } from 'node:fs'
 import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer.js'
 import { allPosts } from '../.contentlayer/generated/index.mjs'
 
