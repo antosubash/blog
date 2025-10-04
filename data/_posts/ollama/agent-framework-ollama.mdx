@@ -1,0 +1,473 @@
+---
+title: 'Building AI Agents with Microsoft Agent Framework and Ollama: A Getting Started Guide'
+excerpt: 'Learn how to build sophisticated AI agents using Microsoft Agent Framework with Ollama for local AI model execution. This comprehensive guide covers streaming responses, multi-turn conversations, function tools, middleware integration, and production-ready patterns.'
+date: '2025-10-04'
+videoId:
+tags:
+  - ollama
+  - agent-framework
+  - llm
+  - dotnet
+  - ai-agents
+  - microsoft-agents
+---
+
+<TOCInline toc={props.toc} asDisclosure />
+
+## Introduction
+
+Microsoft just realease the preview version of yet another Agent Framework. This time with the name Microsoft Agent Framework. The previous name are Semantic Kernel and AutoGen. I have tried Semantic Kernel and AutoGen and It was not straight forward to get started There was bit of learning curve. Microsoft Agent Framework is a bit more straight forward to get started. It was obvious that lots of learnings from Semantic Kernel and AutoGen are incorporated in this new framework. After the release of the preview version I have tried to build some agents and I have been quite impressed with the performance and the ease of use.
+
+## What You'll Learn in this blog post
+
+By the end of this guide, you'll understand how to:
+
+- 🤖 **Build AI Agents**: Create simple agents using Microsoft Agent Framework
+- 💬 **Manage Conversations**: Implement multi-turn conversations with context preservation
+- 🌊 **Stream Responses**: Provide real-time, character-by-character response streaming
+- 🔧 **Integrate Function Tools**: Enable agents to call custom functions and external APIs
+- ⚙️ **Use Middleware**: Implement custom middleware for logging, monitoring, and extensibility
+- 🔒 **Local AI Execution**: Run AI models locally with Ollama for privacy and control
+
+There is lot more you can do with Microsoft Agent Framework and Ollama. But I will cover the basic features in this blog post. I recommend you to check the official repository for sample code here [Microsoft Agent Framework Samples](https://github.com/microsoft/agent-framework/tree/main/dotnet/samples)
+
+## What is Microsoft Agent Framework?
+
+The Microsoft Agent Framework is an open-source development kit for building AI agents and multi-agent workflows for .NET and Python. It brings together and extends ideas from the Semantic Kernel and AutoGen projects, combining their strengths while adding new capabilities. Built by the same teams, it is the unified foundation for building AI agents going forward.
+
+The Agent Framework offers two primary categories of capabilities:
+
+- AI Agents: individual agents that use LLMs to process user inputs, call tools and MCP servers to perform actions, and generate responses. Agents support model providers including Azure OpenAI, OpenAI, and Azure AI.
+
+- Workflows: graph-based workflows that connect multiple agents and functions to perform complex, multi-step tasks. Workflows support type-based routing, nesting, checkpointing, and request/response patterns for human-in-the-loop scenarios.
+
+The framework also provides foundational building blocks, including model clients (chat completions and responses), an agent thread for state management, context providers for agent memory, middleware for intercepting agent actions, and MCP clients for tool integration. Together, these components give you the flexibility and power to build interactive, robust, and safe AI applications.
+
+Check this blog post for the official preview release of Microsoft Agent Framework [Microsoft Agent Framework Preview Release](https://devblogs.microsoft.com/dotnet/introducing-microsoft-agent-framework-preview/)
+
+## What is Ollama?
+
+Ollama is a lightweight, open-source, and fast local AI model serving framework that enables developers to run and manage LLMs locally without relying on external APIs. It provides a simple and easy to use interface to interact with the LLM. It also provides a Open AI like API to interact with the LLM. Ollama has sdk for python and javascript. you can find more about Ollama [here](https://ollama.com)
+
+## Code Repository
+
+You can find the full code for this blog post [here](https://github.com/antosubash/agent-framework-ollama)
+
+## Prerequisites
+
+Before diving into the implementation, ensure you have the following installed and configured:
+
+### Required Software
+
+- **[.NET 10.0 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)** - Latest .NET runtime and SDK
+- **[Ollama](https://ollama.com/)** - Local AI model execution platform
+- **Visual Studio 2022** or **VS Code** with C# extension (recommended)
+
+### Recommended Models
+
+For optimal performance and compatibility, consider these models:
+
+- `qwen3:8b` - Balanced performance and resource usage (recommended)
+- `llama3.2:3b` - Lightweight option for development
+
+## Installation & Setup
+
+Follow these steps to set up your development environment:
+
+### 1. Install Ollama
+
+Choose the installation method for your platform:
+
+```bash
+# Windows (using winget)
+winget install Ollama.Ollama
+
+# macOS (using Homebrew)
+brew install ollama
+
+# Linux (using curl)
+curl -fsSL https://ollama.com/install.sh | sh
+```
+
+### 2. Download AI Models
+
+Pull a compatible model for your system:
+
+```bash
+# Recommended model (balanced performance)
+ollama pull qwen3:8b
+
+# Alternative lightweight model
+ollama pull llama3.2:3b
+
+```
+
+### 3. Start Ollama Service
+
+Launch the Ollama service:
+
+```bash
+# Start Ollama in the background
+ollama serve
+
+# Verify it's running
+curl http://localhost:11434
+```
+
+### 4. Create Your Project
+
+Set up a new .NET console application:
+
+```bash
+# Create new project
+dotnet new console -n AgentWithOllama
+cd AgentWithOllama
+
+# Add required NuGet packages
+dotnet add package Microsoft.Agents.AI --prerelease
+dotnet add package OllamaSharp
+dotnet add package Microsoft.Extensions.AI
+```
+
+### 5. Verify Installation
+
+Test your setup with a simple connection:
+
+```bash
+# Run the application
+dotnet run
+```
+
+## Complete Implementation
+
+Here's the complete working code that demonstrates all the features with detailed explanations:
+
+```csharp
+using System.ComponentModel;
+using Microsoft.Agents.AI;
+using Microsoft.Extensions.AI;
+using OllamaSharp;
+
+// Configuration - Ollama endpoint and model selection
+var endpoint = "http://localhost:11434";  // Default Ollama endpoint
+var modelName = "qwen3:8b";              // Model to use for AI responses
+
+// Agent personality configuration
+const string JokerName = "Joker";
+const string JokerInstructions = "You are good at telling jokes.";
+
+/// <summary>
+/// Example function tool that the agent can call to get weather information.
+/// The Description attributes provide metadata for the AI to understand when and how to use this function.
+/// </summary>
+[Description("Get the weather for a given location.")]
+static string GetWeather([Description("The location to get the weather for.")] string location)
+    => $"The weather in {location} is cloudy with a high of 15°C.";
+
+// Initialize Ollama client and create the AI agent
+// The ChatClientAgent wraps the Ollama client with Microsoft Agent Framework capabilities
+using OllamaApiClient chatClient = new(new Uri(endpoint), modelName);
+AIAgent agent = new ChatClientAgent(
+    chatClient,
+    JokerInstructions,
+    JokerName,
+    tools: [AIFunctionFactory.Create(GetWeather)]  // Register our weather function
+);
+
+/// <summary>
+/// Custom middleware for intercepting and logging function calls.
+/// This demonstrates how to add cross-cutting concerns like logging, monitoring, or validation.
+/// </summary>
+async ValueTask<object?> FunctionCallMiddleware(
+    AIAgent agent,
+    FunctionInvocationContext context,
+    Func<FunctionInvocationContext, CancellationToken, ValueTask<object?>> next,
+    CancellationToken cancellationToken)
+{
+    // Pre-invocation logging
+    Console.ForegroundColor = ConsoleColor.Yellow;
+    Console.WriteLine($"🔧 Function Name: {context!.Function.Name} - Middleware Pre-Invoke");
+    Console.ResetColor();
+
+    // Execute the function and capture timing
+    var startTime = DateTime.UtcNow;
+    var result = await next(context, cancellationToken);
+    var duration = DateTime.UtcNow - startTime;
+
+    // Post-invocation logging with timing information
+    Console.ForegroundColor = ConsoleColor.Yellow;
+    Console.WriteLine($"🔧 Function Name: {context!.Function.Name} - Middleware Post-Invoke (Duration: {duration.TotalMilliseconds}ms)");
+    Console.ResetColor();
+
+    return result;
+}
+
+// Create an agent with middleware pipeline
+// The builder pattern allows for easy composition of middleware components
+var agentWithMiddleware = agent.AsBuilder()
+    .Use(FunctionCallMiddleware)  // Add our custom middleware
+    .Build();
+
+/// <summary>
+/// Enhanced helper method for displaying streaming responses with visual formatting.
+/// This method provides a better user experience by showing real-time character-by-character streaming
+/// with colored output and progress indicators.
+/// </summary>
+async Task DisplayStreamingResponse(string prompt, AgentThread? thread = null, AIAgent? agentToUse = null)
+{
+    var agentInstance = agentToUse ?? agent;
+
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.WriteLine($"🤖 {JokerName} is thinking...");
+    Console.ResetColor();
+
+    var isFirstUpdate = true;
+
+    var stream = thread != null
+        ? agentInstance.RunStreamingAsync(prompt, thread)
+        : agentInstance.RunStreamingAsync(prompt);
+
+    await foreach (var update in stream)
+    {
+        if (isFirstUpdate)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write($"{JokerName}: ");
+            Console.ResetColor();
+            isFirstUpdate = false;
+        }
+
+        Console.Write(update);
+        await Task.Delay(10);
+    }
+
+    Console.WriteLine();
+    Console.ForegroundColor = ConsoleColor.DarkGray;
+    Console.WriteLine("✨ Response complete!");
+    Console.ResetColor();
+}
+
+// ============================================================================
+// EXAMPLE 1: Non-streaming multi-turn conversation
+// Demonstrates context preservation across multiple conversation turns
+// ============================================================================
+Console.ForegroundColor = ConsoleColor.Magenta;
+Console.WriteLine("🎭 MULTI-TURN CONVERSATION (Non-Streaming)");
+Console.WriteLine("=" + new string('=', 60));
+Console.ResetColor();
+
+// Create a new conversation thread for context preservation
+AgentThread thread1 = agent.GetNewThread();
+
+// First interaction - agent responds with a joke
+Console.WriteLine(await agent.RunAsync("Tell me a joke about a pirate.", thread1));
+
+// Second interaction - agent remembers the previous joke and modifies it
+Console.WriteLine(await agent.RunAsync("Now add some emojis to the joke and tell it in the voice of a pirate's parrot.", thread1));
+
+// ============================================================================
+// EXAMPLE 2: Streaming multi-turn conversation
+// Same as Example 1 but with real-time character-by-character streaming
+// ============================================================================
+Console.ForegroundColor = ConsoleColor.Magenta;
+Console.WriteLine("\n🎭 MULTI-TURN CONVERSATION (Streaming)");
+Console.WriteLine("=" + new string('=', 60));
+Console.ResetColor();
+
+// Create a new conversation thread for streaming context preservation
+AgentThread thread2 = agent.GetNewThread();
+
+// First streaming interaction
+await DisplayStreamingResponse("Tell me a joke about a pirate.", thread2);
+
+// Second streaming interaction - agent maintains context from previous turn
+await DisplayStreamingResponse("Now add some emojis to the joke and tell it in the voice of a pirate's parrot.", thread2);
+
+// ============================================================================
+// EXAMPLE 3: Function tools interaction with streaming
+// Demonstrates how agents can call custom functions to extend their capabilities
+// ============================================================================
+Console.ForegroundColor = ConsoleColor.Magenta;
+Console.WriteLine("\n🔧 FUNCTION TOOLS INTERACTION (Streaming)");
+Console.WriteLine("=" + new string('=', 60));
+Console.ResetColor();
+
+// This will trigger the GetWeather function tool
+await DisplayStreamingResponse("What is the weather like in Amsterdam?");
+
+Console.ForegroundColor = ConsoleColor.DarkGray;
+Console.WriteLine("\n" + "=" + new string('=', 60));
+Console.WriteLine("🎉 All conversations completed!");
+Console.ResetColor();
+
+// ============================================================================
+// EXAMPLE 4: Agent with middleware pipeline
+// Demonstrates custom middleware for function call interception and logging
+// ============================================================================
+Console.ForegroundColor = ConsoleColor.Magenta;
+Console.WriteLine("\n🔧 AGENT WITH MIDDLEWARE (Streaming)");
+Console.WriteLine("=" + new string('=', 60));
+Console.ResetColor();
+
+// Use the agent with middleware - this will show function call logging
+await DisplayStreamingResponse("What is the weather like in Amsterdam?", agentToUse: agentWithMiddleware);
+
+Console.ForegroundColor = ConsoleColor.DarkGray;
+Console.WriteLine("\n" + "=" + new string('=', 60));
+Console.WriteLine("🎉 All examples completed successfully!");
+Console.ResetColor();
+```
+
+## Explanation of the code
+
+### 1. Agent Configuration & Personality
+
+The agent configuration defines the AI's personality, capabilities, and behavior:
+
+```csharp
+const string JokerName = "Joker";
+const string JokerInstructions = "You are good at telling jokes.";
+AIAgent agent = new ChatClientAgent(
+    chatClient,
+    JokerInstructions,
+    JokerName,
+    tools: [AIFunctionFactory.Create(GetWeather)]
+);
+```
+
+**Key Points:**
+
+- **Name**: Provides identity for the agent in conversations
+- **Instructions**: Define the agent's personality and behavior patterns
+- **Tools**: Extend agent capabilities with custom functions
+- **ChatClient**: Handles communication with the underlying AI model
+
+### 2. Function Tools & Extensibility
+
+Function tools allow agents to interact with external systems and perform actions:
+
+```csharp
+[Description("Get the weather for a given location.")]
+static string GetWeather([Description("The location to get the weather for.")] string location)
+    => $"The weather in {location} is cloudy with a high of 15°C.";
+```
+
+**Best Practices:**
+
+- Use descriptive `[Description]` attributes for better AI understanding
+- Keep functions focused and single-purpose
+- Handle errors gracefully within functions
+- Consider async operations for external API calls
+
+### 3. Middleware Pipeline Architecture
+
+Middleware provides a powerful way to add cross-cutting concerns:
+
+```csharp
+async ValueTask<object?> FunctionCallMiddleware(
+    AIAgent agent,
+    FunctionInvocationContext context,
+    Func<FunctionInvocationContext, CancellationToken, ValueTask<object?>> next,
+    CancellationToken cancellationToken)
+{
+    // Pre-processing: Logging, validation, rate limiting
+    Console.WriteLine($"🔧 Function Name: {context!.Function.Name} - Pre-Invoke");
+
+    var result = await next(context, cancellationToken);
+
+    // Post-processing: Logging, monitoring, cleanup
+    Console.WriteLine($"🔧 Function Name: {context!.Function.Name} - Post-Invoke");
+
+    return result;
+}
+```
+
+**Middleware Use Cases:**
+
+- **Logging & Monitoring**: Track function calls and performance
+- **Authentication**: Validate user permissions
+- **Rate Limiting**: Control function call frequency
+- **Caching**: Store and retrieve function results
+- **Error Handling**: Centralized exception management
+
+### 4. Streaming Response Architecture
+
+The streaming implementation provides real-time user experience:
+
+```csharp
+async Task DisplayStreamingResponse(string prompt, AgentThread? thread = null, AIAgent? agentToUse = null)
+{
+    var agentInstance = agentToUse ?? agent;
+
+    // Visual feedback for user
+    Console.WriteLine($"🤖 {JokerName} is thinking...");
+
+    // Stream processing with context awareness
+    var stream = thread != null
+        ? agentInstance.RunStreamingAsync(prompt, thread)  // Multi-turn
+        : agentInstance.RunStreamingAsync(prompt);         // Single turn
+
+    // Character-by-character streaming with visual effects
+    await foreach (var update in stream)
+    {
+        Console.Write(update);
+        await Task.Delay(10);  // Smooth streaming effect
+    }
+}
+```
+
+**Streaming Benefits:**
+
+- **Better UX**: Immediate feedback and perceived performance
+- **Context Preservation**: Maintains conversation state across turns
+- **Flexibility**: Supports both single and multi-turn conversations
+
+## Running the Examples
+
+When you run the application, you'll see four distinct examples:
+
+### 1. Non-Streaming Multi-Turn Conversation
+
+- Shows immediate complete responses
+- Demonstrates context preservation across turns
+- Agent remembers previous conversation context
+
+### 2. Streaming Multi-Turn Conversation
+
+- Character-by-character streaming with visual formatting
+- Same context preservation as non-streaming
+- Enhanced user experience with colored output
+
+### 3. Function Tools Interaction
+
+- Agent calls the `GetWeather` function when asked about weather
+- Demonstrates how agents can use external tools
+- Shows integration between AI responses and custom functions
+
+### 4. Middleware Integration
+
+- Same weather query but with middleware logging
+- Shows function call interception
+- Demonstrates extensibility of the agent framework
+
+## Expected Output
+
+The application provides rich console output with:
+
+- 🎭 Colored section headers for each example
+- 🤖 Agent thinking indicators
+- 🔧 Function call logging (with middleware)
+- ✨ Completion indicators
+- 🎉 Final completion message
+
+Each example builds upon the previous one, showing progressive complexity and capabilities.
+
+## Acknowledgments
+
+- [Microsoft Agents AI](https://github.com/microsoft/agent-framework) - The AI framework
+- [Ollama](https://ollama.com/) - Local AI model execution
+- [OllamaSharp](https://github.com/awaescher/OllamaSharp) - .NET Ollama client
+
+## Conclusion
+
+Microsoft Agent Framework is a powerful framework for building AI agents. It is a bit more straight forward to get started than Semantic Kernel and AutoGen. It is a good choice for building AI agents. I recommend you to check the official repository for sample code here [Microsoft Agent Framework Samples](https://github.com/microsoft/agent-framework/tree/main/dotnet/samples)
