@@ -182,15 +182,15 @@ html {
 
 /* Gradient backgrounds */
 .bg-gradient-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #0ea5e9;
 }
 
 .bg-gradient-secondary {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  background: #e879f9;
 }
 
 .bg-gradient-success {
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  background: #22c55e;
 }
 
 /* Glass morphism effect */

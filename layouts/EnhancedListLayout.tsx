@@ -114,19 +114,19 @@ export default function EnhancedListLayout({
   const hasActiveFilters = searchQuery || selectedTags.length > 0
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50/30 dark:from-gray-900 dark:via-gray-800 dark:to-blue-900/20">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
         <div className="py-12 sm:py-16 lg:py-20">
           <div className="text-center">
             <div className="mb-6 flex justify-center">
-              <div className="inline-flex items-center space-x-2 rounded-full bg-gradient-to-r from-blue-100 to-indigo-100 px-4 py-2 text-sm font-medium text-blue-800 dark:from-blue-900 dark:to-indigo-900 dark:text-blue-200">
+              <div className="inline-flex items-center space-x-2 rounded-full bg-blue-100 px-4 py-2 text-sm font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-200">
                 <Sparkles className="h-4 w-4" />
                 <span>Latest Articles</span>
               </div>
             </div>
             <h1
-              className="bg-gradient-to-r from-gray-900 via-blue-800 to-indigo-900 bg-clip-text text-4xl font-bold tracking-tight text-transparent dark:from-gray-100 dark:via-blue-200 dark:to-indigo-200 sm:text-5xl lg:text-6xl"
+              className="text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-100 sm:text-5xl lg:text-6xl"
               style={{ lineHeight: '1.2', paddingBottom: '0.2em' }}
             >
               {title}
@@ -261,7 +261,7 @@ export default function EnhancedListLayout({
                       setSearchQuery('')
                       setSelectedTags([])
                     }}
-                    className="inline-flex items-center space-x-2 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-3 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:from-blue-700 hover:to-indigo-700 hover:shadow-xl"
+                    className="inline-flex items-center space-x-2 rounded-lg bg-blue-600 px-6 py-3 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:bg-blue-700 hover:shadow-xl"
                   >
                     <Filter className="h-4 w-4" />
                     <span>Clear all filters</span>

@@ -15,9 +15,7 @@ const Series = () => {
   const seriesGroups = useMemo(() => getAllSeries(), [])
 
   return (
-    <div
-      className={`min-h-screen bg-gradient-to-br from-secondary-50 via-white to-primary-50/30 dark:from-secondary-900 dark:via-secondary-800 dark:to-primary-900/20`}
-    >
+    <div className={`min-h-screen bg-gray-50 dark:bg-gray-900`}>
       <div className={designSystemUtils.layout.container}>
         {/* Hero Section */}
         <div className={designSystemUtils.spacing.section}>
@@ -171,10 +169,10 @@ const Series = () => {
                   </div>
 
                   {/* Enhanced gradient overlay on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-primary-50/30 opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:to-primary-900/20" />
+                  <div className="absolute inset-0 bg-primary-50/30 opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:bg-primary-900/20" />
 
                   {/* Subtle border animation */}
-                  <div className="absolute inset-0 rounded-2xl border-2 border-transparent bg-gradient-to-r from-primary-500/20 via-accent-500/20 to-accent-500/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                  <div className="absolute inset-0 rounded-2xl border-2 border-transparent bg-primary-500/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 </Card>
               </Link>
             ))}

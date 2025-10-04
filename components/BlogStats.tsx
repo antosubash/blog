@@ -32,8 +32,8 @@ export default function BlogStats({ posts }: BlogStatsProps) {
       label: 'Topics Covered',
       value: totalTags,
       icon: Tag,
-      color: 'text-purple-600 dark:text-purple-400',
-      bgColor: 'bg-purple-100 dark:bg-purple-900/20',
+      color: 'text-teal-600 dark:text-teal-400',
+      bgColor: 'bg-teal-100 dark:bg-teal-900/20',
     },
     {
       label: 'Total Words',

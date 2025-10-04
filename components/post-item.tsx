@@ -54,7 +54,7 @@ const PostItem = ({
               </div>
               {series && (
                 <div className="flex items-center space-x-2">
-                  <div className="inline-flex items-center rounded-full bg-gradient-to-r from-blue-100 to-indigo-100 px-3 py-1.5 text-sm font-medium text-blue-800 shadow-sm dark:from-blue-900 dark:to-indigo-900 dark:text-blue-200">
+                  <div className="inline-flex items-center rounded-full bg-blue-100 px-3 py-1.5 text-sm font-medium text-blue-800 shadow-sm dark:bg-blue-900 dark:text-blue-200">
                     <TrendingUp className="mr-1.5 h-3 w-3" />
                     {series}
                     {part && (
@@ -102,10 +102,10 @@ const PostItem = ({
         </div>
 
         {/* Enhanced gradient overlay on hover */}
-        <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-blue-50/30 opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:to-blue-900/20" />
+        <div className="absolute inset-0 bg-blue-50/30 opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:bg-blue-900/20" />
 
         {/* Subtle border animation */}
-        <div className="absolute inset-0 rounded-2xl border-2 border-transparent bg-gradient-to-r from-blue-500/20 via-indigo-500/20 to-purple-500/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+        <div className="absolute inset-0 rounded-2xl border-2 border-transparent bg-blue-500/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
       </article>
     </Link>
   )

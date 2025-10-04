@@ -48,7 +48,7 @@ const RelatedPost = ({ posts }: { posts: Posts[] }) => {
 
                 {/* Series badge */}
                 {post.series && (
-                  <div className="inline-flex items-center rounded-full bg-gradient-to-r from-blue-100 to-indigo-100 px-2 py-1 text-xs font-medium text-blue-800 dark:from-blue-900 dark:to-indigo-900 dark:text-blue-200">
+                  <div className="inline-flex items-center rounded-full bg-blue-100 px-2 py-1 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-200">
                     <TrendingUp className="mr-1 h-3 w-3" />
                     {post.series}
                     {post.part && (

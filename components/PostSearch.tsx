@@ -121,7 +121,7 @@ export default function PostSearch({
                 onClick={() => handleTagToggle(tag)}
                 className={`inline-flex items-center rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 ${
                   localSelectedTags.includes(tag)
-                    ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-lg'
+                    ? 'bg-blue-500 text-white shadow-lg'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
                 }`}
               >
@@ -142,7 +142,7 @@ export default function PostSearch({
           </span>
 
           {searchQuery && (
-            <span className="inline-flex items-center rounded-full bg-gradient-to-r from-blue-100 to-indigo-100 px-4 py-2 text-sm font-medium text-blue-800 shadow-sm dark:from-blue-900 dark:to-indigo-900 dark:text-blue-200">
+            <span className="inline-flex items-center rounded-full bg-blue-100 px-4 py-2 text-sm font-medium text-blue-800 shadow-sm dark:bg-blue-900 dark:text-blue-200">
               <Search className="mr-2 h-3 w-3" />"{searchQuery}"
               <button
                 onClick={() => setSearchQuery('')}
@@ -156,7 +156,7 @@ export default function PostSearch({
           {localSelectedTags.map((tag) => (
             <span
               key={tag}
-              className="inline-flex items-center rounded-full bg-gradient-to-r from-gray-100 to-gray-200 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm dark:from-gray-700 dark:to-gray-600 dark:text-gray-300"
+              className="inline-flex items-center rounded-full bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm dark:bg-gray-700 dark:text-gray-300"
             >
               <TagIcon className="mr-2 h-3 w-3" />
               {tag}

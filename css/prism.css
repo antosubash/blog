@@ -97,11 +97,11 @@ pre[class*='language-']:hover .code-copy-button {
 
 /* Punctuation and operators */
 .token.punctuation {
-  color: #7c3aed;
+  color: #0d9488;
 }
 
 .dark .token.punctuation {
-  color: #a78bfa;
+  color: #2dd4bf;
 }
 
 .namespace {
@@ -191,13 +191,13 @@ pre[class*='language-']:hover .code-copy-button {
 /* Selectors and doctypes */
 .token.selector,
 .token.doctype {
-  color: #7c3aed;
+  color: #0d9488;
   font-style: italic;
 }
 
 .dark .token.selector,
 .dark .token.doctype {
-  color: #a78bfa;
+  color: #2dd4bf;
 }
 
 /* Attribute names */

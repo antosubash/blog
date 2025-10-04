@@ -114,7 +114,7 @@ const MobileNav = () => {
         <div className="relative border-b border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-900">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-lg">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500 text-white shadow-lg">
                 <Home className="h-5 w-5" />
               </div>
               <div>
@@ -181,7 +181,7 @@ const MobileNav = () => {
             <div className="space-y-3">
               <Link
                 href="/posts"
-                className="flex items-center justify-center space-x-2 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 px-4 py-3 text-sm font-medium text-white transition-all duration-200 hover:from-blue-600 hover:to-purple-700 hover:shadow-lg"
+                className="flex items-center justify-center space-x-2 rounded-xl bg-blue-500 px-4 py-3 text-sm font-medium text-white transition-all duration-200 hover:bg-blue-600 hover:shadow-lg"
                 onClick={closeNav}
               >
                 <FileText className="h-4 w-4" />

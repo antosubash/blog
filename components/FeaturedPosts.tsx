@@ -44,7 +44,7 @@ export default function FeaturedPosts({ posts, maxPosts = 3 }: FeaturedPostsProp
               >
                 {/* Featured badge for first post */}
                 {index === 0 && (
-                  <div className="absolute -right-8 -top-8 h-16 w-16 rotate-45 bg-gradient-to-r from-blue-500 to-purple-600 opacity-90" />
+                  <div className="absolute -right-8 -top-8 h-16 w-16 rotate-45 bg-blue-500 opacity-90" />
                 )}
 
                 <div className="relative space-y-4">
@@ -70,7 +70,7 @@ export default function FeaturedPosts({ posts, maxPosts = 3 }: FeaturedPostsProp
 
                   {/* Series badge */}
                   {post.series && (
-                    <div className="inline-flex items-center rounded-full bg-gradient-to-r from-blue-100 to-indigo-100 px-3 py-1.5 text-sm font-medium text-blue-800 dark:from-blue-900 dark:to-indigo-900 dark:text-blue-200">
+                    <div className="inline-flex items-center rounded-full bg-blue-100 px-3 py-1.5 text-sm font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-200">
                       {post.series}
                       {post.part && (
                         <span className="ml-2 rounded-full bg-blue-200 px-2 py-0.5 text-xs dark:bg-blue-800">
@@ -119,7 +119,7 @@ export default function FeaturedPosts({ posts, maxPosts = 3 }: FeaturedPostsProp
                 </div>
 
                 {/* Subtle gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-blue-50/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:to-blue-900/10" />
+                <div className="absolute inset-0 bg-blue-50/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:bg-blue-900/10" />
               </article>
             )
           })

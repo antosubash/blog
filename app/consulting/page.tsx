@@ -69,7 +69,7 @@ const ConsultingPage = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <div className="bg-gradient-to-br from-primary-50 via-white to-accent-50 py-16 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 md:py-24">
+      <div className="bg-primary-50 py-16 dark:bg-gray-900 md:py-24">
         <div className="container mx-auto px-4">
           <div className="text-center">
             <h1 className="mb-6 text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-100 sm:text-5xl md:text-6xl">

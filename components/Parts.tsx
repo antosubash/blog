@@ -23,7 +23,7 @@ const Parts = (props: PartsProps) => {
       {/* Series Header */}
       <div className="mb-6">
         <div className="mb-3 flex items-center space-x-2">
-          <div className="inline-flex items-center rounded-full bg-gradient-to-r from-blue-100 to-indigo-100 px-3 py-1.5 text-sm font-medium text-blue-800 shadow-sm dark:from-blue-900 dark:to-indigo-900 dark:text-blue-200">
+          <div className="inline-flex items-center rounded-full bg-blue-100 px-3 py-1.5 text-sm font-medium text-blue-800 shadow-sm dark:bg-blue-900 dark:text-blue-200">
             <TrendingUp className="mr-1.5 h-3 w-3" />
             Series
           </div>
@@ -42,7 +42,7 @@ const Parts = (props: PartsProps) => {
           </div>
           <div className="h-2 w-full rounded-full bg-gray-200 dark:bg-gray-700">
             <div
-              className="h-2 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 transition-all duration-300"
+              className="h-2 rounded-full bg-blue-500 transition-all duration-300"
               style={{ width: `${progress.progress}%` }}
             />
           </div>
@@ -151,7 +151,7 @@ const Parts = (props: PartsProps) => {
         {progress.nextPart ? (
           <Link
             href={`/posts/${progress.nextPart.slug}`}
-            className="inline-flex items-center space-x-2 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:from-blue-700 hover:to-indigo-700 hover:shadow-xl"
+            className="inline-flex items-center space-x-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:bg-blue-700 hover:shadow-xl"
           >
             <span>Next</span>
             <ArrowRight className="h-4 w-4" />

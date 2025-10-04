@@ -119,7 +119,7 @@ export default function EnhancedPagination({
                 href={getPageUrl(pageNum)}
                 className={`inline-flex items-center rounded-xl border px-4 py-3 text-sm font-medium transition-all duration-200 ${
                   isCurrentPage
-                    ? 'border-blue-600 bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg dark:border-blue-500 dark:from-blue-500 dark:to-indigo-500'
+                    ? 'border-blue-600 bg-blue-600 text-white shadow-lg dark:border-blue-500 dark:bg-blue-500'
                     : 'border-gray-300 bg-white/80 text-gray-700 backdrop-blur-sm hover:border-gray-400 hover:bg-gray-50 hover:text-blue-600 hover:shadow-lg dark:border-gray-600 dark:bg-gray-800/80 dark:text-gray-300 dark:hover:border-gray-500 dark:hover:bg-gray-700 dark:hover:text-blue-400'
                 }`}
                 aria-current={isCurrentPage ? 'page' : undefined}

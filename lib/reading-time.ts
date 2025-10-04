@@ -73,7 +73,7 @@ export function getReadingTimeDisplay(readingTime: {
     return {
       text: `${minutes} min read`,
       icon: '📚',
-      color: 'text-purple-600 dark:text-purple-400',
+      color: 'text-teal-600 dark:text-teal-400',
     }
   } else if (minutes <= 15) {
     return {

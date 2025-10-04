@@ -41,7 +41,7 @@ export default function EnhancedPostHeader({ post, authorDetails }: EnhancedPost
     <header className="mb-8">
       {/* Series Badge */}
       {series && (
-        <div className="mb-4 inline-flex items-center rounded-full bg-gradient-to-r from-blue-100 to-indigo-100 px-3 py-1 text-sm font-medium text-blue-800 dark:from-blue-900 dark:to-indigo-900 dark:text-blue-200">
+        <div className="mb-4 inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-200">
           <BookOpen className="mr-2 h-4 w-4" />
           {series}
           {part && (
