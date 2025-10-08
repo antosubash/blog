@@ -1,3 +1,4 @@
+export { default as Bleed } from './Bleed'
 export { default as Button } from './Button'
 export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from './Card'
 export { default as Badge } from './Badge'

@@ -9,27 +9,39 @@ interface TOCItem {
 }
 
 interface TOCInlineProps {
-  toc: TOCItem[]
+  toc: string | TOCItem[]
 }
 
 const CustomTOCInline = ({ toc }: TOCInlineProps) => {
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set())
 
-  if (!toc || toc.length === 0) {
+  let parsedToc: TOCItem[] = []
+
+  try {
+    parsedToc = typeof toc === 'string' ? JSON.parse(toc) : toc
+    if (!Array.isArray(parsedToc)) {
+      parsedToc = []
+    }
+  } catch (error) {
+    console.error('Error parsing TOC:', error)
+    parsedToc = []
+  }
+
+  if (!parsedToc || parsedToc.length === 0) {
     return null
   }
 
   // Group TOC items by their parent sections
-  const groupedToc = toc.reduce(
+  const groupedToc = parsedToc.reduce(
     (acc, item, index) => {
       if (item.depth === 2) {
         // Find all children that belong to this section
         const children: TOCItem[] = []
         let nextIndex = index + 1
 
-        while (nextIndex < toc.length && toc[nextIndex].depth > 2) {
-          children.push(toc[nextIndex])
+        while (nextIndex < parsedToc.length && parsedToc[nextIndex].depth > 2) {
+          children.push(parsedToc[nextIndex])
           nextIndex++
         }
 

@@ -1,10 +1,10 @@
 import 'css/prism.css'
 import 'katex/dist/katex.css'
 import { components } from '@/components/MDXComponents'
-import CustomMDXLayoutRenderer from '@/components/CustomMDXLayoutRenderer'
-import { sortPosts, coreContent, allCoreContent } from 'pliny/utils/contentlayer'
-import { allAuthors, allPosts } from 'contentlayer/generated'
-import type { Authors, Posts } from 'contentlayer/generated'
+import CustomTOCInline from '@/components/CustomTOCInline'
+
+import { getAllPosts, getAllAuthors, getPostBySlug, type Post, type Author } from '@/lib/mdx'
+import { MDXRemote } from 'next-mdx-remote/rsc'
 import PostSimple from '@/layouts/PostSimple'
 import PostLayout from '@/layouts/PostLayout'
 import PostBanner from '@/layouts/PostBanner'
@@ -30,6 +30,7 @@ export async function generateMetadata({
 }): Promise<Metadata | undefined> {
   const { slug } = await params
   const decodedSlug = decodeURI(slug.join('/'))
+  const allPosts = await getAllPosts()
   const post = allPosts.find((p) => p.slug === decodedSlug)
 
   if (!post) {
@@ -40,14 +41,15 @@ export async function generateMetadata({
   }
 
   const authorList = post?.authors || ['default']
+  const allAuthorsData = getAllAuthors()
   const authorDetails = authorList.map((author) => {
-    const authorResults = allAuthors.find((p) => p.slug === author)
-    return coreContent(authorResults as Authors)
+    const authorResults = allAuthorsData.find((p) => p.slug === author)
+    return authorResults
   })
 
   const publishedAt = new Date(post.date).toISOString()
   const modifiedAt = new Date(post.lastmod || post.date).toISOString()
-  const authors = authorDetails.map((author) => author.name)
+  const authors = authorDetails.filter((author) => author).map((author) => author!.name)
 
   // Enhanced OG image handling
   const ogImage = post.images?.[0] || `/og/${post.slug}.png`
@@ -104,6 +106,7 @@ export async function generateMetadata({
 }
 
 export const generateStaticParams = async () => {
+  const allPosts = await getAllPosts()
   const paths = allPosts.filter((post) => !post.draft).map((p) => ({ slug: p.slug.split('/') }))
   return paths
 }
@@ -126,29 +129,33 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
   const { slug } = await params
   const decodedSlug = decodeURI(slug.join('/'))
 
-  const post = allPosts.find((p) => p.slug === decodedSlug)
+  const post = await getPostBySlug(decodedSlug)
 
   if (!post || (process.env.NODE_ENV === 'production' && post.draft)) {
     notFound()
   }
 
-  const sortedCoreContents = allCoreContent(sortPosts(allPosts.filter((post) => !post.draft)))
-  const postIndex = sortedCoreContents.findIndex((p) => p.slug === decodedSlug)
+  const allPosts = await getAllPosts()
+  const sortedPosts = allPosts
+    .filter((post) => !post.draft)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  const postIndex = sortedPosts.findIndex((p) => p.slug === decodedSlug)
 
   if (postIndex === -1) {
     notFound()
   }
 
-  const prev = sortedCoreContents[postIndex + 1]
-  const next = sortedCoreContents[postIndex - 1]
+  const prev = sortedPosts[postIndex + 1]
+  const next = sortedPosts[postIndex - 1]
 
   const authorList = post?.authors || ['default']
+  const allAuthorsData = getAllAuthors()
   const authorDetails = authorList.map((author) => {
-    const authorResults = allAuthors.find((p) => p.slug === author)
-    return coreContent(authorResults as Authors)
+    const authorResults = allAuthorsData.find((p) => p.slug === author)
+    return authorResults
   })
 
-  const mainContent = coreContent(post)
+  const mainContent = post
 
   // Enhanced structured data
   const jsonLd = {
@@ -157,13 +164,15 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
     '@type': 'BlogPosting',
     headline: post.title,
     description: post.excerpt,
-    author: authorDetails.map((author) => ({
-      '@type': 'Person',
-      name: author.name,
-      url: author.twitter
-        ? `https://twitter.com/${author.twitter.replace('https://twitter.com/', '')}`
-        : undefined,
-    })),
+    author: authorDetails
+      .filter((author) => author)
+      .map((author) => ({
+        '@type': 'Person',
+        name: author!.name,
+        url: author!.twitter
+          ? `https://twitter.com/${author!.twitter.replace('https://twitter.com/', '')}`
+          : undefined,
+      })),
     publisher: {
       '@type': 'Organization',
       name: siteMetadata.title,
@@ -182,16 +191,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
     },
     keywords: post.tags?.join(', '),
     articleSection: post.tags?.[0],
-    wordCount: post.body.raw.length,
-    timeRequired: post.readingTime
-      ? typeof post.readingTime === 'string'
-        ? post.readingTime
-        : `${Math.ceil(post.readingTime.minutes)}M${post.readingTime.seconds}S`
-      : undefined,
+    wordCount: undefined,
+    timeRequired: post.readingTime?.text,
   }
 
   const Layout = layouts[post.layout || defaultLayout]
-  const relatedPosts = getRelatedPosts(post.slug)
+  const relatedPosts = await getRelatedPosts(post.slug)
 
   return (
     <>
@@ -242,16 +247,58 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
         />
 
         {/* Main Content */}
-        <Suspense fallback={<PostLoading />}>
-          <CustomMDXLayoutRenderer
-            code={post.body.code}
-            components={components}
-            toc={post.toc}
-            slug={post.slug}
-            videoId={post.videoId}
-            series={post.series}
-          />
-        </Suspense>
+        <div className="mdx-content">
+          {/* Series information */}
+          {post.series && (
+            <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-900/20">
+              <h3 className="mb-2 text-lg font-semibold text-blue-800 dark:text-blue-200">
+                Series: {post.series}
+              </h3>
+              <p className="text-blue-700 dark:text-blue-300">
+                This post is part of the {post.series} series.
+              </p>
+            </div>
+          )}
+
+          {/* Video embed if videoId is provided */}
+          {post.videoId && (
+            <div className="mb-8">
+              <div className="relative h-0 w-full pb-[56.25%]">
+                <iframe
+                  className="absolute left-0 top-0 h-full w-full rounded-lg"
+                  src={`https://www.youtube.com/embed/${post.videoId}`}
+                  title="YouTube video player"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Table of Contents */}
+          {post.toc && (
+            <div className="mb-8">
+              <CustomTOCInline toc={post.toc} />
+            </div>
+          )}
+
+          {/* Main MDX content */}
+          <div className="prose prose-lg max-w-none dark:prose-invert">
+            {post.content ? (
+              <MDXRemote source={post.content} components={components} />
+            ) : (
+              <div className="rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-800 dark:bg-red-900/20">
+                <h3 className="mb-2 text-lg font-semibold text-red-800 dark:text-red-200">
+                  Content Error
+                </h3>
+                <p className="text-red-700 dark:text-red-300">
+                  Unable to load the post content. Please try refreshing the page.
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
 
         {/* Related Posts */}
         <Suspense fallback={<div className="my-8 h-32 animate-pulse rounded bg-gray-100"></div>}>

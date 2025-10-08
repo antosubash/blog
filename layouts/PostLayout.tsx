@@ -1,6 +1,5 @@
 import { ReactNode } from 'react'
-import { CoreContent } from 'pliny/utils/contentlayer'
-import type { Posts, Authors } from 'contentlayer/generated'
+import type { Post, Author } from '@/lib/mdx'
 import Comments from '@/components/Comments'
 import Link from '@/components/Link'
 import PageTitle from '@/components/PageTitle'
@@ -22,8 +21,8 @@ const postDateTemplate: Intl.DateTimeFormatOptions = {
 }
 
 interface LayoutProps {
-  content: CoreContent<Posts>
-  authorDetails: CoreContent<Authors>[]
+  content: Post
+  authorDetails: Author[]
   next?: { postUrl: string; title: string }
   prev?: { postUrl: string; title: string }
   children: ReactNode

@@ -1,14 +1,15 @@
 import { MetadataRoute } from 'next'
-import { allPosts } from 'contentlayer/generated'
+import { getAllPosts } from '@/lib/mdx'
 import siteMetadata from '@/data/siteMetadata'
-import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer'
 import { getTagsWithCount } from '@/lib/tag-utils'
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = siteMetadata.siteUrl
 
-  const blogRoutes = allCoreContent(sortPosts(allPosts))
+  const allPosts = await getAllPosts()
+  const blogRoutes = allPosts
     .filter((post) => !post.draft)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .map((post) => ({
       url: `${siteUrl}/${post.path}`,
       lastModified: post.lastmod || post.date,
@@ -19,7 +20,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: new Date().toISOString().split('T')[0],
   }))
 
-  const tagCounts = getTagsWithCount()
+  const tagCounts = await getTagsWithCount()
 
   const tagRoutes = tagCounts.map((tagWithCount) => ({
     url: `${siteUrl}/tags/${tagWithCount.tag}`,

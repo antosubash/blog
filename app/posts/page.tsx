@@ -1,6 +1,6 @@
 import EnhancedListLayout from '@/layouts/EnhancedListLayout'
-import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer'
-import { allPosts } from 'contentlayer/generated'
+import { getAllPosts } from '@/lib/mdx'
+import { getTagsWithCount } from '@/lib/tag-utils'
 import { genPageMetadata } from 'app/seo'
 
 const POSTS_PER_PAGE = 8
@@ -23,8 +23,11 @@ export const metadata = genPageMetadata({
   },
 })
 
-export default function BlogPage() {
-  const posts = allCoreContent(sortPosts(allPosts)).filter((post) => !post.draft)
+export default async function BlogPage() {
+  const allPosts = await getAllPosts()
+  const posts = allPosts
+    .filter((post) => !post.draft)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
   const pageNumber = 1
   const initialDisplayPosts = posts.slice(
     POSTS_PER_PAGE * (pageNumber - 1),
@@ -34,6 +37,7 @@ export default function BlogPage() {
     currentPage: pageNumber,
     totalPages: Math.ceil(posts.length / POSTS_PER_PAGE),
   }
+  const tagsWithCount = await getTagsWithCount()
 
   return (
     <EnhancedListLayout
@@ -41,6 +45,7 @@ export default function BlogPage() {
       initialDisplayPosts={initialDisplayPosts}
       pagination={pagination}
       title="Blog"
+      tagsWithCount={tagsWithCount}
     />
   )
 }

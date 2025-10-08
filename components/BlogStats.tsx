@@ -1,9 +1,8 @@
 import { Calendar, FileText, Tag, Eye } from 'lucide-react'
-import { CoreContent } from 'pliny/utils/contentlayer'
-import type { Posts } from 'contentlayer/generated'
+import type { Post } from '@/lib/mdx'
 
 interface BlogStatsProps {
-  posts: CoreContent<Posts>[]
+  posts: Post[]
 }
 
 // Simple number formatting function that's consistent across server and client

@@ -1,4 +1,4 @@
-import { allPosts } from 'contentlayer/generated'
+import { getAllPosts } from './mdx'
 
 export interface SeriesPost {
   slug: string
@@ -21,10 +21,11 @@ export interface SeriesGroup {
   lastPost: SeriesPost
 }
 
-export function getAllSeries() {
+export async function getAllSeries() {
   const seriesMap = new Map<string, SeriesPost[]>()
 
   // Get all posts that are part of a series
+  const allPosts = await getAllPosts()
   allPosts
     .filter((post) => post.series && post.isDraft !== true)
     .forEach((post) => {
@@ -70,12 +71,13 @@ export function getAllSeries() {
   return groups.sort((a, b) => new Date(b.latestDate).getTime() - new Date(a.latestDate).getTime())
 }
 
-export function getSeriesByName(seriesName: string): SeriesGroup | undefined {
-  return getAllSeries().find((series) => series.name === seriesName)
+export async function getSeriesByName(seriesName: string): Promise<SeriesGroup | undefined> {
+  const series = await getAllSeries()
+  return series.find((s) => s.name === seriesName)
 }
+export async function getSeriesProgress(seriesName: string, currentPart: number) {
+  const series = await getSeriesByName(seriesName)
 
-export function getSeriesProgress(seriesName: string, currentPart: number) {
-  const series = getSeriesByName(seriesName)
   if (!series) return null
 
   const progress = (currentPart / series.totalParts) * 100

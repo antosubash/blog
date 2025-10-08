@@ -1,7 +1,6 @@
 import { ReactNode } from 'react'
-import { formatDate } from 'pliny/utils/formatDate'
-import { CoreContent } from 'pliny/utils/contentlayer'
-import type { Posts } from 'contentlayer/generated'
+import { formatDate } from '@/lib/utils'
+import type { Post } from '@/lib/mdx'
 import Comments from '@/components/Comments'
 import Link from '@/components/Link'
 import PageTitle from '@/components/PageTitle'
@@ -12,7 +11,7 @@ import Tag from '@/components/Tag'
 import { formatReadingTime, getReadingTimeDisplay } from '@/lib/reading-time'
 
 interface LayoutProps {
-  content: CoreContent<Posts>
+  content: Post
   children: ReactNode
   next?: { postUrl: string; title: string }
   prev?: { postUrl: string; title: string }

@@ -1,19 +1,20 @@
-import { Authors, allAuthors } from 'contentlayer/generated'
-import CustomMDXLayoutRenderer from '@/components/CustomMDXLayoutRenderer'
+import { getAllAuthors, getAuthorBySlug, type Author } from '@/lib/mdx'
 import AuthorLayout from '@/layouts/AuthorLayout'
-import { coreContent } from 'pliny/utils/contentlayer'
 import { genPageMetadata } from 'app/seo'
+import { MDXRemote } from 'next-mdx-remote/rsc'
+import { components } from '@/components/MDXComponents'
 
 export const metadata = genPageMetadata({ title: 'About' })
 
-export default function Page() {
-  const author = allAuthors.find((p) => p.slug === 'default') as Authors
-  const mainContent = coreContent(author)
+export default async function Page() {
+  const author = await getAuthorBySlug('default')
 
   return (
     <>
-      <AuthorLayout content={mainContent}>
-        <CustomMDXLayoutRenderer code={author.body.code} />
+      <AuthorLayout content={author}>
+        <div className="prose prose-lg max-w-none dark:prose-invert">
+          <MDXRemote source={author.content} components={components} />
+        </div>
       </AuthorLayout>
     </>
   )

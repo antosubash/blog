@@ -1,6 +1,3 @@
-'use client'
-
-import { useMemo } from 'react'
 import Link from 'next/link'
 import { format, parseISO } from 'date-fns'
 import Tag from '@/components/Tag'
@@ -10,9 +7,9 @@ import { designSystemUtils, themeColors } from '@/lib/design-system'
 import { Card } from '@/components/ui/Card'
 import Badge from '@/components/ui/Badge'
 
-const Series = () => {
+const Series = async () => {
   // Get all series posts and group them
-  const seriesGroups = useMemo(() => getAllSeries(), [])
+  const seriesGroups = await getAllSeries()
 
   return (
     <div className={`min-h-screen bg-gray-50 dark:bg-gray-900`}>

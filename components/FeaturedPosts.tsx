@@ -2,11 +2,10 @@ import Link from 'next/link'
 import { format, parseISO } from 'date-fns'
 import { Calendar, BookOpen, ArrowRight } from 'lucide-react'
 import Tag from './Tag'
-import { CoreContent } from 'pliny/utils/contentlayer'
-import type { Posts } from 'contentlayer/generated'
+import type { Post } from '@/lib/mdx'
 
 interface FeaturedPostsProps {
-  posts: CoreContent<Posts>[]
+  posts: Post[]
   maxPosts?: number
 }
 

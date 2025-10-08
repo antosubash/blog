@@ -3,7 +3,7 @@ import headerNavLinks from '@/data/headerNavLinks'
 import Link from './Link'
 import MobileNav from './MobileNav'
 import ThemeSwitch from './ThemeSwitch'
-import SearchButton from './SearchButton'
+
 import FeedButton from './FeedButton'
 import { Code2 } from 'lucide-react'
 
@@ -58,7 +58,6 @@ const Header = () => {
           </nav>
           <div className="flex items-center space-x-2 sm:space-x-4">
             <FeedButton />
-            <SearchButton />
             <ThemeSwitch />
             <MobileNav />
           </div>

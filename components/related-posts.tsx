@@ -1,10 +1,10 @@
-import { Posts } from 'contentlayer/generated'
+import type { Post } from '@/lib/mdx'
 import Link from 'next/link'
 import { format, parseISO } from 'date-fns'
 import { Calendar, BookOpen, ArrowRight, TrendingUp } from 'lucide-react'
 import Tag from './Tag'
 
-const RelatedPost = ({ posts }: { posts: Posts[] }) => {
+const RelatedPost = ({ posts }: { posts: Post[] }) => {
   if (posts.length === 0) return null
 
   return (

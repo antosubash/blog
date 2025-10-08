@@ -100,7 +100,13 @@ const Mermaid = ({ chart, className = '' }: MermaidProps) => {
         console.log('Render complete')
       } catch (err) {
         console.error('Mermaid rendering error:', err)
-        setError(err instanceof Error ? err.message : 'Failed to render diagram')
+        const errorMessage =
+          err instanceof Error
+            ? err.message
+            : err && typeof err === 'object' && 'message' in err
+              ? String(err.message)
+              : 'Failed to render diagram'
+        setError(errorMessage)
         setIsLoading(false)
       }
     }

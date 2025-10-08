@@ -1,8 +1,7 @@
 import { slug } from 'github-slugger'
-import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer'
 import siteMetadata from '@/data/siteMetadata'
 import EnhancedListLayout from '@/layouts/EnhancedListLayout'
-import { allPosts } from 'contentlayer/generated'
+import { getAllPosts } from '@/lib/mdx'
 import { getTagsWithCount } from '@/lib/tag-utils'
 import { genPageMetadata } from 'app/seo'
 import { Metadata } from 'next'
@@ -50,7 +49,7 @@ export async function generateMetadata({
 }
 
 export const generateStaticParams = async () => {
-  const tagCounts = getTagsWithCount()
+  const tagCounts = await getTagsWithCount()
   const paths = tagCounts.map((tagWithCount) => ({
     tag: encodeURI(tagWithCount.tag),
     count: tagWithCount.count,
@@ -63,18 +62,24 @@ export default async function TagPage({ params }: { params: Promise<{ tag: strin
   const decodedTag = decodeURI(tag)
   // Capitalize first letter and convert space to dash
   const title = decodedTag[0].toUpperCase() + decodedTag.split(' ').join('-').slice(1)
-  const filteredPosts = allCoreContent(
-    sortPosts(
-      allPosts.filter(
-        (post) =>
-          post.tags &&
-          post.tags
-            .filter((t) => t)
-            .map((t) => slug(t))
-            .includes(decodedTag)
-      )
+  const allPosts = await getAllPosts()
+  const filteredPosts = allPosts
+    .filter(
+      (post) =>
+        post.tags &&
+        post.tags
+          .filter((t) => t)
+          .map((t) => slug(t))
+          .includes(decodedTag)
     )
-  )
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 
-  return <EnhancedListLayout posts={filteredPosts} title={`${title} Articles`} />
+  const tagsWithCount = await getTagsWithCount()
+  return (
+    <EnhancedListLayout
+      posts={filteredPosts}
+      title={`${title} Articles`}
+      tagsWithCount={tagsWithCount}
+    />
+  )
 }

@@ -1,8 +1,5 @@
 import 'css/tailwind.css'
-import 'pliny/search/algolia.css'
 import { Inter } from 'next/font/google'
-import { Analytics, AnalyticsConfig } from 'pliny/analytics'
-import { SearchProvider, SearchConfig } from 'pliny/search'
 import Header from '@/components/Header'
 import SectionContainer from '@/components/SectionContainer'
 import Footer from '@/components/Footer'
@@ -89,12 +86,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       )}
       <body className="bg-white text-gray-900 antialiased dark:bg-gray-900 dark:text-gray-100">
         <ThemeProviders>
-          <Analytics analyticsConfig={siteMetadata.analytics as AnalyticsConfig} />
           <div className="flex min-h-screen flex-col">
-            <SearchProvider searchConfig={siteMetadata.search as SearchConfig}>
-              <Header />
-              <main className="flex-1">{children}</main>
-            </SearchProvider>
+            <Header />
+            <main className="flex-1">{children}</main>
             <Footer />
           </div>
         </ThemeProviders>

@@ -1,11 +1,13 @@
-import { allPosts } from 'contentlayer/generated'
-export function getAllTags() {
+import { getAllPosts } from './mdx'
+export async function getAllTags() {
+  const allPosts = await getAllPosts()
   const allTags = allPosts.flatMap((post) => post.tags).filter((tag) => tag)
   const tags = allTags.filter((item, index) => allTags.indexOf(item) === index)
   return tags as string[]
 }
 
-export function getTagsWithCount() {
+export async function getTagsWithCount() {
+  const allPosts = await getAllPosts()
   const tags = allPosts.flatMap((post) => post.tags).filter((tag) => tag)
   let allMappedTags = tags
     .map((tag) => {
@@ -25,8 +27,9 @@ export function getTagsWithCount() {
   return allMappedTags
 }
 
-export function getRelatedPosts(slug: string) {
+export async function getRelatedPosts(slug: string) {
   // get 3 the related posts based on the slug
+  const allPosts = await getAllPosts()
   const post = allPosts.find((p) => p.slug === slug)
   if (!post) return []
 

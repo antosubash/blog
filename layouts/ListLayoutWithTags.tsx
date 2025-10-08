@@ -3,23 +3,22 @@
 
 import { usePathname } from 'next/navigation'
 import { slug } from 'github-slugger'
-import { formatDate } from 'pliny/utils/formatDate'
-import { CoreContent } from 'pliny/utils/contentlayer'
-import type { Posts } from 'contentlayer/generated'
+import { formatDate } from '@/lib/utils'
+import type { Post } from '@/lib/mdx'
 import Link from '@/components/Link'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
-import { getTagsWithCount } from '@/lib/tag-utils'
 
 interface PaginationProps {
   totalPages: number
   currentPage: number
 }
 interface ListLayoutProps {
-  posts: CoreContent<Posts>[]
+  posts: Post[]
   title: string
-  initialDisplayPosts?: CoreContent<Posts>[]
+  initialDisplayPosts?: Post[]
   pagination?: PaginationProps
+  tagsWithCount?: { tag: string; count: number }[]
 }
 
 function Pagination({ totalPages, currentPage }: PaginationProps) {
@@ -67,9 +66,9 @@ export default function ListLayoutWithTags({
   title,
   initialDisplayPosts = [],
   pagination,
+  tagsWithCount = [],
 }: ListLayoutProps) {
   const pathname = usePathname()
-  const tagsWithCount = getTagsWithCount()
 
   const displayPosts = initialDisplayPosts.length > 0 ? initialDisplayPosts : posts
 

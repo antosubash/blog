@@ -2,9 +2,8 @@
 
 import { useState } from 'react'
 import { usePathname } from 'next/navigation'
-import { formatDate } from 'pliny/utils/formatDate'
-import { CoreContent } from 'pliny/utils/contentlayer'
-import type { Posts } from 'contentlayer/generated'
+import { formatDate } from '@/lib/utils'
+import type { Post } from '@/lib/mdx'
 import Link from '@/components/Link'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
@@ -14,9 +13,9 @@ interface PaginationProps {
   currentPage: number
 }
 interface ListLayoutProps {
-  posts: CoreContent<Posts>[]
+  posts: Post[]
   title: string
-  initialDisplayPosts?: CoreContent<Posts>[]
+  initialDisplayPosts?: Post[]
   pagination?: PaginationProps
 }
 

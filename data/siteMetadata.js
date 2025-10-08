@@ -1,4 +1,3 @@
-/** @type {import("pliny/config").PlinyConfig } */
 const siteMetadata = {
   title: 'Anto Subash',
   author: 'Anto Subash',

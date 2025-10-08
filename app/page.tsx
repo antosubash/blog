@@ -1,9 +1,10 @@
-import { sortPosts, allCoreContent } from 'pliny/utils/contentlayer'
-import { allPosts } from 'contentlayer/generated'
+import { getAllPosts } from '@/lib/mdx'
 import Main from './Main'
 
 export default async function Page() {
-  const sortedPosts = sortPosts(allPosts)
-  const posts = allCoreContent(sortedPosts).filter((post) => !post.draft)
+  const allPosts = await getAllPosts()
+  const posts = allPosts
+    .filter((post) => !post.draft)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
   return <Main posts={posts} />
 }
