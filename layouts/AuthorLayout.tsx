@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import type { Authors } from 'contentlayer/generated'
+import type { Authors } from '@/types/content'
 import SocialIcon from '@/components/social-icons'
 import Image from '@/components/Image'
 

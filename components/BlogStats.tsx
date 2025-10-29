@@ -1,6 +1,6 @@
 import { Calendar, FileText, Tag, Eye } from 'lucide-react'
-import { CoreContent } from 'pliny/utils/contentlayer'
-import type { Posts } from 'contentlayer/generated'
+import { CoreContent } from '@/lib/utils/content-utils'
+import type { Posts } from '@/types/content'
 
 interface BlogStatsProps {
   posts: CoreContent<Posts>[]

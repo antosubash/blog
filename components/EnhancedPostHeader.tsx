@@ -5,8 +5,8 @@ import { Calendar, Clock, Eye, Share2, BookOpen, User } from 'lucide-react'
 import Link from '@/components/Link'
 import Image from '@/components/Image'
 import Tag from '@/components/Tag'
-import { CoreContent } from 'pliny/utils/contentlayer'
-import type { Posts, Authors } from 'contentlayer/generated'
+import { CoreContent } from '@/lib/utils/content-utils'
+import type { Posts, Authors } from '@/types/content'
 
 interface EnhancedPostHeaderProps {
   post: CoreContent<Posts>

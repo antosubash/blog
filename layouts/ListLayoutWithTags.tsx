@@ -2,14 +2,14 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
+import { useMemo } from 'react'
 import { slug } from 'github-slugger'
-import { formatDate } from 'pliny/utils/formatDate'
-import { CoreContent } from 'pliny/utils/contentlayer'
-import type { Posts } from 'contentlayer/generated'
+import { formatDate } from '@/lib/utils/format-date'
+import { CoreContent } from '@/lib/utils/content-utils'
+import type { Posts } from '@/types/content'
 import Link from '@/components/Link'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
-import { getTagsWithCount } from '@/lib/tag-utils'
 
 interface PaginationProps {
   totalPages: number
@@ -69,7 +69,15 @@ export default function ListLayoutWithTags({
   pagination,
 }: ListLayoutProps) {
   const pathname = usePathname()
-  const tagsWithCount = getTagsWithCount()
+  const tagsWithCount = useMemo(() => {
+    const counts = new Map<string, number>()
+    posts.forEach((p) => {
+      ;(p.tags || []).filter((t) => t).forEach((t) => counts.set(t, (counts.get(t) || 0) + 1))
+    })
+    return Array.from(counts.entries())
+      .map(([tag, count]) => ({ tag, count }))
+      .sort((a, b) => b.count - a.count)
+  }, [posts])
 
   const displayPosts = initialDisplayPosts.length > 0 ? initialDisplayPosts : posts
 

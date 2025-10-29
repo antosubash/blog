@@ -2,9 +2,9 @@
 
 import { useState } from 'react'
 import { usePathname } from 'next/navigation'
-import { formatDate } from 'pliny/utils/formatDate'
-import { CoreContent } from 'pliny/utils/contentlayer'
-import type { Posts } from 'contentlayer/generated'
+import { formatDate } from '@/lib/utils/format-date'
+import { CoreContent } from '@/lib/utils/content-utils'
+import type { Posts } from '@/types/content'
 import Link from '@/components/Link'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'

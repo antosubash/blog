@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 async function init() {
-  const postsJsonPath = path.resolve(__dirname, '../.contentlayer/generated/Posts/_index.json')
+  const postsJsonPath = path.resolve(__dirname, '../.content/Posts/_index.json')
   const allPosts = JSON.parse(readFileSync(postsJsonPath, 'utf8'))
   await generateAllOgImagesIfNeeded(allPosts)
 }
@@ -47,11 +47,13 @@ async function generateAllOgImagesIfNeeded(allPosts) {
 }
 
 const generateOgImage = async ({ slug, title }) => {
-  const dir = path.resolve('public', 'og')
-  const filepath = path.resolve(dir, `${slug}.png`)
+  // Resolve full output path and ensure parent directories exist recursively
+  const baseDir = path.resolve('public', 'og')
+  const filepath = path.resolve(baseDir, `${slug}.png`)
+  const parentDir = path.dirname(filepath)
 
-  if (!existsSync(dir)) {
-    mkdirSync(dir)
+  if (!existsSync(parentDir)) {
+    mkdirSync(parentDir, { recursive: true })
   }
 
   if (!existsSync(filepath)) {

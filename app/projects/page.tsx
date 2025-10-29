@@ -1,6 +1,7 @@
 import projectsData from '@/data/projectsData'
 import Card from '@/components/Card'
 import { genPageMetadata } from 'app/seo'
+import NewsletterForm from '@/components/ui/NewsletterForm'
 
 export const metadata = genPageMetadata({ title: 'Projects' })
 
@@ -117,30 +118,18 @@ export default function Projects() {
         </div>
       </div>
 
-      {/* CTA Section */}
-      <div className="bg-primary-600 py-16 md:py-24">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="mb-4 text-3xl font-bold tracking-tight text-white sm:text-4xl">
-            Interested in Collaboration?
-          </h2>
-          <p className="mx-auto mb-8 max-w-2xl text-xl text-primary-100">
-            Let's work together on your next project or contribute to open-source initiatives.
-          </p>
-          <div className="flex flex-col items-center justify-center space-y-4 sm:flex-row sm:space-x-6 sm:space-y-0">
-            <a
-              href="mailto:antosubash@outlook.com"
-              className="inline-flex items-center rounded-lg bg-white px-8 py-4 text-lg font-semibold text-primary-600 shadow-lg transition-all hover:bg-gray-100 hover:shadow-xl"
-            >
-              Get in Touch
-            </a>
-            <a
-              href="https://github.com/antosubash"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center rounded-lg border-2 border-white px-8 py-4 text-lg font-semibold text-white transition-all hover:bg-white hover:text-primary-600"
-            >
-              View GitHub Profile
-            </a>
+      {/* Newsletter Section */}
+      <div className="bg-gray-50 py-16 dark:bg-gray-900 md:py-24">
+        <div className="container mx-auto px-4">
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="mb-4 text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl">
+              Stay Updated
+            </h2>
+            <p className="mb-8 text-lg leading-8 text-gray-600 dark:text-gray-300">
+              Subscribe to receive updates about new projects, open-source contributions, and
+              technical insights.
+            </p>
+            <NewsletterForm />
           </div>
         </div>
       </div>

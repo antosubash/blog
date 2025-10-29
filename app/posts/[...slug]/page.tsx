@@ -2,9 +2,9 @@ import 'css/prism.css'
 import 'katex/dist/katex.css'
 import { components } from '@/components/MDXComponents'
 import CustomMDXLayoutRenderer from '@/components/CustomMDXLayoutRenderer'
-import { sortPosts, coreContent, allCoreContent } from 'pliny/utils/contentlayer'
-import { allAuthors, allPosts } from 'contentlayer/generated'
-import type { Authors, Posts } from 'contentlayer/generated'
+import { sortPosts, coreContent, allCoreContent } from '@/lib/utils/content-utils'
+import { allAuthors, allPosts } from '@/lib/content'
+import type { Authors, Posts } from '@/types/content'
 import PostSimple from '@/layouts/PostSimple'
 import PostLayout from '@/layouts/PostLayout'
 import PostBanner from '@/layouts/PostBanner'
@@ -15,6 +15,7 @@ import { getRelatedPosts } from '@/lib/tag-utils'
 import RelatedPost from '@/components/related-posts'
 import PostEnhancements from '@/components/PostEnhancements'
 import { Suspense } from 'react'
+import { serializeMDX } from '@/lib/mdx-utils'
 
 const defaultLayout = 'PostSimple'
 const layouts = {
@@ -186,12 +187,18 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
     timeRequired: post.readingTime
       ? typeof post.readingTime === 'string'
         ? post.readingTime
-        : `${Math.ceil(post.readingTime.minutes)}M${post.readingTime.seconds}S`
+        : `${Math.ceil(post.readingTime.minutes)}M`
       : undefined,
   }
 
   const Layout = layouts[post.layout || defaultLayout]
   const relatedPosts = getRelatedPosts(post.slug)
+
+  // Serialize MDX content if code is empty (use raw content)
+  const mdxContent =
+    post.body.code && post.body.code.trim() !== ''
+      ? post.body.code
+      : await serializeMDX(post.body.raw)
 
   return (
     <>
@@ -244,7 +251,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
         {/* Main Content */}
         <Suspense fallback={<PostLoading />}>
           <CustomMDXLayoutRenderer
-            code={post.body.code}
+            code={mdxContent}
             components={components}
             toc={post.toc}
             slug={post.slug}

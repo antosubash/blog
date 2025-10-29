@@ -1,4 +1,4 @@
-import { KBarButton } from 'pliny/search/KBarButton'
+import { KBarButton } from '@/components/search/KBarButton'
 import siteMetadata from '@/data/siteMetadata'
 import { Search } from 'lucide-react'
 

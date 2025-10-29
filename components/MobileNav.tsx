@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from './Link'
 import headerNavLinks from '@/data/headerNavLinks'
-import { Menu, X, Home, FileText, Layers, Briefcase, Mail, Heart } from 'lucide-react'
+import { Menu, X, Home, FileText, Layers, Briefcase, Mail } from 'lucide-react'
 import siteMetadata from '@/data/siteMetadata'
 
 const MobileNav = () => {
@@ -203,15 +203,9 @@ const MobileNav = () => {
         <div className="border-t border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-900">
           <div className="text-center">
             <div className="flex items-center justify-center space-x-1 text-xs text-gray-500 dark:text-gray-400">
-              <span>Made with</span>
-              <Heart className="h-3 w-3 text-red-500" />
-              <span>by</span>
-              <span className="font-medium text-gray-700 dark:text-gray-300">
-                {siteMetadata.author}
-              </span>
-            </div>
-            <div className="mt-2 text-xs text-gray-400 dark:text-gray-500">
-              © {new Date().getFullYear()} All rights reserved
+              <span>© {new Date().getFullYear()}</span>
+              <span>•</span>
+              <span>{siteMetadata.author}</span>
             </div>
           </div>
         </div>

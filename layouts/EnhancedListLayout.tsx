@@ -2,13 +2,12 @@
 
 import { useState, useMemo } from 'react'
 import { usePathname } from 'next/navigation'
-import { CoreContent } from 'pliny/utils/contentlayer'
-import type { Posts } from 'contentlayer/generated'
+import { CoreContent } from '@/lib/utils/content-utils'
+import type { Posts } from '@/types/content'
 import Tag from '@/components/Tag'
 import PostItem from '@/components/post-item'
 import PostSearch from '@/components/PostSearch'
 import EnhancedPagination from '@/components/EnhancedPagination'
-import { getTagsWithCount } from '@/lib/tag-utils'
 import { BookOpen, Filter, Grid, List, Sparkles } from 'lucide-react'
 
 interface PaginationProps {
@@ -30,7 +29,6 @@ export default function EnhancedListLayout({
   pagination,
 }: EnhancedListLayoutProps) {
   const pathname = usePathname()
-  const tagsWithCount = getTagsWithCount()
 
   // State for search and filtering
   const [searchQuery, setSearchQuery] = useState('')

@@ -1,12 +1,12 @@
 'use client'
 
-import { useMDXComponent } from 'next-contentlayer/hooks'
+import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote'
 import { MDXComponents } from 'mdx/types'
 import CustomTOCInline from './CustomTOCInline'
 import { useState, useEffect } from 'react'
 
 interface CustomMDXLayoutRendererProps {
-  code: string
+  code: string | MDXRemoteSerializeResult
   components?: MDXComponents
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   toc?: any
@@ -23,14 +23,29 @@ export default function CustomMDXLayoutRenderer({
   videoId,
   series,
 }: CustomMDXLayoutRendererProps) {
-  const MDXContent = useMDXComponent(code)
   const [mounted, setMounted] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [mdxSource, setMdxSource] = useState<MDXRemoteSerializeResult | null>(null)
 
   // Ensure component is mounted on client side
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  // If code is already serialized, use it; otherwise serialize on client (not ideal but works)
+  useEffect(() => {
+    if (typeof code === 'string' && code) {
+      // If it's a string, we need to serialize it
+      // This should ideally be done at build time
+      import('next-mdx-remote/serialize').then(({ serialize }) => {
+        serialize(code)
+          .then(setMdxSource)
+          .catch((err) => setError(err.message))
+      })
+    } else {
+      setMdxSource(code as MDXRemoteSerializeResult)
+    }
+  }, [code])
 
   // Error boundary for MDX rendering
   if (error) {
@@ -44,7 +59,7 @@ export default function CustomMDXLayoutRenderer({
     )
   }
 
-  if (!mounted) {
+  if (!mounted || !mdxSource) {
     return (
       <div className="animate-pulse space-y-4">
         <div className="h-4 w-3/4 rounded bg-gray-200 dark:bg-gray-700"></div>
@@ -92,9 +107,11 @@ export default function CustomMDXLayoutRenderer({
       )}
 
       {/* Main MDX content */}
-      <div className="prose prose-lg max-w-none dark:prose-invert">
-        <MDXContent components={components} />
-      </div>
+      {mdxSource && (
+        <div className="prose prose-lg max-w-none dark:prose-invert">
+          <MDXRemote {...mdxSource} components={components} />
+        </div>
+      )}
     </div>
   )
 }

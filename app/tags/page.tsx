@@ -1,13 +1,14 @@
 import Link from '@/components/Link'
 import Tag from '@/components/Tag'
 import { slug } from 'github-slugger'
-import { getTagsWithCount } from '@/lib/tag-utils'
+import { getTagsWithCountFromPosts } from '@/lib/tag-utils'
+import { allPosts } from '@/lib/content'
 import { genPageMetadata } from 'app/seo'
 
 export const metadata = genPageMetadata({ title: 'Tags', description: 'Things I blog about' })
 
 export default async function Page() {
-  const tagsWithCount = getTagsWithCount()
+  const tagsWithCount = getTagsWithCountFromPosts(allPosts)
   return (
     <>
       <div className="pt-12 text-center">

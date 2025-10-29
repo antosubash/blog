@@ -1,6 +1,6 @@
 import Link from '@/components/Link'
 import siteMetadata from '@/data/siteMetadata'
-import NewsletterForm from 'pliny/ui/NewsletterForm'
+import NewsletterForm from '@/components/ui/NewsletterForm'
 import PostItem from '@/components/post-item'
 import { ArrowRight, BookOpen, Code2, Rocket, FileText, Users, Calendar } from 'lucide-react'
 

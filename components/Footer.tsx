@@ -1,7 +1,6 @@
 import Link from './Link'
 import siteMetadata from '@/data/siteMetadata'
 import SocialIcon from '@/components/social-icons'
-import { Heart } from 'lucide-react'
 
 export default function Footer() {
   return (
@@ -85,9 +84,6 @@ export default function Footer() {
               <span>© {new Date().getFullYear()}</span>
               <span>•</span>
               <span>{siteMetadata.author}</span>
-              <span>•</span>
-              <span>Made with</span>
-              <Heart className="h-3 w-3 text-red-500 sm:h-4 sm:w-4" />
             </div>
             <div className="text-xs text-gray-500 dark:text-gray-400 sm:text-sm">
               <Link

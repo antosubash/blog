@@ -1,4 +1,4 @@
-import { Posts } from 'contentlayer/generated'
+import type { Posts } from '@/types/content'
 import Link from 'next/link'
 import { format, parseISO } from 'date-fns'
 import { Calendar, BookOpen, ArrowRight, TrendingUp } from 'lucide-react'

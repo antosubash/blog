@@ -1,6 +1,6 @@
 import EnhancedListLayout from '@/layouts/EnhancedListLayout'
-import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer'
-import { allPosts } from 'contentlayer/generated'
+import { allCoreContent, sortPosts } from '@/lib/utils/content-utils'
+import { allPosts } from '@/lib/content'
 
 const POSTS_PER_PAGE = 8
 

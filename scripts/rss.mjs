@@ -1,10 +1,17 @@
 import { writeFileSync, mkdirSync } from 'fs'
 import path from 'path'
 import GithubSlugger from 'github-slugger'
-import { escape } from 'pliny/utils/htmlEscaper.js'
+// Minimal HTML escape util (avoid importing TS file from Node script)
+const ESCAPE_MAP = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }
+const escape = (html) => html.replace(/[&<>"']/g, (ch) => ESCAPE_MAP[ch] || ch)
 import siteMetadata from '../data/siteMetadata.js'
-import { allPosts } from '../.contentlayer/generated/index.mjs'
-import { sortPosts } from 'pliny/utils/contentlayer.js'
+import { readFileSync } from 'fs'
+import { join } from 'path'
+
+const root = process.cwd()
+const allPosts = JSON.parse(readFileSync(join(root, '.content', 'Posts', '_index.json'), 'utf8'))
+const sortPosts = (posts) =>
+  posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 
 const generateRssItem = (config, post) => `
   <item>

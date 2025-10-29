@@ -1,0 +1,35 @@
+[
+  {
+    "name": "Anto Subash",
+    "avatar": "/static/images/avatar.png",
+    "occupation": "Software Engineer",
+    "company": "Anto Subash",
+    "email": "antosubash@live.com",
+    "twitter": "https://twitter.com/antosubash",
+    "linkedin": "https://www.linkedin.com/in/antosubash",
+    "github": "https://github.com/antosubash",
+    "slug": "default",
+    "path": "default",
+    "filePath": "authors/default.mdx",
+    "postUrl": "/default",
+    "readingTime": {
+      "text": "1 min read",
+      "minutes": 0.355,
+      "time": 21300,
+      "words": 71
+    },
+    "toc": [],
+    "body": {
+      "raw": "\nAnto Subash is a Software Engineer with a passion for building products and solving problems. He has a strong background in building scalable and reliable systems. He is a strong advocate for open source and loves to contribute to the community. He is also a mentor and loves to help others grow in their careers. He is a strong believer in the power of community and loves to connect with people.\n",
+      "code": ""
+    },
+    "_id": "/home/anto/github/blog/data/authors/default.mdx",
+    "_raw": {
+      "sourceFileName": "authors/default.mdx",
+      "sourceFilePath": "/home/anto/github/blog/data/authors/default.mdx",
+      "sourceFileDir": "authors",
+      "contentType": "mdx",
+      "flattenedPath": "default"
+    }
+  }
+]

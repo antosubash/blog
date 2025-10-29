@@ -1,4 +1,4 @@
-import { allPosts } from 'contentlayer/generated'
+import { allPosts } from '@/lib/content'
 
 export interface SeriesPost {
   slug: string

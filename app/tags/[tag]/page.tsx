@@ -1,9 +1,9 @@
 import { slug } from 'github-slugger'
-import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer'
+import { allCoreContent, sortPosts } from '@/lib/utils/content-utils'
 import siteMetadata from '@/data/siteMetadata'
 import EnhancedListLayout from '@/layouts/EnhancedListLayout'
-import { allPosts } from 'contentlayer/generated'
-import { getTagsWithCount } from '@/lib/tag-utils'
+import { allPosts } from '@/lib/content'
+import { getTagsWithCountFromPosts } from '@/lib/tag-utils'
 import { genPageMetadata } from 'app/seo'
 import { Metadata } from 'next'
 
@@ -50,7 +50,7 @@ export async function generateMetadata({
 }
 
 export const generateStaticParams = async () => {
-  const tagCounts = getTagsWithCount()
+  const tagCounts = getTagsWithCountFromPosts(allPosts)
   const paths = tagCounts.map((tagWithCount) => ({
     tag: encodeURI(tagWithCount.tag),
     count: tagWithCount.count,

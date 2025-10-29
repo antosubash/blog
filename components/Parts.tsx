@@ -1,22 +1,90 @@
 'use client'
 
 import Link from 'next/link'
-import { getSeriesProgress, getSeriesByName } from '@/lib/series-utils'
 import { TrendingUp, ChevronRight, CheckCircle, Circle, ArrowLeft, ArrowRight } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
 
 interface PartsProps {
   data: string
 }
 
 const Parts = (props: PartsProps) => {
-  const post = getSeriesByName(props.data)?.posts.find((p) => p.slug === props.data)
+  interface CorePost {
+    slug: string
+    date: string
+    title: string
+    excerpt?: string
+    tags?: string[]
+    series?: string
+    part?: number
+    // readingTime omitted
+  }
 
-  if (!post) return null
+  const [allCorePosts, setAllCorePosts] = useState<CorePost[]>([])
 
-  const series = getSeriesByName(post.series)
-  const progress = getSeriesProgress(post.series, post.part)
+  useEffect(() => {
+    fetch('/search.json')
+      .then((r) => r.json())
+      .then((data: CorePost[]) => setAllCorePosts(data))
+      .catch(() => setAllCorePosts([]))
+  }, [])
 
-  if (!series || !progress) return null
+  const seriesData = useMemo(() => {
+    const map = new Map<string, CorePost[]>()
+    allCorePosts
+      .filter((p) => p.series && typeof p.part === 'number')
+      .forEach((p) => {
+        const key = p.series as string
+        if (!map.has(key)) map.set(key, [])
+        map.get(key)!.push(p)
+      })
+
+    const groups = Array.from(map.entries()).map(([name, posts]) => {
+      const sorted = posts.slice().sort((a, b) => a.part! - b.part!)
+      return {
+        name,
+        posts: sorted,
+        totalParts: sorted.length,
+      }
+    })
+
+    return {
+      byName: (name: string) => groups.find((g) => g.name === name),
+      groups,
+    }
+  }, [allCorePosts])
+
+  const post = useMemo(() => {
+    const current = allCorePosts.find((p) => p.slug === props.data)
+    if (!current || !current.series) return null
+    const s = seriesData.byName(current.series)
+    if (!s) return null
+    return s.posts.find((p) => p.slug === props.data) || null
+  }, [allCorePosts, props.data, seriesData])
+
+  const series = useMemo(() => {
+    if (!post?.series) return undefined
+    return seriesData.byName(post.series as string)
+  }, [post?.series, seriesData])
+
+  const progress = useMemo(() => {
+    if (!series || !post?.part) return null
+    const currentPart = post.part
+    const totalParts = series.totalParts
+    const nextPart = currentPart < totalParts ? currentPart + 1 : null
+    const prevPart = currentPart > 1 ? currentPart - 1 : null
+    return {
+      currentPart,
+      totalParts,
+      progress: (currentPart / totalParts) * 100,
+      nextPart: nextPart ? series.posts.find((p) => p.part === nextPart) : null,
+      prevPart: prevPart ? series.posts.find((p) => p.part === prevPart) : null,
+      isFirst: currentPart === 1,
+      isLast: currentPart === totalParts,
+    }
+  }, [series, post?.part])
+
+  if (!post || !series || !progress) return null
 
   return (
     <div className="my-8 rounded-2xl border border-gray-200 bg-white/80 p-6 shadow-lg backdrop-blur-sm dark:border-gray-700 dark:bg-gray-800/80">
@@ -58,8 +126,9 @@ const Parts = (props: PartsProps) => {
         <div className="space-y-2">
           {series.posts.map((blogPost) => {
             const isCurrentPost = props.data === blogPost.slug
-            const isCompleted = blogPost.part < progress.currentPart
-            const isNext = blogPost.part === progress.currentPart + 1
+            const partNum = blogPost.part ?? 0
+            const isCompleted = partNum < progress.currentPart
+            const isNext = partNum === progress.currentPart + 1
 
             return (
               <Link
@@ -102,7 +171,7 @@ const Parts = (props: PartsProps) => {
                               : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300'
                       }`}
                     >
-                      Part {blogPost.part}
+                      Part {partNum}
                     </span>
                     {isCurrentPost && (
                       <span className="text-xs font-medium text-blue-600 dark:text-blue-400">

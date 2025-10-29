@@ -2,8 +2,8 @@ import Link from 'next/link'
 import { format, parseISO } from 'date-fns'
 import { Calendar, BookOpen, ArrowRight } from 'lucide-react'
 import Tag from './Tag'
-import { CoreContent } from 'pliny/utils/contentlayer'
-import type { Posts } from 'contentlayer/generated'
+import { CoreContent } from '@/lib/utils/content-utils'
+import type { Posts } from '@/types/content'
 
 interface FeaturedPostsProps {
   posts: CoreContent<Posts>[]

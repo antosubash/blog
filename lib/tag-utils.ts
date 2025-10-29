@@ -1,23 +1,23 @@
-import { allPosts } from 'contentlayer/generated'
-export function getAllTags() {
-  const allTags = allPosts.flatMap((post) => post.tags).filter((tag) => tag)
+import { allPosts } from '@/lib/content'
+
+export function getAllTagsFromPosts(posts: { tags?: (string | null | undefined)[] }[]) {
+  const allTags = posts.flatMap((post) => post.tags).filter((tag): tag is string => Boolean(tag))
   const tags = allTags.filter((item, index) => allTags.indexOf(item) === index)
-  return tags as string[]
+  return tags
 }
 
-export function getTagsWithCount() {
-  const tags = allPosts.flatMap((post) => post.tags).filter((tag) => tag)
+export function getTagsWithCountFromPosts(posts: { tags?: (string | null | undefined)[] }[]) {
+  const tags = posts.flatMap((post) => post.tags).filter((tag): tag is string => Boolean(tag))
   let allMappedTags = tags
     .map((tag) => {
       return {
-        tag: tag,
-        count: allPosts.filter((post) => post.tags?.filter((t) => t).includes(tag)).length,
-      } as { tag: string; count: number }
+        tag,
+        count: posts.filter((post) => (post.tags || []).filter((t) => t).includes(tag)).length,
+      }
     })
     .sort((a, b) => b.count - a.count)
 
   // Remove duplicates
-
   allMappedTags = allMappedTags.filter(
     (item, index) => allMappedTags.findIndex((i) => i.tag === item.tag) === index
   )

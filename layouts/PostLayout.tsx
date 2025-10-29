@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
-import { CoreContent } from 'pliny/utils/contentlayer'
-import type { Posts, Authors } from 'contentlayer/generated'
+import { CoreContent } from '@/lib/utils/content-utils'
+import type { Posts, Authors } from '@/types/content'
 import Comments from '@/components/Comments'
 import Link from '@/components/Link'
 import PageTitle from '@/components/PageTitle'

@@ -1,18 +1,72 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { format, parseISO } from 'date-fns'
 import Tag from '@/components/Tag'
 import { BookOpen, TrendingUp, Calendar, Clock, ArrowRight } from 'lucide-react'
-import { getAllSeries } from '@/lib/series-utils'
 import { designSystemUtils, themeColors } from '@/lib/design-system'
 import { Card } from '@/components/ui/Card'
 import Badge from '@/components/ui/Badge'
 
+interface CorePost {
+  slug: string
+  date: string
+  title: string
+  excerpt?: string
+  tags?: string[]
+  series?: string
+  part?: number
+  readingTime?: string | { text: string }
+}
+
+type SeriesGroup = {
+  name: string
+  posts: CorePost[]
+  totalParts: number
+  latestDate: string
+  tags: string[]
+}
+
 const Series = () => {
-  // Get all series posts and group them
-  const seriesGroups = useMemo(() => getAllSeries(), [])
+  const [posts, setPosts] = useState<CorePost[]>([])
+
+  useEffect(() => {
+    fetch('/search.json')
+      .then((r) => r.json())
+      .then((data: CorePost[]) => setPosts(data))
+      .catch(() => setPosts([]))
+  }, [])
+
+  const seriesGroups: SeriesGroup[] = useMemo(() => {
+    const map = new Map<string, CorePost[]>()
+    posts
+      .filter((p) => p.series && typeof p.part === 'number')
+      .forEach((p) => {
+        const key = p.series as string
+        if (!map.has(key)) map.set(key, [])
+        map.get(key)!.push(p)
+      })
+
+    const groups = Array.from(map.entries()).map(([name, list]) => {
+      const sorted = list.slice().sort((a, b) => a.part! - b.part!)
+      const tags = Array.from(
+        sorted.reduce((acc, p) => {
+          ;(p.tags || []).forEach((t) => acc.add(t))
+          return acc
+        }, new Set<string>())
+      )
+      const latestDate = sorted.reduce(
+        (latest, p) => (new Date(p.date) > new Date(latest) ? p.date : latest),
+        sorted[0]?.date || new Date(0).toISOString()
+      )
+      return { name, posts: sorted, totalParts: sorted.length, latestDate, tags }
+    })
+
+    return groups.sort(
+      (a, b) => new Date(b.latestDate).getTime() - new Date(a.latestDate).getTime()
+    )
+  }, [posts])
 
   return (
     <div className={`min-h-screen bg-gray-50 dark:bg-gray-900`}>
