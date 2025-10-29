@@ -26,5 +26,7 @@ export async function serializeMDX(content: string) {
     },
   }
 
-  return await serialize(content, options)
+  // Type assertion to resolve vfile version conflict between dependencies
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return await serialize(content, options as any)
 }
