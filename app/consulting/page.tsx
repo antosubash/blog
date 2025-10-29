@@ -215,8 +215,6 @@ const ConsultingPage = () => {
           </div>
         </div>
       </div>
-
-      
     </div>
   )
 }
