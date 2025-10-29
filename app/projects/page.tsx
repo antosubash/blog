@@ -1,7 +1,7 @@
 import projectsData from '@/data/projectsData'
 import Card from '@/components/Card'
 import { genPageMetadata } from 'app/seo'
-import NewsletterForm from '@/components/ui/NewsletterForm'
+ 
 
 export const metadata = genPageMetadata({ title: 'Projects' })
 
@@ -118,21 +118,7 @@ export default function Projects() {
         </div>
       </div>
 
-      {/* Newsletter Section */}
-      <div className="bg-gray-50 py-16 dark:bg-gray-900 md:py-24">
-        <div className="container mx-auto px-4">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="mb-4 text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl">
-              Stay Updated
-            </h2>
-            <p className="mb-8 text-lg leading-8 text-gray-600 dark:text-gray-300">
-              Subscribe to receive updates about new projects, open-source contributions, and
-              technical insights.
-            </p>
-            <NewsletterForm />
-          </div>
-        </div>
-      </div>
+      
     </div>
   )
 }

@@ -1,8 +1,6 @@
 import Link from '@/components/Link'
-import siteMetadata from '@/data/siteMetadata'
-import NewsletterForm from '@/components/ui/NewsletterForm'
 import PostItem from '@/components/post-item'
-import { ArrowRight, BookOpen, Code2, Rocket, FileText, Users, Calendar } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 
 const MAX_DISPLAY = 6
 
@@ -53,26 +51,6 @@ export default function Home({ posts }) {
                 </Link>
               </div>
             )}
-          </div>
-        </div>
-      )}
-
-      {/* Newsletter Section */}
-      {siteMetadata.newsletter?.provider && (
-        <div className="bg-white py-12 dark:bg-gray-800 sm:py-16">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-2xl text-center">
-              <BookOpen className="mx-auto h-8 w-8 text-primary-600 sm:h-12 sm:w-12" />
-              <h2 className="mt-3 text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100 sm:mt-4 sm:text-3xl">
-                Stay Updated
-              </h2>
-              <p className="mt-3 text-base text-gray-600 dark:text-gray-300 sm:mt-4 sm:text-lg">
-                Get the latest posts and updates delivered to your inbox
-              </p>
-              <div className="mt-6 sm:mt-8">
-                <NewsletterForm />
-              </div>
-            </div>
           </div>
         </div>
       )}

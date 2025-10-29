@@ -5,7 +5,10 @@
       "excerpt": "In this post we will see how to develop a modular with tiered abp application. We will add a new module to tiered abp app and then use the separate database to store the modules data and the identity data.",
       "date": "2021-11-03",
       "videoId": "y2O8Hr3ioSE",
-      "tags": ["abp", "module"],
+      "tags": [
+        "abp",
+        "module"
+      ],
       "slug": "abp/abp-add-new-module-with-seperate-db",
       "path": "posts/abp/abp-add-new-module-with-seperate-db",
       "filePath": "_posts/abp/abp-add-new-module-with-seperate-db.mdx",
@@ -117,7 +120,10 @@
       "excerpt": "In this post we will see how to develop a modular abp application. We will add a new module to default abp app and then use the same database to store the modules data and the identity data.",
       "date": "2021-11-02",
       "videoId": "z7Nej3q9t80",
-      "tags": ["abp", "module"],
+      "tags": [
+        "abp",
+        "module"
+      ],
       "slug": "abp/abp-add-new-module",
       "path": "posts/abp/abp-add-new-module",
       "filePath": "_posts/abp/abp-add-new-module.mdx",
@@ -234,7 +240,11 @@
       "excerpt": "In this post we will see how to add tailwind css to your ABP Blazor UI.",
       "date": "2022-01-05",
       "videoId": "_3kK8qWGD2w",
-      "tags": ["abp", "blazor", "tailwind"],
+      "tags": [
+        "abp",
+        "blazor",
+        "tailwind"
+      ],
       "slug": "abp/abp-add-tailwindcss-to-blazor-ui",
       "path": "posts/abp/abp-add-tailwindcss-to-blazor-ui",
       "filePath": "_posts/abp/abp-add-tailwindcss-to-blazor-ui.mdx",
@@ -351,7 +361,11 @@
       "excerpt": "In this post we will see how to add tailwind css to your ABP MVC UI.",
       "date": "2022-01-11",
       "videoId": "bD7h4jiJXts",
-      "tags": ["abp", "dotnet", "tailwind"],
+      "tags": [
+        "abp",
+        "dotnet",
+        "tailwind"
+      ],
       "slug": "abp/abp-add-tailwindcss-to-dotnet-mvc",
       "path": "posts/abp/abp-add-tailwindcss-to-dotnet-mvc",
       "filePath": "_posts/abp/abp-add-tailwindcss-to-dotnet-mvc.mdx",
@@ -465,7 +479,12 @@
       "videoId": "lQEVvKzX6P8",
       "series": "ABP Framework - Getting started",
       "part": 5,
-      "tags": ["abp", "flutter", "openid", "identity-server"],
+      "tags": [
+        "abp",
+        "flutter",
+        "openid",
+        "identity-server"
+      ],
       "slug": "abp/abp-auth-with-flutter-p5",
       "path": "posts/abp/abp-auth-with-flutter-p5",
       "filePath": "_posts/abp/abp-auth-with-flutter-p5.mdx",
@@ -564,7 +583,13 @@
       "videoId": "b5SglxXoa7w",
       "series": "ABP Framework - Getting started",
       "part": 2,
-      "tags": ["abp", "nextjs", "react", "identity-server", "openid"],
+      "tags": [
+        "abp",
+        "nextjs",
+        "react",
+        "identity-server",
+        "openid"
+      ],
       "slug": "abp/abp-auth-with-nextjs-p2",
       "path": "posts/abp/abp-auth-with-nextjs-p2",
       "filePath": "_posts/abp/abp-auth-with-nextjs-p2.mdx",
@@ -668,7 +693,11 @@
       "videoId": "0_5634MuEvU",
       "series": "ABP Framework - Getting started",
       "part": 3,
-      "tags": ["abp", "authorization", "identity-server"],
+      "tags": [
+        "abp",
+        "authorization",
+        "identity-server"
+      ],
       "slug": "abp/abp-authorization-p3",
       "path": "posts/abp/abp-authorization-p3",
       "filePath": "_posts/abp/abp-authorization-p3.mdx",
@@ -737,7 +766,11 @@
       "videoId": "B-NXJvZ77i8",
       "series": "ABP Framework - Getting started",
       "part": 8,
-      "tags": ["abp", "seq", "dotnet"],
+      "tags": [
+        "abp",
+        "seq",
+        "dotnet"
+      ],
       "slug": "abp/abp-central-application-logging-with-seq",
       "path": "posts/abp/abp-central-application-logging-with-seq",
       "filePath": "_posts/abp/abp-central-application-logging-with-seq.mdx",
@@ -811,7 +844,11 @@
       "videoId": "tj_n6UJ_guU",
       "series": "ABP Framework - Getting started",
       "part": 10,
-      "tags": ["abp", "bootstrap", "theme"],
+      "tags": [
+        "abp",
+        "bootstrap",
+        "theme"
+      ],
       "slug": "abp/abp-change-theme-p10",
       "path": "posts/abp/abp-change-theme-p10",
       "filePath": "_posts/abp/abp-change-theme-p10.mdx",
@@ -893,7 +930,11 @@
       "excerpt": "In this post we will see how to create a Cli for your abp application.",
       "date": "2023-05-20T00:00:00.322Z",
       "videoId": null,
-      "tags": ["abp", "cli", "template"],
+      "tags": [
+        "abp",
+        "cli",
+        "template"
+      ],
       "slug": "abp/abp-cli-template",
       "path": "posts/abp/abp-cli-template",
       "filePath": "_posts/abp/abp-cli-template.mdx",
@@ -990,7 +1031,11 @@
       "excerpt": "In this post we will see how to use minimal api with the ABP application to create a CRUD app.",
       "date": "2021-12-31",
       "videoId": "H_GYXKJuCTA",
-      "tags": ["dotnet", "abp", "crud"],
+      "tags": [
+        "dotnet",
+        "abp",
+        "crud"
+      ],
       "slug": "abp/abp-crud-with-minimal-api-p3",
       "path": "posts/abp/abp-crud-with-minimal-api-p3",
       "filePath": "_posts/abp/abp-crud-with-minimal-api-p3.mdx",
@@ -1094,7 +1139,11 @@
       "videoId": "L2GeLy_VWRQ",
       "series": "ABP Framework - Getting started",
       "part": 9,
-      "tags": ["abp", "docker", "deployment"],
+      "tags": [
+        "abp",
+        "docker",
+        "deployment"
+      ],
       "slug": "abp/abp-deploy-with-docker",
       "path": "posts/abp/abp-deploy-with-docker",
       "filePath": "_posts/abp/abp-deploy-with-docker.mdx",
@@ -1196,7 +1245,11 @@
       "excerpt": "In this post we will see how to create proper docker file for your abp application.",
       "date": "2023-03-19T21:52:11.973Z",
       "videoId": null,
-      "tags": ["abp", "dotnet", "docker"],
+      "tags": [
+        "abp",
+        "dotnet",
+        "docker"
+      ],
       "slug": "abp/abp-docker-file",
       "path": "posts/abp/abp-docker-file",
       "filePath": "_posts/abp/abp-docker-file.mdx",
@@ -1300,7 +1353,10 @@
       "videoId": "pdAJcxsCo8s",
       "series": "ABP Framework - Getting started",
       "part": 7,
-      "tags": ["abp", "deployment"],
+      "tags": [
+        "abp",
+        "deployment"
+      ],
       "slug": "abp/abp-extend-tenant-with-custom-host",
       "path": "posts/abp/abp-extend-tenant-with-custom-host",
       "filePath": "_posts/abp/abp-extend-tenant-with-custom-host.mdx",
@@ -1424,7 +1480,12 @@
       "videoId": "R2Y7wHBxERg",
       "series": "ABP Framework - Getting started",
       "part": 6,
-      "tags": ["abp", "minio", "blob-store", "upload"],
+      "tags": [
+        "abp",
+        "minio",
+        "blob-store",
+        "upload"
+      ],
       "slug": "abp/abp-extend-user-entity-with-profile-picture",
       "path": "posts/abp/abp-extend-user-entity-with-profile-picture",
       "filePath": "_posts/abp/abp-extend-user-entity-with-profile-picture.mdx",
@@ -1518,7 +1579,10 @@
       "videoId": "xn7cfannWE0",
       "series": "ABP Framework - Getting started",
       "part": 4,
-      "tags": ["abp", "feature"],
+      "tags": [
+        "abp",
+        "feature"
+      ],
       "slug": "abp/abp-feature-p4",
       "path": "posts/abp/abp-feature-p4",
       "filePath": "_posts/abp/abp-feature-p4.mdx",
@@ -1585,7 +1649,11 @@
       "excerpt": "In this post we will see how to use how to use the NSwag to generate a typescript client with ABP",
       "date": "2022-01-08",
       "videoId": "fOEt_YI-Oww",
-      "tags": ["dotnet", "abp", "react"],
+      "tags": [
+        "dotnet",
+        "abp",
+        "react"
+      ],
       "slug": "abp/abp-generate-typescript-client-from-swagger-and-openapi",
       "path": "posts/abp/abp-generate-typescript-client-from-swagger-and-openapi",
       "filePath": "_posts/abp/abp-generate-typescript-client-from-swagger-and-openapi.mdx",
@@ -1679,7 +1747,9 @@
       "videoId": "m8pjAtmpmBI",
       "series": "ABP Framework - Getting started",
       "part": 1,
-      "tags": ["abp"],
+      "tags": [
+        "abp"
+      ],
       "slug": "abp/abp-getting-started-p1",
       "path": "posts/abp/abp-getting-started-p1",
       "filePath": "_posts/abp/abp-getting-started-p1.mdx",
@@ -1770,7 +1840,11 @@
       "title": "Add a new Module and convert it to a microservice in ABP",
       "excerpt": "In this post we will see how to create a modular abp application and convert it to microservice. We will add a new module to tiered abp app and then use the separate database to store the modules data and then convert the module to a microservice..",
       "date": "2021-11-27",
-      "tags": ["abp", "module", "microservice"],
+      "tags": [
+        "abp",
+        "module",
+        "microservice"
+      ],
       "videoId": "qQGbpfVTt_w",
       "slug": "abp/abp-module-to-microservice",
       "path": "posts/abp/abp-module-to-microservice",
@@ -1923,7 +1997,12 @@
       "excerpt": "In this article, you will learn how to create a no-layer module template for abp application.",
       "date": "2023-05-21T17:28:49.979Z",
       "videoId": null,
-      "tags": ["abp", "module", "no-layer", "template"],
+      "tags": [
+        "abp",
+        "module",
+        "no-layer",
+        "template"
+      ],
       "slug": "abp/abp-no-layer-module-template",
       "path": "posts/abp/abp-no-layer-module-template",
       "filePath": "_posts/abp/abp-no-layer-module-template.mdx",
@@ -2009,7 +2088,11 @@
       "title": "Introduction to ABP No Layer Template",
       "excerpt": "In this post we will explore the new experimental no layer template from the ABP framework",
       "date": "2022-01-29",
-      "tags": ["abp", "dotnet", "no-layers"],
+      "tags": [
+        "abp",
+        "dotnet",
+        "no-layers"
+      ],
       "videoId": "af4BqBhgftY",
       "slug": "abp/abp-no-layer-template",
       "path": "posts/abp/abp-no-layer-template",
@@ -2198,7 +2281,12 @@
       "excerpt": "React Starter Template for ABP application.",
       "date": "2023-04-03T12:54:31.904Z",
       "videoId": "nY_FGagjs0E",
-      "tags": ["react", "nextjs", "abp", "dotnet"],
+      "tags": [
+        "react",
+        "nextjs",
+        "abp",
+        "dotnet"
+      ],
       "slug": "abp/abp-react-template",
       "path": "posts/abp/abp-react-template",
       "filePath": "_posts/abp/abp-react-template.mdx",
@@ -2350,7 +2438,15 @@
       "excerpt": "Version 2 of React Starter Template for ABP application with Next.js, Tailwind CSS, and shadcn-ui.",
       "date": "2024-07-06T12:54:31.904Z",
       "videoId": "Atsj3NBiAVM",
-      "tags": ["react", "nextjs", "abp", "dotnet", "tailwindcss", "radixui", "shadcn"],
+      "tags": [
+        "react",
+        "nextjs",
+        "abp",
+        "dotnet",
+        "tailwindcss",
+        "radixui",
+        "shadcn"
+      ],
       "slug": "abp/abp-react-v2",
       "path": "posts/abp/abp-react-v2",
       "filePath": "_posts/abp/abp-react-v2.mdx",
@@ -2446,7 +2542,11 @@
       "title": "Removing IdentityServer from ABP No Layer Template",
       "excerpt": "In this post we will see how to remove identity server from the No Layer ABP template",
       "date": "2022-01-30",
-      "tags": ["abp", "dotnet", "no-layers"],
+      "tags": [
+        "abp",
+        "dotnet",
+        "no-layers"
+      ],
       "videoId": "yYqqupOw8uI",
       "slug": "abp/abp-remove-identity-server-from-abp-no-layers-app",
       "path": "posts/abp/abp-remove-identity-server-from-abp-no-layers-app",
@@ -2488,7 +2588,13 @@
       "excerpt": "Building a web application with ABP Framework, Inertia.js, React, and Vite.",
       "date": "2024-10-03T12:54:31.904Z",
       "videoId": "AVxHrWtHzSw",
-      "tags": ["react", "abp", "dotnet", "inertiajs", "vite"],
+      "tags": [
+        "react",
+        "abp",
+        "dotnet",
+        "inertiajs",
+        "vite"
+      ],
       "slug": "abp/abp-with-inertia-and-react",
       "path": "posts/abp/abp-with-inertia-and-react",
       "filePath": "_posts/abp/abp-with-inertia-and-react.mdx",
@@ -2630,7 +2736,10 @@
       "excerpt": "In this post we will see how to use minimal api with the ABP application.",
       "date": "2021-12-29",
       "videoId": "1xgKy7ucXoE",
-      "tags": ["dotnet", "abp"],
+      "tags": [
+        "dotnet",
+        "abp"
+      ],
       "slug": "abp/abp-with-minimal-api-p1",
       "path": "posts/abp/abp-with-minimal-api-p1",
       "filePath": "_posts/abp/abp-with-minimal-api-p1.mdx",
@@ -2697,7 +2806,10 @@
       "excerpt": "In this post we will see how to use minimal api with the ABP application and configure EF core.",
       "date": "2021-12-30",
       "videoId": "IW_3Y9eMa4o",
-      "tags": ["dotnet", "abp"],
+      "tags": [
+        "dotnet",
+        "abp"
+      ],
       "slug": "abp/abp-with-minimal-api-p2",
       "path": "posts/abp/abp-with-minimal-api-p2",
       "filePath": "_posts/abp/abp-with-minimal-api-p2.mdx",
@@ -2800,7 +2912,12 @@
       "date": "2023-03-30T10:46:07.099Z",
       "videoId": null,
       "isDraft": true,
-      "tags": ["abp", "dotnet", "cli", "openid"],
+      "tags": [
+        "abp",
+        "dotnet",
+        "cli",
+        "openid"
+      ],
       "slug": "abp/creating-a-cli-for-your-abp-application",
       "path": "posts/abp/creating-a-cli-for-your-abp-application",
       "filePath": "_posts/abp/creating-a-cli-for-your-abp-application.mdx",
@@ -2882,7 +2999,10 @@
       "excerpt": "In this post we will implement file upload using the ABP blob store and Minio",
       "date": "2021-07-10",
       "videoId": "YUIHVbOhg_Q",
-      "tags": ["dotnet", "abp"],
+      "tags": [
+        "dotnet",
+        "abp"
+      ],
       "slug": "abp/dotnet-file-upload-with-abp",
       "path": "posts/abp/dotnet-file-upload-with-abp",
       "filePath": "_posts/abp/dotnet-file-upload-with-abp.mdx",
@@ -2964,7 +3084,12 @@
       "excerpt": "Learn how to automate image cleanup in Azure Container Registry using ACR Tasks and implement best practices for container image management.",
       "date": "2025-01-16",
       "videoId": null,
-      "tags": ["azure", "docker", "azure-container-registry", "devops"],
+      "tags": [
+        "azure",
+        "docker",
+        "azure-container-registry",
+        "devops"
+      ],
       "slug": "azure/automatic-image-cleanup-in-acr",
       "path": "posts/azure/automatic-image-cleanup-in-acr",
       "filePath": "_posts/azure/automatic-image-cleanup-in-acr.mdx",
@@ -3216,7 +3341,13 @@
       "videoId": null,
       "series": "Azure Kubernetes (AKS) Deployment for .Net",
       "part": 2,
-      "tags": ["aks", "azure", "kubernetes", "terraform", "acr"],
+      "tags": [
+        "aks",
+        "azure",
+        "kubernetes",
+        "terraform",
+        "acr"
+      ],
       "slug": "azure/certmanager-nginx-ingress-controller-with-static-ip-in-aks",
       "path": "posts/azure/certmanager-nginx-ingress-controller-with-static-ip-in-aks",
       "filePath": "_posts/azure/certmanager-nginx-ingress-controller-with-static-ip-in-aks.mdx",
@@ -3296,7 +3427,12 @@
       "series": "Azure Kubernetes (AKS) Deployment for .Net",
       "draft": true,
       "part": 3,
-      "tags": ["aks", "kubernetes", "terraform", "cloudflare"],
+      "tags": [
+        "aks",
+        "kubernetes",
+        "terraform",
+        "cloudflare"
+      ],
       "slug": "azure/cloudflare-dns-for-aks-cluster-with-terraform",
       "path": "posts/azure/cloudflare-dns-for-aks-cluster-with-terraform",
       "filePath": "_posts/azure/cloudflare-dns-for-aks-cluster-with-terraform.mdx",
@@ -3376,7 +3512,15 @@
       "draft": true,
       "series": "Azure Kubernetes (AKS) Deployment for .Net",
       "part": 5,
-      "tags": ["aks", "azure", "kubernetes", "dotnet", "github", "actions", "acr"],
+      "tags": [
+        "aks",
+        "azure",
+        "kubernetes",
+        "dotnet",
+        "github",
+        "actions",
+        "acr"
+      ],
       "slug": "azure/github-actions-build-version-push-docker-image-to-azure-container-registry",
       "path": "posts/azure/github-actions-build-version-push-docker-image-to-azure-container-registry",
       "filePath": "_posts/azure/github-actions-build-version-push-docker-image-to-azure-container-registry.mdx",
@@ -3455,7 +3599,13 @@
       "videoId": null,
       "series": "Azure Kubernetes (AKS) Deployment for .Net",
       "part": 1,
-      "tags": ["aks", "azure", "kubernetes", "terraform", "acr"],
+      "tags": [
+        "aks",
+        "azure",
+        "kubernetes",
+        "terraform",
+        "acr"
+      ],
       "slug": "azure/terraform-to-create-azure-kubernetes-service-aks-cluster-and-container-registry",
       "path": "posts/azure/terraform-to-create-azure-kubernetes-service-aks-cluster-and-container-registry",
       "filePath": "_posts/azure/terraform-to-create-azure-kubernetes-service-aks-cluster-and-container-registry.mdx",
@@ -3592,7 +3742,10 @@
       "excerpt": "In this post we will see how to setup fluxor in Blazor Wasm App",
       "date": "2022-06-01",
       "videoId": "yM9F8rxo8L8",
-      "tags": ["blazor", "fluxor"],
+      "tags": [
+        "blazor",
+        "fluxor"
+      ],
       "slug": "blazor/state-management-blazor-fluxor",
       "path": "posts/blazor/state-management-blazor-fluxor",
       "filePath": "_posts/blazor/state-management-blazor-fluxor.mdx",
@@ -3723,7 +3876,10 @@
       "title": "Css for leaflet div element",
       "excerpt": "If you are like me who struggle with anything CSS. These are some small css that will help you to fill the leaflet map without setting the fixed height",
       "date": "2020-09-21",
-      "tags": ["css", "leaflet"],
+      "tags": [
+        "css",
+        "leaflet"
+      ],
       "slug": "css/css-for-leaflet-div-element",
       "path": "posts/css/css-for-leaflet-div-element",
       "filePath": "_posts/css/css-for-leaflet-div-element.mdx",
@@ -3787,7 +3943,11 @@
       "videoId": "LWflLXiAnFs",
       "series": "Docker Deployment",
       "part": 0,
-      "tags": ["docker", "docker-swarm", "series"],
+      "tags": [
+        "docker",
+        "docker-swarm",
+        "series"
+      ],
       "slug": "docker/docker-swarm-hetzner",
       "path": "posts/docker/docker-swarm-hetzner",
       "filePath": "_posts/docker/docker-swarm-hetzner.mdx",
@@ -3853,7 +4013,10 @@
       "title": "Docker swarm setup for localhost",
       "excerpt": "In this post we will see how to setup docker swarm for localhost.",
       "date": "2020-12-26",
-      "tags": ["docker", "docker-swarm"],
+      "tags": [
+        "docker",
+        "docker-swarm"
+      ],
       "slug": "docker/docker-swarm-localhost",
       "path": "posts/docker/docker-swarm-localhost",
       "filePath": "_posts/docker/docker-swarm-localhost.mdx",
@@ -3947,7 +4110,11 @@
       "videoId": "5meiTtVRtRc",
       "part": 1,
       "series": "Docker Deployment",
-      "tags": ["docker", "ubuntu", "hetzner"],
+      "tags": [
+        "docker",
+        "ubuntu",
+        "hetzner"
+      ],
       "slug": "docker/part-1-setup-docker-with-ubuntu-server-in-hetzner",
       "path": "posts/docker/part-1-setup-docker-with-ubuntu-server-in-hetzner",
       "filePath": "_posts/docker/part-1-setup-docker-with-ubuntu-server-in-hetzner.mdx",
@@ -4051,7 +4218,12 @@
       "videoId": "mX-30rUt0k8",
       "part": 2,
       "series": "Docker Deployment",
-      "tags": ["docker", "ubuntu", "traefik", "portainer"],
+      "tags": [
+        "docker",
+        "ubuntu",
+        "traefik",
+        "portainer"
+      ],
       "slug": "docker/part-2-setup-docker-swarm-with-traefik-and-portainer",
       "path": "posts/docker/part-2-setup-docker-swarm-with-traefik-and-portainer",
       "filePath": "_posts/docker/part-2-setup-docker-swarm-with-traefik-and-portainer.mdx",
@@ -4160,7 +4332,14 @@
       "part": 3,
       "videoId": "J2m6QrMpBm4",
       "series": "Docker Deployment",
-      "tags": ["docker", "redis", "rabbitmq", "postgres", "registry", "seq"],
+      "tags": [
+        "docker",
+        "redis",
+        "rabbitmq",
+        "postgres",
+        "registry",
+        "seq"
+      ],
       "slug": "docker/part-3-deploy-registry-redis-rabitmq-postgresql-in-docker",
       "path": "posts/docker/part-3-deploy-registry-redis-rabitmq-postgresql-in-docker",
       "filePath": "_posts/docker/part-3-deploy-registry-redis-rabitmq-postgresql-in-docker.mdx",
@@ -4289,7 +4468,10 @@
       "part": 4,
       "videoId": "1oXjAOm2TgM",
       "series": "Docker Deployment",
-      "tags": ["docker", "docker-compose"],
+      "tags": [
+        "docker",
+        "docker-compose"
+      ],
       "slug": "docker/part-4-prepare-and-deploy-microservice-in-docker",
       "path": "posts/docker/part-4-prepare-and-deploy-microservice-in-docker",
       "filePath": "_posts/docker/part-4-prepare-and-deploy-microservice-in-docker.mdx",
@@ -4360,7 +4542,10 @@
       "title": "Setup docker in Ubuntu 18.04",
       "excerpt": "In this post you will see how to setup docker in Ubuntu 18.04. We will also change the default ssh port and install fail2ban.",
       "date": "2020-09-17T07:35:07.322Z",
-      "tags": ["docker", "ubuntu"],
+      "tags": [
+        "docker",
+        "ubuntu"
+      ],
       "slug": "docker/setup-docker-node-hetzner",
       "path": "posts/docker/setup-docker-node-hetzner",
       "filePath": "_posts/docker/setup-docker-node-hetzner.mdx",
@@ -4426,7 +4611,10 @@
       "title": "Traefik setup with docker swarm",
       "excerpt": "In this post you will see how to setup traefik with docker swarm. Along with that we will also setup Portainer and Swarmpit so that it is easy to manage the docker swarm.",
       "date": "2020-09-17T05:35:07.322Z",
-      "tags": ["docker", "traefik"],
+      "tags": [
+        "docker",
+        "traefik"
+      ],
       "slug": "docker/setup-traefik-docker",
       "path": "posts/docker/setup-traefik-docker",
       "filePath": "_posts/docker/setup-traefik-docker.mdx",
@@ -4518,7 +4706,12 @@
       "excerpt": "In this post you will see how to automatically version and release a .Net Application using GitHub Actions",
       "date": "2022-10-23",
       "videoId": "nJKAXMqfO84",
-      "tags": ["dotnet", "version", "release", "git"],
+      "tags": [
+        "dotnet",
+        "version",
+        "release",
+        "git"
+      ],
       "slug": "dotnet/automatic-version-and-release",
       "path": "posts/dotnet/automatic-version-and-release",
       "filePath": "_posts/dotnet/automatic-version-and-release.mdx",
@@ -4655,7 +4848,12 @@
       "excerpt": "In this post you will see how to upload large files with resume using tus. We will use dotnet core for the backend and nextjs for the frontend",
       "date": "2021-07-22",
       "videoId": "9IQfy1l6kLg",
-      "tags": ["dotnet", "nextjs", "react", "tus"],
+      "tags": [
+        "dotnet",
+        "nextjs",
+        "react",
+        "tus"
+      ],
       "slug": "dotnet/dotnet-and-react-nextjs-large-file-upload-with-tus",
       "path": "posts/dotnet/dotnet-and-react-nextjs-large-file-upload-with-tus",
       "filePath": "_posts/dotnet/dotnet-and-react-nextjs-large-file-upload-with-tus.mdx",
@@ -4737,7 +4935,13 @@
       "excerpt": "Learn how to implement beautiful API documentation using Scalar and OpenAPI in .NET 9.0",
       "date": "2025-01-15",
       "videoId": "irYAi1z5cW0",
-      "tags": ["dotnet", "openapi", "scalar", "api-documentation", "aspnetcore"],
+      "tags": [
+        "dotnet",
+        "openapi",
+        "scalar",
+        "api-documentation",
+        "aspnetcore"
+      ],
       "slug": "dotnet/dotnet-openapi-with-scalar",
       "path": "posts/dotnet/dotnet-openapi-with-scalar",
       "filePath": "_posts/dotnet/dotnet-openapi-with-scalar.mdx",
@@ -4866,7 +5070,11 @@
       "videoId": "a_LuE43YaWc",
       "series": "MicroK8s - Getting Started",
       "part": 4,
-      "tags": ["abp", "tye", "microk8s"],
+      "tags": [
+        "abp",
+        "tye",
+        "microk8s"
+      ],
       "slug": "microk8s/create-and-deploy-dotnet-application-in-micro-k8s",
       "path": "posts/microk8s/create-and-deploy-dotnet-application-in-micro-k8s",
       "filePath": "_posts/microk8s/create-and-deploy-dotnet-application-in-micro-k8s.mdx",
@@ -4960,7 +5168,11 @@
       "videoId": "pxPARH8bF2s",
       "series": "MicroK8s - Getting Started",
       "part": 3,
-      "tags": ["postgres", "registry", "microk8s"],
+      "tags": [
+        "postgres",
+        "registry",
+        "microk8s"
+      ],
       "slug": "microk8s/deploy-docker-registry-and-postgres-database-in-micro-k8s",
       "path": "posts/microk8s/deploy-docker-registry-and-postgres-database-in-micro-k8s",
       "filePath": "_posts/microk8s/deploy-docker-registry-and-postgres-database-in-micro-k8s.mdx",
@@ -5044,7 +5256,11 @@
       "videoId": "si-OPBZvC_o",
       "series": "MicroK8s - Getting Started",
       "part": 0,
-      "tags": ["microk8s", "docker", "series"],
+      "tags": [
+        "microk8s",
+        "docker",
+        "series"
+      ],
       "slug": "microk8s/microk8s-gettings-started",
       "path": "posts/microk8s/microk8s-gettings-started",
       "filePath": "_posts/microk8s/microk8s-gettings-started.mdx",
@@ -5128,7 +5344,10 @@
       "videoId": "j2C3nS9tjls",
       "series": "MicroK8s - Getting Started",
       "part": 1,
-      "tags": ["ubuntu", "microk8s"],
+      "tags": [
+        "ubuntu",
+        "microk8s"
+      ],
       "slug": "microk8s/setup-micro-k8s-with-ubuntu",
       "path": "posts/microk8s/setup-micro-k8s-with-ubuntu",
       "filePath": "_posts/microk8s/setup-micro-k8s-with-ubuntu.mdx",
@@ -5332,7 +5551,12 @@
       "videoId": "Wq0KQ0m_3lE",
       "series": "MicroK8s - Getting Started",
       "part": 2,
-      "tags": ["ngnix", "ssl", "microk8s", "letsencrypt"],
+      "tags": [
+        "ngnix",
+        "ssl",
+        "microk8s",
+        "letsencrypt"
+      ],
       "slug": "microk8s/setup-nginx-and-cert-manager-in-micro-k8s",
       "path": "posts/microk8s/setup-nginx-and-cert-manager-in-micro-k8s",
       "filePath": "_posts/microk8s/setup-nginx-and-cert-manager-in-micro-k8s.mdx",
@@ -5446,7 +5670,12 @@
       "videoId": "PFFNHQUn74A",
       "part": 0,
       "series": ".NET Microservice with ABP",
-      "tags": ["dotnet", "abp", "microservice", "series"],
+      "tags": [
+        "dotnet",
+        "abp",
+        "microservice",
+        "series"
+      ],
       "slug": "microservice/abp-microservice-series",
       "path": "posts/microservice/abp-microservice-series",
       "filePath": "_posts/microservice/abp-microservice-series.mdx",
@@ -5520,7 +5749,11 @@
       "videoId": "fEkSBQIiiyQ",
       "series": ".NET Microservice with ABP",
       "part": 14,
-      "tags": ["microservice", "abp", "dotnet"],
+      "tags": [
+        "microservice",
+        "abp",
+        "dotnet"
+      ],
       "slug": "microservice/dotnet-microservice-template-with-abp",
       "path": "posts/microservice/dotnet-microservice-template-with-abp",
       "filePath": "_posts/microservice/dotnet-microservice-template-with-abp.mdx",
@@ -5604,7 +5837,12 @@
       "videoId": "DgZvgij5E7g",
       "series": ".NET Microservice with ABP",
       "part": 13,
-      "tags": ["abp", "identity-server", "openiddict", "migration"],
+      "tags": [
+        "abp",
+        "identity-server",
+        "openiddict",
+        "migration"
+      ],
       "slug": "microservice/migrating-identity-service-to-open-iddict-module",
       "path": "posts/microservice/migrating-identity-service-to-open-iddict-module",
       "filePath": "_posts/microservice/migrating-identity-service-to-open-iddict-module.mdx",
@@ -5753,7 +5991,10 @@
       "videoId": "jG-vrcy_uhM",
       "series": ".NET Microservice with ABP",
       "part": 14,
-      "tags": ["abp", "aspire"],
+      "tags": [
+        "abp",
+        "aspire"
+      ],
       "slug": "microservice/migrating-tye-to-aspire",
       "path": "posts/microservice/migrating-tye-to-aspire",
       "filePath": "_posts/microservice/migrating-tye-to-aspire.mdx",
@@ -5862,7 +6103,14 @@
       "videoId": "ma0P3jo9uGE",
       "series": ".NET Microservice with ABP",
       "part": 12,
-      "tags": ["dotnet", "abp", "microservice", "seq", "logging", null],
+      "tags": [
+        "dotnet",
+        "abp",
+        "microservice",
+        "seq",
+        "logging",
+        null
+      ],
       "slug": "microservice/netcore-microservice-with-abp-add-central-logging-part-12",
       "path": "posts/microservice/netcore-microservice-with-abp-add-central-logging-part-12",
       "filePath": "_posts/microservice/netcore-microservice-with-abp-add-central-logging-part-12.mdx",
@@ -5966,7 +6214,11 @@
       "videoId": "i_MwyAYOknk",
       "series": ".NET Microservice with ABP",
       "part": 11,
-      "tags": ["dotnet", "abp", "microservice"],
+      "tags": [
+        "dotnet",
+        "abp",
+        "microservice"
+      ],
       "slug": "microservice/netcore-microservice-with-abp-add-new-service-part-11",
       "path": "posts/microservice/netcore-microservice-with-abp-add-new-service-part-11",
       "filePath": "_posts/microservice/netcore-microservice-with-abp-add-new-service-part-11.mdx",
@@ -6095,7 +6347,12 @@
       "videoId": "Pwnz_t7IK80",
       "series": ".NET Microservice with ABP",
       "part": 3,
-      "tags": ["dotnet", "abp", "microservice", "netcore6"],
+      "tags": [
+        "dotnet",
+        "abp",
+        "microservice",
+        "netcore6"
+      ],
       "slug": "microservice/netcore-microservice-with-abp-administration-services-part-3",
       "path": "posts/microservice/netcore-microservice-with-abp-administration-services-part-3",
       "filePath": "_posts/microservice/netcore-microservice-with-abp-administration-services-part-3.mdx",
@@ -6189,7 +6446,12 @@
       "videoId": "vtv8gzSbjCY",
       "series": ".NET Microservice with ABP",
       "part": 6,
-      "tags": ["dotnet", "abp", "microservice", "netcore6"],
+      "tags": [
+        "dotnet",
+        "abp",
+        "microservice",
+        "netcore6"
+      ],
       "slug": "microservice/netcore-microservice-with-abp-db-migration-part-6",
       "path": "posts/microservice/netcore-microservice-with-abp-db-migration-part-6",
       "filePath": "_posts/microservice/netcore-microservice-with-abp-db-migration-part-6.mdx",
@@ -6268,7 +6530,12 @@
       "videoId": "gCBZUXbyOJo",
       "series": ".NET Microservice with ABP",
       "part": 9,
-      "tags": ["dotnet", "abp", "microservice", "rabbitmq"],
+      "tags": [
+        "dotnet",
+        "abp",
+        "microservice",
+        "rabbitmq"
+      ],
       "slug": "microservice/netcore-microservice-with-abp-distributed-event-bus-part-9",
       "path": "posts/microservice/netcore-microservice-with-abp-distributed-event-bus-part-9",
       "filePath": "_posts/microservice/netcore-microservice-with-abp-distributed-event-bus-part-9.mdx",
@@ -6367,7 +6634,12 @@
       "videoId": "zUD2xPpvTVg",
       "series": ".NET Microservice with ABP",
       "part": 10,
-      "tags": ["dotnet", "abp", "microservice", "docker"],
+      "tags": [
+        "dotnet",
+        "abp",
+        "microservice",
+        "docker"
+      ],
       "slug": "microservice/netcore-microservice-with-abp-docker-and-ci-cd-part-10",
       "path": "posts/microservice/netcore-microservice-with-abp-docker-and-ci-cd-part-10",
       "filePath": "_posts/microservice/netcore-microservice-with-abp-docker-and-ci-cd-part-10.mdx",
@@ -6431,7 +6703,14 @@
       "videoId": "w2dZokfRxe0",
       "series": ".NET Microservice with ABP",
       "part": 8,
-      "tags": ["dotnet", "abp", "microservice", "netcore6", "identity-server", "angular"],
+      "tags": [
+        "dotnet",
+        "abp",
+        "microservice",
+        "netcore6",
+        "identity-server",
+        "angular"
+      ],
       "slug": "microservice/netcore-microservice-with-abp-identity-server-and-angular-part-8",
       "path": "posts/microservice/netcore-microservice-with-abp-identity-server-and-angular-part-8",
       "filePath": "_posts/microservice/netcore-microservice-with-abp-identity-server-and-angular-part-8.mdx",
@@ -6545,7 +6824,12 @@
       "videoId": "Qsi7AFflmdk",
       "series": ".NET Microservice with ABP",
       "part": 4,
-      "tags": ["dotnet", "abp", "microservice", "netcore6"],
+      "tags": [
+        "dotnet",
+        "abp",
+        "microservice",
+        "netcore6"
+      ],
       "slug": "microservice/netcore-microservice-with-abp-identity-services-part-4",
       "path": "posts/microservice/netcore-microservice-with-abp-identity-services-part-4",
       "filePath": "_posts/microservice/netcore-microservice-with-abp-identity-services-part-4.mdx",
@@ -6634,7 +6918,12 @@
       "videoId": "e95p53tDPis",
       "series": ".NET Microservice with ABP",
       "part": 1,
-      "tags": ["dotnet", "abp", "microservice", "netcore6"],
+      "tags": [
+        "dotnet",
+        "abp",
+        "microservice",
+        "netcore6"
+      ],
       "slug": "microservice/netcore-microservice-with-abp-init-part-1",
       "path": "posts/microservice/netcore-microservice-with-abp-init-part-1",
       "filePath": "_posts/microservice/netcore-microservice-with-abp-init-part-1.mdx",
@@ -6698,7 +6987,12 @@
       "videoId": "h0yWwQ_2mzs",
       "series": ".NET Microservice with ABP",
       "part": 5,
-      "tags": ["dotnet", "abp", "microservice", "netcore6"],
+      "tags": [
+        "dotnet",
+        "abp",
+        "microservice",
+        "netcore6"
+      ],
       "slug": "microservice/netcore-microservice-with-abp-saas-services-part-5",
       "path": "posts/microservice/netcore-microservice-with-abp-saas-services-part-5",
       "filePath": "_posts/microservice/netcore-microservice-with-abp-saas-services-part-5.mdx",
@@ -6782,7 +7076,12 @@
       "videoId": "qGYeWNj_DI0",
       "series": ".NET Microservice with ABP",
       "part": 2,
-      "tags": ["dotnet", "abp", "microservice", "netcore6"],
+      "tags": [
+        "dotnet",
+        "abp",
+        "microservice",
+        "netcore6"
+      ],
       "slug": "microservice/netcore-microservice-with-abp-shared-project-part-2",
       "path": "posts/microservice/netcore-microservice-with-abp-shared-project-part-2",
       "filePath": "_posts/microservice/netcore-microservice-with-abp-shared-project-part-2.mdx",
@@ -6846,7 +7145,14 @@
       "videoId": "ICd7dpaCrDo",
       "series": ".NET Microservice with ABP",
       "part": 7,
-      "tags": ["dotnet", "abp", "microservice", "netcore6", "yarp", "tye"],
+      "tags": [
+        "dotnet",
+        "abp",
+        "microservice",
+        "netcore6",
+        "yarp",
+        "tye"
+      ],
       "slug": "microservice/netcore-microservice-with-abp-yarp-and-tye-part-7",
       "path": "posts/microservice/netcore-microservice-with-abp-yarp-and-tye-part-7",
       "filePath": "_posts/microservice/netcore-microservice-with-abp-yarp-and-tye-part-7.mdx",
@@ -6932,7 +7238,10 @@
       "title": "NDepend - A tool you can depend on",
       "excerpt": "In this post we will see how to use NDepend to improve your .net development.",
       "date": "2022-09-06",
-      "tags": ["dotnet", "tools"],
+      "tags": [
+        "dotnet",
+        "tools"
+      ],
       "slug": "ndepend/ndepend",
       "path": "posts/ndepend/ndepend",
       "filePath": "_posts/ndepend/ndepend.mdx",
@@ -7210,7 +7519,14 @@
       "excerpt": "In this post, we will see how to implement OpenID Connect with Next.js.",
       "date": "2024-07-03",
       "videoId": "HUFZnj0WT3o",
-      "tags": ["nextjs", "auth", "oidc", "openid-connect", "iron-session", "openid-client"],
+      "tags": [
+        "nextjs",
+        "auth",
+        "oidc",
+        "openid-connect",
+        "iron-session",
+        "openid-client"
+      ],
       "slug": "next-oidc/openid-connect-with-nextjs",
       "path": "posts/next-oidc/openid-connect-with-nextjs",
       "filePath": "_posts/next-oidc/openid-connect-with-nextjs.mdx",
@@ -7322,7 +7638,14 @@
       "excerpt": "Learn how to build sophisticated AI agents using Microsoft Agent Framework with Ollama for local AI model execution. This comprehensive guide covers streaming responses, multi-turn conversations, function tools, middleware integration, and production-ready patterns.",
       "date": "2025-10-04",
       "videoId": null,
-      "tags": ["ollama", "agent-framework", "llm", "dotnet", "ai-agents", "microsoft-agents"],
+      "tags": [
+        "ollama",
+        "agent-framework",
+        "llm",
+        "dotnet",
+        "ai-agents",
+        "microsoft-agents"
+      ],
       "slug": "ollama/agent-framework-ollama",
       "path": "posts/ollama/agent-framework-ollama",
       "filePath": "_posts/ollama/agent-framework-ollama.mdx",
@@ -7554,7 +7877,14 @@
       "excerpt": "In this post, we will learn how to use the Ollama Semantic Kernel Connector with C#.",
       "date": "2024-10-19",
       "videoId": "nkXDiLEN3Rw",
-      "tags": ["ollama", "semantic-kernel", "connector", "Llama", "llm", "dotnet"],
+      "tags": [
+        "ollama",
+        "semantic-kernel",
+        "connector",
+        "Llama",
+        "llm",
+        "dotnet"
+      ],
       "slug": "ollama/ollama-semantic-kernal-connector",
       "path": "posts/ollama/ollama-semantic-kernal-connector",
       "filePath": "_posts/ollama/ollama-semantic-kernal-connector.mdx",
@@ -7846,7 +8176,14 @@
       "excerpt": "In this post, we will learn how to get started with Ollama and Semantic Kernel with C#.",
       "date": "2024-08-15",
       "videoId": "MsH6rYAkVZg",
-      "tags": ["ollama", "semantic-kernel", "getting-started", "Llama", "llm", "dotnet"],
+      "tags": [
+        "ollama",
+        "semantic-kernel",
+        "getting-started",
+        "Llama",
+        "llm",
+        "dotnet"
+      ],
       "slug": "ollama/ollama-with-semantic-kernel",
       "path": "posts/ollama/ollama-with-semantic-kernel",
       "filePath": "_posts/ollama/ollama-with-semantic-kernel.mdx",
@@ -7985,7 +8322,10 @@
       "videoId": "bYk3JCFcf94",
       "series": "Orchard Core - Getting Started",
       "part": 3,
-      "tags": ["orchard-core", "cms"],
+      "tags": [
+        "orchard-core",
+        "cms"
+      ],
       "slug": "orchard-core/orchard-core-create-content-with-code",
       "path": "posts/orchard-core/orchard-core-create-content-with-code",
       "filePath": "_posts/orchard-core/orchard-core-create-content-with-code.mdx",
@@ -8059,7 +8399,9 @@
       "videoId": "ItfKWbKxPAw",
       "series": "Orchard Core - Getting Started",
       "part": 1,
-      "tags": ["orchard-core"],
+      "tags": [
+        "orchard-core"
+      ],
       "slug": "orchard-core/orchard-core-getting-started-p1",
       "path": "posts/orchard-core/orchard-core-getting-started-p1",
       "filePath": "_posts/orchard-core/orchard-core-getting-started-p1.mdx",
@@ -8133,7 +8475,12 @@
       "videoId": "UldaX-QXdqE",
       "series": "Orchard Core - Getting Started",
       "part": 2,
-      "tags": ["orchard-core", "openid", "nextjs", "auth"],
+      "tags": [
+        "orchard-core",
+        "openid",
+        "nextjs",
+        "auth"
+      ],
       "slug": "orchard-core/orchard-core-openid-nextjs",
       "path": "posts/orchard-core/orchard-core-openid-nextjs",
       "filePath": "_posts/orchard-core/orchard-core-openid-nextjs.mdx",
@@ -8240,7 +8587,9 @@
       "excerpt": "In this post we will see how to setup the oh-my-posh and PSReadLine with PowerShell.",
       "date": "2021-06-30",
       "videoId": "Cy73CoOx8z8",
-      "tags": ["terminal"],
+      "tags": [
+        "terminal"
+      ],
       "slug": "terminal/setting-up-powershell-with-oh-my-posh-v3",
       "path": "posts/terminal/setting-up-powershell-with-oh-my-posh-v3",
       "filePath": "_posts/terminal/setting-up-powershell-with-oh-my-posh-v3.mdx",
@@ -8336,7 +8685,9 @@
       "title": "Set up Windows Terminal with PoshGit, oh-my-posh and Cascadia Code PL",
       "excerpt": "In this post we will see how to setup windows terminal with PoshGit and oh-my-posh to make the terminal more productive",
       "date": "2020-12-05",
-      "tags": ["terminal"],
+      "tags": [
+        "terminal"
+      ],
       "slug": "terminal/setup-window-terminal-with-poshgit",
       "path": "posts/terminal/setup-window-terminal-with-poshgit",
       "filePath": "_posts/terminal/setup-window-terminal-with-poshgit.mdx",
@@ -8382,7 +8733,9 @@
       "title": "Set up Wsl with zsh and oh-my-zsh",
       "excerpt": "In this post we will see how to setup zsh shell in the wsl and use oh-my-zsh.",
       "date": "2020-12-12",
-      "tags": ["terminal"],
+      "tags": [
+        "terminal"
+      ],
       "slug": "terminal/setup-zsh-and-oh-my-zsh",
       "path": "posts/terminal/setup-zsh-and-oh-my-zsh",
       "filePath": "_posts/terminal/setup-zsh-and-oh-my-zsh.mdx",
