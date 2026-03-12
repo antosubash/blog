@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Anto Subash - docker-swarm</title>
+    <link>https://blog.antosubash.com</link>
+    <description>Full-stack developer passionate about web technologies, microservices, and modern software development.</description>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 12 Mar 2026 20:14:30 GMT</lastBuildDate>
+    <atom:link href="https://blog.antosubash.com/tags/docker-swarm/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Docker Deployment using docker swarm</title>
+      <link>https://blog.antosubash.com/posts/docker-swarm-hetzner</link>
+      <guid>https://blog.antosubash.com/posts/docker-swarm-hetzner</guid>
+      <pubDate>Sun, 31 Jul 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to setup docker swarm for your development environment.</description>
+    </item>
+    <item>
+      <title>Docker swarm setup for localhost</title>
+      <link>https://blog.antosubash.com/posts/docker-swarm-localhost</link>
+      <guid>https://blog.antosubash.com/posts/docker-swarm-localhost</guid>
+      <pubDate>Sat, 26 Dec 2020 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to setup docker swarm for localhost.</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Anto Subash - microk8s</title>
+    <link>https://blog.antosubash.com</link>
+    <description>Full-stack developer passionate about web technologies, microservices, and modern software development.</description>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 12 Mar 2026 20:14:30 GMT</lastBuildDate>
+    <atom:link href="https://blog.antosubash.com/tags/microk8s/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>MicroK8s - Hassle-free Kubernetes</title>
+      <link>https://blog.antosubash.com/posts/microk8s-gettings-started</link>
+      <guid>https://blog.antosubash.com/posts/microk8s-gettings-started</guid>
+      <pubDate>Thu, 15 Sep 2022 14:30:14 GMT</pubDate>
+      <description>In this post we will see how to get started with the MicroK8s Kubernetes distribution.</description>
+    </item>
+    <item>
+      <title>Create and deploy .Net application in MicroK8s</title>
+      <link>https://blog.antosubash.com/posts/create-and-deploy-dotnet-application-in-micro-k8s</link>
+      <guid>https://blog.antosubash.com/posts/create-and-deploy-dotnet-application-in-micro-k8s</guid>
+      <pubDate>Wed, 14 Sep 2022 19:55:43 GMT</pubDate>
+      <description>In this post we will create a simple abp application and deploy it in the microk8s instance.</description>
+    </item>
+    <item>
+      <title>Deploy docker registry and postgres database in MicroK8s</title>
+      <link>https://blog.antosubash.com/posts/deploy-docker-registry-and-postgres-database-in-micro-k8s</link>
+      <guid>https://blog.antosubash.com/posts/deploy-docker-registry-and-postgres-database-in-micro-k8s</guid>
+      <pubDate>Wed, 14 Sep 2022 19:53:18 GMT</pubDate>
+      <description>In this post we will see how to deploy and secure the registry along with deploying a postgres database in microk8s</description>
+    </item>
+    <item>
+      <title>Setup Nginx and cert-manager in MicroK8s</title>
+      <link>https://blog.antosubash.com/posts/setup-nginx-and-cert-manager-in-micro-k8s</link>
+      <guid>https://blog.antosubash.com/posts/setup-nginx-and-cert-manager-in-micro-k8s</guid>
+      <pubDate>Wed, 14 Sep 2022 19:51:51 GMT</pubDate>
+      <description>In this post we will see how to setup nginx reverse proxy and cert-manager in microk8s</description>
+    </item>
+    <item>
+      <title>Setup MicroK8s With Ubuntu</title>
+      <link>https://blog.antosubash.com/posts/setup-micro-k8s-with-ubuntu</link>
+      <guid>https://blog.antosubash.com/posts/setup-micro-k8s-with-ubuntu</guid>
+      <pubDate>Wed, 14 Sep 2022 19:50:03 GMT</pubDate>
+      <description>In this post we will see how to setup microk8s in ubuntu server.</description>
+    </item>
+  </channel>
+</rss>

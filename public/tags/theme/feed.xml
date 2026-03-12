@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Anto Subash - theme</title>
+    <link>https://blog.antosubash.com</link>
+    <description>Full-stack developer passionate about web technologies, microservices, and modern software development.</description>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 12 Mar 2026 20:14:30 GMT</lastBuildDate>
+    <atom:link href="https://blog.antosubash.com/tags/theme/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Changing theme for your ABP app. Part 10</title>
+      <link>https://blog.antosubash.com/posts/abp-change-theme-p10</link>
+      <guid>https://blog.antosubash.com/posts/abp-change-theme-p10</guid>
+      <pubDate>Tue, 26 Oct 2021 00:00:00 GMT</pubDate>
+      <description>In this post we will explore how to change the theme for your ABP application.</description>
+    </item>
+  </channel>
+</rss>

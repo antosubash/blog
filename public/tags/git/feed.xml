@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Anto Subash - git</title>
+    <link>https://blog.antosubash.com</link>
+    <description>Full-stack developer passionate about web technologies, microservices, and modern software development.</description>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 12 Mar 2026 20:14:30 GMT</lastBuildDate>
+    <atom:link href="https://blog.antosubash.com/tags/git/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Automatically version and release .Net Application</title>
+      <link>https://blog.antosubash.com/posts/automatic-version-and-release</link>
+      <guid>https://blog.antosubash.com/posts/automatic-version-and-release</guid>
+      <pubDate>Sun, 23 Oct 2022 00:00:00 GMT</pubDate>
+      <description>In this post you will see how to automatically version and release a .Net Application using GitHub Actions</description>
+    </item>
+  </channel>
+</rss>

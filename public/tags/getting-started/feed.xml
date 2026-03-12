@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Anto Subash - getting-started</title>
+    <link>https://blog.antosubash.com</link>
+    <description>Full-stack developer passionate about web technologies, microservices, and modern software development.</description>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 12 Mar 2026 20:14:30 GMT</lastBuildDate>
+    <atom:link href="https://blog.antosubash.com/tags/getting-started/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Getting started with Ollama and Semantic Kernel with C#</title>
+      <link>https://blog.antosubash.com/posts/ollama-with-semantic-kernel</link>
+      <guid>https://blog.antosubash.com/posts/ollama-with-semantic-kernel</guid>
+      <pubDate>Thu, 15 Aug 2024 00:00:00 GMT</pubDate>
+      <description>In this post, we will learn how to get started with Ollama and Semantic Kernel with C#.</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Anto Subash - docker-compose</title>
+    <link>https://blog.antosubash.com</link>
+    <description>Full-stack developer passionate about web technologies, microservices, and modern software development.</description>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 12 Mar 2026 20:14:30 GMT</lastBuildDate>
+    <atom:link href="https://blog.antosubash.com/tags/docker-compose/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Prepare and deploy the microservice</title>
+      <link>https://blog.antosubash.com/posts/part-4-prepare-and-deploy-microservice-in-docker</link>
+      <guid>https://blog.antosubash.com/posts/part-4-prepare-and-deploy-microservice-in-docker</guid>
+      <pubDate>Sat, 30 Jul 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to deploy the microservice solution to the our server.</description>
+    </item>
+  </channel>
+</rss>

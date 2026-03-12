@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Anto Subash - tailwind</title>
+    <link>https://blog.antosubash.com</link>
+    <description>Full-stack developer passionate about web technologies, microservices, and modern software development.</description>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 12 Mar 2026 20:14:30 GMT</lastBuildDate>
+    <atom:link href="https://blog.antosubash.com/tags/tailwind/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Add tailwindcss to your ABP MVC UI</title>
+      <link>https://blog.antosubash.com/posts/abp-add-tailwindcss-to-dotnet-mvc</link>
+      <guid>https://blog.antosubash.com/posts/abp-add-tailwindcss-to-dotnet-mvc</guid>
+      <pubDate>Tue, 11 Jan 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to add tailwind css to your ABP MVC UI.</description>
+    </item>
+    <item>
+      <title>Add tailwindcss to your ABP Blazor UI</title>
+      <link>https://blog.antosubash.com/posts/abp-add-tailwindcss-to-blazor-ui</link>
+      <guid>https://blog.antosubash.com/posts/abp-add-tailwindcss-to-blazor-ui</guid>
+      <pubDate>Wed, 05 Jan 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to add tailwind css to your ABP Blazor UI.</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Anto Subash - azure</title>
+    <link>https://blog.antosubash.com</link>
+    <description>Full-stack developer passionate about web technologies, microservices, and modern software development.</description>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 12 Mar 2026 20:14:30 GMT</lastBuildDate>
+    <atom:link href="https://blog.antosubash.com/tags/azure/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Automating Image Cleanup in Azure Container Registry with ACR Tasks</title>
+      <link>https://blog.antosubash.com/posts/automatic-image-cleanup-in-acr</link>
+      <guid>https://blog.antosubash.com/posts/automatic-image-cleanup-in-acr</guid>
+      <pubDate>Thu, 16 Jan 2025 00:00:00 GMT</pubDate>
+      <description>Learn how to automate image cleanup in Azure Container Registry using ACR Tasks and implement best practices for container image management.</description>
+    </item>
+    <item>
+      <title>Cert Manager and Nginx Ingress Controller on AKS Cluster with static IP</title>
+      <link>https://blog.antosubash.com/posts/certmanager-nginx-ingress-controller-with-static-ip-in-aks</link>
+      <guid>https://blog.antosubash.com/posts/certmanager-nginx-ingress-controller-with-static-ip-in-aks</guid>
+      <pubDate>Fri, 18 Aug 2023 11:53:48 GMT</pubDate>
+      <description>In this we will setup Cert Manager and Nginx Ingress Controller on AKS Cluster</description>
+    </item>
+    <item>
+      <title>Create AKS cluster and ACR with Terraform</title>
+      <link>https://blog.antosubash.com/posts/terraform-to-create-azure-kubernetes-service-aks-cluster-and-container-registry</link>
+      <guid>https://blog.antosubash.com/posts/terraform-to-create-azure-kubernetes-service-aks-cluster-and-container-registry</guid>
+      <pubDate>Wed, 16 Aug 2023 11:53:48 GMT</pubDate>
+      <description>In this we will create Azure Kubernetes (AKS) cluster and Azure Container Registry (ACR).</description>
+    </item>
+    <item>
+      <title>Azure Deployment for .Net - Introduction - Prerequisites</title>
+      <link>https://blog.antosubash.com/posts/azure-deployment-for-dotnet</link>
+      <guid>https://blog.antosubash.com/posts/azure-deployment-for-dotnet</guid>
+      <pubDate>Mon, 14 Aug 2023 11:53:48 GMT</pubDate>
+      <description>This is the introduction to the Azure Deployment for .Net series.</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Anto Subash - series</title>
+    <link>https://blog.antosubash.com</link>
+    <description>Full-stack developer passionate about web technologies, microservices, and modern software development.</description>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 12 Mar 2026 20:14:30 GMT</lastBuildDate>
+    <atom:link href="https://blog.antosubash.com/tags/series/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>MicroK8s - Hassle-free Kubernetes</title>
+      <link>https://blog.antosubash.com/posts/microk8s-gettings-started</link>
+      <guid>https://blog.antosubash.com/posts/microk8s-gettings-started</guid>
+      <pubDate>Thu, 15 Sep 2022 14:30:14 GMT</pubDate>
+      <description>In this post we will see how to get started with the MicroK8s Kubernetes distribution.</description>
+    </item>
+    <item>
+      <title>Docker Deployment using docker swarm</title>
+      <link>https://blog.antosubash.com/posts/docker-swarm-hetzner</link>
+      <guid>https://blog.antosubash.com/posts/docker-swarm-hetzner</guid>
+      <pubDate>Sun, 31 Jul 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to setup docker swarm for your development environment.</description>
+    </item>
+    <item>
+      <title>.NET Microservice with ABP - Full Series</title>
+      <link>https://blog.antosubash.com/posts/abp-microservice-series</link>
+      <guid>https://blog.antosubash.com/posts/abp-microservice-series</guid>
+      <pubDate>Sat, 23 Apr 2022 00:00:00 GMT</pubDate>
+      <description>This post contains all the parts of the microservice development with ABP</description>
+    </item>
+  </channel>
+</rss>

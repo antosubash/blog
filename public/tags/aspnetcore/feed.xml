@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Anto Subash - aspnetcore</title>
+    <link>https://blog.antosubash.com</link>
+    <description>Full-stack developer passionate about web technologies, microservices, and modern software development.</description>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 12 Mar 2026 20:14:30 GMT</lastBuildDate>
+    <atom:link href="https://blog.antosubash.com/tags/aspnetcore/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Modern API Documentation in .NET with Scalar and OpenAPI</title>
+      <link>https://blog.antosubash.com/posts/dotnet-openapi-with-scalar</link>
+      <guid>https://blog.antosubash.com/posts/dotnet-openapi-with-scalar</guid>
+      <pubDate>Wed, 15 Jan 2025 00:00:00 GMT</pubDate>
+      <description>Learn how to implement beautiful API documentation using Scalar and OpenAPI in .NET 9.0</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Anto Subash - comments</title>
+    <link>https://blog.antosubash.com</link>
+    <description>Full-stack developer passionate about web technologies, microservices, and modern software development.</description>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 12 Mar 2026 20:14:30 GMT</lastBuildDate>
+    <atom:link href="https://blog.antosubash.com/tags/comments/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>ABP React CMS Module: Building Dynamic Pages with Puck Editor</title>
+      <link>https://blog.antosubash.com/posts/abp-react-cms-module-pages</link>
+      <guid>https://blog.antosubash.com/posts/abp-react-cms-module-pages</guid>
+      <pubDate>Thu, 07 Aug 2025 00:00:00 GMT</pubDate>
+      <description>ABP React CMS Kit is a React UI for the ABP CmsKit module.</description>
+    </item>
+  </channel>
+</rss>

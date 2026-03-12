@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Anto Subash - docker</title>
+    <link>https://blog.antosubash.com</link>
+    <description>Full-stack developer passionate about web technologies, microservices, and modern software development.</description>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 12 Mar 2026 20:14:30 GMT</lastBuildDate>
+    <atom:link href="https://blog.antosubash.com/tags/docker/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Automating Image Cleanup in Azure Container Registry with ACR Tasks</title>
+      <link>https://blog.antosubash.com/posts/automatic-image-cleanup-in-acr</link>
+      <guid>https://blog.antosubash.com/posts/automatic-image-cleanup-in-acr</guid>
+      <pubDate>Thu, 16 Jan 2025 00:00:00 GMT</pubDate>
+      <description>Learn how to automate image cleanup in Azure Container Registry using ACR Tasks and implement best practices for container image management.</description>
+    </item>
+    <item>
+      <title>Azure Deployment for .Net - Introduction - Prerequisites</title>
+      <link>https://blog.antosubash.com/posts/azure-deployment-for-dotnet</link>
+      <guid>https://blog.antosubash.com/posts/azure-deployment-for-dotnet</guid>
+      <pubDate>Mon, 14 Aug 2023 11:53:48 GMT</pubDate>
+      <description>This is the introduction to the Azure Deployment for .Net series.</description>
+    </item>
+    <item>
+      <title>Abp Dockerfile</title>
+      <link>https://blog.antosubash.com/posts/abp-docker-file</link>
+      <guid>https://blog.antosubash.com/posts/abp-docker-file</guid>
+      <pubDate>Sun, 19 Mar 2023 21:52:11 GMT</pubDate>
+      <description>In this post we will see how to create proper docker file for your abp application.</description>
+    </item>
+    <item>
+      <title>MicroK8s - Hassle-free Kubernetes</title>
+      <link>https://blog.antosubash.com/posts/microk8s-gettings-started</link>
+      <guid>https://blog.antosubash.com/posts/microk8s-gettings-started</guid>
+      <pubDate>Thu, 15 Sep 2022 14:30:14 GMT</pubDate>
+      <description>In this post we will see how to get started with the MicroK8s Kubernetes distribution.</description>
+    </item>
+    <item>
+      <title>Docker Deployment using docker swarm</title>
+      <link>https://blog.antosubash.com/posts/docker-swarm-hetzner</link>
+      <guid>https://blog.antosubash.com/posts/docker-swarm-hetzner</guid>
+      <pubDate>Sun, 31 Jul 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to setup docker swarm for your development environment.</description>
+    </item>
+    <item>
+      <title>Prepare and deploy the microservice</title>
+      <link>https://blog.antosubash.com/posts/part-4-prepare-and-deploy-microservice-in-docker</link>
+      <guid>https://blog.antosubash.com/posts/part-4-prepare-and-deploy-microservice-in-docker</guid>
+      <pubDate>Sat, 30 Jul 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to deploy the microservice solution to the our server.</description>
+    </item>
+    <item>
+      <title>Deploy redis, rabbitmq, seq, registry and postgres in docker swarm</title>
+      <link>https://blog.antosubash.com/posts/part-3-deploy-registry-redis-rabitmq-postgresql-in-docker</link>
+      <guid>https://blog.antosubash.com/posts/part-3-deploy-registry-redis-rabitmq-postgresql-in-docker</guid>
+      <pubDate>Tue, 21 Jun 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to deploy redis, rabbitmq, postgres and registry.</description>
+    </item>
+    <item>
+      <title>Setting up docker swarm with traefik and portainer</title>
+      <link>https://blog.antosubash.com/posts/part-2-setup-docker-swarm-with-traefik-and-portainer</link>
+      <guid>https://blog.antosubash.com/posts/part-2-setup-docker-swarm-with-traefik-and-portainer</guid>
+      <pubDate>Mon, 20 Jun 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to create a docker swarm and deploy traefik and portainer in our ubuntu server.</description>
+    </item>
+    <item>
+      <title>Setting up Ubuntu Server with docker in Hetzner</title>
+      <link>https://blog.antosubash.com/posts/part-1-setup-docker-with-ubuntu-server-in-hetzner</link>
+      <guid>https://blog.antosubash.com/posts/part-1-setup-docker-with-ubuntu-server-in-hetzner</guid>
+      <pubDate>Sun, 19 Jun 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to create a ubuntu server for docker deployment.</description>
+    </item>
+    <item>
+      <title>Docker and CI/CD</title>
+      <link>https://blog.antosubash.com/posts/netcore-microservice-with-abp-docker-and-ci-cd-part-10</link>
+      <guid>https://blog.antosubash.com/posts/netcore-microservice-with-abp-docker-and-ci-cd-part-10</guid>
+      <pubDate>Sat, 26 Mar 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to add docker support and create a CI/CD with github actions</description>
+    </item>
+    <item>
+      <title>Deploy ABP Framework dotnet core tiered app to docker swarm. Part 9</title>
+      <link>https://blog.antosubash.com/posts/abp-deploy-with-docker</link>
+      <guid>https://blog.antosubash.com/posts/abp-deploy-with-docker</guid>
+      <pubDate>Tue, 28 Sep 2021 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to deploy your dotnet core app with docker container.</description>
+    </item>
+    <item>
+      <title>Docker swarm setup for localhost</title>
+      <link>https://blog.antosubash.com/posts/docker-swarm-localhost</link>
+      <guid>https://blog.antosubash.com/posts/docker-swarm-localhost</guid>
+      <pubDate>Sat, 26 Dec 2020 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to setup docker swarm for localhost.</description>
+    </item>
+    <item>
+      <title>Setup docker in Ubuntu 18.04</title>
+      <link>https://blog.antosubash.com/posts/setup-docker-node-hetzner</link>
+      <guid>https://blog.antosubash.com/posts/setup-docker-node-hetzner</guid>
+      <pubDate>Thu, 17 Sep 2020 07:35:07 GMT</pubDate>
+      <description>In this post you will see how to setup docker in Ubuntu 18.04. We will also change the default ssh port and install fail2ban.</description>
+    </item>
+    <item>
+      <title>Traefik setup with docker swarm</title>
+      <link>https://blog.antosubash.com/posts/setup-traefik-docker</link>
+      <guid>https://blog.antosubash.com/posts/setup-traefik-docker</guid>
+      <pubDate>Thu, 17 Sep 2020 05:35:07 GMT</pubDate>
+      <description>In this post you will see how to setup traefik with docker swarm. Along with that we will also setup Portainer and Swarmpit so that it is easy to manage the docker swarm.</description>
+    </item>
+  </channel>
+</rss>

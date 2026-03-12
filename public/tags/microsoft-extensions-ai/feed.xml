@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Anto Subash - microsoft-extensions-ai</title>
+    <link>https://blog.antosubash.com</link>
+    <description>Full-stack developer passionate about web technologies, microservices, and modern software development.</description>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 12 Mar 2026 20:14:30 GMT</lastBuildDate>
+    <atom:link href="https://blog.antosubash.com/tags/microsoft-extensions-ai/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Building an AI-Powered .NET API with Ollama and Microsoft.Extensions.AI</title>
+      <link>https://blog.antosubash.com/posts/ollama-with-extension-ai-and-function-calling</link>
+      <guid>https://blog.antosubash.com/posts/ollama-with-extension-ai-and-function-calling</guid>
+      <pubDate>Wed, 15 Jan 2025 00:00:00 GMT</pubDate>
+      <description>Learn how to create an intelligent .NET API using Ollama, Microsoft.Extensions.AI, and implement function calling capabilities with Large Language Models.</description>
+    </item>
+  </channel>
+</rss>

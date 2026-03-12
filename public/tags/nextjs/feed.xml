@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Anto Subash - nextjs</title>
+    <link>https://blog.antosubash.com</link>
+    <description>Full-stack developer passionate about web technologies, microservices, and modern software development.</description>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 12 Mar 2026 20:14:30 GMT</lastBuildDate>
+    <atom:link href="https://blog.antosubash.com/tags/nextjs/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>ABP React CMS Module: Building Dynamic Pages with Puck Editor</title>
+      <link>https://blog.antosubash.com/posts/abp-react-cms-module-pages</link>
+      <guid>https://blog.antosubash.com/posts/abp-react-cms-module-pages</guid>
+      <pubDate>Thu, 07 Aug 2025 00:00:00 GMT</pubDate>
+      <description>ABP React CMS Kit is a React UI for the ABP CmsKit module.</description>
+    </item>
+    <item>
+      <title>OpenID Connect with Next.js 15 and openid-client 6</title>
+      <link>https://blog.antosubash.com/posts/openid-connect-with-nextjs-with-openid-client-6-and-next-15</link>
+      <guid>https://blog.antosubash.com/posts/openid-connect-with-nextjs-with-openid-client-6-and-next-15</guid>
+      <pubDate>Tue, 05 Nov 2024 00:00:00 GMT</pubDate>
+      <description>A guide to implementing secure authentication using OpenID Connect in Next.js 15 with the openid-client library version 6</description>
+    </item>
+    <item>
+      <title>ABP React Template V2</title>
+      <link>https://blog.antosubash.com/posts/abp-react-v2</link>
+      <guid>https://blog.antosubash.com/posts/abp-react-v2</guid>
+      <pubDate>Sat, 06 Jul 2024 12:54:31 GMT</pubDate>
+      <description>Version 2 of React Starter Template for ABP application with Next.js, Tailwind CSS, and shadcn-ui.</description>
+    </item>
+    <item>
+      <title>OpenID Connect with Next.js</title>
+      <link>https://blog.antosubash.com/posts/openid-connect-with-nextjs</link>
+      <guid>https://blog.antosubash.com/posts/openid-connect-with-nextjs</guid>
+      <pubDate>Wed, 03 Jul 2024 00:00:00 GMT</pubDate>
+      <description>In this post, we will see how to implement OpenID Connect with Next.js.</description>
+    </item>
+    <item>
+      <title>ABP React Template</title>
+      <link>https://blog.antosubash.com/posts/abp-react-template</link>
+      <guid>https://blog.antosubash.com/posts/abp-react-template</guid>
+      <pubDate>Mon, 03 Apr 2023 12:54:31 GMT</pubDate>
+      <description>React Starter Template for ABP application.</description>
+    </item>
+    <item>
+      <title>Authentication using OpenId in React/NextJs App With Orchard Core - Part 2</title>
+      <link>https://blog.antosubash.com/posts/orchard-core-openid-nextjs</link>
+      <guid>https://blog.antosubash.com/posts/orchard-core-openid-nextjs</guid>
+      <pubDate>Thu, 18 Nov 2021 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to do authentication using OpenId for a React App using Orchard Core.</description>
+    </item>
+    <item>
+      <title>dotnet core large file upload with resume using tus and react/nextjs</title>
+      <link>https://blog.antosubash.com/posts/dotnet-and-react-nextjs-large-file-upload-with-tus</link>
+      <guid>https://blog.antosubash.com/posts/dotnet-and-react-nextjs-large-file-upload-with-tus</guid>
+      <pubDate>Thu, 22 Jul 2021 00:00:00 GMT</pubDate>
+      <description>In this post you will see how to upload large files with resume using tus. We will use dotnet core for the backend and nextjs for the frontend</description>
+    </item>
+    <item>
+      <title>SPA Authentication using Next.js, ABP and IdentityServer4. Part 2</title>
+      <link>https://blog.antosubash.com/posts/abp-auth-with-nextjs-p2</link>
+      <guid>https://blog.antosubash.com/posts/abp-auth-with-nextjs-p2</guid>
+      <pubDate>Sat, 06 Mar 2021 00:00:00 GMT</pubDate>
+      <description>In this post we will implement the SPA authentication for the Nexjs.js app as the frontend and ABP with IdentityServer as Backend</description>
+    </item>
+  </channel>
+</rss>

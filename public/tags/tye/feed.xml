@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Anto Subash - tye</title>
+    <link>https://blog.antosubash.com</link>
+    <description>Full-stack developer passionate about web technologies, microservices, and modern software development.</description>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 12 Mar 2026 20:14:30 GMT</lastBuildDate>
+    <atom:link href="https://blog.antosubash.com/tags/tye/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Create and deploy .Net application in MicroK8s</title>
+      <link>https://blog.antosubash.com/posts/create-and-deploy-dotnet-application-in-micro-k8s</link>
+      <guid>https://blog.antosubash.com/posts/create-and-deploy-dotnet-application-in-micro-k8s</guid>
+      <pubDate>Wed, 14 Sep 2022 19:55:43 GMT</pubDate>
+      <description>In this post we will create a simple abp application and deploy it in the microk8s instance.</description>
+    </item>
+    <item>
+      <title>Yarp and Tye</title>
+      <link>https://blog.antosubash.com/posts/netcore-microservice-with-abp-yarp-and-tye-part-7</link>
+      <guid>https://blog.antosubash.com/posts/netcore-microservice-with-abp-yarp-and-tye-part-7</guid>
+      <pubDate>Sat, 19 Mar 2022 05:00:00 GMT</pubDate>
+      <description>In this post we will see how to create a reverse proxy with Yarp and integrate Tye for our microservice application</description>
+    </item>
+  </channel>
+</rss>

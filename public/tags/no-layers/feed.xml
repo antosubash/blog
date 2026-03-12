@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Anto Subash - no-layers</title>
+    <link>https://blog.antosubash.com</link>
+    <description>Full-stack developer passionate about web technologies, microservices, and modern software development.</description>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 12 Mar 2026 20:14:30 GMT</lastBuildDate>
+    <atom:link href="https://blog.antosubash.com/tags/no-layers/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Removing IdentityServer from ABP No Layer Template</title>
+      <link>https://blog.antosubash.com/posts/abp-remove-identity-server-from-abp-no-layers-app</link>
+      <guid>https://blog.antosubash.com/posts/abp-remove-identity-server-from-abp-no-layers-app</guid>
+      <pubDate>Sun, 30 Jan 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to remove identity server from the No Layer ABP template</description>
+    </item>
+    <item>
+      <title>Introduction to ABP No Layer Template</title>
+      <link>https://blog.antosubash.com/posts/abp-no-layer-template</link>
+      <guid>https://blog.antosubash.com/posts/abp-no-layer-template</guid>
+      <pubDate>Sat, 29 Jan 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will explore the new experimental no layer template from the ABP framework</description>
+    </item>
+  </channel>
+</rss>

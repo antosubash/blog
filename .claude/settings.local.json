@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd \"J:\\\\repos\\\\GitHub\\\\blog\\\\new\\\\start-app\" && npx tsc --noEmit 2>&1 | head -30)",
+      "Bash(cd \"J:\\\\repos\\\\GitHub\\\\blog\\\\new\\\\start-app\" && npx tsc --noEmit 2>&1 | head -20)",
+      "Bash(cd \"J:\\\\repos\\\\GitHub\\\\blog\\\\new\\\\start-app\" && pnpm dev 2>&1)",
+      "Bash(sleep 8 && curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)",
+      "Bash(pkill -f \"vite dev --port 3000\" 2>/dev/null; lsof -ti:3000 2>/dev/null | xargs kill 2>/dev/null; echo \"Done\")",
+      "Bash(netstat -ano | grep ':3000' | grep LISTENING)",
+      "Bash(taskkill //PID 37800 //F)",
+      "Bash(cd \"J:\\\\repos\\\\GitHub\\\\blog\\\\new\\\\start-app\" && pnpm add @fontsource-variable/fraunces @fontsource-variable/dm-sans 2>&1 | tail -5)",
+      "Bash(cd \"J:/repos/GitHub/blog/new/start-app\" && npx tsc --noEmit 2>&1)",
+      "Bash(cd J:/repos/GitHub/blog/new/start-app && npx tsc --noEmit 2>&1)",
+      "Bash(sleep 10 && curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)",
+      "Bash(sleep 15 && curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)",
+      "mcp__plugin_playwright_playwright__browser_navigate",
+      "mcp__plugin_playwright_playwright__browser_take_screenshot",
+      "mcp__plugin_playwright_playwright__browser_close",
+      "mcp__plugin_playwright_playwright__browser_resize",
+      "mcp__plugin_playwright_playwright__browser_snapshot",
+      "mcp__plugin_playwright_playwright__browser_click",
+      "mcp__plugin_playwright_playwright__browser_evaluate"
+    ]
+  }
+}

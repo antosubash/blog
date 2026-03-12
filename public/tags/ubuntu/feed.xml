@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Anto Subash - ubuntu</title>
+    <link>https://blog.antosubash.com</link>
+    <description>Full-stack developer passionate about web technologies, microservices, and modern software development.</description>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 12 Mar 2026 20:14:30 GMT</lastBuildDate>
+    <atom:link href="https://blog.antosubash.com/tags/ubuntu/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Setup MicroK8s With Ubuntu</title>
+      <link>https://blog.antosubash.com/posts/setup-micro-k8s-with-ubuntu</link>
+      <guid>https://blog.antosubash.com/posts/setup-micro-k8s-with-ubuntu</guid>
+      <pubDate>Wed, 14 Sep 2022 19:50:03 GMT</pubDate>
+      <description>In this post we will see how to setup microk8s in ubuntu server.</description>
+    </item>
+    <item>
+      <title>Setting up docker swarm with traefik and portainer</title>
+      <link>https://blog.antosubash.com/posts/part-2-setup-docker-swarm-with-traefik-and-portainer</link>
+      <guid>https://blog.antosubash.com/posts/part-2-setup-docker-swarm-with-traefik-and-portainer</guid>
+      <pubDate>Mon, 20 Jun 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to create a docker swarm and deploy traefik and portainer in our ubuntu server.</description>
+    </item>
+    <item>
+      <title>Setting up Ubuntu Server with docker in Hetzner</title>
+      <link>https://blog.antosubash.com/posts/part-1-setup-docker-with-ubuntu-server-in-hetzner</link>
+      <guid>https://blog.antosubash.com/posts/part-1-setup-docker-with-ubuntu-server-in-hetzner</guid>
+      <pubDate>Sun, 19 Jun 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to create a ubuntu server for docker deployment.</description>
+    </item>
+    <item>
+      <title>Setup docker in Ubuntu 18.04</title>
+      <link>https://blog.antosubash.com/posts/setup-docker-node-hetzner</link>
+      <guid>https://blog.antosubash.com/posts/setup-docker-node-hetzner</guid>
+      <pubDate>Thu, 17 Sep 2020 07:35:07 GMT</pubDate>
+      <description>In this post you will see how to setup docker in Ubuntu 18.04. We will also change the default ssh port and install fail2ban.</description>
+    </item>
+  </channel>
+</rss>
