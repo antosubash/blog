@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import Tag from "@/components/Tag"
 import PostItem from "@/components/post-item"
 import PostSearch from "@/components/PostSearch"
@@ -24,6 +24,9 @@ export default function EnhancedListLayout({
 }: EnhancedListLayoutProps) {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedTags, setSelectedTags] = useState<string[]>([])
+  const [clientPage, setClientPage] = useState(1)
+
+  const isClientPaginated = !pagination
 
   const availableTags = useMemo(() => {
     const allTags = new Set<string>()
@@ -57,8 +60,13 @@ export default function EnhancedListLayout({
     return filtered
   }, [posts, searchQuery, selectedTags])
 
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    if (isClientPaginated) setClientPage(1)
+  }, [searchQuery, selectedTags, isClientPaginated])
+
   const POSTS_PER_PAGE = 10
-  const currentPage = pagination?.currentPage || 1
+  const currentPage = isClientPaginated ? clientPage : (pagination?.currentPage || 1)
   const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE)
 
   const startIndex = (currentPage - 1) * POSTS_PER_PAGE
@@ -152,7 +160,11 @@ export default function EnhancedListLayout({
 
       {totalPages > 1 && (
         <div className="mt-12">
-          <EnhancedPagination currentPage={currentPage} totalPages={totalPages} />
+          <EnhancedPagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={isClientPaginated ? setClientPage : undefined}
+          />
         </div>
       )}
     </div>

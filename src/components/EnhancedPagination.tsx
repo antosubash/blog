@@ -6,12 +6,14 @@ interface PaginationProps {
   totalPages: number
   currentPage: number
   maxVisiblePages?: number
+  onPageChange?: (page: number) => void
 }
 
 export default function EnhancedPagination({
   totalPages,
   currentPage,
   maxVisiblePages = 5,
+  onPageChange,
 }: PaginationProps) {
   const { pathname } = useLocation()
   const basePath = pathname.split('/')[1]
@@ -63,6 +65,46 @@ export default function EnhancedPagination({
   const navButtonDisabled =
     "cursor-not-allowed border-border/50 bg-muted text-muted-foreground"
 
+  // Client-side pagination button (no route navigation)
+  const PageButton = ({ page, children, className, disabled, ...props }: {
+    page: number
+    children: React.ReactNode
+    className: string
+    disabled?: boolean
+    'aria-disabled'?: boolean
+    'aria-label'?: string
+    'aria-current'?: 'page' | undefined
+    tabIndex?: number
+  }) => {
+    if (onPageChange) {
+      return (
+        <button
+          onClick={() => !disabled && onPageChange(page)}
+          className={className}
+          disabled={disabled}
+          aria-disabled={props['aria-disabled']}
+          aria-label={props['aria-label']}
+          aria-current={props['aria-current']}
+          tabIndex={props.tabIndex}
+        >
+          {children}
+        </button>
+      )
+    }
+    return (
+      <Link
+        to={disabled ? '#' : getPageUrl(page)}
+        className={className}
+        aria-disabled={props['aria-disabled']}
+        aria-label={props['aria-label']}
+        aria-current={props['aria-current']}
+        tabIndex={props.tabIndex}
+      >
+        {children}
+      </Link>
+    )
+  }
+
   return (
     <div className="flex flex-col items-center gap-4 py-12">
       <p className="text-sm text-muted-foreground">
@@ -71,8 +113,9 @@ export default function EnhancedPagination({
       </p>
 
       <nav className="flex items-center gap-2" aria-label="Pagination">
-        <Link
-          to={prevPage ? getPageUrl(currentPage - 1) : '#'}
+        <PageButton
+          page={currentPage - 1}
+          disabled={!prevPage}
           className={`${navButtonBase} ${prevPage ? navButtonEnabled : navButtonDisabled}`}
           aria-disabled={!prevPage}
           aria-label="Previous page"
@@ -80,7 +123,7 @@ export default function EnhancedPagination({
         >
           <ArrowLeft className="h-4 w-4" />
           <span>Previous</span>
-        </Link>
+        </PageButton>
 
         <div className="flex items-center gap-1">
           {visiblePages.map((page, index) => {
@@ -99,9 +142,9 @@ export default function EnhancedPagination({
             const isCurrentPage = pageNum === currentPage
 
             return (
-              <Link
+              <PageButton
                 key={pageNum}
-                to={getPageUrl(pageNum)}
+                page={pageNum}
                 className={`${navButtonBase} min-w-[42px] justify-center ${
                   isCurrentPage
                     ? 'border-accent bg-accent text-primary-foreground'
@@ -110,13 +153,14 @@ export default function EnhancedPagination({
                 aria-current={isCurrentPage ? 'page' : undefined}
               >
                 {pageNum}
-              </Link>
+              </PageButton>
             )
           })}
         </div>
 
-        <Link
-          to={nextPage ? getPageUrl(currentPage + 1) : '#'}
+        <PageButton
+          page={currentPage + 1}
+          disabled={!nextPage}
           className={`${navButtonBase} ${nextPage ? navButtonEnabled : navButtonDisabled}`}
           aria-disabled={!nextPage}
           aria-label="Next page"
@@ -124,27 +168,27 @@ export default function EnhancedPagination({
         >
           <span>Next</span>
           <ArrowRight className="h-4 w-4" />
-        </Link>
+        </PageButton>
       </nav>
 
       <div className="flex items-center gap-4 text-xs">
-        <Link
-          to={getPageUrl(1)}
+        <PageButton
+          page={1}
           className={`font-medium transition-colors duration-150 ${
             currentPage === 1 ? 'text-muted-foreground/50' : 'text-muted-foreground hover:text-foreground'
           }`}
         >
           First
-        </Link>
+        </PageButton>
         <span className="text-border">|</span>
-        <Link
-          to={getPageUrl(totalPages)}
+        <PageButton
+          page={totalPages}
           className={`font-medium transition-colors duration-150 ${
             currentPage === totalPages ? 'text-muted-foreground/50' : 'text-muted-foreground hover:text-foreground'
           }`}
         >
           Last
-        </Link>
+        </PageButton>
       </div>
     </div>
   )

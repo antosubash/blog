@@ -16,3 +16,4 @@ todos.json
 .playwright-cli
 .playwright-mcp
 .content-collections
+.vercel

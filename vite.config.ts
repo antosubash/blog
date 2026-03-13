@@ -1,5 +1,4 @@
 import { defineConfig } from "vite"
-import { devtools } from "@tanstack/devtools-vite"
 import { tanstackStart } from "@tanstack/react-start/plugin/vite"
 import viteReact from "@vitejs/plugin-react"
 import viteTsConfigPaths from "vite-tsconfig-paths"
@@ -7,19 +6,38 @@ import tailwindcss from "@tailwindcss/vite"
 import { nitro } from "nitro/vite"
 import contentCollections from "@content-collections/vite"
 
-const config = defineConfig({
+export default defineConfig(async ({ mode }) => ({
   plugins: [
-    devtools(),
-    nitro(),
+    ...(mode === "development"
+      ? [await import("@tanstack/devtools-vite").then((m) => m.devtools())]
+      : []),
+    nitro({
+      preset: "vercel",
+    }),
     contentCollections(),
-    // this is the plugin that enables path aliases
     viteTsConfigPaths({
       projects: ["./tsconfig.json"],
     }),
     tailwindcss(),
-    tanstackStart(),
+    tanstackStart({
+      prerender: {
+        enabled: true,
+        crawlLinks: true,
+      },
+    }),
     viteReact(),
   ],
-})
-
-export default config
+  environments: {
+    client: {
+      build: {
+        rollupOptions: {
+          output: {
+            manualChunks: {
+              mermaid: ["mermaid"],
+            },
+          },
+        },
+      },
+    },
+  },
+}))
