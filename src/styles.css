@@ -90,7 +90,11 @@
   }
   html {
     @apply font-sans scroll-smooth;
-    scrollbar-gutter: stable;
+  }
+  @media (hover: hover) {
+    html {
+      scrollbar-gutter: stable;
+    }
   }
   body {
     @apply bg-background text-foreground antialiased;
