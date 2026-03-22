@@ -51,9 +51,9 @@
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.2",
     "@tanstack/devtools-vite": "^0.3.11",
+    "@tanstack/eslint-config": "^0.3.0",
     "@tanstack/react-devtools": "^0.7.0",
     "@tanstack/react-router-devtools": "^1.132.0",
-    "@tanstack/eslint-config": "^0.3.0",
     "@types/node": "^22.10.2",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
@@ -62,6 +62,7 @@
     "prettier-plugin-tailwindcss": "^0.7.2",
     "satori": "^0.25.0",
     "shadcn": "^4.0.5",
+    "tsx": "^4.21.0",
     "typescript": "^5.7.2",
     "vite": "^7.1.7",
     "vitest": "^3.0.5"
