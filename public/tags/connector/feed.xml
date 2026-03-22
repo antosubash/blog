@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Anto Subash - connector</title>
+    <link>https://blog.antosubash.com</link>
+    <description>Full-stack developer passionate about web technologies, microservices, and modern software development.</description>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 13 Mar 2026 08:57:05 GMT</lastBuildDate>
+    <atom:link href="https://blog.antosubash.com/tags/connector/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Ollama Semantic Kernel Connector With C#: Console App &amp; API Guide</title>
+      <link>https://blog.antosubash.com/posts/ollama-semantic-kernal-connector</link>
+      <guid>https://blog.antosubash.com/posts/ollama-semantic-kernal-connector</guid>
+      <pubDate>Sat, 19 Oct 2024 00:00:00 GMT</pubDate>
+      <description>In this post, we will learn how to use the Ollama Semantic Kernel Connector with C#.</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Anto Subash - no-layer</title>
+    <link>https://blog.antosubash.com</link>
+    <description>Full-stack developer passionate about web technologies, microservices, and modern software development.</description>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 13 Mar 2026 08:57:05 GMT</lastBuildDate>
+    <atom:link href="https://blog.antosubash.com/tags/no-layer/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>ABP no-layer module template</title>
+      <link>https://blog.antosubash.com/posts/abp-no-layer-module-template</link>
+      <guid>https://blog.antosubash.com/posts/abp-no-layer-module-template</guid>
+      <pubDate>Sun, 21 May 2023 17:28:49 GMT</pubDate>
+      <description>In this article, you will learn how to create a no-layer module template for abp application.</description>
+    </item>
+  </channel>
+</rss>

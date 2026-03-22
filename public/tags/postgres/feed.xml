@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Anto Subash - postgres</title>
+    <link>https://blog.antosubash.com</link>
+    <description>Full-stack developer passionate about web technologies, microservices, and modern software development.</description>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 13 Mar 2026 08:57:05 GMT</lastBuildDate>
+    <atom:link href="https://blog.antosubash.com/tags/postgres/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Deploy docker registry and postgres database in MicroK8s</title>
+      <link>https://blog.antosubash.com/posts/deploy-docker-registry-and-postgres-database-in-micro-k8s</link>
+      <guid>https://blog.antosubash.com/posts/deploy-docker-registry-and-postgres-database-in-micro-k8s</guid>
+      <pubDate>Wed, 14 Sep 2022 19:53:18 GMT</pubDate>
+      <description>In this post we will see how to deploy and secure the registry along with deploying a postgres database in microk8s</description>
+    </item>
+    <item>
+      <title>Deploy redis, rabbitmq, seq, registry and postgres in docker swarm</title>
+      <link>https://blog.antosubash.com/posts/part-3-deploy-registry-redis-rabitmq-postgresql-in-docker</link>
+      <guid>https://blog.antosubash.com/posts/part-3-deploy-registry-redis-rabitmq-postgresql-in-docker</guid>
+      <pubDate>Tue, 21 Jun 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to deploy redis, rabbitmq, postgres and registry.</description>
+    </item>
+  </channel>
+</rss>

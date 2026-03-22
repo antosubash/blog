@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Anto Subash - devops</title>
+    <link>https://blog.antosubash.com</link>
+    <description>Full-stack developer passionate about web technologies, microservices, and modern software development.</description>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 13 Mar 2026 08:57:05 GMT</lastBuildDate>
+    <atom:link href="https://blog.antosubash.com/tags/devops/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Automating Image Cleanup in Azure Container Registry with ACR Tasks</title>
+      <link>https://blog.antosubash.com/posts/automatic-image-cleanup-in-acr</link>
+      <guid>https://blog.antosubash.com/posts/automatic-image-cleanup-in-acr</guid>
+      <pubDate>Thu, 16 Jan 2025 00:00:00 GMT</pubDate>
+      <description>Learn how to automate image cleanup in Azure Container Registry using ACR Tasks and implement best practices for container image management.</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Anto Subash - feature</title>
+    <link>https://blog.antosubash.com</link>
+    <description>Full-stack developer passionate about web technologies, microservices, and modern software development.</description>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 13 Mar 2026 08:57:05 GMT</lastBuildDate>
+    <atom:link href="https://blog.antosubash.com/tags/feature/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Application features with dotnet core and ABP. Part 4</title>
+      <link>https://blog.antosubash.com/posts/abp-feature-p4</link>
+      <guid>https://blog.antosubash.com/posts/abp-feature-p4</guid>
+      <pubDate>Mon, 17 May 2021 00:00:00 GMT</pubDate>
+      <description>ABP Feature system is used to enable, disable or change the behavior of the application features on runtime.</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Anto Subash - traefik</title>
+    <link>https://blog.antosubash.com</link>
+    <description>Full-stack developer passionate about web technologies, microservices, and modern software development.</description>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 13 Mar 2026 08:57:05 GMT</lastBuildDate>
+    <atom:link href="https://blog.antosubash.com/tags/traefik/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Setting up docker swarm with traefik and portainer</title>
+      <link>https://blog.antosubash.com/posts/part-2-setup-docker-swarm-with-traefik-and-portainer</link>
+      <guid>https://blog.antosubash.com/posts/part-2-setup-docker-swarm-with-traefik-and-portainer</guid>
+      <pubDate>Mon, 20 Jun 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to create a docker swarm and deploy traefik and portainer in our ubuntu server.</description>
+    </item>
+    <item>
+      <title>Traefik setup with docker swarm</title>
+      <link>https://blog.antosubash.com/posts/setup-traefik-docker</link>
+      <guid>https://blog.antosubash.com/posts/setup-traefik-docker</guid>
+      <pubDate>Thu, 17 Sep 2020 05:35:07 GMT</pubDate>
+      <description>In this post you will see how to setup traefik with docker swarm. Along with that we will also setup Portainer and Swarmpit so that it is easy to manage the docker swarm.</description>
+    </item>
+  </channel>
+</rss>

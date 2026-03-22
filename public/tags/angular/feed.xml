@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Anto Subash - angular</title>
+    <link>https://blog.antosubash.com</link>
+    <description>Full-stack developer passionate about web technologies, microservices, and modern software development.</description>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 13 Mar 2026 08:57:05 GMT</lastBuildDate>
+    <atom:link href="https://blog.antosubash.com/tags/angular/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>IdentityServer and Angular</title>
+      <link>https://blog.antosubash.com/posts/netcore-microservice-with-abp-identity-server-and-angular-part-8</link>
+      <guid>https://blog.antosubash.com/posts/netcore-microservice-with-abp-identity-server-and-angular-part-8</guid>
+      <pubDate>Sun, 20 Mar 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to get the IdentityServer and the Angular App working with other services</description>
+    </item>
+  </channel>
+</rss>

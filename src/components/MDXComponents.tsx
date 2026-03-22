@@ -1,0 +1,17 @@
+import Image from "./Image"
+import CustomLink from "./Link"
+import TableWrapper from "./TableWrapper"
+import Parts from "./Parts"
+import YoutubeVideo from "./YoutubeVideo"
+import CustomTOCInline from "./CustomTOCInline"
+import EnhancedCodeBlock from "./EnhancedCodeBlock"
+
+export const components: Record<string, React.ComponentType<any>> = {
+  Image,
+  TOCInline: CustomTOCInline,
+  a: CustomLink,
+  pre: EnhancedCodeBlock,
+  table: TableWrapper,
+  Parts,
+  YoutubeVideo,
+}

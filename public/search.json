@@ -1,0 +1,869 @@
+[
+  {
+    "slug": "abp-add-new-module-with-seperate-db",
+    "title": "Add a new Module to the Tiered ABP App with separate database for the module",
+    "tags": [
+      "abp",
+      "module"
+    ],
+    "excerpt": "In this post we will see how to develop a modular with tiered abp application. We will add a new module to tiered abp app and then use the separate database to store the modules data and the identity data."
+  },
+  {
+    "slug": "abp-add-new-module",
+    "title": "Add a new Module to the ABP App",
+    "tags": [
+      "abp",
+      "module"
+    ],
+    "excerpt": "In this post we will see how to develop a modular abp application. We will add a new module to default abp app and then use the same database to store the modules data and the identity data."
+  },
+  {
+    "slug": "abp-add-tailwindcss-to-blazor-ui",
+    "title": "Add tailwindcss to your ABP Blazor UI",
+    "tags": [
+      "abp",
+      "blazor",
+      "tailwind"
+    ],
+    "excerpt": "In this post we will see how to add tailwind css to your ABP Blazor UI."
+  },
+  {
+    "slug": "abp-add-tailwindcss-to-dotnet-mvc",
+    "title": "Add tailwindcss to your ABP MVC UI",
+    "tags": [
+      "abp",
+      "dotnet",
+      "tailwind"
+    ],
+    "excerpt": "In this post we will see how to add tailwind css to your ABP MVC UI."
+  },
+  {
+    "slug": "abp-auth-with-flutter-p5",
+    "title": "Flutter Authentication using OpenID, ABP and IdentityServer4. Part 5",
+    "tags": [
+      "abp",
+      "flutter",
+      "openid",
+      "identity-server"
+    ],
+    "excerpt": "In this post we will implement the OAuth for the Flutter app."
+  },
+  {
+    "slug": "abp-auth-with-nextjs-p2",
+    "title": "SPA Authentication using Next.js, ABP and IdentityServer4. Part 2",
+    "tags": [
+      "abp",
+      "nextjs",
+      "react",
+      "identity-server",
+      "openid"
+    ],
+    "excerpt": "In this post we will implement the SPA authentication for the Nexjs.js app as the frontend and ABP with IdentityServer as Backend"
+  },
+  {
+    "slug": "abp-authorization-p3",
+    "title": "Authorization in dotnet core with ABP. Part 3",
+    "tags": [
+      "abp",
+      "authorization",
+      "identity-server"
+    ],
+    "excerpt": "In this post we will implement the Authorization in ABP with IdentityServer"
+  },
+  {
+    "slug": "abp-central-application-logging-with-seq",
+    "title": "Centralized logging for .net core ABP microservices app using Seq. Part 8",
+    "tags": [
+      "abp",
+      "seq",
+      "dotnet"
+    ],
+    "excerpt": "In this post we will see how to implement a central logging system for your ABP app using Seq."
+  },
+  {
+    "slug": "abp-change-theme-p10",
+    "title": "Changing theme for your ABP app. Part 10",
+    "tags": [
+      "abp",
+      "bootstrap",
+      "theme"
+    ],
+    "excerpt": "In this post we will explore how to change the theme for your ABP application."
+  },
+  {
+    "slug": "abp-cli-template",
+    "title": "Abp CLI Template",
+    "tags": [
+      "abp",
+      "cli",
+      "template"
+    ],
+    "excerpt": "In this post we will see how to create a Cli for your abp application."
+  },
+  {
+    "slug": "abp-crud-with-minimal-api-p3",
+    "title": "Minimal Api with ABP - Swagger and CRUD - Part 3",
+    "tags": [
+      "dotnet",
+      "abp",
+      "crud"
+    ],
+    "excerpt": "In this post we will see how to use minimal api with the ABP application to create a CRUD app."
+  },
+  {
+    "slug": "abp-deploy-with-docker",
+    "title": "Deploy ABP Framework dotnet core tiered app to docker swarm. Part 9",
+    "tags": [
+      "abp",
+      "docker",
+      "deployment"
+    ],
+    "excerpt": "In this post we will see how to deploy your dotnet core app with docker container."
+  },
+  {
+    "slug": "abp-docker-file",
+    "title": "Abp Dockerfile",
+    "tags": [
+      "abp",
+      "dotnet",
+      "docker"
+    ],
+    "excerpt": "In this post we will see how to create proper docker file for your abp application."
+  },
+  {
+    "slug": "abp-extend-tenant-with-custom-host",
+    "title": "Extend Tenant management and add custom host to your ABP App. Part 7",
+    "tags": [
+      "abp",
+      "deployment"
+    ],
+    "excerpt": "In this post we will see how to extent the tenant entity and Add a custom tenant resolver for your ABP app."
+  },
+  {
+    "slug": "abp-extend-user-entity-with-profile-picture",
+    "title": "Add profile picture to User Entity in ABP app using BlobStore and Minio. Part 6",
+    "tags": [
+      "abp",
+      "minio",
+      "blob-store",
+      "upload"
+    ],
+    "excerpt": "In this post we will implement the profile picture upload for the ABP app using BlobStore and Minio."
+  },
+  {
+    "slug": "abp-feature-p4",
+    "title": "Application features with dotnet core and ABP. Part 4",
+    "tags": [
+      "abp",
+      "feature"
+    ],
+    "excerpt": "ABP Feature system is used to enable, disable or change the behavior of the application features on runtime."
+  },
+  {
+    "slug": "abp-generate-typescript-client-from-swagger-and-openapi",
+    "title": "Generate typescript client from swagger / OpenApi",
+    "tags": [
+      "dotnet",
+      "abp",
+      "react"
+    ],
+    "excerpt": "In this post we will see how to use how to use the NSwag to generate a typescript client with ABP"
+  },
+  {
+    "slug": "abp-getting-started-p1",
+    "title": "ABP Getting Started With .Net Core and EF Core. ABP Part 1",
+    "tags": [
+      "abp"
+    ],
+    "excerpt": "This is an introduction to the ABP Application framework with .Net core and EF core. I have created a Todo App with a CRUD function."
+  },
+  {
+    "slug": "abp-module-to-microservice",
+    "title": "Add a new Module and convert it to a microservice in ABP",
+    "tags": [
+      "abp",
+      "module",
+      "microservice"
+    ],
+    "excerpt": "In this post we will see how to create a modular abp application and convert it to microservice. We will add a new module to tiered abp app and then use the separate database to store the modules data and then convert the module to a microservice.."
+  },
+  {
+    "slug": "abp-no-layer-module-template",
+    "title": "ABP no-layer module template",
+    "tags": [
+      "abp",
+      "module",
+      "no-layer",
+      "template"
+    ],
+    "excerpt": "In this article, you will learn how to create a no-layer module template for abp application."
+  },
+  {
+    "slug": "abp-no-layer-template",
+    "title": "Introduction to ABP No Layer Template",
+    "tags": [
+      "abp",
+      "dotnet",
+      "no-layers"
+    ],
+    "excerpt": "In this post we will explore the new experimental no layer template from the ABP framework"
+  },
+  {
+    "slug": "abp-react-cms-module-pages",
+    "title": "ABP React CMS Module: Building Dynamic Pages with Puck Editor",
+    "tags": [
+      "react",
+      "nextjs",
+      "abp",
+      "cms",
+      "pages",
+      "comments",
+      "puck-editor",
+      "visual-editor"
+    ],
+    "excerpt": "ABP React CMS Kit is a React UI for the ABP CmsKit module."
+  },
+  {
+    "slug": "abp-react-template",
+    "title": "ABP React Template",
+    "tags": [
+      "react",
+      "nextjs",
+      "abp",
+      "dotnet"
+    ],
+    "excerpt": "React Starter Template for ABP application."
+  },
+  {
+    "slug": "abp-react-v2",
+    "title": "ABP React Template V2",
+    "tags": [
+      "react",
+      "nextjs",
+      "abp",
+      "dotnet",
+      "tailwindcss",
+      "radixui",
+      "shadcn"
+    ],
+    "excerpt": "Version 2 of React Starter Template for ABP application with Next.js, Tailwind CSS, and shadcn-ui."
+  },
+  {
+    "slug": "abp-remove-identity-server-from-abp-no-layers-app",
+    "title": "Removing IdentityServer from ABP No Layer Template",
+    "tags": [
+      "abp",
+      "dotnet",
+      "no-layers"
+    ],
+    "excerpt": "In this post we will see how to remove identity server from the No Layer ABP template"
+  },
+  {
+    "slug": "abp-with-inertia-and-react",
+    "title": "ABP-Powered Web App with Inertia.js, React, and Vite",
+    "tags": [
+      "react",
+      "abp",
+      "dotnet",
+      "inertiajs",
+      "vite"
+    ],
+    "excerpt": "Building a web application with ABP Framework, Inertia.js, React, and Vite."
+  },
+  {
+    "slug": "abp-with-minimal-api-p1",
+    "title": "Minimal Api with ABP - Hello World - Part 1",
+    "tags": [
+      "dotnet",
+      "abp"
+    ],
+    "excerpt": "In this post we will see how to use minimal api with the ABP application."
+  },
+  {
+    "slug": "abp-with-minimal-api-p2",
+    "title": "Minimal Api with ABP - EF Core - Part 2",
+    "tags": [
+      "dotnet",
+      "abp"
+    ],
+    "excerpt": "In this post we will see how to use minimal api with the ABP application and configure EF core."
+  },
+  {
+    "slug": "dotnet-file-upload-with-abp",
+    "title": "dotnet file upload with ABP Blob store and Minio",
+    "tags": [
+      "dotnet",
+      "abp"
+    ],
+    "excerpt": "In this post we will implement file upload using the ABP blob store and Minio"
+  },
+  {
+    "slug": "automatic-image-cleanup-in-acr",
+    "title": "Automating Image Cleanup in Azure Container Registry with ACR Tasks",
+    "tags": [
+      "azure",
+      "docker",
+      "azure-container-registry",
+      "devops"
+    ],
+    "excerpt": "Learn how to automate image cleanup in Azure Container Registry using ACR Tasks and implement best practices for container image management."
+  },
+  {
+    "slug": "azure-deployment-for-dotnet",
+    "title": "Azure Deployment for .Net - Introduction - Prerequisites",
+    "tags": [
+      "azure",
+      "dotnet",
+      "github",
+      "github-actions",
+      "terraform",
+      "kubernetes",
+      "aks",
+      "cloudflare",
+      "helm",
+      "cert-manager",
+      "nginx-ingress-controller",
+      "docker",
+      "azure-container-registry"
+    ],
+    "excerpt": "This is the introduction to the Azure Deployment for .Net series."
+  },
+  {
+    "slug": "certmanager-nginx-ingress-controller-with-static-ip-in-aks",
+    "title": "Cert Manager and Nginx Ingress Controller on AKS Cluster with static IP",
+    "tags": [
+      "aks",
+      "azure",
+      "kubernetes",
+      "terraform",
+      "acr"
+    ],
+    "excerpt": "In this we will setup Cert Manager and Nginx Ingress Controller on AKS Cluster"
+  },
+  {
+    "slug": "terraform-to-create-azure-kubernetes-service-aks-cluster-and-container-registry",
+    "title": "Create AKS cluster and ACR with Terraform",
+    "tags": [
+      "aks",
+      "azure",
+      "kubernetes",
+      "terraform",
+      "acr"
+    ],
+    "excerpt": "In this we will create Azure Kubernetes (AKS) cluster and Azure Container Registry (ACR)."
+  },
+  {
+    "slug": "state-management-blazor-fluxor",
+    "title": "Blazor state management with Fluxor",
+    "tags": [
+      "blazor",
+      "fluxor"
+    ],
+    "excerpt": "In this post we will see how to setup fluxor in Blazor Wasm App"
+  },
+  {
+    "slug": "css-for-leaflet-div-element",
+    "title": "Css for leaflet div element",
+    "tags": [
+      "css",
+      "leaflet"
+    ],
+    "excerpt": "If you are like me who struggle with anything CSS. These are some small css that will help you to fill the leaflet map without setting the fixed height"
+  },
+  {
+    "slug": "docker-swarm-hetzner",
+    "title": "Docker Deployment using docker swarm",
+    "tags": [
+      "docker",
+      "docker-swarm",
+      "series"
+    ],
+    "excerpt": "In this post we will see how to setup docker swarm for your development environment."
+  },
+  {
+    "slug": "docker-swarm-localhost",
+    "title": "Docker swarm setup for localhost",
+    "tags": [
+      "docker",
+      "docker-swarm"
+    ],
+    "excerpt": "In this post we will see how to setup docker swarm for localhost."
+  },
+  {
+    "slug": "part-1-setup-docker-with-ubuntu-server-in-hetzner",
+    "title": "Setting up Ubuntu Server with docker in Hetzner",
+    "tags": [
+      "docker",
+      "ubuntu",
+      "hetzner"
+    ],
+    "excerpt": "In this post we will see how to create a ubuntu server for docker deployment."
+  },
+  {
+    "slug": "part-2-setup-docker-swarm-with-traefik-and-portainer",
+    "title": "Setting up docker swarm with traefik and portainer",
+    "tags": [
+      "docker",
+      "ubuntu",
+      "traefik",
+      "portainer"
+    ],
+    "excerpt": "In this post we will see how to create a docker swarm and deploy traefik and portainer in our ubuntu server."
+  },
+  {
+    "slug": "part-3-deploy-registry-redis-rabitmq-postgresql-in-docker",
+    "title": "Deploy redis, rabbitmq, seq, registry and postgres in docker swarm",
+    "tags": [
+      "docker",
+      "redis",
+      "rabbitmq",
+      "postgres",
+      "registry",
+      "seq"
+    ],
+    "excerpt": "In this post we will see how to deploy redis, rabbitmq, postgres and registry."
+  },
+  {
+    "slug": "part-4-prepare-and-deploy-microservice-in-docker",
+    "title": "Prepare and deploy the microservice",
+    "tags": [
+      "docker",
+      "docker-compose"
+    ],
+    "excerpt": "In this post we will see how to deploy the microservice solution to the our server."
+  },
+  {
+    "slug": "setup-docker-node-hetzner",
+    "title": "Setup docker in Ubuntu 18.04",
+    "tags": [
+      "docker",
+      "ubuntu"
+    ],
+    "excerpt": "In this post you will see how to setup docker in Ubuntu 18.04. We will also change the default ssh port and install fail2ban."
+  },
+  {
+    "slug": "setup-traefik-docker",
+    "title": "Traefik setup with docker swarm",
+    "tags": [
+      "docker",
+      "traefik"
+    ],
+    "excerpt": "In this post you will see how to setup traefik with docker swarm. Along with that we will also setup Portainer and Swarmpit so that it is easy to manage the docker swarm."
+  },
+  {
+    "slug": "automatic-version-and-release",
+    "title": "Automatically version and release .Net Application",
+    "tags": [
+      "dotnet",
+      "version",
+      "release",
+      "git"
+    ],
+    "excerpt": "In this post you will see how to automatically version and release a .Net Application using GitHub Actions"
+  },
+  {
+    "slug": "dotnet-and-react-nextjs-large-file-upload-with-tus",
+    "title": "dotnet core large file upload with resume using tus and react/nextjs",
+    "tags": [
+      "dotnet",
+      "nextjs",
+      "react",
+      "tus"
+    ],
+    "excerpt": "In this post you will see how to upload large files with resume using tus. We will use dotnet core for the backend and nextjs for the frontend"
+  },
+  {
+    "slug": "dotnet-openapi-with-scalar",
+    "title": "Modern API Documentation in .NET with Scalar and OpenAPI",
+    "tags": [
+      "dotnet",
+      "openapi",
+      "scalar",
+      "api-documentation",
+      "aspnetcore"
+    ],
+    "excerpt": "Learn how to implement beautiful API documentation using Scalar and OpenAPI in .NET 9.0"
+  },
+  {
+    "slug": "create-and-deploy-dotnet-application-in-micro-k8s",
+    "title": "Create and deploy .Net application in MicroK8s",
+    "tags": [
+      "abp",
+      "tye",
+      "microk8s"
+    ],
+    "excerpt": "In this post we will create a simple abp application and deploy it in the microk8s instance."
+  },
+  {
+    "slug": "deploy-docker-registry-and-postgres-database-in-micro-k8s",
+    "title": "Deploy docker registry and postgres database in MicroK8s",
+    "tags": [
+      "postgres",
+      "registry",
+      "microk8s"
+    ],
+    "excerpt": "In this post we will see how to deploy and secure the registry along with deploying a postgres database in microk8s"
+  },
+  {
+    "slug": "microk8s-gettings-started",
+    "title": "MicroK8s - Hassle-free Kubernetes",
+    "tags": [
+      "microk8s",
+      "docker",
+      "series"
+    ],
+    "excerpt": "In this post we will see how to get started with the MicroK8s Kubernetes distribution."
+  },
+  {
+    "slug": "setup-micro-k8s-with-ubuntu",
+    "title": "Setup MicroK8s With Ubuntu",
+    "tags": [
+      "ubuntu",
+      "microk8s"
+    ],
+    "excerpt": "In this post we will see how to setup microk8s in ubuntu server."
+  },
+  {
+    "slug": "setup-nginx-and-cert-manager-in-micro-k8s",
+    "title": "Setup Nginx and cert-manager in MicroK8s",
+    "tags": [
+      "ngnix",
+      "ssl",
+      "microk8s",
+      "letsencrypt"
+    ],
+    "excerpt": "In this post we will see how to setup nginx reverse proxy and cert-manager in microk8s"
+  },
+  {
+    "slug": "abp-microservice-series",
+    "title": ".NET Microservice with ABP - Full Series",
+    "tags": [
+      "dotnet",
+      "abp",
+      "microservice",
+      "series"
+    ],
+    "excerpt": "This post contains all the parts of the microservice development with ABP"
+  },
+  {
+    "slug": "dotnet-microservice-template-with-abp",
+    "title": ".Net Microservice template with ABP",
+    "tags": [
+      "microservice",
+      "abp",
+      "dotnet"
+    ],
+    "excerpt": "In this post I will show you how to create ABP microservice using a dotnet new template."
+  },
+  {
+    "slug": "migrating-identity-service-to-open-iddict-module",
+    "title": "Migrating Identity Service to OpenIddict Module",
+    "tags": [
+      "abp",
+      "identity-server",
+      "openiddict",
+      "migration"
+    ],
+    "excerpt": "In this post we will see how to replace Identity server with OpenIddict in our microservice"
+  },
+  {
+    "slug": "migrating-tye-to-aspire",
+    "title": "Migrating Tye to Aspire",
+    "tags": [
+      "abp",
+      "aspire"
+    ],
+    "excerpt": "In this post we will see how to migrate the Tye to Aspire"
+  },
+  {
+    "slug": "netcore-microservice-with-abp-add-central-logging-part-12",
+    "title": "Logging with Seq",
+    "tags": [
+      "dotnet",
+      "abp",
+      "microservice",
+      "seq",
+      "logging"
+    ],
+    "excerpt": "In this post, we will see how to add centralized logging to our microservice application"
+  },
+  {
+    "slug": "netcore-microservice-with-abp-add-new-service-part-11",
+    "title": "Add New Service",
+    "tags": [
+      "dotnet",
+      "abp",
+      "microservice"
+    ],
+    "excerpt": "In this post we will see how to add docker support and create a CI/CD with github actions"
+  },
+  {
+    "slug": "netcore-microservice-with-abp-administration-services-part-3",
+    "title": "Administration Services",
+    "tags": [
+      "dotnet",
+      "abp",
+      "microservice",
+      "netcore6"
+    ],
+    "excerpt": "In this post we will see how to do the create Administration service for our microservice application"
+  },
+  {
+    "slug": "netcore-microservice-with-abp-db-migration-part-6",
+    "title": "DbMigration",
+    "tags": [
+      "dotnet",
+      "abp",
+      "microservice",
+      "netcore6"
+    ],
+    "excerpt": "In this post we will see how to create migration project for our microservice application"
+  },
+  {
+    "slug": "netcore-microservice-with-abp-distributed-event-bus-part-9",
+    "title": "Distributed Event Bus",
+    "tags": [
+      "dotnet",
+      "abp",
+      "microservice",
+      "rabbitmq"
+    ],
+    "excerpt": "In this post we will see how to get the RabbitMQ working for service to service communication"
+  },
+  {
+    "slug": "netcore-microservice-with-abp-docker-and-ci-cd-part-10",
+    "title": "Docker and CI/CD",
+    "tags": [
+      "dotnet",
+      "abp",
+      "microservice",
+      "docker"
+    ],
+    "excerpt": "In this post we will see how to add docker support and create a CI/CD with github actions"
+  },
+  {
+    "slug": "netcore-microservice-with-abp-identity-server-and-angular-part-8",
+    "title": "IdentityServer and Angular",
+    "tags": [
+      "dotnet",
+      "abp",
+      "microservice",
+      "netcore6",
+      "identity-server",
+      "angular"
+    ],
+    "excerpt": "In this post we will see how to get the IdentityServer and the Angular App working with other services"
+  },
+  {
+    "slug": "netcore-microservice-with-abp-identity-services-part-4",
+    "title": "Identity Services",
+    "tags": [
+      "dotnet",
+      "abp",
+      "microservice",
+      "netcore6"
+    ],
+    "excerpt": "In this post we will see how to do the create Identity service for our microservice application"
+  },
+  {
+    "slug": "netcore-microservice-with-abp-init-part-1",
+    "title": "Initial setup",
+    "tags": [
+      "dotnet",
+      "abp",
+      "microservice",
+      "netcore6"
+    ],
+    "excerpt": "In this post we will see how to do the initial setup for a abp microservice application."
+  },
+  {
+    "slug": "netcore-microservice-with-abp-saas-services-part-5",
+    "title": "SaaS Services",
+    "tags": [
+      "dotnet",
+      "abp",
+      "microservice",
+      "netcore6"
+    ],
+    "excerpt": "In this post we will see how to do the create SaaS Service for our microservice application"
+  },
+  {
+    "slug": "netcore-microservice-with-abp-shared-project-part-2",
+    "title": "Shared Project",
+    "tags": [
+      "dotnet",
+      "abp",
+      "microservice",
+      "netcore6"
+    ],
+    "excerpt": "In this post we will see how to do the create a Shared project which will be used by all services"
+  },
+  {
+    "slug": "netcore-microservice-with-abp-yarp-and-tye-part-7",
+    "title": "Yarp and Tye",
+    "tags": [
+      "dotnet",
+      "abp",
+      "microservice",
+      "netcore6",
+      "yarp",
+      "tye"
+    ],
+    "excerpt": "In this post we will see how to create a reverse proxy with Yarp and integrate Tye for our microservice application"
+  },
+  {
+    "slug": "ndepend",
+    "title": "NDepend - A tool you can depend on",
+    "tags": [
+      "dotnet",
+      "tools"
+    ],
+    "excerpt": "In this post we will see how to use NDepend to improve your .net development."
+  },
+  {
+    "slug": "openid-connect-with-nextjs-with-openid-client-6-and-next-15",
+    "title": "OpenID Connect with Next.js 15 and openid-client 6",
+    "tags": [
+      "nextjs",
+      "auth",
+      "oidc",
+      "openid-connect",
+      "iron-session",
+      "openid-client",
+      "openid",
+      "security"
+    ],
+    "excerpt": "A guide to implementing secure authentication using OpenID Connect in Next.js 15 with the openid-client library version 6"
+  },
+  {
+    "slug": "openid-connect-with-nextjs",
+    "title": "OpenID Connect with Next.js",
+    "tags": [
+      "nextjs",
+      "auth",
+      "oidc",
+      "openid-connect",
+      "iron-session",
+      "openid-client"
+    ],
+    "excerpt": "In this post, we will see how to implement OpenID Connect with Next.js."
+  },
+  {
+    "slug": "agent-framework-ollama",
+    "title": "Building AI Agents with Microsoft Agent Framework and Ollama: A Getting Started Guide",
+    "tags": [
+      "ollama",
+      "agent-framework",
+      "llm",
+      "dotnet",
+      "ai-agents",
+      "microsoft-agents"
+    ],
+    "excerpt": "Learn how to build sophisticated AI agents using Microsoft Agent Framework with Ollama for local AI model execution. This comprehensive guide covers streaming responses, multi-turn conversations, function tools, middleware integration, and production-ready patterns."
+  },
+  {
+    "slug": "agent-framework-sentiment-analysis",
+    "title": "Building AI-Powered Sentiment Analysis with Microsoft Agent Framework and Ollama",
+    "tags": [
+      "ollama",
+      "agent-framework",
+      "llm",
+      "dotnet",
+      "ai-agents",
+      "microsoft-agents"
+    ],
+    "excerpt": "Learn how to build sentiment analysis with Microsoft Agent Framework and Ollama. We will use the Ollama model to perform the sentiment analysis and the Microsoft Agent Framework to build the agent."
+  },
+  {
+    "slug": "ollama-semantic-kernal-connector",
+    "title": "Ollama Semantic Kernel Connector With C#: Console App & API Guide",
+    "tags": [
+      "ollama",
+      "semantic-kernel",
+      "connector",
+      "Llama",
+      "llm",
+      "dotnet"
+    ],
+    "excerpt": "In this post, we will learn how to use the Ollama Semantic Kernel Connector with C#."
+  },
+  {
+    "slug": "ollama-with-extension-ai-and-function-calling",
+    "title": "Building an AI-Powered .NET API with Ollama and Microsoft.Extensions.AI",
+    "tags": [
+      "ollama",
+      "Llama",
+      "llm",
+      "dotnet",
+      "function-calling",
+      "ai-extension",
+      "microsoft-extensions-ai"
+    ],
+    "excerpt": "Learn how to create an intelligent .NET API using Ollama, Microsoft.Extensions.AI, and implement function calling capabilities with Large Language Models."
+  },
+  {
+    "slug": "ollama-with-semantic-kernel",
+    "title": "Getting started with Ollama and Semantic Kernel with C#",
+    "tags": [
+      "ollama",
+      "semantic-kernel",
+      "getting-started",
+      "Llama",
+      "llm",
+      "dotnet"
+    ],
+    "excerpt": "In this post, we will learn how to get started with Ollama and Semantic Kernel with C#."
+  },
+  {
+    "slug": "orchard-core-create-content-with-code",
+    "title": "Create content with code in Orchard Core - Part 3",
+    "tags": [
+      "orchard-core",
+      "cms"
+    ],
+    "excerpt": "In this post we will see how to create content types using the code in Orchard Core."
+  },
+  {
+    "slug": "orchard-core-getting-started-p1",
+    "title": "Orchard core. Getting started - Part 1",
+    "tags": [
+      "orchard-core"
+    ],
+    "excerpt": "In this post we will see how to get started with the orchard core."
+  },
+  {
+    "slug": "orchard-core-openid-nextjs",
+    "title": "Authentication using OpenId in React/NextJs App With Orchard Core - Part 2",
+    "tags": [
+      "orchard-core",
+      "openid",
+      "nextjs",
+      "auth"
+    ],
+    "excerpt": "In this post we will see how to do authentication using OpenId for a React App using Orchard Core."
+  },
+  {
+    "slug": "setting-up-powershell-with-oh-my-posh-v3",
+    "title": "Setting up oh-my-posh and PSReadLine in PowerShell",
+    "tags": [
+      "terminal"
+    ],
+    "excerpt": "In this post we will see how to setup the oh-my-posh and PSReadLine with PowerShell."
+  },
+  {
+    "slug": "setup-window-terminal-with-poshgit",
+    "title": "Set up Windows Terminal with PoshGit, oh-my-posh and Cascadia Code PL",
+    "tags": [
+      "terminal"
+    ],
+    "excerpt": "In this post we will see how to setup windows terminal with PoshGit and oh-my-posh to make the terminal more productive"
+  },
+  {
+    "slug": "setup-zsh-and-oh-my-zsh",
+    "title": "Set up Wsl with zsh and oh-my-zsh",
+    "tags": [
+      "terminal"
+    ],
+    "excerpt": "In this post we will see how to setup zsh shell in the wsl and use oh-my-zsh."
+  }
+]

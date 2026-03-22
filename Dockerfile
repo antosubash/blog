@@ -1,33 +1,24 @@
-FROM node:21-slim AS base
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-ENV HUSKY=0
+FROM node:24-alpine AS base
 RUN corepack enable
-# RUN npm install -g pnpm
-RUN npm install husky -g
-# RUN npm install cross-env -g
-COPY . /app
+
+FROM base AS deps
 WORKDIR /app
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
 
 FROM base AS build
-RUN pnpm install
-RUN pnpm run build
-
-FROM base AS runner
 WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN pnpm build
 
-# Don't run production as root
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-USER nextjs
+FROM base AS runtime
+WORKDIR /app
+COPY --from=build /app/.output ./.output
+COPY --from=build /app/public ./public
 
-COPY next.config.js .
-COPY package.json .
+ENV NODE_ENV=production
+ENV PORT=3000
+EXPOSE 3000
 
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=build --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=build --chown=nextjs:nodejs /app/.next/static ./.next/static
-COPY --from=build --chown=nextjs:nodejs /app/public ./public
-
-CMD node server.js
+CMD ["node", ".output/server/index.mjs"]

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Anto Subash - blob-store</title>
+    <link>https://blog.antosubash.com</link>
+    <description>Full-stack developer passionate about web technologies, microservices, and modern software development.</description>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 13 Mar 2026 08:57:05 GMT</lastBuildDate>
+    <atom:link href="https://blog.antosubash.com/tags/blob-store/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Add profile picture to User Entity in ABP app using BlobStore and Minio. Part 6</title>
+      <link>https://blog.antosubash.com/posts/abp-extend-user-entity-with-profile-picture</link>
+      <guid>https://blog.antosubash.com/posts/abp-extend-user-entity-with-profile-picture</guid>
+      <pubDate>Sun, 15 Aug 2021 00:00:00 GMT</pubDate>
+      <description>In this post we will implement the profile picture upload for the ABP app using BlobStore and Minio.</description>
+    </item>
+  </channel>
+</rss>

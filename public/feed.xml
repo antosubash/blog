@@ -1,0 +1,578 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Anto Subash</title>
+    <link>https://blog.antosubash.com</link>
+    <description>Full-stack developer passionate about web technologies, microservices, and modern software development.</description>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 13 Mar 2026 08:57:05 GMT</lastBuildDate>
+    <atom:link href="https://blog.antosubash.com/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Building AI-Powered Sentiment Analysis with Microsoft Agent Framework and Ollama</title>
+      <link>https://blog.antosubash.com/posts/agent-framework-sentiment-analysis</link>
+      <guid>https://blog.antosubash.com/posts/agent-framework-sentiment-analysis</guid>
+      <pubDate>Sun, 02 Nov 2025 00:00:00 GMT</pubDate>
+      <description>Learn how to build sentiment analysis with Microsoft Agent Framework and Ollama. We will use the Ollama model to perform the sentiment analysis and the Microsoft Agent Framework to build the agent.</description>
+    </item>
+    <item>
+      <title>Building AI Agents with Microsoft Agent Framework and Ollama: A Getting Started Guide</title>
+      <link>https://blog.antosubash.com/posts/agent-framework-ollama</link>
+      <guid>https://blog.antosubash.com/posts/agent-framework-ollama</guid>
+      <pubDate>Sat, 04 Oct 2025 00:00:00 GMT</pubDate>
+      <description>Learn how to build sophisticated AI agents using Microsoft Agent Framework with Ollama for local AI model execution. This comprehensive guide covers streaming responses, multi-turn conversations, function tools, middleware integration, and production-ready patterns.</description>
+    </item>
+    <item>
+      <title>ABP React CMS Module: Building Dynamic Pages with Puck Editor</title>
+      <link>https://blog.antosubash.com/posts/abp-react-cms-module-pages</link>
+      <guid>https://blog.antosubash.com/posts/abp-react-cms-module-pages</guid>
+      <pubDate>Thu, 07 Aug 2025 00:00:00 GMT</pubDate>
+      <description>ABP React CMS Kit is a React UI for the ABP CmsKit module.</description>
+    </item>
+    <item>
+      <title>Automating Image Cleanup in Azure Container Registry with ACR Tasks</title>
+      <link>https://blog.antosubash.com/posts/automatic-image-cleanup-in-acr</link>
+      <guid>https://blog.antosubash.com/posts/automatic-image-cleanup-in-acr</guid>
+      <pubDate>Thu, 16 Jan 2025 00:00:00 GMT</pubDate>
+      <description>Learn how to automate image cleanup in Azure Container Registry using ACR Tasks and implement best practices for container image management.</description>
+    </item>
+    <item>
+      <title>Modern API Documentation in .NET with Scalar and OpenAPI</title>
+      <link>https://blog.antosubash.com/posts/dotnet-openapi-with-scalar</link>
+      <guid>https://blog.antosubash.com/posts/dotnet-openapi-with-scalar</guid>
+      <pubDate>Wed, 15 Jan 2025 00:00:00 GMT</pubDate>
+      <description>Learn how to implement beautiful API documentation using Scalar and OpenAPI in .NET 9.0</description>
+    </item>
+    <item>
+      <title>Building an AI-Powered .NET API with Ollama and Microsoft.Extensions.AI</title>
+      <link>https://blog.antosubash.com/posts/ollama-with-extension-ai-and-function-calling</link>
+      <guid>https://blog.antosubash.com/posts/ollama-with-extension-ai-and-function-calling</guid>
+      <pubDate>Wed, 15 Jan 2025 00:00:00 GMT</pubDate>
+      <description>Learn how to create an intelligent .NET API using Ollama, Microsoft.Extensions.AI, and implement function calling capabilities with Large Language Models.</description>
+    </item>
+    <item>
+      <title>OpenID Connect with Next.js 15 and openid-client 6</title>
+      <link>https://blog.antosubash.com/posts/openid-connect-with-nextjs-with-openid-client-6-and-next-15</link>
+      <guid>https://blog.antosubash.com/posts/openid-connect-with-nextjs-with-openid-client-6-and-next-15</guid>
+      <pubDate>Tue, 05 Nov 2024 00:00:00 GMT</pubDate>
+      <description>A guide to implementing secure authentication using OpenID Connect in Next.js 15 with the openid-client library version 6</description>
+    </item>
+    <item>
+      <title>Ollama Semantic Kernel Connector With C#: Console App &amp; API Guide</title>
+      <link>https://blog.antosubash.com/posts/ollama-semantic-kernal-connector</link>
+      <guid>https://blog.antosubash.com/posts/ollama-semantic-kernal-connector</guid>
+      <pubDate>Sat, 19 Oct 2024 00:00:00 GMT</pubDate>
+      <description>In this post, we will learn how to use the Ollama Semantic Kernel Connector with C#.</description>
+    </item>
+    <item>
+      <title>ABP-Powered Web App with Inertia.js, React, and Vite</title>
+      <link>https://blog.antosubash.com/posts/abp-with-inertia-and-react</link>
+      <guid>https://blog.antosubash.com/posts/abp-with-inertia-and-react</guid>
+      <pubDate>Thu, 03 Oct 2024 12:54:31 GMT</pubDate>
+      <description>Building a web application with ABP Framework, Inertia.js, React, and Vite.</description>
+    </item>
+    <item>
+      <title>Getting started with Ollama and Semantic Kernel with C#</title>
+      <link>https://blog.antosubash.com/posts/ollama-with-semantic-kernel</link>
+      <guid>https://blog.antosubash.com/posts/ollama-with-semantic-kernel</guid>
+      <pubDate>Thu, 15 Aug 2024 00:00:00 GMT</pubDate>
+      <description>In this post, we will learn how to get started with Ollama and Semantic Kernel with C#.</description>
+    </item>
+    <item>
+      <title>Migrating Tye to Aspire</title>
+      <link>https://blog.antosubash.com/posts/migrating-tye-to-aspire</link>
+      <guid>https://blog.antosubash.com/posts/migrating-tye-to-aspire</guid>
+      <pubDate>Wed, 17 Jul 2024 20:59:17 GMT</pubDate>
+      <description>In this post we will see how to migrate the Tye to Aspire</description>
+    </item>
+    <item>
+      <title>ABP React Template V2</title>
+      <link>https://blog.antosubash.com/posts/abp-react-v2</link>
+      <guid>https://blog.antosubash.com/posts/abp-react-v2</guid>
+      <pubDate>Sat, 06 Jul 2024 12:54:31 GMT</pubDate>
+      <description>Version 2 of React Starter Template for ABP application with Next.js, Tailwind CSS, and shadcn-ui.</description>
+    </item>
+    <item>
+      <title>OpenID Connect with Next.js</title>
+      <link>https://blog.antosubash.com/posts/openid-connect-with-nextjs</link>
+      <guid>https://blog.antosubash.com/posts/openid-connect-with-nextjs</guid>
+      <pubDate>Wed, 03 Jul 2024 00:00:00 GMT</pubDate>
+      <description>In this post, we will see how to implement OpenID Connect with Next.js.</description>
+    </item>
+    <item>
+      <title>Cert Manager and Nginx Ingress Controller on AKS Cluster with static IP</title>
+      <link>https://blog.antosubash.com/posts/certmanager-nginx-ingress-controller-with-static-ip-in-aks</link>
+      <guid>https://blog.antosubash.com/posts/certmanager-nginx-ingress-controller-with-static-ip-in-aks</guid>
+      <pubDate>Fri, 18 Aug 2023 11:53:48 GMT</pubDate>
+      <description>In this we will setup Cert Manager and Nginx Ingress Controller on AKS Cluster</description>
+    </item>
+    <item>
+      <title>Create AKS cluster and ACR with Terraform</title>
+      <link>https://blog.antosubash.com/posts/terraform-to-create-azure-kubernetes-service-aks-cluster-and-container-registry</link>
+      <guid>https://blog.antosubash.com/posts/terraform-to-create-azure-kubernetes-service-aks-cluster-and-container-registry</guid>
+      <pubDate>Wed, 16 Aug 2023 11:53:48 GMT</pubDate>
+      <description>In this we will create Azure Kubernetes (AKS) cluster and Azure Container Registry (ACR).</description>
+    </item>
+    <item>
+      <title>Azure Deployment for .Net - Introduction - Prerequisites</title>
+      <link>https://blog.antosubash.com/posts/azure-deployment-for-dotnet</link>
+      <guid>https://blog.antosubash.com/posts/azure-deployment-for-dotnet</guid>
+      <pubDate>Mon, 14 Aug 2023 11:53:48 GMT</pubDate>
+      <description>This is the introduction to the Azure Deployment for .Net series.</description>
+    </item>
+    <item>
+      <title>ABP no-layer module template</title>
+      <link>https://blog.antosubash.com/posts/abp-no-layer-module-template</link>
+      <guid>https://blog.antosubash.com/posts/abp-no-layer-module-template</guid>
+      <pubDate>Sun, 21 May 2023 17:28:49 GMT</pubDate>
+      <description>In this article, you will learn how to create a no-layer module template for abp application.</description>
+    </item>
+    <item>
+      <title>Abp CLI Template</title>
+      <link>https://blog.antosubash.com/posts/abp-cli-template</link>
+      <guid>https://blog.antosubash.com/posts/abp-cli-template</guid>
+      <pubDate>Sat, 20 May 2023 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to create a Cli for your abp application.</description>
+    </item>
+    <item>
+      <title>ABP React Template</title>
+      <link>https://blog.antosubash.com/posts/abp-react-template</link>
+      <guid>https://blog.antosubash.com/posts/abp-react-template</guid>
+      <pubDate>Mon, 03 Apr 2023 12:54:31 GMT</pubDate>
+      <description>React Starter Template for ABP application.</description>
+    </item>
+    <item>
+      <title>Abp Dockerfile</title>
+      <link>https://blog.antosubash.com/posts/abp-docker-file</link>
+      <guid>https://blog.antosubash.com/posts/abp-docker-file</guid>
+      <pubDate>Sun, 19 Mar 2023 21:52:11 GMT</pubDate>
+      <description>In this post we will see how to create proper docker file for your abp application.</description>
+    </item>
+    <item>
+      <title>.Net Microservice template with ABP</title>
+      <link>https://blog.antosubash.com/posts/dotnet-microservice-template-with-abp</link>
+      <guid>https://blog.antosubash.com/posts/dotnet-microservice-template-with-abp</guid>
+      <pubDate>Sat, 18 Feb 2023 18:11:38 GMT</pubDate>
+      <description>In this post I will show you how to create ABP microservice using a dotnet new template.</description>
+    </item>
+    <item>
+      <title>Migrating Identity Service to OpenIddict Module</title>
+      <link>https://blog.antosubash.com/posts/migrating-identity-service-to-open-iddict-module</link>
+      <guid>https://blog.antosubash.com/posts/migrating-identity-service-to-open-iddict-module</guid>
+      <pubDate>Mon, 05 Dec 2022 20:59:17 GMT</pubDate>
+      <description>In this post we will see how to replace Identity server with OpenIddict in our microservice</description>
+    </item>
+    <item>
+      <title>Automatically version and release .Net Application</title>
+      <link>https://blog.antosubash.com/posts/automatic-version-and-release</link>
+      <guid>https://blog.antosubash.com/posts/automatic-version-and-release</guid>
+      <pubDate>Sun, 23 Oct 2022 00:00:00 GMT</pubDate>
+      <description>In this post you will see how to automatically version and release a .Net Application using GitHub Actions</description>
+    </item>
+    <item>
+      <title>MicroK8s - Hassle-free Kubernetes</title>
+      <link>https://blog.antosubash.com/posts/microk8s-gettings-started</link>
+      <guid>https://blog.antosubash.com/posts/microk8s-gettings-started</guid>
+      <pubDate>Thu, 15 Sep 2022 14:30:14 GMT</pubDate>
+      <description>In this post we will see how to get started with the MicroK8s Kubernetes distribution.</description>
+    </item>
+    <item>
+      <title>Create and deploy .Net application in MicroK8s</title>
+      <link>https://blog.antosubash.com/posts/create-and-deploy-dotnet-application-in-micro-k8s</link>
+      <guid>https://blog.antosubash.com/posts/create-and-deploy-dotnet-application-in-micro-k8s</guid>
+      <pubDate>Wed, 14 Sep 2022 19:55:43 GMT</pubDate>
+      <description>In this post we will create a simple abp application and deploy it in the microk8s instance.</description>
+    </item>
+    <item>
+      <title>Deploy docker registry and postgres database in MicroK8s</title>
+      <link>https://blog.antosubash.com/posts/deploy-docker-registry-and-postgres-database-in-micro-k8s</link>
+      <guid>https://blog.antosubash.com/posts/deploy-docker-registry-and-postgres-database-in-micro-k8s</guid>
+      <pubDate>Wed, 14 Sep 2022 19:53:18 GMT</pubDate>
+      <description>In this post we will see how to deploy and secure the registry along with deploying a postgres database in microk8s</description>
+    </item>
+    <item>
+      <title>Setup Nginx and cert-manager in MicroK8s</title>
+      <link>https://blog.antosubash.com/posts/setup-nginx-and-cert-manager-in-micro-k8s</link>
+      <guid>https://blog.antosubash.com/posts/setup-nginx-and-cert-manager-in-micro-k8s</guid>
+      <pubDate>Wed, 14 Sep 2022 19:51:51 GMT</pubDate>
+      <description>In this post we will see how to setup nginx reverse proxy and cert-manager in microk8s</description>
+    </item>
+    <item>
+      <title>Setup MicroK8s With Ubuntu</title>
+      <link>https://blog.antosubash.com/posts/setup-micro-k8s-with-ubuntu</link>
+      <guid>https://blog.antosubash.com/posts/setup-micro-k8s-with-ubuntu</guid>
+      <pubDate>Wed, 14 Sep 2022 19:50:03 GMT</pubDate>
+      <description>In this post we will see how to setup microk8s in ubuntu server.</description>
+    </item>
+    <item>
+      <title>NDepend - A tool you can depend on</title>
+      <link>https://blog.antosubash.com/posts/ndepend</link>
+      <guid>https://blog.antosubash.com/posts/ndepend</guid>
+      <pubDate>Tue, 06 Sep 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to use NDepend to improve your .net development.</description>
+    </item>
+    <item>
+      <title>Docker Deployment using docker swarm</title>
+      <link>https://blog.antosubash.com/posts/docker-swarm-hetzner</link>
+      <guid>https://blog.antosubash.com/posts/docker-swarm-hetzner</guid>
+      <pubDate>Sun, 31 Jul 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to setup docker swarm for your development environment.</description>
+    </item>
+    <item>
+      <title>Prepare and deploy the microservice</title>
+      <link>https://blog.antosubash.com/posts/part-4-prepare-and-deploy-microservice-in-docker</link>
+      <guid>https://blog.antosubash.com/posts/part-4-prepare-and-deploy-microservice-in-docker</guid>
+      <pubDate>Sat, 30 Jul 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to deploy the microservice solution to the our server.</description>
+    </item>
+    <item>
+      <title>Deploy redis, rabbitmq, seq, registry and postgres in docker swarm</title>
+      <link>https://blog.antosubash.com/posts/part-3-deploy-registry-redis-rabitmq-postgresql-in-docker</link>
+      <guid>https://blog.antosubash.com/posts/part-3-deploy-registry-redis-rabitmq-postgresql-in-docker</guid>
+      <pubDate>Tue, 21 Jun 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to deploy redis, rabbitmq, postgres and registry.</description>
+    </item>
+    <item>
+      <title>Setting up docker swarm with traefik and portainer</title>
+      <link>https://blog.antosubash.com/posts/part-2-setup-docker-swarm-with-traefik-and-portainer</link>
+      <guid>https://blog.antosubash.com/posts/part-2-setup-docker-swarm-with-traefik-and-portainer</guid>
+      <pubDate>Mon, 20 Jun 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to create a docker swarm and deploy traefik and portainer in our ubuntu server.</description>
+    </item>
+    <item>
+      <title>Setting up Ubuntu Server with docker in Hetzner</title>
+      <link>https://blog.antosubash.com/posts/part-1-setup-docker-with-ubuntu-server-in-hetzner</link>
+      <guid>https://blog.antosubash.com/posts/part-1-setup-docker-with-ubuntu-server-in-hetzner</guid>
+      <pubDate>Sun, 19 Jun 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to create a ubuntu server for docker deployment.</description>
+    </item>
+    <item>
+      <title>Blazor state management with Fluxor</title>
+      <link>https://blog.antosubash.com/posts/state-management-blazor-fluxor</link>
+      <guid>https://blog.antosubash.com/posts/state-management-blazor-fluxor</guid>
+      <pubDate>Wed, 01 Jun 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to setup fluxor in Blazor Wasm App</description>
+    </item>
+    <item>
+      <title>.NET Microservice with ABP - Full Series</title>
+      <link>https://blog.antosubash.com/posts/abp-microservice-series</link>
+      <guid>https://blog.antosubash.com/posts/abp-microservice-series</guid>
+      <pubDate>Sat, 23 Apr 2022 00:00:00 GMT</pubDate>
+      <description>This post contains all the parts of the microservice development with ABP</description>
+    </item>
+    <item>
+      <title>Logging with Seq</title>
+      <link>https://blog.antosubash.com/posts/netcore-microservice-with-abp-add-central-logging-part-12</link>
+      <guid>https://blog.antosubash.com/posts/netcore-microservice-with-abp-add-central-logging-part-12</guid>
+      <pubDate>Wed, 13 Apr 2022 00:00:00 GMT</pubDate>
+      <description>In this post, we will see how to add centralized logging to our microservice application</description>
+    </item>
+    <item>
+      <title>Add New Service</title>
+      <link>https://blog.antosubash.com/posts/netcore-microservice-with-abp-add-new-service-part-11</link>
+      <guid>https://blog.antosubash.com/posts/netcore-microservice-with-abp-add-new-service-part-11</guid>
+      <pubDate>Thu, 07 Apr 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to add docker support and create a CI/CD with github actions</description>
+    </item>
+    <item>
+      <title>Docker and CI/CD</title>
+      <link>https://blog.antosubash.com/posts/netcore-microservice-with-abp-docker-and-ci-cd-part-10</link>
+      <guid>https://blog.antosubash.com/posts/netcore-microservice-with-abp-docker-and-ci-cd-part-10</guid>
+      <pubDate>Sat, 26 Mar 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to add docker support and create a CI/CD with github actions</description>
+    </item>
+    <item>
+      <title>Distributed Event Bus</title>
+      <link>https://blog.antosubash.com/posts/netcore-microservice-with-abp-distributed-event-bus-part-9</link>
+      <guid>https://blog.antosubash.com/posts/netcore-microservice-with-abp-distributed-event-bus-part-9</guid>
+      <pubDate>Fri, 25 Mar 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to get the RabbitMQ working for service to service communication</description>
+    </item>
+    <item>
+      <title>IdentityServer and Angular</title>
+      <link>https://blog.antosubash.com/posts/netcore-microservice-with-abp-identity-server-and-angular-part-8</link>
+      <guid>https://blog.antosubash.com/posts/netcore-microservice-with-abp-identity-server-and-angular-part-8</guid>
+      <pubDate>Sun, 20 Mar 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to get the IdentityServer and the Angular App working with other services</description>
+    </item>
+    <item>
+      <title>Yarp and Tye</title>
+      <link>https://blog.antosubash.com/posts/netcore-microservice-with-abp-yarp-and-tye-part-7</link>
+      <guid>https://blog.antosubash.com/posts/netcore-microservice-with-abp-yarp-and-tye-part-7</guid>
+      <pubDate>Sat, 19 Mar 2022 05:00:00 GMT</pubDate>
+      <description>In this post we will see how to create a reverse proxy with Yarp and integrate Tye for our microservice application</description>
+    </item>
+    <item>
+      <title>DbMigration</title>
+      <link>https://blog.antosubash.com/posts/netcore-microservice-with-abp-db-migration-part-6</link>
+      <guid>https://blog.antosubash.com/posts/netcore-microservice-with-abp-db-migration-part-6</guid>
+      <pubDate>Sat, 19 Mar 2022 04:00:00 GMT</pubDate>
+      <description>In this post we will see how to create migration project for our microservice application</description>
+    </item>
+    <item>
+      <title>SaaS Services</title>
+      <link>https://blog.antosubash.com/posts/netcore-microservice-with-abp-saas-services-part-5</link>
+      <guid>https://blog.antosubash.com/posts/netcore-microservice-with-abp-saas-services-part-5</guid>
+      <pubDate>Sat, 19 Mar 2022 03:00:00 GMT</pubDate>
+      <description>In this post we will see how to do the create SaaS Service for our microservice application</description>
+    </item>
+    <item>
+      <title>Identity Services</title>
+      <link>https://blog.antosubash.com/posts/netcore-microservice-with-abp-identity-services-part-4</link>
+      <guid>https://blog.antosubash.com/posts/netcore-microservice-with-abp-identity-services-part-4</guid>
+      <pubDate>Sat, 19 Mar 2022 02:00:00 GMT</pubDate>
+      <description>In this post we will see how to do the create Identity service for our microservice application</description>
+    </item>
+    <item>
+      <title>Administration Services</title>
+      <link>https://blog.antosubash.com/posts/netcore-microservice-with-abp-administration-services-part-3</link>
+      <guid>https://blog.antosubash.com/posts/netcore-microservice-with-abp-administration-services-part-3</guid>
+      <pubDate>Sat, 19 Mar 2022 01:00:00 GMT</pubDate>
+      <description>In this post we will see how to do the create Administration service for our microservice application</description>
+    </item>
+    <item>
+      <title>Shared Project</title>
+      <link>https://blog.antosubash.com/posts/netcore-microservice-with-abp-shared-project-part-2</link>
+      <guid>https://blog.antosubash.com/posts/netcore-microservice-with-abp-shared-project-part-2</guid>
+      <pubDate>Sat, 19 Mar 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to do the create a Shared project which will be used by all services</description>
+    </item>
+    <item>
+      <title>Initial setup</title>
+      <link>https://blog.antosubash.com/posts/netcore-microservice-with-abp-init-part-1</link>
+      <guid>https://blog.antosubash.com/posts/netcore-microservice-with-abp-init-part-1</guid>
+      <pubDate>Fri, 18 Mar 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to do the initial setup for a abp microservice application.</description>
+    </item>
+    <item>
+      <title>Removing IdentityServer from ABP No Layer Template</title>
+      <link>https://blog.antosubash.com/posts/abp-remove-identity-server-from-abp-no-layers-app</link>
+      <guid>https://blog.antosubash.com/posts/abp-remove-identity-server-from-abp-no-layers-app</guid>
+      <pubDate>Sun, 30 Jan 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to remove identity server from the No Layer ABP template</description>
+    </item>
+    <item>
+      <title>Introduction to ABP No Layer Template</title>
+      <link>https://blog.antosubash.com/posts/abp-no-layer-template</link>
+      <guid>https://blog.antosubash.com/posts/abp-no-layer-template</guid>
+      <pubDate>Sat, 29 Jan 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will explore the new experimental no layer template from the ABP framework</description>
+    </item>
+    <item>
+      <title>Add tailwindcss to your ABP MVC UI</title>
+      <link>https://blog.antosubash.com/posts/abp-add-tailwindcss-to-dotnet-mvc</link>
+      <guid>https://blog.antosubash.com/posts/abp-add-tailwindcss-to-dotnet-mvc</guid>
+      <pubDate>Tue, 11 Jan 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to add tailwind css to your ABP MVC UI.</description>
+    </item>
+    <item>
+      <title>Generate typescript client from swagger / OpenApi</title>
+      <link>https://blog.antosubash.com/posts/abp-generate-typescript-client-from-swagger-and-openapi</link>
+      <guid>https://blog.antosubash.com/posts/abp-generate-typescript-client-from-swagger-and-openapi</guid>
+      <pubDate>Sat, 08 Jan 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to use how to use the NSwag to generate a typescript client with ABP</description>
+    </item>
+    <item>
+      <title>Add tailwindcss to your ABP Blazor UI</title>
+      <link>https://blog.antosubash.com/posts/abp-add-tailwindcss-to-blazor-ui</link>
+      <guid>https://blog.antosubash.com/posts/abp-add-tailwindcss-to-blazor-ui</guid>
+      <pubDate>Wed, 05 Jan 2022 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to add tailwind css to your ABP Blazor UI.</description>
+    </item>
+    <item>
+      <title>Minimal Api with ABP - Swagger and CRUD - Part 3</title>
+      <link>https://blog.antosubash.com/posts/abp-crud-with-minimal-api-p3</link>
+      <guid>https://blog.antosubash.com/posts/abp-crud-with-minimal-api-p3</guid>
+      <pubDate>Fri, 31 Dec 2021 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to use minimal api with the ABP application to create a CRUD app.</description>
+    </item>
+    <item>
+      <title>Minimal Api with ABP - EF Core - Part 2</title>
+      <link>https://blog.antosubash.com/posts/abp-with-minimal-api-p2</link>
+      <guid>https://blog.antosubash.com/posts/abp-with-minimal-api-p2</guid>
+      <pubDate>Thu, 30 Dec 2021 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to use minimal api with the ABP application and configure EF core.</description>
+    </item>
+    <item>
+      <title>Minimal Api with ABP - Hello World - Part 1</title>
+      <link>https://blog.antosubash.com/posts/abp-with-minimal-api-p1</link>
+      <guid>https://blog.antosubash.com/posts/abp-with-minimal-api-p1</guid>
+      <pubDate>Wed, 29 Dec 2021 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to use minimal api with the ABP application.</description>
+    </item>
+    <item>
+      <title>Add a new Module and convert it to a microservice in ABP</title>
+      <link>https://blog.antosubash.com/posts/abp-module-to-microservice</link>
+      <guid>https://blog.antosubash.com/posts/abp-module-to-microservice</guid>
+      <pubDate>Sat, 27 Nov 2021 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to create a modular abp application and convert it to microservice. We will add a new module to tiered abp app and then use the separate database to store the modules data and then convert the module to a microservice..</description>
+    </item>
+    <item>
+      <title>Create content with code in Orchard Core - Part 3</title>
+      <link>https://blog.antosubash.com/posts/orchard-core-create-content-with-code</link>
+      <guid>https://blog.antosubash.com/posts/orchard-core-create-content-with-code</guid>
+      <pubDate>Sat, 27 Nov 2021 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to create content types using the code in Orchard Core.</description>
+    </item>
+    <item>
+      <title>Authentication using OpenId in React/NextJs App With Orchard Core - Part 2</title>
+      <link>https://blog.antosubash.com/posts/orchard-core-openid-nextjs</link>
+      <guid>https://blog.antosubash.com/posts/orchard-core-openid-nextjs</guid>
+      <pubDate>Thu, 18 Nov 2021 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to do authentication using OpenId for a React App using Orchard Core.</description>
+    </item>
+    <item>
+      <title>Add a new Module to the Tiered ABP App with separate database for the module</title>
+      <link>https://blog.antosubash.com/posts/abp-add-new-module-with-seperate-db</link>
+      <guid>https://blog.antosubash.com/posts/abp-add-new-module-with-seperate-db</guid>
+      <pubDate>Wed, 03 Nov 2021 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to develop a modular with tiered abp application. We will add a new module to tiered abp app and then use the separate database to store the modules data and the identity data.</description>
+    </item>
+    <item>
+      <title>Add a new Module to the ABP App</title>
+      <link>https://blog.antosubash.com/posts/abp-add-new-module</link>
+      <guid>https://blog.antosubash.com/posts/abp-add-new-module</guid>
+      <pubDate>Tue, 02 Nov 2021 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to develop a modular abp application. We will add a new module to default abp app and then use the same database to store the modules data and the identity data.</description>
+    </item>
+    <item>
+      <title>Orchard core. Getting started - Part 1</title>
+      <link>https://blog.antosubash.com/posts/orchard-core-getting-started-p1</link>
+      <guid>https://blog.antosubash.com/posts/orchard-core-getting-started-p1</guid>
+      <pubDate>Mon, 01 Nov 2021 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to get started with the orchard core.</description>
+    </item>
+    <item>
+      <title>Changing theme for your ABP app. Part 10</title>
+      <link>https://blog.antosubash.com/posts/abp-change-theme-p10</link>
+      <guid>https://blog.antosubash.com/posts/abp-change-theme-p10</guid>
+      <pubDate>Tue, 26 Oct 2021 00:00:00 GMT</pubDate>
+      <description>In this post we will explore how to change the theme for your ABP application.</description>
+    </item>
+    <item>
+      <title>Deploy ABP Framework dotnet core tiered app to docker swarm. Part 9</title>
+      <link>https://blog.antosubash.com/posts/abp-deploy-with-docker</link>
+      <guid>https://blog.antosubash.com/posts/abp-deploy-with-docker</guid>
+      <pubDate>Tue, 28 Sep 2021 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to deploy your dotnet core app with docker container.</description>
+    </item>
+    <item>
+      <title>Centralized logging for .net core ABP microservices app using Seq. Part 8</title>
+      <link>https://blog.antosubash.com/posts/abp-central-application-logging-with-seq</link>
+      <guid>https://blog.antosubash.com/posts/abp-central-application-logging-with-seq</guid>
+      <pubDate>Sun, 26 Sep 2021 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to implement a central logging system for your ABP app using Seq.</description>
+    </item>
+    <item>
+      <title>Extend Tenant management and add custom host to your ABP App. Part 7</title>
+      <link>https://blog.antosubash.com/posts/abp-extend-tenant-with-custom-host</link>
+      <guid>https://blog.antosubash.com/posts/abp-extend-tenant-with-custom-host</guid>
+      <pubDate>Sat, 25 Sep 2021 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to extent the tenant entity and Add a custom tenant resolver for your ABP app.</description>
+    </item>
+    <item>
+      <title>Add profile picture to User Entity in ABP app using BlobStore and Minio. Part 6</title>
+      <link>https://blog.antosubash.com/posts/abp-extend-user-entity-with-profile-picture</link>
+      <guid>https://blog.antosubash.com/posts/abp-extend-user-entity-with-profile-picture</guid>
+      <pubDate>Sun, 15 Aug 2021 00:00:00 GMT</pubDate>
+      <description>In this post we will implement the profile picture upload for the ABP app using BlobStore and Minio.</description>
+    </item>
+    <item>
+      <title>dotnet core large file upload with resume using tus and react/nextjs</title>
+      <link>https://blog.antosubash.com/posts/dotnet-and-react-nextjs-large-file-upload-with-tus</link>
+      <guid>https://blog.antosubash.com/posts/dotnet-and-react-nextjs-large-file-upload-with-tus</guid>
+      <pubDate>Thu, 22 Jul 2021 00:00:00 GMT</pubDate>
+      <description>In this post you will see how to upload large files with resume using tus. We will use dotnet core for the backend and nextjs for the frontend</description>
+    </item>
+    <item>
+      <title>dotnet file upload with ABP Blob store and Minio</title>
+      <link>https://blog.antosubash.com/posts/dotnet-file-upload-with-abp</link>
+      <guid>https://blog.antosubash.com/posts/dotnet-file-upload-with-abp</guid>
+      <pubDate>Sat, 10 Jul 2021 00:00:00 GMT</pubDate>
+      <description>In this post we will implement file upload using the ABP blob store and Minio</description>
+    </item>
+    <item>
+      <title>Setting up oh-my-posh and PSReadLine in PowerShell</title>
+      <link>https://blog.antosubash.com/posts/setting-up-powershell-with-oh-my-posh-v3</link>
+      <guid>https://blog.antosubash.com/posts/setting-up-powershell-with-oh-my-posh-v3</guid>
+      <pubDate>Wed, 30 Jun 2021 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to setup the oh-my-posh and PSReadLine with PowerShell.</description>
+    </item>
+    <item>
+      <title>Flutter Authentication using OpenID, ABP and IdentityServer4. Part 5</title>
+      <link>https://blog.antosubash.com/posts/abp-auth-with-flutter-p5</link>
+      <guid>https://blog.antosubash.com/posts/abp-auth-with-flutter-p5</guid>
+      <pubDate>Sat, 29 May 2021 00:00:00 GMT</pubDate>
+      <description>In this post we will implement the OAuth for the Flutter app.</description>
+    </item>
+    <item>
+      <title>Application features with dotnet core and ABP. Part 4</title>
+      <link>https://blog.antosubash.com/posts/abp-feature-p4</link>
+      <guid>https://blog.antosubash.com/posts/abp-feature-p4</guid>
+      <pubDate>Mon, 17 May 2021 00:00:00 GMT</pubDate>
+      <description>ABP Feature system is used to enable, disable or change the behavior of the application features on runtime.</description>
+    </item>
+    <item>
+      <title>Authorization in dotnet core with ABP. Part 3</title>
+      <link>https://blog.antosubash.com/posts/abp-authorization-p3</link>
+      <guid>https://blog.antosubash.com/posts/abp-authorization-p3</guid>
+      <pubDate>Sun, 16 May 2021 00:00:00 GMT</pubDate>
+      <description>In this post we will implement the Authorization in ABP with IdentityServer</description>
+    </item>
+    <item>
+      <title>SPA Authentication using Next.js, ABP and IdentityServer4. Part 2</title>
+      <link>https://blog.antosubash.com/posts/abp-auth-with-nextjs-p2</link>
+      <guid>https://blog.antosubash.com/posts/abp-auth-with-nextjs-p2</guid>
+      <pubDate>Sat, 06 Mar 2021 00:00:00 GMT</pubDate>
+      <description>In this post we will implement the SPA authentication for the Nexjs.js app as the frontend and ABP with IdentityServer as Backend</description>
+    </item>
+    <item>
+      <title>ABP Getting Started With .Net Core and EF Core. ABP Part 1</title>
+      <link>https://blog.antosubash.com/posts/abp-getting-started-p1</link>
+      <guid>https://blog.antosubash.com/posts/abp-getting-started-p1</guid>
+      <pubDate>Fri, 05 Mar 2021 00:00:00 GMT</pubDate>
+      <description>This is an introduction to the ABP Application framework with .Net core and EF core. I have created a Todo App with a CRUD function.</description>
+    </item>
+    <item>
+      <title>Docker swarm setup for localhost</title>
+      <link>https://blog.antosubash.com/posts/docker-swarm-localhost</link>
+      <guid>https://blog.antosubash.com/posts/docker-swarm-localhost</guid>
+      <pubDate>Sat, 26 Dec 2020 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to setup docker swarm for localhost.</description>
+    </item>
+    <item>
+      <title>Set up Wsl with zsh and oh-my-zsh</title>
+      <link>https://blog.antosubash.com/posts/setup-zsh-and-oh-my-zsh</link>
+      <guid>https://blog.antosubash.com/posts/setup-zsh-and-oh-my-zsh</guid>
+      <pubDate>Sat, 12 Dec 2020 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to setup zsh shell in the wsl and use oh-my-zsh.</description>
+    </item>
+    <item>
+      <title>Set up Windows Terminal with PoshGit, oh-my-posh and Cascadia Code PL</title>
+      <link>https://blog.antosubash.com/posts/setup-window-terminal-with-poshgit</link>
+      <guid>https://blog.antosubash.com/posts/setup-window-terminal-with-poshgit</guid>
+      <pubDate>Sat, 05 Dec 2020 00:00:00 GMT</pubDate>
+      <description>In this post we will see how to setup windows terminal with PoshGit and oh-my-posh to make the terminal more productive</description>
+    </item>
+    <item>
+      <title>Css for leaflet div element</title>
+      <link>https://blog.antosubash.com/posts/css-for-leaflet-div-element</link>
+      <guid>https://blog.antosubash.com/posts/css-for-leaflet-div-element</guid>
+      <pubDate>Mon, 21 Sep 2020 00:00:00 GMT</pubDate>
+      <description>If you are like me who struggle with anything CSS. These are some small css that will help you to fill the leaflet map without setting the fixed height</description>
+    </item>
+    <item>
+      <title>Setup docker in Ubuntu 18.04</title>
+      <link>https://blog.antosubash.com/posts/setup-docker-node-hetzner</link>
+      <guid>https://blog.antosubash.com/posts/setup-docker-node-hetzner</guid>
+      <pubDate>Thu, 17 Sep 2020 07:35:07 GMT</pubDate>
+      <description>In this post you will see how to setup docker in Ubuntu 18.04. We will also change the default ssh port and install fail2ban.</description>
+    </item>
+    <item>
+      <title>Traefik setup with docker swarm</title>
+      <link>https://blog.antosubash.com/posts/setup-traefik-docker</link>
+      <guid>https://blog.antosubash.com/posts/setup-traefik-docker</guid>
+      <pubDate>Thu, 17 Sep 2020 05:35:07 GMT</pubDate>
+      <description>In this post you will see how to setup traefik with docker swarm. Along with that we will also setup Portainer and Swarmpit so that it is easy to manage the docker swarm.</description>
+    </item>
+  </channel>
+</rss>
