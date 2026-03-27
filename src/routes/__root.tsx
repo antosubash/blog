@@ -25,7 +25,7 @@ export const Route = createRootRoute({
         content:
           "Full-stack developer passionate about web technologies, microservices, and modern software development.",
       },
-      { name: "theme-color", content: "#231f1b" },
+      { name: "theme-color", content: "#1e2433" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
