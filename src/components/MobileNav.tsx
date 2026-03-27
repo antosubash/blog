@@ -1,140 +1,157 @@
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
+import { createPortal } from "react-dom"
 import Link from "./Link"
 import headerNavLinks from "@/config/headerNavLinks"
 import { Menu, X } from "lucide-react"
 
 const MobileNav = () => {
-  const [navShow, setNavShow] = useState(false)
+  const [open, setOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const panelRef = useRef<HTMLDivElement>(null)
   const toggleRef = useRef<HTMLButtonElement>(null)
 
-  const onToggleNav = () => {
-    setNavShow((status) => {
-      document.body.style.overflow = status ? "auto" : "hidden"
-      return !status
-    })
-  }
+  useEffect(() => setMounted(true), [])
 
-  const closeNav = () => {
-    setNavShow(false)
-    document.body.style.overflow = "auto"
+  const close = useCallback(() => {
+    setOpen(false)
+    document.body.style.overflow = ""
     toggleRef.current?.focus()
-  }
+  }, [])
 
-  // Focus trap inside the panel
+  const toggle = useCallback(() => {
+    setOpen((prev) => {
+      document.body.style.overflow = prev ? "" : "hidden"
+      return !prev
+    })
+  }, [])
+
+  // Focus trap + keyboard handling
   useEffect(() => {
-    if (!navShow || !panelRef.current) return
+    if (!open || !panelRef.current) return
     const panel = panelRef.current
     const focusables = panel.querySelectorAll<HTMLElement>(
-      'a[href], button, input, textarea, select, [tabindex]:not([tabindex="-1"])'
+      'a[href], button, [tabindex]:not([tabindex="-1"])'
     )
     if (focusables.length > 0) focusables[0].focus()
 
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") { closeNav(); return }
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        close()
+        return
+      }
       if (e.key !== "Tab" || focusables.length === 0) return
       const first = focusables[0]
       const last = focusables[focusables.length - 1]
       if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault(); last.focus()
+        e.preventDefault()
+        last.focus()
       } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault(); first.focus()
+        e.preventDefault()
+        first.focus()
       }
     }
-    document.addEventListener("keydown", handleKeyDown)
-    return () => document.removeEventListener("keydown", handleKeyDown)
-  }, [navShow])
+    document.addEventListener("keydown", onKeyDown)
+    return () => document.removeEventListener("keydown", onKeyDown)
+  }, [open, close])
 
+  // Close on resize to desktop
   useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 768 && navShow) closeNav()
+    const onResize = () => {
+      if (window.innerWidth >= 768 && open) close()
     }
-    window.addEventListener("resize", handleResize)
-    return () => window.removeEventListener("resize", handleResize)
-  }, [navShow])
+    window.addEventListener("resize", onResize)
+    return () => window.removeEventListener("resize", onResize)
+  }, [open, close])
 
+  // Cleanup on unmount
   useEffect(() => {
-    return () => { document.body.style.overflow = "auto" }
+    return () => {
+      document.body.style.overflow = ""
+    }
   }, [])
+
+  const navLinks = headerNavLinks.filter((link) => link.href !== "/")
+
+  const overlay = (
+    <div
+      ref={panelRef}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Navigation menu"
+      className={`fixed inset-0 z-[100] md:hidden transition-opacity duration-200 ${
+        open ? "opacity-100" : "pointer-events-none opacity-0"
+      }`}
+    >
+      {/* Full-screen backdrop */}
+      <div
+        className="absolute inset-0 bg-background/95 backdrop-blur-lg"
+        onClick={close}
+        aria-hidden="true"
+      />
+
+      {/* Content */}
+      <div className="relative flex h-dvh flex-col">
+        {/* Close button */}
+        <div className="flex justify-end px-5 py-4">
+          <button
+            aria-label="Close menu"
+            onClick={close}
+            className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-muted-foreground transition-colors duration-150 hover:text-foreground"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        {/* Nav links — centered */}
+        <nav className="flex flex-1 flex-col items-start justify-center px-10">
+          <div className="space-y-2">
+            {navLinks.map((link, i) => {
+              const cls =
+                "block text-2xl font-display font-semibold tracking-tight text-foreground/80 transition-colors duration-150 hover:text-accent py-2"
+
+              return link.track ? (
+                <a
+                  key={link.title}
+                  href={link.href}
+                  className={cls}
+                  style={{ animationDelay: `${i * 50}ms` }}
+                  data-umami-event={`mobile_header_${link.title.toLowerCase()}`}
+                  onClick={close}
+                >
+                  {link.title}
+                </a>
+              ) : (
+                <Link
+                  key={link.title}
+                  href={link.href}
+                  className={cls}
+                  style={{ animationDelay: `${i * 50}ms` }}
+                  onClick={close}
+                >
+                  {link.title}
+                </Link>
+              )
+            })}
+          </div>
+        </nav>
+      </div>
+    </div>
+  )
 
   return (
     <>
       <button
         ref={toggleRef}
         aria-label="Open menu"
-        aria-expanded={navShow}
-        onClick={onToggleNav}
-        className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-muted-foreground transition-colors duration-150 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 md:hidden"
+        aria-expanded={open}
+        onClick={toggle}
+        className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-muted-foreground transition-colors duration-150 hover:text-accent md:hidden"
       >
         <Menu className="h-5 w-5" />
       </button>
 
-      {/* Backdrop */}
-      <div
-        className={`fixed inset-0 z-50 bg-black/40 transition-opacity duration-200 md:hidden ${
-          navShow ? "opacity-100" : "pointer-events-none opacity-0"
-        }`}
-        onClick={closeNav}
-        aria-hidden="true"
-      />
-
-      {/* Panel */}
-      <div
-        ref={panelRef}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Navigation menu"
-        className={`fixed right-0 top-0 z-50 flex h-full w-72 max-w-[85vw] flex-col bg-background shadow-2xl transition-transform duration-200 ease-out md:hidden ${
-          navShow ? "translate-x-0" : "translate-x-full"
-        }`}
-      >
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-border px-6 py-5">
-          <span className="text-lg font-semibold text-foreground">
-            Menu
-          </span>
-          <button
-            aria-label="Close Menu"
-            onClick={closeNav}
-            className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-muted-foreground transition-colors duration-150 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
-
-        {/* Navigation */}
-        <nav className="flex-1 overflow-y-auto px-6 py-6">
-          <div className="space-y-1">
-            {headerNavLinks
-              .filter((link) => link.href !== "/")
-              .map((link) => {
-                const cls =
-                  "block rounded-lg px-3 py-2.5 text-base font-medium text-muted-foreground transition-colors duration-150 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70"
-
-                return link.track ? (
-                  <a
-                    key={link.title}
-                    href={link.href}
-                    className={cls}
-                    data-umami-event={`mobile_header_${link.title.toLowerCase()}`}
-                    onClick={closeNav}
-                  >
-                    {link.title}
-                  </a>
-                ) : (
-                  <Link
-                    key={link.title}
-                    href={link.href}
-                    className={cls}
-                    onClick={closeNav}
-                  >
-                    {link.title}
-                  </Link>
-                )
-              })}
-          </div>
-        </nav>
-      </div>
+      {/* Portal overlay to body — avoids backdrop-blur containing block */}
+      {mounted && createPortal(overlay, document.body)}
     </>
   )
 }

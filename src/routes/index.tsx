@@ -23,38 +23,43 @@ function HomePage() {
   const recentPosts = sortedPosts.slice(0, MAX_DISPLAY)
 
   return (
-    <div className="mx-auto max-w-7xl px-4 sm:px-6">
-      {/* Personal intro */}
-      <div className="pb-8 pt-12 sm:pt-16">
-        <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-          Latest Posts
+    <div className="mx-auto max-w-4xl px-5 sm:px-6">
+      {/* Personal intro block */}
+      <div className="pb-10 pt-14 sm:pb-12 sm:pt-20">
+        <h1 className="font-display text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
+          Hey, I'm Anto<span className="text-accent">.</span>
         </h1>
-        <p className="mt-3 max-w-xl text-lg text-muted-foreground">
-          Software engineer sharing what I learn — from cloud infrastructure to
-          frontend frameworks and everything in between.
+        <p className="mt-4 max-w-lg text-base leading-relaxed text-muted-foreground sm:text-lg">
+          Full-stack engineer writing about cloud infrastructure, frontend
+          frameworks, .NET, and the things I learn along the way.
         </p>
       </div>
 
-      {/* Post list */}
+      {/* Recent posts */}
       {recentPosts.length > 0 && (
-        <div className="divide-y divide-border">
-          {recentPosts.map((post) => (
-            <PostItem
-              key={post.slug}
-              slug={post.slug}
-              date={new Date(post.date).toISOString()}
-              title={post.title}
-              summary={post.excerpt || ""}
-              tags={post.tags}
-              series={post.series ?? undefined}
-              part={post.part ?? undefined}
-            />
-          ))}
+        <div>
+          <h2 className="mb-6 text-xs font-semibold tracking-widest uppercase text-muted-foreground">
+            Recent Writing
+          </h2>
+          <div className="space-y-1">
+            {recentPosts.map((post) => (
+              <PostItem
+                key={post.slug}
+                slug={post.slug}
+                date={new Date(post.date).toISOString()}
+                title={post.title}
+                summary={post.excerpt || ""}
+                tags={post.tags}
+                series={post.series ?? undefined}
+                part={post.part ?? undefined}
+              />
+            ))}
+          </div>
         </div>
       )}
 
       {sortedPosts.length > MAX_DISPLAY && (
-        <div className="py-8">
+        <div className="py-10">
           <Link
             to="/posts"
             className="inline-flex items-center gap-2 text-sm font-medium text-accent transition-colors duration-150 hover:text-accent-hover"

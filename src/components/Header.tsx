@@ -22,7 +22,7 @@ const Header = () => {
         scrolled ? "bg-background/90 backdrop-blur-md" : "bg-transparent"
       }`}
     >
-      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+      <div className="mx-auto max-w-4xl px-5 sm:px-6">
         <div className="flex items-center justify-between py-4 sm:py-5">
           <Link href="/" aria-label={siteMetadata.headerTitle}>
             <span className="text-lg font-semibold text-foreground">

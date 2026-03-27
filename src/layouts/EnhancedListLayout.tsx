@@ -80,7 +80,7 @@ export default function EnhancedListLayout({
   const hasActiveFilters = searchQuery || selectedTags.length > 0
 
   return (
-    <div className="mx-auto max-w-7xl px-4 sm:px-6">
+    <div className="mx-auto max-w-4xl px-5 sm:px-6">
       <div className="pb-8 pt-12 sm:pt-16">
         <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
           {title}
