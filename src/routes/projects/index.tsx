@@ -1,6 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router"
 import projectsData from "@/config/projectsData"
 import { genPageMetadata } from "@/lib/seo"
+import { createFileRoute } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/projects/")({
   component: ProjectsPage,

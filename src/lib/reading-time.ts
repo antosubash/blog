@@ -16,29 +16,32 @@ export function getReadingTimeDisplay(readingTime: {
       icon: "⚡",
       color: "text-green-600 dark:text-green-400",
     }
-  } else if (minutes <= 3) {
+  }
+  if (minutes <= 3) {
     return {
       text: `${minutes} min read`,
       icon: "📖",
       color: "text-blue-600 dark:text-blue-400",
     }
-  } else if (minutes <= 7) {
+  }
+  if (minutes <= 7) {
     return {
       text: `${minutes} min read`,
       icon: "📚",
       color: "text-teal-600 dark:text-teal-400",
     }
-  } else if (minutes <= 15) {
+  }
+  if (minutes <= 15) {
     return {
       text: `${minutes} min read`,
       icon: "📖",
       color: "text-orange-600 dark:text-orange-400",
     }
-  } else {
-    return {
-      text: `${minutes} min read`,
-      icon: "📚",
-      color: "text-red-600 dark:text-red-400",
-    }
+  }
+
+  return {
+    text: `${minutes} min read`,
+    icon: "📚",
+    color: "text-red-600 dark:text-red-400",
   }
 }

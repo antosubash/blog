@@ -6,12 +6,12 @@ interface CustomLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
 }
 
 const CustomLink = ({ href, ...rest }: CustomLinkProps) => {
-  const isInternalLink = href && href.startsWith("/")
-  const isAnchorLink = href && href.startsWith("#")
+  const isInternalLink = href?.startsWith("/")
+  const isAnchorLink = href?.startsWith("#")
   const isStaticAsset = href && /\.\w+$/.test(href)
 
   if (isInternalLink && !isStaticAsset) {
-    return <TanStackLink to={href} {...(rest as any)} />
+    return <TanStackLink to={href} {...rest} />
   }
 
   if (isAnchorLink) {

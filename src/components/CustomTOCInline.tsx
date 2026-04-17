@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState } from "react"
 
 interface TOCItem {
   value: string
@@ -12,7 +12,9 @@ interface TOCInlineProps {
 
 const CustomTOCInline = ({ toc }: TOCInlineProps) => {
   const [isCollapsed, setIsCollapsed] = useState(false)
-  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set())
+  const [expandedSections, setExpandedSections] = useState<Set<string>>(
+    new Set()
+  )
 
   if (!toc || toc.length === 0) {
     return null
@@ -61,6 +63,7 @@ const CustomTOCInline = ({ toc }: TOCInlineProps) => {
         <div className="flex items-center gap-3">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent-muted/50">
             <svg
+              aria-hidden="true"
               className="h-4 w-4 text-accent"
               fill="none"
               stroke="currentColor"
@@ -79,18 +82,30 @@ const CustomTOCInline = ({ toc }: TOCInlineProps) => {
           </h2>
         </div>
         <button
+          type="button"
           onClick={toggleCollapse}
+          aria-label={
+            isCollapsed
+              ? "Expand table of contents"
+              : "Collapse table of contents"
+          }
           className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface hover:bg-surface"
         >
           <svg
+            aria-hidden="true"
             className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${
-              isCollapsed ? 'rotate-180' : ''
+              isCollapsed ? "rotate-180" : ""
             }`}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 9l-7 7-7-7"
+            />
           </svg>
         </button>
       </div>
@@ -102,17 +117,24 @@ const CustomTOCInline = ({ toc }: TOCInlineProps) => {
               <li key={section.url || `toc-section-${index}`}>
                 <div className="flex items-center">
                   <button
+                    type="button"
                     onClick={() => toggleSection(section.url)}
+                    aria-label={
+                      expandedSections.has(section.url)
+                        ? `Collapse section ${section.value}`
+                        : `Expand section ${section.value}`
+                    }
                     className={`mr-2 flex h-5 w-5 items-center justify-center rounded transition-colors ${
                       section.children.length > 0
-                        ? 'text-muted-foreground hover:text-foreground'
-                        : 'invisible'
+                        ? "text-muted-foreground hover:text-foreground"
+                        : "invisible"
                     }`}
                     disabled={section.children.length === 0}
                   >
                     <svg
+                      aria-hidden="true"
                       className={`h-3 w-3 transition-transform duration-200 ${
-                        expandedSections.has(section.url) ? 'rotate-90' : ''
+                        expandedSections.has(section.url) ? "rotate-90" : ""
                       }`}
                       fill="none"
                       stroke="currentColor"
@@ -134,27 +156,30 @@ const CustomTOCInline = ({ toc }: TOCInlineProps) => {
                   </a>
                 </div>
 
-                {section.children.length > 0 && expandedSections.has(section.url) && (
-                  <ul className="ml-6 mt-1 space-y-0.5 border-l-2 border-border pl-4">
-                    {section.children.map((child, childIndex) => (
-                      <li key={child.url || `toc-child-${index}-${childIndex}`}>
-                        <a
-                          href={child.url}
-                          className={`block rounded-md px-3 py-1.5 text-sm transition-all duration-200 hover:bg-accent-muted/30 hover:text-accent ${
-                            child.depth === 3
-                              ? 'text-muted-foreground'
-                              : 'ml-3 text-muted-foreground'
-                          }`}
-                          style={{
-                            paddingLeft: `${(child.depth - 2) * 16 + 12}px`,
-                          }}
+                {section.children.length > 0 &&
+                  expandedSections.has(section.url) && (
+                    <ul className="ml-6 mt-1 space-y-0.5 border-l-2 border-border pl-4">
+                      {section.children.map((child, childIndex) => (
+                        <li
+                          key={child.url || `toc-child-${index}-${childIndex}`}
                         >
-                          {child.value}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                )}
+                          <a
+                            href={child.url}
+                            className={`block rounded-md px-3 py-1.5 text-sm transition-all duration-200 hover:bg-accent-muted/30 hover:text-accent ${
+                              child.depth === 3
+                                ? "text-muted-foreground"
+                                : "ml-3 text-muted-foreground"
+                            }`}
+                            style={{
+                              paddingLeft: `${(child.depth - 2) * 16 + 12}px`,
+                            }}
+                          >
+                            {child.value}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
               </li>
             ))}
           </ul>

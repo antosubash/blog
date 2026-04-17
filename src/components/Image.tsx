@@ -8,18 +8,33 @@ interface ImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   fill?: boolean
 }
 
-const Image = ({ fill, className, style, ...rest }: ImageProps) => {
+const Image = ({ fill, className, style, alt, ...imgProps }: ImageProps) => {
   if (fill) {
     return (
       <img
         loading="lazy"
         className={className}
-        style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", ...style }}
-        {...rest}
+        style={{
+          objectFit: "cover",
+          width: "100%",
+          height: "100%",
+          position: "absolute",
+          ...style,
+        }}
+        {...imgProps}
+        alt={alt}
       />
     )
   }
-  return <img loading="lazy" className={className} style={style} {...rest} />
+  return (
+    <img
+      loading="lazy"
+      className={className}
+      style={style}
+      {...imgProps}
+      alt={alt}
+    />
+  )
 }
 
 export default Image

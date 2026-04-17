@@ -1,9 +1,24 @@
+import Tag from "@/components/Tag"
 import { Link } from "@tanstack/react-router"
-import { format, parseISO } from 'date-fns'
-import { Calendar, BookOpen, ArrowRight, TrendingUp } from 'lucide-react'
-import Tag from '@/components/Tag'
+import { format, parseISO } from "date-fns"
+import { ArrowRight, BookOpen, Calendar, TrendingUp } from "lucide-react"
 
-const RelatedPost = ({ posts }: { posts: any[] }) => {
+interface RelatedPostItem {
+  slug: string
+  date: string
+  title: string
+  excerpt?: string
+  tags: string[]
+  series?: string | null
+  part?: number | null
+  readingTime?:
+    | string
+    | {
+        text: string
+      }
+}
+
+const RelatedPost = ({ posts }: { posts: RelatedPostItem[] }) => {
   if (posts.length === 0) return null
 
   return (
@@ -30,13 +45,15 @@ const RelatedPost = ({ posts }: { posts: any[] }) => {
                   <div className="flex items-center space-x-2 text-xs text-muted-foreground">
                     <div className="flex items-center space-x-1">
                       <Calendar className="h-3 w-3" />
-                      <time dateTime={post.date}>{format(parseISO(post.date), 'MMM d, yyyy')}</time>
+                      <time dateTime={post.date}>
+                        {format(parseISO(post.date), "MMM d, yyyy")}
+                      </time>
                     </div>
                     {post.readingTime && (
                       <div className="flex items-center space-x-1">
                         <BookOpen className="h-3 w-3" />
                         <span>
-                          {typeof post.readingTime === 'string'
+                          {typeof post.readingTime === "string"
                             ? post.readingTime
                             : post.readingTime.text}
                         </span>

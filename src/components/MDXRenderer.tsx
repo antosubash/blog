@@ -1,11 +1,18 @@
 import { MDXContent } from "@content-collections/mdx/react"
+import { useState } from "react"
 import CustomTOCInline from "./CustomTOCInline"
-import { useState, useEffect } from "react"
+import type { MdxComponents } from "./MDXComponents"
+
+interface TocItem {
+  value: string
+  url: string
+  depth: number
+}
 
 interface MDXRendererProps {
   code: string
-  components?: Record<string, React.ComponentType<any>>
-  toc?: any
+  components?: Partial<MdxComponents>
+  toc?: TocItem[]
   slug?: string
   videoId?: string
   series?: string
@@ -18,12 +25,7 @@ export default function MDXRenderer({
   videoId,
   series,
 }: MDXRendererProps) {
-  const [mounted, setMounted] = useState(false)
   const [error] = useState<string | null>(null)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   if (error) {
     return (
@@ -32,16 +34,6 @@ export default function MDXRenderer({
           Error rendering content
         </h3>
         <p className="text-red-700 dark:text-red-300">{error}</p>
-      </div>
-    )
-  }
-
-  if (!mounted) {
-    return (
-      <div className="animate-pulse space-y-4">
-        <div className="h-4 w-3/4 rounded bg-surface"></div>
-        <div className="h-4 w-1/2 rounded bg-surface"></div>
-        <div className="h-4 w-5/6 rounded bg-surface"></div>
       </div>
     )
   }

@@ -1,11 +1,11 @@
-import siteMetadata from "@/config/siteMetadata"
 import headerNavLinks from "@/config/headerNavLinks"
+import siteMetadata from "@/config/siteMetadata"
+import { useEffect, useState } from "react"
+import FeedButton from "./FeedButton"
 import Link from "./Link"
 import MobileNav from "./MobileNav"
-import ThemeSwitch from "./ThemeSwitch"
 import SearchButton from "./SearchButton"
-import FeedButton from "./FeedButton"
-import { useEffect, useState } from "react"
+import ThemeSwitch from "./ThemeSwitch"
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false)

@@ -1,6 +1,6 @@
 import siteMetadata from "@/config/siteMetadata"
-import { useEffect, useState } from "react"
 import { ArrowUp, MessageCircle } from "lucide-react"
+import { useEffect, useState } from "react"
 
 const ScrollTopAndComment = () => {
   const [show, setShow] = useState(false)
@@ -33,6 +33,7 @@ const ScrollTopAndComment = () => {
     >
       {siteMetadata.comments?.provider && (
         <button
+          type="button"
           aria-label="Scroll To Comment"
           onClick={handleScrollToComment}
           className={buttonClass}
@@ -41,6 +42,7 @@ const ScrollTopAndComment = () => {
         </button>
       )}
       <button
+        type="button"
         aria-label="Scroll To Top"
         onClick={handleScrollTop}
         className={buttonClass}

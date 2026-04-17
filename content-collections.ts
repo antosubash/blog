@@ -1,17 +1,17 @@
 import { defineCollection, defineConfig } from "@content-collections/core"
 import { compileMDX } from "@content-collections/mdx"
-import { z } from "zod"
 import readingTime from "reading-time"
-import remarkGfm from "remark-gfm"
-import remarkMath from "remark-math"
-import rehypeSlug from "rehype-slug"
 import rehypeAutolinkHeadings from "rehype-autolink-headings"
 import rehypeKatex from "rehype-katex"
-import rehypePrismPlus from "rehype-prism-plus"
 import rehypePresetMinify from "rehype-preset-minify"
+import rehypePrismPlus from "rehype-prism-plus"
+import rehypeSlug from "rehype-slug"
+import remarkGfm from "remark-gfm"
+import remarkMath from "remark-math"
+import { z } from "zod"
 
 const siteUrl = "https://blog.antosubash.com"
-const socialBanner = "/static/images/twitter-card.png"
+const socialBanner = "/static/images/logo.png"
 
 const posts = defineCollection({
   name: "posts",
@@ -20,7 +20,14 @@ const posts = defineCollection({
   schema: z.object({
     title: z.string(),
     date: z.coerce.date(),
-    tags: z.array(z.string().nullable().transform(v => v ?? "")).default([]),
+    tags: z
+      .array(
+        z
+          .string()
+          .nullable()
+          .transform((v) => v ?? "")
+      )
+      .default([]),
     lastmod: z.coerce.date().optional(),
     draft: z.boolean().optional(),
     isDraft: z.boolean().optional(),
@@ -41,8 +48,7 @@ const posts = defineCollection({
       rehypePlugins: [
         rehypeSlug,
         rehypeAutolinkHeadings,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        rehypeKatex as any,
+        rehypeKatex,
         [rehypePrismPlus, { defaultLanguage: "js", ignoreMissing: true }],
         rehypePresetMinify,
       ],
@@ -72,10 +78,15 @@ const posts = defineCollection({
       bibliography: doc.bibliography ?? null,
       canonicalUrl: doc.canonicalUrl ?? null,
       mdx,
-      readingTime: { text: rt.text, minutes: rt.minutes, time: rt.time, words: rt.words },
+      readingTime: {
+        text: rt.text,
+        minutes: rt.minutes,
+        time: rt.time,
+        words: rt.words,
+      },
       slug,
       path,
-      filePath: doc._meta.filePath,
+      filePath: `content/posts/${doc._meta.filePath}`,
       postUrl: `/posts/${slug}`,
       toc,
       structuredData: {
@@ -85,7 +96,7 @@ const posts = defineCollection({
         datePublished: doc.date.toISOString(),
         dateModified: (doc.lastmod || doc.date).toISOString(),
         description: doc.excerpt ?? "",
-        image: doc.images ? doc.images[0] : socialBanner,
+        image: doc.images?.[0] ?? socialBanner,
         url: `${siteUrl}/posts/${slug}`,
         fileName: slug,
       },
@@ -126,7 +137,7 @@ const authors = defineCollection({
       mdx,
       slug,
       path: `authors/${slug}`,
-      filePath: doc._meta.filePath,
+      filePath: `content/authors/${doc._meta.filePath}`,
     }
   },
 })
@@ -136,9 +147,9 @@ function extractTocHeadings(
 ): Array<{ value: string; url: string; depth: number }> {
   const headingRegex = /^(#{2,4})\s+(.+)$/gm
   const headings: Array<{ value: string; url: string; depth: number }> = []
-  let match
+  let match: RegExpExecArray | null = headingRegex.exec(content)
 
-  while ((match = headingRegex.exec(content)) !== null) {
+  while (match !== null) {
     const depth = match[1].length
     const value = match[2].trim()
     const url = `#${value
@@ -146,6 +157,7 @@ function extractTocHeadings(
       .replace(/[^\w\s-]/g, "")
       .replace(/\s+/g, "-")}`
     headings.push({ value, url, depth })
+    match = headingRegex.exec(content)
   }
 
   return headings

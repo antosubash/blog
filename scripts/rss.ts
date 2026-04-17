@@ -27,7 +27,11 @@ function escapeXml(str: string): string {
     .replace(/'/g, "&apos;")
 }
 
-function generateRssFeed(posts: PostData[], feedTitle: string, feedPath: string) {
+function generateRssFeed(
+  posts: PostData[],
+  feedTitle: string,
+  feedPath: string
+) {
   const items = posts
     .map(
       (post) => `    <item>
@@ -75,12 +79,19 @@ async function main() {
     for (const tag of post.tags.filter(Boolean)) {
       const slug = tag.toLowerCase().replace(/\s+/g, "-")
       if (!tagMap.has(slug)) tagMap.set(slug, [])
-      tagMap.get(slug)!.push(post)
+      const tagPosts = tagMap.get(slug)
+      if (tagPosts) {
+        tagPosts.push(post)
+      }
     }
   }
 
   for (const [tagSlug, tagPosts] of tagMap) {
-    generateRssFeed(tagPosts, `${siteTitle} - ${tagSlug}`, `tags/${tagSlug}/feed.xml`)
+    generateRssFeed(
+      tagPosts,
+      `${siteTitle} - ${tagSlug}`,
+      `tags/${tagSlug}/feed.xml`
+    )
   }
 }
 

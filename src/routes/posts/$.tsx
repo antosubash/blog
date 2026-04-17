@@ -1,18 +1,32 @@
-import { createFileRoute } from "@tanstack/react-router"
-import { allPosts, allAuthors } from "content-collections"
-import PostSimple from "@/layouts/PostSimple"
-import PostLayout from "@/layouts/PostLayout"
-import PostBanner from "@/layouts/PostBanner"
-import MDXRenderer from "@/components/MDXRenderer"
 import { components } from "@/components/MDXComponents"
+import MDXRenderer from "@/components/MDXRenderer"
 import PostEnhancements from "@/components/PostEnhancements"
-import RelatedPost from "@/components/related-posts"
-import { getRelatedPosts } from "@/lib/tag-utils"
-import siteMetadata from "@/config/siteMetadata"
 import SectionContainer from "@/components/SectionContainer"
+import RelatedPost from "@/components/related-posts"
+import siteMetadata from "@/config/siteMetadata"
+import PostBanner from "@/layouts/PostBanner"
+import PostLayout from "@/layouts/PostLayout"
+import PostSimple from "@/layouts/PostSimple"
+import { getRelatedPosts } from "@/lib/tag-utils"
+import { createFileRoute } from "@tanstack/react-router"
+import {
+  type Author,
+  type Post,
+  allAuthors,
+  allPosts,
+} from "content-collections"
+import type { ComponentType, ReactNode } from "react"
 
 const defaultLayout = "PostSimple"
-const layouts: Record<string, any> = {
+type LayoutComponent = ComponentType<{
+  content: Post
+  authorDetails?: typeof allAuthors
+  next?: { postUrl: string; title: string }
+  prev?: { postUrl: string; title: string }
+  children: ReactNode
+}>
+
+const layouts: Record<string, LayoutComponent> = {
   PostSimple,
   PostLayout,
   PostBanner,
@@ -64,7 +78,9 @@ function PostPage() {
     return (
       <SectionContainer>
         <div className="py-20 text-center">
-          <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">Post Not Found</h1>
+          <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+            Post Not Found
+          </h1>
           <p className="mt-4 text-muted-foreground">
             The post you're looking for doesn't exist.
           </p>
@@ -82,9 +98,24 @@ function PostPage() {
   const next = sortedPosts[postIndex - 1]
 
   const authorList = post.authors || ["default"]
+  const fallbackAuthor: Author = {
+    name: "Default Author",
+    avatar: null,
+    occupation: null,
+    company: null,
+    email: null,
+    twitter: null,
+    linkedin: null,
+    github: null,
+    layout: null,
+    mdx: "",
+    slug: "default",
+    path: "authors/default",
+    filePath: "content/authors/default.mdx",
+  }
   const authorDetails = authorList.map((author: string) => {
-    const authorResult = allAuthors.find((a: { slug: string }) => a.slug === author)
-    return authorResult || { name: "Default Author", slug: "default" }
+    const authorResult = allAuthors.find((a) => a.slug === author)
+    return authorResult || fallbackAuthor
   })
 
   const Layout = layouts[post.layout || defaultLayout]
@@ -114,10 +145,7 @@ function PostPage() {
   return (
     <>
       {/* JSON-LD structured data for SEO - content is from our own post metadata, not user input */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
 
       <Layout
         content={mainContent}

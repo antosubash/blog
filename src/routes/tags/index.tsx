@@ -1,13 +1,14 @@
-import { createFileRoute } from "@tanstack/react-router"
-import { slug } from "github-slugger"
 import Link from "@/components/Link"
 import Tag from "@/components/Tag"
-import { getTagsWithCount } from "@/lib/tag-utils"
 import { genPageMetadata } from "@/lib/seo"
+import { getTagsWithCount } from "@/lib/tag-utils"
+import { createFileRoute } from "@tanstack/react-router"
+import { slug } from "github-slugger"
 
 export const Route = createFileRoute("/tags/")({
   component: TagsPage,
-  head: () => genPageMetadata({ title: "Tags", description: "Things I blog about" }),
+  head: () =>
+    genPageMetadata({ title: "Tags", description: "Things I blog about" }),
 })
 
 function TagsPage() {

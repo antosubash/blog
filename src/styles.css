@@ -12,50 +12,50 @@
   --foreground: oklch(0.93 0.008 220);
   --muted-foreground: oklch(0.58 0.015 240);
   --border: oklch(0.26 0.012 250);
-  --accent: oklch(0.70 0.12 175);
+  --accent: oklch(0.7 0.12 175);
   --accent-hover: oklch(0.78 0.13 175);
   --accent-muted: oklch(0.25 0.04 175);
-  --ring: oklch(0.70 0.12 175);
+  --ring: oklch(0.7 0.12 175);
   --input: oklch(0.26 0.012 250);
   --card: oklch(0.19 0.012 250);
   --card-foreground: oklch(0.93 0.008 220);
   --popover: oklch(0.19 0.012 250);
   --popover-foreground: oklch(0.93 0.008 220);
-  --primary: oklch(0.70 0.12 175);
+  --primary: oklch(0.7 0.12 175);
   --primary-foreground: oklch(0.16 0.01 250);
   --secondary: oklch(0.26 0.012 250);
   --secondary-foreground: oklch(0.93 0.008 220);
   --muted: oklch(0.22 0.01 250);
-  --destructive: oklch(0.60 0.20 25);
+  --destructive: oklch(0.6 0.2 25);
 }
 
 :root:not(.dark) {
   --background: oklch(0.98 0.004 240);
   --surface: oklch(1.0 0 0);
-  --foreground: oklch(0.20 0.015 250);
+  --foreground: oklch(0.2 0.015 250);
   --muted-foreground: oklch(0.48 0.015 240);
-  --border: oklch(0.90 0.008 240);
+  --border: oklch(0.9 0.008 240);
   --accent: oklch(0.45 0.12 175);
   --accent-hover: oklch(0.38 0.14 175);
   --accent-muted: oklch(0.94 0.03 175);
   --ring: oklch(0.45 0.12 175);
-  --input: oklch(0.90 0.008 240);
+  --input: oklch(0.9 0.008 240);
   --card: oklch(1.0 0 0);
-  --card-foreground: oklch(0.20 0.015 250);
+  --card-foreground: oklch(0.2 0.015 250);
   --popover: oklch(1.0 0 0);
-  --popover-foreground: oklch(0.20 0.015 250);
+  --popover-foreground: oklch(0.2 0.015 250);
   --primary: oklch(0.45 0.12 175);
   --primary-foreground: oklch(0.98 0.004 240);
   --secondary: oklch(0.94 0.006 240);
-  --secondary-foreground: oklch(0.20 0.015 250);
+  --secondary-foreground: oklch(0.2 0.015 250);
   --muted: oklch(0.94 0.006 240);
   --destructive: oklch(0.55 0.22 25);
 }
 
 @theme inline {
-  --font-sans: 'Geist Variable', 'Geist', system-ui, sans-serif;
-  --font-display: 'Fraunces Variable', 'Fraunces', Georgia, serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+  --font-sans: "Geist Variable", "Geist", system-ui, sans-serif;
+  --font-display: "Fraunces Variable", "Fraunces", Georgia, serif;
+  --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
 
   --color-surface: var(--surface);
   --color-accent: var(--accent);
@@ -100,7 +100,7 @@
     @apply bg-background text-foreground antialiased;
   }
   ::selection {
-    background: oklch(0.70 0.12 175 / 0.25);
+    background: oklch(0.7 0.12 175 / 0.25);
   }
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-accent;
@@ -133,7 +133,7 @@
     letter-spacing: -0.02em;
   }
   .prose :where(a):not(:where([class~="not-prose"] *)) {
-    text-decoration-color: oklch(0.70 0.12 175 / 0.35);
+    text-decoration-color: oklch(0.7 0.12 175 / 0.35);
     text-underline-offset: 3px;
     transition: text-decoration-color 150ms ease-out;
   }
@@ -145,22 +145,22 @@
 /* Syntax highlighting — Tide theme */
 .dark {
   --code-comment: oklch(0.48 0.01 240);
-  --code-keyword: oklch(0.75 0.10 280);
-  --code-string: oklch(0.72 0.10 160);
-  --code-function: oklch(0.78 0.10 200);
-  --code-number: oklch(0.75 0.10 80);
-  --code-operator: oklch(0.70 0.12 175);
+  --code-keyword: oklch(0.75 0.1 280);
+  --code-string: oklch(0.72 0.1 160);
+  --code-function: oklch(0.78 0.1 200);
+  --code-number: oklch(0.75 0.1 80);
+  --code-operator: oklch(0.7 0.12 175);
   --code-class: oklch(0.78 0.08 100);
   --code-variable: oklch(0.82 0.06 230);
   --code-punctuation: oklch(0.55 0.01 240);
-  --code-attr-name: oklch(0.75 0.10 200);
-  --code-attr-value: oklch(0.72 0.10 160);
-  --code-tag: oklch(0.75 0.10 280);
-  --code-inserted: oklch(0.72 0.10 160);
+  --code-attr-name: oklch(0.75 0.1 200);
+  --code-attr-value: oklch(0.72 0.1 160);
+  --code-tag: oklch(0.75 0.1 280);
+  --code-inserted: oklch(0.72 0.1 160);
   --code-deleted: oklch(0.65 0.15 25);
-  --code-changed: oklch(0.75 0.10 200);
+  --code-changed: oklch(0.75 0.1 200);
   --code-line-highlight: oklch(0.22 0.012 250);
-  --code-line-number: oklch(0.40 0.01 240);
+  --code-line-number: oklch(0.4 0.01 240);
 }
 :root:not(.dark) {
   --code-comment: oklch(0.52 0.01 240);
@@ -169,14 +169,14 @@
   --code-function: oklch(0.42 0.12 200);
   --code-number: oklch(0.48 0.14 80);
   --code-operator: oklch(0.45 0.12 175);
-  --code-class: oklch(0.45 0.10 100);
+  --code-class: oklch(0.45 0.1 100);
   --code-variable: oklch(0.42 0.08 230);
   --code-punctuation: oklch(0.48 0.01 240);
   --code-attr-name: oklch(0.42 0.12 200);
   --code-attr-value: oklch(0.42 0.12 160);
   --code-tag: oklch(0.45 0.14 280);
   --code-inserted: oklch(0.42 0.12 160);
-  --code-deleted: oklch(0.50 0.18 25);
+  --code-deleted: oklch(0.5 0.18 25);
   --code-changed: oklch(0.42 0.12 200);
   --code-line-highlight: oklch(0.95 0.008 240);
   --code-line-number: oklch(0.62 0.01 240);
@@ -186,56 +186,108 @@
 .token.comment,
 .token.prolog,
 .token.doctype,
-.token.cdata { color: var(--code-comment); font-style: italic; }
+.token.cdata {
+  color: var(--code-comment);
+  font-style: italic;
+}
 
 .token.keyword,
 .token.control,
 .token.directive,
-.token.important { color: var(--code-keyword); }
+.token.important {
+  color: var(--code-keyword);
+}
 
 .token.string,
 .token.char,
 .token.template-string,
-.token.url { color: var(--code-string); }
+.token.url {
+  color: var(--code-string);
+}
 
-.token.function { color: var(--code-function); }
+.token.function {
+  color: var(--code-function);
+}
 
 .token.number,
 .token.boolean,
 .token.constant,
-.token.symbol { color: var(--code-number); }
+.token.symbol {
+  color: var(--code-number);
+}
 
 .token.operator,
-.token.arrow { color: var(--code-operator); }
+.token.arrow {
+  color: var(--code-operator);
+}
 
 .token.class-name,
 .token.builtin,
-.token.namespace { color: var(--code-class); }
+.token.namespace {
+  color: var(--code-class);
+}
 
-.token.variable { color: var(--code-variable); }
+.token.variable {
+  color: var(--code-variable);
+}
 
-.token.punctuation { color: var(--code-punctuation); }
+.token.punctuation {
+  color: var(--code-punctuation);
+}
 
 .token.property,
-.token.attr-name { color: var(--code-attr-name); }
+.token.attr-name {
+  color: var(--code-attr-name);
+}
 
 .token.attr-value,
-.token.selector { color: var(--code-attr-value); }
+.token.selector {
+  color: var(--code-attr-value);
+}
 
-.token.tag { color: var(--code-tag); }
+.token.tag {
+  color: var(--code-tag);
+}
 
-.token.inserted { color: var(--code-inserted); }
-.token.deleted { color: var(--code-deleted); text-decoration: line-through; }
-.token.changed { color: var(--code-changed); }
+.token.inserted {
+  color: var(--code-inserted);
+}
+.token.deleted {
+  color: var(--code-deleted);
+  text-decoration: line-through;
+}
+.token.changed {
+  color: var(--code-changed);
+}
 
-.token.regex { color: var(--code-string); }
-.token.entity { color: var(--code-operator); cursor: help; }
-.token.atrule { color: var(--code-keyword); }
+.token.regex {
+  color: var(--code-string);
+}
+.token.entity {
+  color: var(--code-operator);
+  cursor: help;
+}
+.token.atrule {
+  color: var(--code-keyword);
+}
 
 /* Line highlighting from rehype-prism-plus */
-.code-highlight { float: left; min-width: 100%; }
-.code-line { display: block; padding-left: 1rem; padding-right: 1rem; margin-left: -1rem; margin-right: -1rem; border-left: 2px solid transparent; }
-.code-line.highlight-line { background: var(--code-line-highlight); border-left-color: var(--code-operator); }
+.code-highlight {
+  float: left;
+  min-width: 100%;
+}
+.code-line {
+  display: block;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin-left: -1rem;
+  margin-right: -1rem;
+  border-left: 2px solid transparent;
+}
+.code-line.highlight-line {
+  background: var(--code-line-highlight);
+  border-left-color: var(--code-operator);
+}
 .code-line.line-number::before {
   content: attr(line);
   display: inline-block;
@@ -260,7 +312,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

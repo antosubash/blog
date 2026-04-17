@@ -1,6 +1,6 @@
-import { type ReactNode, useState } from 'react'
-import { Copy, Check } from 'lucide-react'
-import Mermaid from './Mermaid'
+import { Check, Copy } from "lucide-react"
+import { type ReactNode, useState } from "react"
+import Mermaid from "./Mermaid"
 
 interface EnhancedCodeBlockProps {
   children: ReactNode
@@ -8,26 +8,29 @@ interface EnhancedCodeBlockProps {
 }
 
 const extractText = (node: ReactNode): string => {
-  if (typeof node === 'string') return node
-  if (typeof node === 'number') return String(node)
-  if (Array.isArray(node)) return node.map(extractText).join('')
-  if (node && typeof node === 'object' && 'props' in node) {
+  if (typeof node === "string") return node
+  if (typeof node === "number") return String(node)
+  if (Array.isArray(node)) return node.map(extractText).join("")
+  if (node && typeof node === "object" && "props" in node) {
     const reactElement = node as { props: { children?: ReactNode } }
-    return extractText(reactElement.props.children || '')
+    return extractText(reactElement.props.children || "")
   }
-  return ''
+  return ""
 }
 
-const EnhancedCodeBlock = ({ children, className = '' }: EnhancedCodeBlockProps) => {
+const EnhancedCodeBlock = ({
+  children,
+  className = "",
+}: EnhancedCodeBlockProps) => {
   const [copied, setCopied] = useState(false)
 
-  if (className?.includes('language-mermaid')) {
+  if (className?.includes("language-mermaid")) {
     const mermaidCode = extractText(children).trim()
     return <Mermaid chart={mermaidCode} className="my-6" />
   }
 
   const codeContent = extractText(children)
-  const language = className?.replace('language-', '') || ''
+  const language = className?.replace("language-", "") || ""
 
   const copyToClipboard = async () => {
     try {
@@ -44,11 +47,12 @@ const EnhancedCodeBlock = ({ children, className = '' }: EnhancedCodeBlockProps)
       {/* Terminal-style header bar */}
       <div className="flex items-center justify-between bg-surface px-4 py-2">
         <span className="text-xs font-medium text-muted-foreground">
-          {language || 'code'}
+          {language || "code"}
         </span>
         <button
+          type="button"
           onClick={copyToClipboard}
-          aria-label={copied ? 'Copied' : 'Copy code'}
+          aria-label={copied ? "Copied" : "Copy code"}
           className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs text-muted-foreground transition-colors duration-150 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70"
         >
           {copied ? (

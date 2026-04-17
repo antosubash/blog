@@ -1,5 +1,5 @@
-import Link from "./Link"
 import siteMetadata from "@/config/siteMetadata"
+import Link from "./Link"
 
 export default function Footer() {
   const links = [

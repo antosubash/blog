@@ -1,6 +1,6 @@
+import EnhancedListLayout from "@/layouts/EnhancedListLayout"
 import { createFileRoute } from "@tanstack/react-router"
 import { allPosts } from "content-collections"
-import EnhancedListLayout from "@/layouts/EnhancedListLayout"
 
 const POSTS_PER_PAGE = 8
 
@@ -10,7 +10,7 @@ export const Route = createFileRoute("/posts/page/$page")({
 
 function PaginatedBlogPage() {
   const { page } = Route.useParams()
-  const pageNumber = parseInt(page)
+  const pageNumber = Number.parseInt(page)
 
   const posts = [...allPosts]
     .filter((post) => !post.draft && !post.isDraft)

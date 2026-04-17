@@ -1,22 +1,22 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from "react"
 
 type SubmitStatus =
-  | { state: 'idle' }
-  | { state: 'submitting' }
-  | { state: 'success'; message: string }
-  | { state: 'error'; message: string }
+  | { state: "idle" }
+  | { state: "submitting" }
+  | { state: "success"; message: string }
+  | { state: "error"; message: string }
 
 export default function ContactForm() {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [subject, setSubject] = useState('')
-  const [message, setMessage] = useState('')
-  const [website, setWebsite] = useState('') // honeypot
-  const [status, setStatus] = useState<SubmitStatus>({ state: 'idle' })
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [subject, setSubject] = useState("")
+  const [message, setMessage] = useState("")
+  const [website, setWebsite] = useState("") // honeypot
+  const [status, setStatus] = useState<SubmitStatus>({ state: "idle" })
 
   const isDisabled = useMemo(() => {
     return (
-      status.state === 'submitting' ||
+      status.state === "submitting" ||
       !name.trim() ||
       !email.trim() ||
       !subject.trim() ||
@@ -31,29 +31,37 @@ export default function ContactForm() {
         // Honeypot triggered
         return
       }
-      setStatus({ state: 'submitting' })
+      setStatus({ state: "submitting" })
       try {
-        const res = await fetch('/api/contact', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+        const res = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ name, email, subject, message }),
         })
 
         const data = await res.json().catch(() => ({}))
 
         if (!res.ok) {
-          const errorMsg = data?.error || 'Failed to send your message. Please try again later.'
-          setStatus({ state: 'error', message: errorMsg })
+          const errorMsg =
+            data?.error ||
+            "Failed to send your message. Please try again later."
+          setStatus({ state: "error", message: errorMsg })
           return
         }
 
-        setStatus({ state: 'success', message: 'Thanks! Your message has been sent.' })
-        setName('')
-        setEmail('')
-        setSubject('')
-        setMessage('')
+        setStatus({
+          state: "success",
+          message: "Thanks! Your message has been sent.",
+        })
+        setName("")
+        setEmail("")
+        setSubject("")
+        setMessage("")
       } catch (err) {
-        setStatus({ state: 'error', message: 'Network error. Please try again.' })
+        setStatus({
+          state: "error",
+          message: "Network error. Please try again.",
+        })
       }
     },
     [name, email, subject, message, website]
@@ -156,13 +164,15 @@ export default function ContactForm() {
           disabled={isDisabled}
           className="inline-flex items-center space-x-2 rounded-lg bg-accent px-6 py-3 text-primary-foreground transition-colors hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          <span>{status.state === 'submitting' ? 'Sending...' : 'Send Message'}</span>
+          <span>
+            {status.state === "submitting" ? "Sending..." : "Send Message"}
+          </span>
         </button>
 
-        {status.state === 'success' && (
+        {status.state === "success" && (
           <p className="text-sm text-accent">{status.message}</p>
         )}
-        {status.state === 'error' && (
+        {status.state === "error" && (
           <p className="text-sm text-destructive">{status.message}</p>
         )}
       </div>

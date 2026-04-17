@@ -1,9 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router"
-import { Mail, MapPin, Phone, Github, Twitter, Linkedin } from "lucide-react"
-import siteMetadata from "@/config/siteMetadata"
-import SectionContainer from "@/components/SectionContainer"
 import ContactForm from "@/components/ContactForm"
+import SectionContainer from "@/components/SectionContainer"
+import siteMetadata from "@/config/siteMetadata"
 import { genPageMetadata } from "@/lib/seo"
+import { createFileRoute } from "@tanstack/react-router"
+import { Github, Linkedin, Mail, MapPin, Phone, Twitter } from "lucide-react"
 
 export const Route = createFileRoute("/contact/")({
   component: ContactPage,
@@ -20,7 +20,8 @@ function ContactPage() {
               Contact
             </h1>
             <p className="text-lg leading-7 text-muted-foreground">
-              Get in touch with me for collaborations, questions, or just to say hello!
+              Get in touch with me for collaborations, questions, or just to say
+              hello!
             </p>
           </div>
           <div className="py-12 lg:py-16">
@@ -32,8 +33,8 @@ function ContactPage() {
                     Let's Connect
                   </h2>
                   <p className="mb-6 text-muted-foreground">
-                    I'm always open to discussing new projects, creative ideas, or opportunities to
-                    be part of your visions.
+                    I'm always open to discussing new projects, creative ideas,
+                    or opportunities to be part of your visions.
                   </p>
                 </div>
 
@@ -55,15 +56,21 @@ function ContactPage() {
                     <MapPin className="h-5 w-5 text-accent" />
                     <div>
                       <p className="font-medium text-foreground">Location</p>
-                      <p className="text-muted-foreground">Remote / Worldwide</p>
+                      <p className="text-muted-foreground">
+                        Remote / Worldwide
+                      </p>
                     </div>
                   </div>
 
                   <div className="flex items-center space-x-3">
                     <Phone className="h-5 w-5 text-accent" />
                     <div>
-                      <p className="font-medium text-foreground">Availability</p>
-                      <p className="text-muted-foreground">Open to new opportunities</p>
+                      <p className="font-medium text-foreground">
+                        Availability
+                      </p>
+                      <p className="text-muted-foreground">
+                        Open to new opportunities
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -117,7 +124,8 @@ function ContactPage() {
                     Send a Message
                   </h2>
                   <p className="mb-6 text-muted-foreground">
-                    Fill out the form below and I'll get back to you as soon as possible.
+                    Fill out the form below and I'll get back to you as soon as
+                    possible.
                   </p>
                 </div>
                 <ContactForm />

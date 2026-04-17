@@ -1,7 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router"
-import { genPageMetadata } from "@/lib/seo"
-import { allPosts } from "content-collections"
 import PostItem from "@/components/post-item"
+import { genPageMetadata } from "@/lib/seo"
+import { Link, createFileRoute } from "@tanstack/react-router"
+import { allPosts } from "content-collections"
 import { ArrowRight } from "lucide-react"
 
 const MAX_DISPLAY = 8
