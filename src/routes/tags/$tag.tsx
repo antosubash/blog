@@ -1,7 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router"
-import { slug as slugify } from "github-slugger"
-import { allPosts } from "content-collections"
 import EnhancedListLayout from "@/layouts/EnhancedListLayout"
+import { createFileRoute } from "@tanstack/react-router"
+import { allPosts } from "content-collections"
+import { slug as slugify } from "github-slugger"
 
 export const Route = createFileRoute("/tags/$tag")({
   component: TagPage,
@@ -30,5 +30,7 @@ function TagPage() {
       date: new Date(post.date).toISOString(),
     }))
 
-  return <EnhancedListLayout posts={filteredPosts} title={`${title} Articles`} />
+  return (
+    <EnhancedListLayout posts={filteredPosts} title={`${title} Articles`} />
+  )
 }

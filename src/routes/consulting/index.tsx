@@ -1,5 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router"
 import { genPageMetadata } from "@/lib/seo"
+import { createFileRoute } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/consulting/")({
   component: ConsultingPage,
@@ -72,7 +72,8 @@ function ConsultingPage() {
           Consulting Services
         </h1>
         <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
-          Transform your ABP projects with professional guidance and technical expertise.
+          Transform your ABP projects with professional guidance and technical
+          expertise.
         </p>
         <div className="mt-6 flex flex-wrap gap-4">
           <a
@@ -102,7 +103,10 @@ function ConsultingPage() {
             <p className="mt-2 text-muted-foreground">{service.description}</p>
             <ul className="mt-4 grid grid-cols-2 gap-2">
               {service.features.map((feature) => (
-                <li key={feature} className="flex items-center gap-2 text-sm text-muted-foreground">
+                <li
+                  key={feature}
+                  className="flex items-center gap-2 text-sm text-muted-foreground"
+                >
                   <span className="text-accent">✓</span>
                   {feature}
                 </li>
@@ -136,15 +140,37 @@ function ConsultingPage() {
         </h2>
         <div className="mt-6 grid gap-6 sm:grid-cols-2 md:grid-cols-4">
           {[
-            { step: "01", title: "Discovery", description: "Understanding your requirements and project scope" },
-            { step: "02", title: "Planning", description: "Creating a detailed roadmap and timeline" },
-            { step: "03", title: "Execution", description: "Implementing solutions with regular updates" },
-            { step: "04", title: "Delivery", description: "Handing over with documentation and support" },
+            {
+              step: "01",
+              title: "Discovery",
+              description: "Understanding your requirements and project scope",
+            },
+            {
+              step: "02",
+              title: "Planning",
+              description: "Creating a detailed roadmap and timeline",
+            },
+            {
+              step: "03",
+              title: "Execution",
+              description: "Implementing solutions with regular updates",
+            },
+            {
+              step: "04",
+              title: "Delivery",
+              description: "Handing over with documentation and support",
+            },
           ].map((process) => (
             <div key={process.step}>
-              <span className="text-sm font-medium text-accent">{process.step}</span>
-              <h3 className="mt-1 font-semibold text-foreground">{process.title}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">{process.description}</p>
+              <span className="text-sm font-medium text-accent">
+                {process.step}
+              </span>
+              <h3 className="mt-1 font-semibold text-foreground">
+                {process.title}
+              </h3>
+              <p className="mt-1 text-sm text-muted-foreground">
+                {process.description}
+              </p>
             </div>
           ))}
         </div>

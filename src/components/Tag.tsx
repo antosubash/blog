@@ -1,6 +1,6 @@
+import { cn } from "@/lib/utils"
 import { Link } from "@tanstack/react-router"
 import { slug as createSlug } from "github-slugger"
-import { cn } from "@/lib/utils"
 
 interface TagProps {
   text: string

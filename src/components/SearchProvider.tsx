@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from "react"
-import { Command } from "cmdk"
 import { useNavigate } from "@tanstack/react-router"
-import { Search, FileText, Tag, X } from "lucide-react"
+import { Command } from "cmdk"
+import { FileText, Search, Tag, X } from "lucide-react"
+import { useCallback, useEffect, useState } from "react"
 
 interface SearchItem {
   slug: string
@@ -52,8 +52,10 @@ export default function SearchProvider() {
       label="Search posts"
       className="fixed inset-0 z-50"
     >
-      <div
+      <button
+        type="button"
         className="fixed inset-0 bg-black/50"
+        aria-label="Close search"
         onClick={() => setOpen(false)}
       />
       <div className="fixed left-1/2 top-1/4 z-50 w-full max-w-lg -translate-x-1/2 rounded-xl border border-border bg-background shadow-2xl">
@@ -66,7 +68,12 @@ export default function SearchProvider() {
             className="flex h-12 w-full bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
           />
           {query && (
-            <button aria-label="Clear search" onClick={() => setQuery("")} className="ml-2 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70">
+            <button
+              type="button"
+              aria-label="Clear search"
+              onClick={() => setQuery("")}
+              className="ml-2 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70"
+            >
               <X className="h-4 w-4 text-muted-foreground" />
             </button>
           )}

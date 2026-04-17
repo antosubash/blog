@@ -9,7 +9,7 @@ export const siteMetadata = {
   siteUrl: "https://blog.antosubash.com",
   siteRepo: "https://github.com/antosubash/blog",
   siteLogo: "/static/images/logo.png",
-  socialBanner: "/static/images/twitter-card.png",
+  socialBanner: "/static/images/logo.png",
   mastodon: "https://mastodon.social/@antosubash",
   email: "antosubash@live.com",
   github: "https://github.com/antosubash",

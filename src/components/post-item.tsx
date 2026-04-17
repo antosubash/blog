@@ -1,6 +1,6 @@
+import Tag from "@/components/Tag"
 import { Link } from "@tanstack/react-router"
 import { format, parseISO } from "date-fns"
-import Tag from "@/components/Tag"
 
 interface PostItemProps {
   slug: string
@@ -21,7 +21,6 @@ const PostItem = ({
   series,
   tags,
   part,
-  readingTime,
 }: PostItemProps) => {
   return (
     <Link to="/posts/$" params={{ _splat: slug }} className="group block">
@@ -45,7 +44,8 @@ const PostItem = ({
         <div className="mt-2.5 flex flex-wrap items-center gap-2">
           {series && (
             <span className="text-xs font-medium text-accent">
-              {series}{part != null ? ` #${part}` : ""}
+              {series}
+              {part != null ? ` #${part}` : ""}
             </span>
           )}
           {tags.slice(0, 3).map((tag) => (

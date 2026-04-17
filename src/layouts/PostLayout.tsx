@@ -1,14 +1,15 @@
-import type { ReactNode } from "react"
 import Comments from "@/components/Comments"
+import Image from "@/components/Image"
 import Link from "@/components/Link"
 import PageTitle from "@/components/PageTitle"
+import ScrollTopAndComment from "@/components/ScrollTopAndComment"
 import SectionContainer from "@/components/SectionContainer"
-import Image from "@/components/Image"
 import Tag from "@/components/Tag"
 import siteMetadata from "@/config/siteMetadata"
-import ScrollTopAndComment from "@/components/ScrollTopAndComment"
+import type { Author, Post } from "content-collections"
+import type { ReactNode } from "react"
 
-const editUrl = (path: string) => `${siteMetadata.siteRepo}/blob/main/data/${path}`
+const editUrl = (path: string) => `${siteMetadata.siteRepo}/blob/main/${path}`
 const discussUrl = (path: string) =>
   `https://mobile.twitter.com/search?q=${encodeURIComponent(`${siteMetadata.siteUrl}/${path}`)}`
 
@@ -20,14 +21,21 @@ const postDateTemplate: Intl.DateTimeFormatOptions = {
 }
 
 interface LayoutProps {
-  content: any
-  authorDetails: any[]
+  content: Post
+  authorDetails?: Author[]
   next?: { postUrl: string; title: string }
   prev?: { postUrl: string; title: string }
   children: ReactNode
 }
 
-export default function PostLayout({ content, authorDetails, next, prev, children }: LayoutProps) {
+export default function PostLayout({
+  content,
+  authorDetails,
+  next,
+  prev,
+  children,
+}: LayoutProps) {
+  const safeAuthorDetails = authorDetails ?? []
   const { filePath, postUrl, slug, date, title, tags } = content
   const basePath = postUrl.split("/")[0]
 
@@ -43,7 +51,10 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                   <dt className="sr-only">Published on</dt>
                   <dd className="text-base font-medium leading-6 text-muted-foreground">
                     <time dateTime={date}>
-                      {new Date(date).toLocaleDateString(siteMetadata.locale, postDateTemplate)}
+                      {new Date(date).toLocaleDateString(
+                        siteMetadata.locale,
+                        postDateTemplate
+                      )}
                     </time>
                   </dd>
                 </div>
@@ -58,8 +69,11 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
               <dt className="sr-only">Authors</dt>
               <dd>
                 <ul className="flex flex-wrap justify-center gap-4 sm:space-x-12 xl:block xl:space-x-0 xl:space-y-8">
-                  {authorDetails.map((author) => (
-                    <li className="flex items-center space-x-2" key={author.name}>
+                  {safeAuthorDetails.map((author) => (
+                    <li
+                      className="flex items-center space-x-2"
+                      key={author.name}
+                    >
                       {author.avatar && (
                         <Image
                           src={author.avatar}
@@ -79,7 +93,10 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                               href={author.twitter}
                               className="text-accent transition-colors duration-150 hover:text-accent-hover"
                             >
-                              {author.twitter.replace("https://twitter.com/", "@")}
+                              {author.twitter.replace(
+                                "https://twitter.com/",
+                                "@"
+                              )}
                             </Link>
                           )}
                         </dd>
@@ -90,12 +107,14 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
               </dd>
             </dl>
             <div className="divide-y divide-border xl:col-span-3 xl:row-span-2 xl:pb-0">
-              <div className="prose max-w-none pb-8 pt-10 dark:prose-invert">{children}</div>
+              <div className="prose max-w-none pb-8 pt-10 dark:prose-invert">
+                {children}
+              </div>
               <div className="pb-6 pt-6 text-sm text-muted-foreground">
                 <Link href={discussUrl(postUrl)} rel="nofollow">
                   Discuss on Twitter
                 </Link>
-                {` • `}
+                {" • "}
                 <Link href={editUrl(filePath)}>View on GitHub</Link>
               </div>
               {siteMetadata.comments && (
@@ -115,13 +134,17 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                       Tags
                     </h2>
                     <div className="flex flex-wrap gap-2 pt-2">
-                      {tags?.filter((tag: string) => tag).map((tag: string) => <Tag key={tag} text={tag} />)}
+                      {tags
+                        ?.filter((tag: string) => tag)
+                        .map((tag: string) => (
+                          <Tag key={tag} text={tag} />
+                        ))}
                     </div>
                   </div>
                 )}
                 {(next || prev) && (
                   <div className="flex justify-between py-4 xl:block xl:space-y-8 xl:py-8">
-                    {prev && prev.postUrl && (
+                    {prev?.postUrl && (
                       <div>
                         <h2 className="text-xs uppercase tracking-wide text-muted-foreground">
                           Previous Article
@@ -131,7 +154,7 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                         </div>
                       </div>
                     )}
-                    {next && next.postUrl && (
+                    {next?.postUrl && (
                       <div>
                         <h2 className="text-xs uppercase tracking-wide text-muted-foreground">
                           Next Article

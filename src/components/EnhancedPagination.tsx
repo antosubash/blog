@@ -1,6 +1,5 @@
-import { Link } from "@tanstack/react-router"
-import { useLocation } from "@tanstack/react-router"
-import { MoreHorizontal, ArrowLeft, ArrowRight } from 'lucide-react'
+import { Link, useLocation } from "@tanstack/react-router"
+import { ArrowLeft, ArrowRight, MoreHorizontal } from "lucide-react"
 
 interface PaginationProps {
   totalPages: number
@@ -16,7 +15,7 @@ export default function EnhancedPagination({
   onPageChange,
 }: PaginationProps) {
   const { pathname } = useLocation()
-  const basePath = pathname.split('/')[1]
+  const basePath = pathname.split("/")[1]
 
   const prevPage = currentPage - 1 > 0
   const nextPage = currentPage + 1 <= totalPages
@@ -38,13 +37,13 @@ export default function EnhancedPagination({
 
     if (start > 1) {
       pages.push(1)
-      if (start > 2) pages.push('...')
+      if (start > 2) pages.push("...")
     }
 
     for (let i = start; i <= end; i++) pages.push(i)
 
     if (end < totalPages) {
-      if (end < totalPages - 1) pages.push('...')
+      if (end < totalPages - 1) pages.push("...")
       pages.push(totalPages)
     }
 
@@ -66,25 +65,32 @@ export default function EnhancedPagination({
     "cursor-not-allowed border-border/50 bg-muted text-muted-foreground"
 
   // Client-side pagination button (no route navigation)
-  const PageButton = ({ page, children, className, disabled, ...props }: {
+  const PageButton = ({
+    page,
+    children,
+    className,
+    disabled,
+    ...props
+  }: {
     page: number
     children: React.ReactNode
     className: string
     disabled?: boolean
-    'aria-disabled'?: boolean
-    'aria-label'?: string
-    'aria-current'?: 'page' | undefined
+    "aria-disabled"?: boolean
+    "aria-label"?: string
+    "aria-current"?: "page" | undefined
     tabIndex?: number
   }) => {
     if (onPageChange) {
       return (
         <button
+          type="button"
           onClick={() => !disabled && onPageChange(page)}
           className={className}
           disabled={disabled}
-          aria-disabled={props['aria-disabled']}
-          aria-label={props['aria-label']}
-          aria-current={props['aria-current']}
+          aria-disabled={props["aria-disabled"]}
+          aria-label={props["aria-label"]}
+          aria-current={props["aria-current"]}
           tabIndex={props.tabIndex}
         >
           {children}
@@ -93,11 +99,11 @@ export default function EnhancedPagination({
     }
     return (
       <Link
-        to={disabled ? '#' : getPageUrl(page)}
+        to={disabled ? "#" : getPageUrl(page)}
         className={className}
-        aria-disabled={props['aria-disabled']}
-        aria-label={props['aria-label']}
-        aria-current={props['aria-current']}
+        aria-disabled={props["aria-disabled"]}
+        aria-label={props["aria-label"]}
+        aria-current={props["aria-current"]}
         tabIndex={props.tabIndex}
       >
         {children}
@@ -108,8 +114,9 @@ export default function EnhancedPagination({
   return (
     <div className="flex flex-col items-center gap-4 py-12">
       <p className="text-sm text-muted-foreground">
-        Page <span className="font-semibold text-foreground">{currentPage}</span>{' '}
-        of <span className="font-semibold text-foreground">{totalPages}</span>
+        Page{" "}
+        <span className="font-semibold text-foreground">{currentPage}</span> of{" "}
+        <span className="font-semibold text-foreground">{totalPages}</span>
       </p>
 
       <nav className="flex items-center gap-2" aria-label="Pagination">
@@ -127,10 +134,12 @@ export default function EnhancedPagination({
 
         <div className="flex items-center gap-1">
           {visiblePages.map((page, index) => {
-            if (page === '...') {
+            if (page === "...") {
+              const previousPage = visiblePages[index - 1] ?? "start"
+              const nextPageNumber = visiblePages[index + 1] ?? "end"
               return (
                 <span
-                  key={`ellipsis-${index}`}
+                  key={`ellipsis-${previousPage}-${nextPageNumber}`}
                   className="inline-flex items-center px-3 py-2.5 text-sm text-muted-foreground"
                 >
                   <MoreHorizontal className="h-4 w-4" />
@@ -147,10 +156,10 @@ export default function EnhancedPagination({
                 page={pageNum}
                 className={`${navButtonBase} min-w-[42px] justify-center ${
                   isCurrentPage
-                    ? 'border-accent bg-accent text-primary-foreground'
-                    : 'border-border bg-card text-foreground hover:border-accent/50'
+                    ? "border-accent bg-accent text-primary-foreground"
+                    : "border-border bg-card text-foreground hover:border-accent/50"
                 }`}
-                aria-current={isCurrentPage ? 'page' : undefined}
+                aria-current={isCurrentPage ? "page" : undefined}
               >
                 {pageNum}
               </PageButton>
@@ -175,7 +184,9 @@ export default function EnhancedPagination({
         <PageButton
           page={1}
           className={`font-medium transition-colors duration-150 ${
-            currentPage === 1 ? 'text-muted-foreground/50' : 'text-muted-foreground hover:text-foreground'
+            currentPage === 1
+              ? "text-muted-foreground/50"
+              : "text-muted-foreground hover:text-foreground"
           }`}
         >
           First
@@ -184,7 +195,9 @@ export default function EnhancedPagination({
         <PageButton
           page={totalPages}
           className={`font-medium transition-colors duration-150 ${
-            currentPage === totalPages ? 'text-muted-foreground/50' : 'text-muted-foreground hover:text-foreground'
+            currentPage === totalPages
+              ? "text-muted-foreground/50"
+              : "text-muted-foreground hover:text-foreground"
           }`}
         >
           Last

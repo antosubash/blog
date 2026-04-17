@@ -1,13 +1,13 @@
-import { useState, useEffect, useRef, useCallback } from "react"
-import { createPortal } from "react-dom"
-import Link from "./Link"
 import headerNavLinks from "@/config/headerNavLinks"
 import { Menu, X } from "lucide-react"
+import { useCallback, useEffect, useRef, useState } from "react"
+import { createPortal } from "react-dom"
+import Link from "./Link"
 
 const MobileNav = () => {
   const [open, setOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
-  const panelRef = useRef<HTMLDivElement>(null)
+  const panelRef = useRef<HTMLDialogElement>(null)
   const toggleRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => setMounted(true), [])
@@ -73,9 +73,8 @@ const MobileNav = () => {
   const navLinks = headerNavLinks.filter((link) => link.href !== "/")
 
   const overlay = (
-    <div
+    <dialog
       ref={panelRef}
-      role="dialog"
       aria-modal="true"
       aria-label="Navigation menu"
       className={`fixed inset-0 z-[100] md:hidden transition-opacity duration-200 ${
@@ -83,10 +82,11 @@ const MobileNav = () => {
       }`}
     >
       {/* Full-screen backdrop */}
-      <div
+      <button
+        type="button"
         className="absolute inset-0 bg-background/95 backdrop-blur-lg"
         onClick={close}
-        aria-hidden="true"
+        aria-label="Close navigation menu"
       />
 
       {/* Content */}
@@ -94,6 +94,7 @@ const MobileNav = () => {
         {/* Close button */}
         <div className="flex justify-end px-5 py-4">
           <button
+            type="button"
             aria-label="Close menu"
             onClick={close}
             className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-muted-foreground transition-colors duration-150 hover:text-foreground"
@@ -135,12 +136,13 @@ const MobileNav = () => {
           </div>
         </nav>
       </div>
-    </div>
+    </dialog>
   )
 
   return (
     <>
       <button
+        type="button"
         ref={toggleRef}
         aria-label="Open menu"
         aria-expanded={open}

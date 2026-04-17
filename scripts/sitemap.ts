@@ -20,7 +20,16 @@ async function main() {
 
   const posts = allPosts.filter((p) => !p.draft && !p.isDraft)
 
-  const staticRoutes = ["", "/posts", "/tags", "/series", "/about", "/contact", "/projects", "/consulting"]
+  const staticRoutes = [
+    "",
+    "/posts",
+    "/tags",
+    "/series",
+    "/about",
+    "/contact",
+    "/projects",
+    "/consulting",
+  ]
 
   const tags = new Set<string>()
   for (const post of posts) {

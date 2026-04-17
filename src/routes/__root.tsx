@@ -1,16 +1,16 @@
+import Analytics from "@/components/Analytics"
+import Footer from "@/components/Footer"
+import Header from "@/components/Header"
+import Link from "@/components/Link"
+import SearchProvider from "@/components/SearchProvider"
+import SectionContainer from "@/components/SectionContainer"
+import { ThemeProvider } from "@/components/ThemeProvider"
 import {
   HeadContent,
   Outlet,
   Scripts,
   createRootRoute,
 } from "@tanstack/react-router"
-import { ThemeProvider } from "@/components/ThemeProvider"
-import Header from "@/components/Header"
-import Footer from "@/components/Footer"
-import SectionContainer from "@/components/SectionContainer"
-import SearchProvider from "@/components/SearchProvider"
-import Analytics from "@/components/Analytics"
-import Link from "@/components/Link"
 
 import appCss from "../styles.css?url"
 
@@ -66,9 +66,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
-        <script
-          dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }}
-        />
+        <script>{THEME_SCRIPT}</script>
       </head>
       <body className="bg-background text-foreground antialiased">
         {children}
@@ -108,7 +106,8 @@ function NotFoundComponent() {
             Sorry we couldn&apos;t find this page.
           </p>
           <p className="mb-8 text-muted-foreground">
-            But don&apos;t worry, you can find plenty of other things on our homepage.
+            But don&apos;t worry, you can find plenty of other things on our
+            homepage.
           </p>
           <Link
             href="/"

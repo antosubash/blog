@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from "react"
 
 // Global mermaid instance
-let mermaidInstance: any = null // eslint-disable-line @typescript-eslint/no-explicit-any
+type MermaidInstance = typeof import("mermaid")["default"]
+let mermaidInstance: MermaidInstance | null = null
 
 interface MermaidProps {
   chart: string
@@ -13,32 +14,33 @@ let isMermaidInitialized = false
 
 const loadMermaid = async () => {
   if (!mermaidInstance) {
-    const mermaidModule = await import('mermaid')
+    const mermaidModule = await import("mermaid")
     mermaidInstance = mermaidModule.default
   }
   return mermaidInstance
 }
 
 const initializeMermaid = async () => {
-  if (!isMermaidInitialized && typeof window !== 'undefined') {
+  if (!isMermaidInitialized && typeof window !== "undefined") {
     const mermaid = await loadMermaid()
     mermaid.initialize({
       startOnLoad: false,
-      theme: 'default',
-      securityLevel: 'loose',
-      fontFamily: 'inherit',
+      theme: "default",
+      securityLevel: "loose",
+      fontFamily: "inherit",
       fontSize: 14,
     })
     isMermaidInitialized = true
   }
 }
 
-const Mermaid = ({ chart, className = '' }: MermaidProps) => {
+const Mermaid = ({ chart, className = "" }: MermaidProps) => {
   const elementRef = useRef<HTMLDivElement>(null)
+  const svgContainerRef = useRef<HTMLDivElement>(null)
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [mounted, setMounted] = useState(false)
-  const [svgContent, setSvgContent] = useState<string>('')
+  const [svgContent, setSvgContent] = useState<string>("")
 
   useEffect(() => {
     setMounted(true)
@@ -63,16 +65,33 @@ const Mermaid = ({ chart, className = '' }: MermaidProps) => {
         setSvgContent(svg)
         setIsLoading(false)
       } catch (err) {
-        console.error('Mermaid rendering error:', err)
-        setError(err instanceof Error ? err.message : 'Failed to render diagram')
+        console.error("Mermaid rendering error:", err)
+        setError(
+          err instanceof Error ? err.message : "Failed to render diagram"
+        )
         setIsLoading(false)
       }
     }
 
     const timer = setTimeout(renderMermaid, 50)
     return () => clearTimeout(timer)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chart, mounted, elementRef.current])
+  }, [chart, mounted])
+
+  useEffect(() => {
+    const container = svgContainerRef.current
+    if (!container || !svgContent || isLoading) return
+
+    const parser = new DOMParser()
+    const parsed = parser.parseFromString(svgContent, "image/svg+xml")
+    const svg = parsed.documentElement
+
+    container.replaceChildren()
+    container.appendChild(svg)
+
+    return () => {
+      container.replaceChildren()
+    }
+  }, [svgContent, isLoading])
 
   if (error) {
     return (
@@ -103,20 +122,16 @@ const Mermaid = ({ chart, className = '' }: MermaidProps) => {
       {(!mounted || isLoading) && (
         <div className="flex items-center justify-center p-8">
           <div className="text-center">
-            <div className="mx-auto mb-2 h-8 w-8 animate-spin rounded-full border-2 border-border border-t-accent"></div>
+            <div className="mx-auto mb-2 h-8 w-8 animate-spin rounded-full border-2 border-border border-t-accent" />
             <p className="text-sm text-muted-foreground">
-              {!mounted ? 'Loading...' : 'Rendering diagram...'}
+              {!mounted ? "Loading..." : "Rendering diagram..."}
             </p>
           </div>
         </div>
       )}
 
       {svgContent && !isLoading && (
-        <div
-          className="flex justify-center"
-          // Safe: SVG generated locally by mermaid from our own MDX content
-          dangerouslySetInnerHTML={{ __html: svgContent }}
-        />
+        <div ref={svgContainerRef} className="flex justify-center" />
       )}
     </div>
   )

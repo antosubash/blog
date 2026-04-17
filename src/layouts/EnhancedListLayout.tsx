@@ -1,8 +1,9 @@
-import { useState, useMemo, useEffect } from "react"
+import EnhancedPagination from "@/components/EnhancedPagination"
+import PostSearch from "@/components/PostSearch"
 import Tag from "@/components/Tag"
 import PostItem from "@/components/post-item"
-import PostSearch from "@/components/PostSearch"
-import EnhancedPagination from "@/components/EnhancedPagination"
+import type { Post } from "content-collections"
+import { useMemo, useState } from "react"
 
 interface PaginationProps {
   totalPages: number
@@ -10,9 +11,9 @@ interface PaginationProps {
 }
 
 interface EnhancedListLayoutProps {
-  posts: any[]
+  posts: Post[]
   title: string
-  initialDisplayPosts?: any[]
+  initialDisplayPosts?: Post[]
   pagination?: PaginationProps
 }
 
@@ -28,13 +29,27 @@ export default function EnhancedListLayout({
 
   const isClientPaginated = !pagination
 
+  const updateSearchQuery = (query: string) => {
+    setSearchQuery(query)
+    if (isClientPaginated) {
+      setClientPage(1)
+    }
+  }
+
+  const updateSelectedTags = (tags: string[]) => {
+    setSelectedTags(tags)
+    if (isClientPaginated) {
+      setClientPage(1)
+    }
+  }
+
   const availableTags = useMemo(() => {
     const allTags = new Set<string>()
-    posts.forEach((post) => {
-      post.tags?.forEach((tag: string) => {
+    for (const post of posts) {
+      for (const tag of post.tags ?? []) {
         if (tag) allTags.add(tag)
-      })
-    })
+      }
+    }
     return Array.from(allTags).sort()
   }, [posts])
 
@@ -47,33 +62,38 @@ export default function EnhancedListLayout({
         (post) =>
           post.title.toLowerCase().includes(query) ||
           post.excerpt?.toLowerCase().includes(query) ||
-          post.tags?.some((tag: string) => tag && tag.toLowerCase().includes(query))
+          post.tags?.some((tag: string) => tag?.toLowerCase().includes(query))
       )
     }
 
     if (selectedTags.length > 0) {
       filtered = filtered.filter((post) =>
-        selectedTags.every((tag) => post.tags?.filter((t: string) => t).includes(tag))
+        selectedTags.every((tag) =>
+          post.tags?.filter((t: string) => t).includes(tag)
+        )
       )
     }
 
     return filtered
   }, [posts, searchQuery, selectedTags])
 
-  // Reset to page 1 when filters change
-  useEffect(() => {
-    if (isClientPaginated) setClientPage(1)
-  }, [searchQuery, selectedTags, isClientPaginated])
-
   const POSTS_PER_PAGE = 10
-  const currentPage = isClientPaginated ? clientPage : (pagination?.currentPage || 1)
+  const currentPage = isClientPaginated
+    ? clientPage
+    : pagination?.currentPage || 1
   const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE)
 
   const startIndex = (currentPage - 1) * POSTS_PER_PAGE
-  const currentPagePosts = filteredPosts.slice(startIndex, startIndex + POSTS_PER_PAGE)
+  const currentPagePosts = filteredPosts.slice(
+    startIndex,
+    startIndex + POSTS_PER_PAGE
+  )
 
   const displayPosts =
-    initialDisplayPosts.length > 0 && currentPage === 1 && !searchQuery && selectedTags.length === 0
+    initialDisplayPosts.length > 0 &&
+    currentPage === 1 &&
+    !searchQuery &&
+    selectedTags.length === 0
       ? initialDisplayPosts
       : currentPagePosts
 
@@ -94,8 +114,8 @@ export default function EnhancedListLayout({
 
       <div className="mb-8">
         <PostSearch
-          onSearch={setSearchQuery}
-          onTagFilter={setSelectedTags}
+          onSearch={updateSearchQuery}
+          onTagFilter={updateSelectedTags}
           availableTags={availableTags}
           selectedTags={selectedTags}
         />
@@ -135,8 +155,8 @@ export default function EnhancedListLayout({
                   title={post.title}
                   summary={post.excerpt || ""}
                   tags={post.tags || []}
-                  series={post.series}
-                  part={post.part}
+                  series={post.series ?? undefined}
+                  part={post.part ?? undefined}
                   readingTime={safeReadingTime}
                 />
               )
@@ -147,6 +167,7 @@ export default function EnhancedListLayout({
         <div className="py-16 text-center">
           <p className="text-lg text-muted-foreground">No posts found.</p>
           <button
+            type="button"
             onClick={() => {
               setSearchQuery("")
               setSelectedTags([])

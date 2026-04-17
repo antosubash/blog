@@ -1,14 +1,12 @@
-import { useEffect, useState } from "react"
 import { ChevronUp } from "lucide-react"
+import { useEffect, useState } from "react"
 import Link from "./Link"
 
 interface PostEnhancementsProps {
   tags?: string[]
 }
 
-export default function PostEnhancements({
-  tags,
-}: PostEnhancementsProps) {
+export default function PostEnhancements({ tags }: PostEnhancementsProps) {
   const [showScrollTop, setShowScrollTop] = useState(false)
 
   // Scroll to top button visibility
@@ -18,15 +16,15 @@ export default function PostEnhancements({
       setShowScrollTop(scrollTop > 400)
     }
 
-    window.addEventListener('scroll', updateScrollButton)
+    window.addEventListener("scroll", updateScrollButton)
 
     return () => {
-      window.removeEventListener('scroll', updateScrollButton)
+      window.removeEventListener("scroll", updateScrollButton)
     }
   }, [])
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
   return (
@@ -36,6 +34,7 @@ export default function PostEnhancements({
         {/* Scroll to Top Button */}
         {showScrollTop && (
           <button
+            type="button"
             onClick={scrollToTop}
             aria-label="Scroll to top"
             className="flex h-12 w-12 items-center justify-center rounded-full bg-card shadow-lg transition-all duration-200 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70"
@@ -48,7 +47,9 @@ export default function PostEnhancements({
       {/* Enhanced Tags */}
       {tags && tags.length > 0 && (
         <div className="mb-8">
-          <h3 className="mb-3 text-sm font-medium text-muted-foreground">Tags:</h3>
+          <h3 className="mb-3 text-sm font-medium text-muted-foreground">
+            Tags:
+          </h3>
           <div className="flex flex-wrap gap-2">
             {tags.map((tag) => (
               <Link

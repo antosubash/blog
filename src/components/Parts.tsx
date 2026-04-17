@@ -1,13 +1,22 @@
+import { getSeriesByName, getSeriesProgress } from "@/lib/series-utils"
 import { Link } from "@tanstack/react-router"
-import { getSeriesProgress, getSeriesByName } from "@/lib/series-utils"
-import { TrendingUp, ChevronRight, CheckCircle, Circle, ArrowLeft, ArrowRight } from 'lucide-react'
+import {
+  ArrowLeft,
+  ArrowRight,
+  CheckCircle,
+  ChevronRight,
+  Circle,
+  TrendingUp,
+} from "lucide-react"
 
 interface PartsProps {
   data: string
 }
 
 const Parts = (props: PartsProps) => {
-  const post = getSeriesByName(props.data)?.posts.find((p) => p.slug === props.data)
+  const post = getSeriesByName(props.data)?.posts.find(
+    (p) => p.slug === props.data
+  )
 
   if (!post) return null
 
@@ -62,15 +71,16 @@ const Parts = (props: PartsProps) => {
             return (
               <Link
                 key={blogPost.slug}
-                to="/posts/$" params={{ _splat: blogPost.slug }}
+                to="/posts/$"
+                params={{ _splat: blogPost.slug }}
                 className={`group flex items-center space-x-3 rounded-lg border p-3 transition-all duration-200 ${
                   isCurrentPost
-                    ? 'border-accent bg-accent-muted/30'
+                    ? "border-accent bg-accent-muted/30"
                     : isCompleted
-                      ? 'border-green-200 bg-green-50 hover:border-green-300 dark:border-green-700 dark:bg-green-900/20 dark:hover:border-green-600'
+                      ? "border-green-200 bg-green-50 hover:border-green-300 dark:border-green-700 dark:bg-green-900/20 dark:hover:border-green-600"
                       : isNext
-                        ? 'border-orange-200 bg-orange-50 hover:border-orange-300 dark:border-orange-700 dark:bg-orange-900/20 dark:hover:border-orange-600'
-                        : 'border-border bg-surface hover:border-border'
+                        ? "border-orange-200 bg-orange-50 hover:border-orange-300 dark:border-orange-700 dark:bg-orange-900/20 dark:hover:border-orange-600"
+                        : "border-border bg-surface hover:border-border"
                 }`}
               >
                 {/* Status Icon */}
@@ -92,12 +102,12 @@ const Parts = (props: PartsProps) => {
                     <span
                       className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-bold ${
                         isCurrentPost
-                          ? 'bg-accent-muted/50 text-foreground'
+                          ? "bg-accent-muted/50 text-foreground"
                           : isCompleted
-                            ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                            ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
                             : isNext
-                              ? 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200'
-                              : 'bg-surface text-muted-foreground'
+                              ? "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200"
+                              : "bg-surface text-muted-foreground"
                       }`}
                     >
                       Part {blogPost.part}
@@ -115,9 +125,7 @@ const Parts = (props: PartsProps) => {
                   </div>
                   <h4
                     className={`line-clamp-2 text-sm font-medium ${
-                      isCurrentPost
-                        ? 'text-foreground'
-                        : 'text-foreground'
+                      isCurrentPost ? "text-foreground" : "text-foreground"
                     }`}
                   >
                     {blogPost.title}
@@ -136,7 +144,8 @@ const Parts = (props: PartsProps) => {
       <div className="mt-6 flex items-center justify-between border-t border-border pt-4">
         {progress.prevPart ? (
           <Link
-            to="/posts/$" params={{ _splat: progress.prevPart.slug }}
+            to="/posts/$"
+            params={{ _splat: progress.prevPart.slug }}
             className="inline-flex items-center space-x-2 rounded-lg bg-surface px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-surface"
           >
             <ArrowLeft className="h-4 w-4" />
@@ -148,7 +157,8 @@ const Parts = (props: PartsProps) => {
 
         {progress.nextPart ? (
           <Link
-            to="/posts/$" params={{ _splat: progress.nextPart.slug }}
+            to="/posts/$"
+            params={{ _splat: progress.nextPart.slug }}
             className="inline-flex items-center space-x-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:bg-accent-hover hover:shadow-xl"
           >
             <span>Next</span>

@@ -37,9 +37,7 @@ export const sendContactEmail = createServerFn({ method: "POST" })
       throw new Error("Email service not configured (RESEND_API_KEY missing).")
     }
     if (!toAddress) {
-      throw new Error(
-        "Destination address not configured (CONTACT_TO_EMAIL)."
-      )
+      throw new Error("Destination address not configured (CONTACT_TO_EMAIL).")
     }
     if (!fromAddress) {
       throw new Error("Sender address not configured (CONTACT_FROM_EMAIL).")
@@ -73,9 +71,7 @@ export const sendContactEmail = createServerFn({ method: "POST" })
 
     if (!resp.ok) {
       const errorText = await resp.text().catch(() => "")
-      throw new Error(
-        `Failed to send email: ${errorText || resp.statusText}`
-      )
+      throw new Error(`Failed to send email: ${errorText || resp.statusText}`)
     }
 
     return { ok: true }

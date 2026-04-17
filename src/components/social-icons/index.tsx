@@ -1,13 +1,13 @@
 import {
-  Mail,
-  Github,
   Facebook,
-  Youtube,
+  Github,
+  Instagram,
   Linkedin,
-  Twitter,
+  Mail,
   Mastodon,
   Threads,
-  Instagram,
+  Twitter,
+  Youtube,
 } from "./icons"
 
 const components = {
@@ -31,7 +31,8 @@ type SocialIconProps = {
 const SocialIcon = ({ kind, href, size = 8 }: SocialIconProps) => {
   if (
     !href ||
-    (kind === "mail" && !/^mailto:\w+([.-]?\w+)@\w+([.-]?\w+)(.\w{2,3})+$/.test(href))
+    (kind === "mail" &&
+      !/^mailto:\w+([.-]?\w+)@\w+([.-]?\w+)(.\w{2,3})+$/.test(href))
   )
     return null
 
@@ -43,7 +44,11 @@ const SocialIcon = ({ kind, href, size = 8 }: SocialIconProps) => {
       target="_blank"
       rel="noopener noreferrer"
       href={href}
-      aria-label={kind === "mail" ? "Send email" : `Follow on ${kind.charAt(0).toUpperCase() + kind.slice(1)}`}
+      aria-label={
+        kind === "mail"
+          ? "Send email"
+          : `Follow on ${kind.charAt(0).toUpperCase() + kind.slice(1)}`
+      }
     >
       <span className="sr-only">{kind}</span>
       <SocialSvg

@@ -10,7 +10,9 @@ interface Post {
   excerpt?: string
   series?: string | null
   part?: number | null
-  readingTime?: { text: string; minutes: number; time: number; words: number } | string
+  readingTime?:
+    | { text: string; minutes: number; time: number; words: number }
+    | string
   [key: string]: unknown
 }
 
@@ -37,15 +39,19 @@ export interface SeriesGroup {
 
 export function getAllSeries() {
   const seriesMap = new Map<string, SeriesPost[]>()
+  for (const post of allPosts as Post[]) {
+    if (!post.series || post.isDraft === true) {
+      continue
+    }
 
-  ;(allPosts as Post[])
-    .filter((post: Post) => post.series && post.isDraft !== true)
-    .forEach((post: Post) => {
-      const seriesName = post.series!
-      if (!seriesMap.has(seriesName)) {
-        seriesMap.set(seriesName, [])
-      }
-      seriesMap.get(seriesName)!.push({
+    const seriesName = post.series
+    if (!seriesMap.has(seriesName)) {
+      seriesMap.set(seriesName, [])
+    }
+
+    const seriesPosts = seriesMap.get(seriesName)
+    if (seriesPosts) {
+      seriesPosts.push({
         slug: post.slug,
         date: new Date(post.date).toISOString(),
         title: post.title,
@@ -60,13 +66,20 @@ export function getAllSeries() {
             ? post.readingTime.text
             : undefined,
       })
-    })
+    }
+  }
 
   const groups: SeriesGroup[] = Array.from(seriesMap.entries()).map(
     ([name, posts]: [string, SeriesPost[]]) => {
-      const sortedPosts = posts.sort((a: SeriesPost, b: SeriesPost) => a.part - b.part)
+      const sortedPosts = posts.sort(
+        (a: SeriesPost, b: SeriesPost) => a.part - b.part
+      )
       const allTags = new Set<string>()
-      posts.forEach((post: SeriesPost) => post.tags.forEach((tag: string) => allTags.add(tag)))
+      for (const post of posts) {
+        for (const tag of post.tags) {
+          allTags.add(tag)
+        }
+      }
 
       return {
         name,
@@ -90,22 +103,18 @@ export function getAllSeries() {
   )
 }
 
-export function getSeriesByName(
-  seriesName: string
-): SeriesGroup | undefined {
-  return getAllSeries().find((series: SeriesGroup) => series.name === seriesName)
+export function getSeriesByName(seriesName: string): SeriesGroup | undefined {
+  return getAllSeries().find(
+    (series: SeriesGroup) => series.name === seriesName
+  )
 }
 
-export function getSeriesProgress(
-  seriesName: string,
-  currentPart: number
-) {
+export function getSeriesProgress(seriesName: string, currentPart: number) {
   const series = getSeriesByName(seriesName)
   if (!series) return null
 
   const progress = (currentPart / series.totalParts) * 100
-  const nextPart =
-    currentPart < series.totalParts ? currentPart + 1 : null
+  const nextPart = currentPart < series.totalParts ? currentPart + 1 : null
   const prevPart = currentPart > 1 ? currentPart - 1 : null
 
   return {

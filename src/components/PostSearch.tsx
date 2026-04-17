@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react"
 import { Search, X } from "lucide-react"
+import { useEffect, useState } from "react"
 
 interface PostSearchProps {
   onSearch: (query: string) => void
@@ -46,6 +46,7 @@ export default function PostSearch({
           />
           {searchQuery && (
             <button
+              type="button"
               aria-label="Clear search"
               onClick={() => setSearchQuery("")}
               className="absolute right-0 top-1/2 -translate-y-1/2 p-1 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 focus-visible:rounded-sm"
@@ -55,10 +56,13 @@ export default function PostSearch({
           )}
         </div>
         <button
+          type="button"
           onClick={() => setShowTags(!showTags)}
           aria-expanded={showTags}
           className={`rounded-sm text-sm font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 ${
-            selectedTags.length > 0 ? "text-accent" : "text-muted-foreground hover:text-foreground"
+            selectedTags.length > 0
+              ? "text-accent"
+              : "text-muted-foreground hover:text-foreground"
           }`}
         >
           Tags{selectedTags.length > 0 ? ` (${selectedTags.length})` : ""}
@@ -69,6 +73,7 @@ export default function PostSearch({
         <div className="flex flex-wrap gap-2">
           {availableTags.map((tag) => (
             <button
+              type="button"
               key={tag}
               onClick={() => handleTagToggle(tag)}
               className={`rounded-md px-2 py-0.5 text-xs font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 ${

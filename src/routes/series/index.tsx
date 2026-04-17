@@ -1,16 +1,17 @@
-import { useMemo } from "react"
-import { createFileRoute, Link } from "@tanstack/react-router"
-import { format, parseISO } from "date-fns"
 import Tag from "@/components/Tag"
-import { getAllSeries } from "@/lib/series-utils"
 import { genPageMetadata } from "@/lib/seo"
+import { getAllSeries } from "@/lib/series-utils"
+import { Link, createFileRoute } from "@tanstack/react-router"
+import { format, parseISO } from "date-fns"
+import { useMemo } from "react"
 
 export const Route = createFileRoute("/series/")({
   component: SeriesPage,
   head: () =>
     genPageMetadata({
       title: "Series",
-      description: "Explore comprehensive guides and tutorials organized in series.",
+      description:
+        "Explore comprehensive guides and tutorials organized in series.",
     }),
 })
 
@@ -62,9 +63,7 @@ function SeriesPage() {
                   key={post.slug}
                   className="flex items-baseline gap-2 text-sm"
                 >
-                  <span className="font-medium text-accent">
-                    {post.part}.
-                  </span>
+                  <span className="font-medium text-accent">{post.part}.</span>
                   <span className="line-clamp-1 text-muted-foreground">
                     {post.title}
                   </span>

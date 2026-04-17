@@ -1,16 +1,18 @@
-import { createFileRoute } from "@tanstack/react-router"
-import { allPosts } from "content-collections"
 import EnhancedListLayout from "@/layouts/EnhancedListLayout"
 import { genPageMetadata } from "@/lib/seo"
+import { createFileRoute } from "@tanstack/react-router"
+import { allPosts } from "content-collections"
 
 const POSTS_PER_PAGE = 8
 
 export const Route = createFileRoute("/posts/")({
   component: BlogPage,
-  head: () => genPageMetadata({
-    title: "Blog",
-    description: "Explore articles on web development, microservices, .NET, React, Docker, Kubernetes, and modern software development practices.",
-  }),
+  head: () =>
+    genPageMetadata({
+      title: "Blog",
+      description:
+        "Explore articles on web development, microservices, .NET, React, Docker, Kubernetes, and modern software development practices.",
+    }),
 })
 
 function BlogPage() {
