@@ -9,7 +9,13 @@
     "test": "vitest run",
     "lint": "biome check .",
     "format": "biome format --write .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "video:studio": "remotion studio video/src/index.ts",
+    "video:storyboard": "VIDEO_STEP=storyboard tsx video/src/cli/generate.ts",
+    "video:voice": "VIDEO_STEP=voice tsx video/src/cli/generate.ts",
+    "video:render": "VIDEO_STEP=render tsx video/src/cli/generate.ts",
+    "video:upload": "VIDEO_STEP=upload tsx video/src/cli/generate.ts",
+    "video:generate": "VIDEO_STEP=all tsx video/src/cli/generate.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.2.0",
@@ -49,7 +55,11 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@anthropic-ai/sdk": "^0.92.0",
     "@biomejs/biome": "^1.9.4",
+    "@remotion/bundler": "^4.0.430",
+    "@remotion/cli": "^4.0.430",
+    "@remotion/renderer": "^4.0.430",
     "@resvg/resvg-js": "^2.6.2",
     "@tanstack/devtools-vite": "^0.3.11",
     "@tanstack/react-devtools": "^0.7.0",
@@ -58,6 +68,10 @@
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^5.0.4",
+    "dotenv": "^16.4.7",
+    "googleapis": "^144.0.0",
+    "gray-matter": "^4.0.3",
+    "remotion": "^4.0.430",
     "satori": "^0.25.0",
     "shadcn": "^4.0.5",
     "tsx": "^4.21.0",
