@@ -76,6 +76,8 @@ export type SceneTiming = {
 }
 
 export type RenderedStoryboard = Storyboard & {
-  totalDurationFrames: number
   timings: SceneTiming[]
 }
+
+export const totalDurationFrames = (timings: SceneTiming[]): number =>
+  timings.reduce((sum, t) => sum + t.durationFrames, 0)

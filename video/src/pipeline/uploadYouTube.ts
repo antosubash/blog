@@ -1,13 +1,12 @@
 import { createReadStream } from "node:fs"
 import { google } from "googleapis"
+import type { Privacy } from "../config"
 import type { LoadedPost } from "./loadPost"
-
-export type YouTubePrivacy = "private" | "unlisted" | "public"
 
 export async function uploadToYouTube(
   videoPath: string,
   post: LoadedPost,
-  privacy: YouTubePrivacy = "unlisted"
+  privacy: Privacy = "unlisted"
 ): Promise<string> {
   const clientId = process.env.YOUTUBE_CLIENT_ID
   const clientSecret = process.env.YOUTUBE_CLIENT_SECRET

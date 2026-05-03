@@ -67,9 +67,7 @@ export async function loadOrGenerateStoryboard(
       const cached = await readFile(cachePath, "utf8")
       console.log(`Using cached storyboard at ${cachePath}`)
       return StoryboardSchema.parse(JSON.parse(cached))
-    } catch {
-      // fall through
-    }
+    } catch {}
   }
 
   console.log(`Generating storyboard for ${post.slug} via Claude Opus 4.7...`)

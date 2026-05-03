@@ -7,7 +7,7 @@ import {
 } from "remotion"
 import type { z } from "zod"
 import type { SectionSceneSchema } from "../types"
-import { SceneFooter } from "./SceneChrome"
+import { SceneFooter, SceneHeader } from "./SceneChrome"
 
 type Props = {
   scene: z.infer<typeof SectionSceneSchema>
@@ -32,32 +32,11 @@ export const SectionScene: React.FC<Props> = ({ scene, index, total }) => {
       }}
     >
       <div>
-        <div
-          style={{
-            color: "#5eead4",
-            fontSize: 28,
-            fontWeight: 600,
-            letterSpacing: 4,
-            textTransform: "uppercase",
-            opacity: headingProgress,
-          }}
-        >
-          Chapter {index} / {total - 1}
-        </div>
-        <h2
-          style={{
-            color: "#f8fafc",
-            fontSize: 88,
-            fontWeight: 700,
-            lineHeight: 1.1,
-            margin: "30px 0 60px",
-            transform: `translateY(${(1 - headingProgress) * 30}px)`,
-            opacity: headingProgress,
-            fontFamily: "Fraunces, serif",
-          }}
-        >
-          {scene.heading}
-        </h2>
+        <SceneHeader
+          eyebrow={`Chapter ${index} / ${total - 1}`}
+          title={scene.heading}
+          progress={headingProgress}
+        />
         <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
           {scene.bullets.map((bullet, i) => {
             const delay = fps * 0.6 + i * fps * 0.4

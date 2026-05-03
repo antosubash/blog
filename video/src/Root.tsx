@@ -1,12 +1,16 @@
 import { Composition } from "remotion"
 import { BlogVideo } from "./BlogVideo"
-import { FPS, VIDEO_HEIGHT, VIDEO_WIDTH } from "./types"
-import type { RenderedStoryboard } from "./types"
+import {
+  FPS,
+  type RenderedStoryboard,
+  VIDEO_HEIGHT,
+  VIDEO_WIDTH,
+  totalDurationFrames,
+} from "./types"
 
 const PLACEHOLDER: RenderedStoryboard = {
   slug: "placeholder",
   title: "Preview your storyboard with --props",
-  totalDurationFrames: FPS * 6,
   timings: [{ startFrame: 0, durationFrames: FPS * 6, voiceFile: null }],
   scenes: [
     {
@@ -27,10 +31,10 @@ export const Root: React.FC = () => {
       width={VIDEO_WIDTH}
       height={VIDEO_HEIGHT}
       fps={FPS}
-      durationInFrames={PLACEHOLDER.totalDurationFrames}
+      durationInFrames={totalDurationFrames(PLACEHOLDER.timings)}
       defaultProps={PLACEHOLDER}
       calculateMetadata={({ props }) => ({
-        durationInFrames: props.totalDurationFrames,
+        durationInFrames: totalDurationFrames(props.timings),
       })}
     />
   )

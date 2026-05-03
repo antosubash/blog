@@ -1,7 +1,13 @@
 import { spawn } from "node:child_process"
-import { mkdir, stat, writeFile } from "node:fs/promises"
+import { mkdir, readFile, stat, writeFile } from "node:fs/promises"
 import path from "node:path"
-import { FPS, type SceneTiming, type Storyboard } from "../types"
+import { TTS_CONCURRENCY } from "../config"
+import {
+  FPS,
+  type RenderedStoryboard,
+  type SceneTiming,
+  type Storyboard,
+} from "../types"
 
 const CACHE_DIR = path.resolve(process.cwd(), "video/cache")
 
@@ -15,7 +21,7 @@ type ElevenLabsOptions = {
   modelId?: string
 }
 
-export async function synthesizeScene(
+async function synthesizeScene(
   text: string,
   outPath: string,
   options: ElevenLabsOptions = {}
@@ -55,7 +61,7 @@ export async function synthesizeScene(
   await writeFile(outPath, buffer)
 }
 
-export async function getMp3DurationSeconds(filePath: string): Promise<number> {
+function probeMp3DurationSeconds(filePath: string): Promise<number> {
   // Use ffprobe — already available because Remotion ships ffmpeg.
   return new Promise((resolve, reject) => {
     const proc = spawn("ffprobe", [
@@ -91,56 +97,107 @@ export async function getMp3DurationSeconds(filePath: string): Promise<number> {
   })
 }
 
+async function getDurationSeconds(mp3Path: string): Promise<number> {
+  const sidecar = `${mp3Path}.duration`
+  try {
+    const [mp3Stat, sidecarStat] = await Promise.all([
+      stat(mp3Path),
+      stat(sidecar),
+    ])
+    if (sidecarStat.mtimeMs >= mp3Stat.mtimeMs) {
+      const cached = Number.parseFloat(await readFile(sidecar, "utf8"))
+      if (Number.isFinite(cached)) return cached
+    }
+  } catch {
+    // sidecar missing or stale — re-probe
+  }
+
+  const seconds = await probeMp3DurationSeconds(mp3Path)
+  await writeFile(sidecar, String(seconds))
+  return seconds
+}
+
+async function mapWithConcurrency<T, R>(
+  items: T[],
+  concurrency: number,
+  worker: (item: T, index: number) => Promise<R>
+): Promise<R[]> {
+  const results = new Array<R>(items.length)
+  let cursor = 0
+  const runners = Array.from(
+    { length: Math.min(concurrency, items.length) },
+    async () => {
+      while (true) {
+        const i = cursor++
+        if (i >= items.length) return
+        results[i] = await worker(items[i], i)
+      }
+    }
+  )
+  await Promise.all(runners)
+  return results
+}
+
 export async function synthesizeStoryboard(
   storyboard: Storyboard,
   options: { force?: boolean } = {}
-): Promise<SceneTiming[]> {
+): Promise<RenderedStoryboard> {
   const voiceDir = path.join(CACHE_DIR, storyboard.slug, "voice")
   await mkdir(voiceDir, { recursive: true })
 
-  const timings: SceneTiming[] = []
-  let cursor = 0
+  type SceneAudio = { audioFrames: number; voiceFile: string }
 
-  for (const [index, scene] of storyboard.scenes.entries()) {
-    const fileName = `${String(index).padStart(2, "0")}-${scene.id}.mp3`
-    const outPath = path.join(voiceDir, fileName)
+  const audioBySceneIndex = await mapWithConcurrency(
+    storyboard.scenes,
+    TTS_CONCURRENCY,
+    async (scene, index): Promise<SceneAudio> => {
+      const fileName = `${String(index).padStart(2, "0")}-${scene.id}.mp3`
+      const outPath = path.join(voiceDir, fileName)
 
-    let needsRender = options.force === true
-    if (!needsRender) {
+      let needsRender = options.force === true
+      if (!needsRender) {
+        try {
+          await stat(outPath)
+        } catch {
+          needsRender = true
+        }
+      }
+
+      if (needsRender) {
+        console.log(
+          `  [${index + 1}/${storyboard.scenes.length}] TTS ${scene.id}`
+        )
+        await synthesizeScene(scene.narration, outPath)
+      }
+
+      let durationSeconds: number
       try {
-        await stat(outPath)
-      } catch {
-        needsRender = true
+        durationSeconds = await getDurationSeconds(outPath)
+      } catch (error) {
+        console.warn(
+          `  ffprobe failed for ${outPath}; falling back to ${FALLBACK_DURATION_FRAMES / FPS}s. Reason: ${(error as Error).message}`
+        )
+        durationSeconds = FALLBACK_DURATION_FRAMES / FPS
+      }
+
+      return {
+        audioFrames: Math.ceil(durationSeconds * FPS),
+        voiceFile: outPath,
       }
     }
+  )
 
-    if (needsRender) {
-      console.log(
-        `  [${index + 1}/${storyboard.scenes.length}] TTS ${scene.id}`
-      )
-      await synthesizeScene(scene.narration, outPath)
-    }
-
-    let durationSeconds: number
-    try {
-      durationSeconds = await getMp3DurationSeconds(outPath)
-    } catch (error) {
-      console.warn(
-        `  ffprobe failed for ${outPath}; falling back to ${FALLBACK_DURATION_FRAMES / FPS}s. Reason: ${(error as Error).message}`
-      )
-      durationSeconds = FALLBACK_DURATION_FRAMES / FPS
-    }
-
-    const audioFrames = Math.ceil(durationSeconds * FPS)
-    const durationFrames = audioFrames + PRE_PAD_FRAMES + POST_PAD_FRAMES
-
+  const timings: SceneTiming[] = []
+  let cursor = 0
+  for (const audio of audioBySceneIndex) {
+    const durationFrames = audio.audioFrames + PRE_PAD_FRAMES + POST_PAD_FRAMES
     timings.push({
       startFrame: cursor,
       durationFrames,
-      voiceFile: outPath,
+      voiceFile: audio.voiceFile,
     })
     cursor += durationFrames
   }
 
-  return timings
+  return { ...storyboard, timings }
 }

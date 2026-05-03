@@ -6,6 +6,7 @@ import {
   useVideoConfig,
 } from "remotion"
 import type { z } from "zod"
+import { SITE_LABEL } from "../config"
 import type { IntroSceneSchema } from "../types"
 
 type Props = {
@@ -41,7 +42,7 @@ export const IntroScene: React.FC<Props> = ({ scene }) => {
           opacity: titleSpring,
         }}
       >
-        blog.antosubash.com
+        {SITE_LABEL}
       </div>
       <div
         style={{
