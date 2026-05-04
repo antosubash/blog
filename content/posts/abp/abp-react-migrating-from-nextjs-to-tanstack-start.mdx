@@ -1,0 +1,245 @@
+---
+title: 'Migrating an ABP Frontend from Next.js to TanStack Start'
+excerpt: 'A real-world case study of moving abp-react from Next.js App Router to TanStack Start — what changed in routing, SSR, OIDC, the generated API client, state, and Docker.'
+date: '2026-05-04'
+tags:
+  - react
+  - tanstack
+  - tanstack-start
+  - tanstack-router
+  - nextjs
+  - abp
+  - typescript
+  - oidc
+  - vite
+  - biome
+---
+
+<TOCInline toc={props.toc} asDisclosure />
+
+## Why I moved off Next.js
+
+`abp-react` started as a Next.js App Router project. It worked, and for a long time it was the obvious choice for a React UI that needs SSR plus a server-side OIDC session. But every time I touched the auth code or the data layer, the friction added up:
+
+- **Server Actions kept leaking into client code.** A function marked `'use server'` is a server boundary, but the call site looks identical to a normal import. I lost time more than once chasing bugs that were really "this ran on the wrong side."
+- **The bundler/runtime story was opaque.** App Router decides what's static, what's server-rendered, what's a client component. When something went wrong, the trail led into framework internals.
+- **The generated API client was just types.** I was hand-wrapping every endpoint in a `useQuery`, hand-writing the query keys, hand-invalidating on mutation. The types were generated; the hooks weren't.
+- **Iron-session + Redis for token storage** felt heavier than the actual problem (storing an access token and a refresh token between requests).
+
+TanStack Start is built on Vite + Nitro + TanStack Router. The mental model is closer to "a real router with file-based routes, plus typed server functions" and farther from "a framework that decides for you." After a few weekends of prototyping, the rebuild lived at [`abp-react-tanstack`](https://github.com/antosubash/abp-react-tanstack), and I switched the demo over to it.
+
+This post walks through the parts that actually changed.
+
+## File-based routing: App Router → TanStack Router
+
+In Next.js, routes lived under `src/app/` with `page.tsx` / `layout.tsx` / `route.ts` per folder. The folder *was* the route segment, and server vs client was decided per-file with `'use client'`.
+
+In TanStack Router, the equivalent layout looks like this:
+
+```
+src/routes/
+  __root.tsx           // root layout
+  index.tsx            // /
+  dashboard.tsx        // /dashboard
+  admin.roles.tsx      // /admin/roles
+  auth/
+    login.ts           // server route handler
+    callback.ts        // server route handler
+  routeTree.gen.ts     // generated, do not edit
+```
+
+`__root.tsx` replaces `app/layout.tsx`. It's where I set up the QueryClient, theme provider, auth context, and `<Outlet />`. The route tree is generated at dev time into `routeTree.gen.ts`, which is what gives the router its end-to-end types — links and `useParams()` are typed against the actual filesystem.
+
+Two things I appreciate after the move:
+
+1. **There's no implicit boundary.** Every route is a TypeScript module I can read. If it has a `server` block, it runs on the server; otherwise it runs everywhere a route runs.
+2. **Dot-segmented filenames** (`admin.roles.tsx`) keep deep route trees flat. The Next.js version had `src/app/admin/roles/page.tsx`, `src/app/admin/users/page.tsx`, and a long climb up `..` to share helpers.
+
+## SSR with server functions
+
+Next.js mixed two server-side mechanisms: async server components for data fetching on render, and Server Actions (`'use server'`) for mutations. The split was awkward — read paths and write paths felt different even when they were doing the same thing.
+
+TanStack Start has a single primitive: **server functions**, defined inside route files. A login route in `src/routes/auth/login.ts`:
+
+```ts
+import { createFileRoute } from '@tanstack/react-router'
+import { getAuthUrl } from '~/infrastructure/auth/oidc'
+import { updateSession } from '~/infrastructure/auth/session'
+
+export const Route = createFileRoute('/auth/login').server.handlers.GET(
+  async () => {
+    const { url, codeVerifier, state, nonce } = await getAuthUrl()
+    await updateSession({ codeVerifier, state, nonce })
+    return Response.redirect(url, 302)
+  }
+)
+```
+
+That same pattern handles `GET`, `POST`, anything. Reads in routes use the loader's `beforeLoad` / `loader` to fetch on the server during SSR; mutations call typed server functions. There's one model to learn instead of two.
+
+## OIDC + PKCE without iron-session
+
+The auth flow stayed conceptually the same — Authorization Code with PKCE — but the moving parts shrank.
+
+**Next.js version** (`src/lib/auth.ts`):
+
+- [`openid-client`](https://github.com/panva/node-openid-client) for the protocol.
+- [`iron-session`](https://github.com/vvo/iron-session) cookies for the encrypted session.
+- Redis (keyed by user `sub`) to store the active token outside the cookie, because some payloads were big enough to push past cookie size limits.
+- Token refresh inside an `'use server'` function called from layouts.
+
+**TanStack Start version** (`src/infrastructure/auth/`):
+
+- Still `openid-client` for the protocol — that part wasn't broken.
+- `@tanstack/react-start/server`'s session helpers replace `iron-session`. Same idea — encrypted, HttpOnly cookie — without an extra dependency.
+- **No Redis.** I keep the access token and refresh token in the session, and refresh proactively 15 minutes before expiry inside `getUserSession()` so the route loader never has to wait for a 401.
+- Files are small and explicit:
+  - `oidc.ts` — `getAuthUrl()`, `exchangeCodeForTokens()`, `refreshToken()`, `revokeToken()`
+  - `auth-server.ts` — `getUserSession()`, `createSession()`, `performLogout()`
+  - `session.ts` — typed wrappers around the start session API
+  - `routes/auth/callback.ts` — validates `state` + `code_verifier`, swaps code for tokens, calls `createSession()`
+
+Dropping Redis was the unexpected win. The original reason it existed was iron-session's cookie size ceiling. With Start's session API and a more careful claims projection, the cookie fits comfortably and Redis is no longer in the deployment topology.
+
+## Auto-generated TypeScript clients from OpenAPI
+
+Both versions use [`@hey-api/openapi-ts`](https://heyapi.dev/) to generate a typed client from the ABP swagger document. The difference is what gets generated.
+
+**Next.js — `openapi-ts.config.ts`:**
+
+```ts
+export default {
+  input: process.env.OPENAPI_SPEC_URL,
+  output: 'src/client',
+  plugins: ['@hey-api/client-fetch', '@hey-api/typescript'],
+}
+```
+
+That gave me types and a fetch wrapper. Everything else — `useQuery` hooks, query keys, mutation invalidation — was hand-written.
+
+**TanStack — `hey-api.config.ts`:**
+
+```ts
+export default {
+  input: process.env.VITE_OPENAPI_SPEC_URL,
+  output: { path: 'src/infrastructure/api', clean: true },
+  plugins: [
+    '@hey-api/client-fetch',
+    '@hey-api/typescript',
+    'zod',
+    '@tanstack/react-query',
+  ],
+}
+```
+
+The `@tanstack/react-query` plugin generates query options and mutation options for every endpoint. `zod` generates runtime validation schemas alongside the types. A call site for the email settings endpoint now reads:
+
+```ts
+import { useQuery } from '@tanstack/react-query'
+import { emailSettingsGetOptions } from '~/infrastructure/api/@tanstack/react-query.gen'
+
+export function useEmailSettings() {
+  return useQuery(emailSettingsGetOptions({}))
+}
+```
+
+Query keys, the fetcher, and the response type are all derived from the spec. Renaming an endpoint on the backend turns into a TypeScript error on every call site after the next codegen run, instead of a silent 404 at runtime.
+
+## State split: TanStack Query for server state, Zustand for feature stores
+
+The Next.js version leaned on React Query for everything that came from the server, and on local `useState` / form libraries for everything else. That worked, but multi-step forms and admin screens with cross-component state (open dialog, selected row, pending edit) ended up with prop drilling or ad-hoc context.
+
+In the rebuild I split the two cleanly:
+
+- **TanStack Query** owns server state — anything that has a URL behind it. The generated `*Options` functions are the entry point; manual `queryKey` arrays mostly disappeared.
+- **Zustand** owns feature-local UI state — open form, draft values, validation errors before submit.
+
+A small `createBaseStore()` factory in `src/shared/stores/base-store.ts` gives every feature store the same `isLoading`, `error`, and `reset` shape, which keeps the form components consistent across `features/users`, `features/profile`, etc.
+
+The rule of thumb that survived: *if a refresh of the page should bring it back, it's server state (Query). If a refresh should clear it, it's UI state (Zustand).*
+
+## Shadcn/ui + Tailwind setup
+
+Both versions use shadcn/ui on top of Radix primitives and Tailwind, but the wiring differs:
+
+| | Next.js | TanStack Start |
+| --- | --- | --- |
+| Tailwind integration | `@tailwindcss/postcss` + `postcss.config.mjs` | `@tailwindcss/vite` plugin (no PostCSS config) |
+| `components.json` style | `default` | `new-york` |
+| Base color | `slate` | `zinc` |
+| RSC | `true` | `false` |
+| Aliases | `components`, `utils` | `components`, `utils`, `ui`, `lib`, `hooks` |
+| CSS entry | `src/app/globals.css` | `src/styles.css` |
+
+Switching `rsc` to `false` matters: shadcn's CLI stops emitting the React Server Components-only directives, which is what you want when every component is client-rendered or SSR'd as a normal React component.
+
+## Vitest + Playwright + Biome toolchain
+
+The Next.js project listed Vitest and Playwright in `devDependencies` but had no test files committed. The TanStack rebuild was a chance to actually wire them up.
+
+- **Vitest** for unit/component tests with `jsdom`, MSW for API mocking, and a 70 % coverage threshold enforced in `vitest.config.ts`.
+- **Playwright** for end-to-end. `playwright.config.ts` runs Chromium with two retries on CI and HTML + JSON reporters.
+- **Biome** replaces ESLint + Prettier in one binary. `biome.json` excludes the generated files (`routeTree.gen.ts`, `infrastructure/api/**`) so they don't fight the linter.
+
+Biome is the tool I underestimated. Format-on-save plus a single config file is a small thing per file and a large thing across a year of edits. It also runs noticeably faster than the ESLint + Prettier pair it replaced.
+
+## Docker deployment
+
+The Dockerfile shrank in both line count and runtime weight.
+
+**Before — Next.js standalone:**
+
+```dockerfile
+FROM node:23-slim AS base
+# ... prod-deps, build, runner stages
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/public ./public
+USER nextjs
+CMD ["node", "server.js"]
+```
+
+**After — TanStack Start (Nitro output):**
+
+```dockerfile
+FROM node:24-alpine AS builder
+# build → .output/
+
+FROM node:24-alpine AS production
+RUN apk add --no-cache dumb-init curl
+COPY --from=builder /app/.output ./.output
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./
+USER tanstack
+HEALTHCHECK CMD curl -f http://localhost:3000/api/health || exit 1
+ENTRYPOINT ["dumb-init", "--"]
+CMD ["node", ".output/server/index.mjs"]
+```
+
+The differences that matter in production:
+
+- **Alpine base + dumb-init.** Smaller image and proper signal forwarding so SIGTERM actually stops the Node process during a rolling deploy.
+- **Built-in healthcheck endpoint** so the orchestrator can stop guessing.
+- **`.output/`** is just a Node app — no `server.js` shim, no standalone tree to assemble. `node .output/server/index.mjs` and you're up.
+
+## What I'd warn you about
+
+A few rough edges from the migration that aren't in the marketing copy:
+
+- **Codegen output churns on schema changes.** If you regenerate the client and don't review the diff, you can lose tracking of what actually changed in the API. I now treat the generated folder as a reviewed PR artifact, not magic.
+- **Mutation invalidation isn't free.** The generated query options give you keys, but you still have to decide *which* queries to invalidate after a mutation. Predicate-based invalidation (match by endpoint URL) is what I ended up with for most cases.
+- **Server-only modules.** Importing a server-only module (e.g. `infrastructure/auth/oidc`) into a client component crashes at build time, not at edit time. Folder boundaries (`infrastructure/`, `features/`, `shared/`) mostly prevent this, but it's a footgun the first week.
+- **Ecosystem gaps.** Some Next.js-specific libraries (image components, font loaders, middleware-flavoured packages) don't apply. For images I use a plain `<img>` plus a Vite asset import; for fonts I import them in `styles.css`. None of this was hard, but the migration is partly an exercise in *deleting* dependencies, which surprised me.
+
+## Wrapping up
+
+After living with it for a few months, the rebuild is the version I want to maintain. The router is honest about where code runs, the generated client carries hooks, query keys, and validation schemas, and the deployment artifact is just a Node server.
+
+If you're running an ABP backend with the Next.js `abp-react`, the migration is straightforward: the auth flow, the API client, and the UI components all port over. The biggest mindset shift is treating server functions as the single server primitive instead of toggling between server components and Server Actions.
+
+### Source
+
+- [`antosubash/abp-react-tanstack`](https://github.com/antosubash/abp-react-tanstack) — the TanStack Start rebuild
+- [`antosubash/abp-react`](https://github.com/antosubash/abp-react) — the Next.js original
+
+If you find these useful, a star helps others find them.
