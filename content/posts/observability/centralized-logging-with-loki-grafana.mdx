@@ -1,0 +1,1014 @@
+---
+title: 'Centralized Logging for Any Stack with Loki, Promtail, Alloy, and Grafana'
+excerpt: 'A drop-in observability stack that captures backend logs and browser telemetry into a single Grafana dashboard — works with any backend language and any frontend framework. All configs and code included.'
+date: '2026-05-06'
+tags:
+  - observability
+  - logging
+  - grafana
+  - loki
+  - promtail
+  - alloy
+  - faro
+  - docker-compose
+  - monitoring
+---
+
+<TOCInline toc={props.toc} asDisclosure />
+
+The first time a production bug hits a real user, the question is almost always the same: _what was the system doing at 14:32:07?_ If your answer is "let me SSH into the box and grep some files," you've already lost. Centralized logging fixes that — every service, every browser session, every error, in one searchable place.
+
+This post walks through a complete, self-hosted log aggregation stack you can drop into any project, regardless of whether your backend is Python, Node, Go, .NET, or Rust, and regardless of whether your frontend is React, Vue, Svelte, or plain HTML. The stack is:
+
+- **Loki** — log storage and query engine (think Prometheus, but for logs)
+- **Promtail** — scrapes container logs and ships them to Loki
+- **Alloy** — a Grafana Faro receiver for browser-side telemetry
+- **Grafana** — the dashboard UI that ties it all together
+
+Everything runs as containers, configured with a handful of YAML files. No SaaS bill, no vendor lock-in, no JVM.
+
+## Why this stack
+
+A few reasons it's worth standing this up early:
+
+1. **Log labels, not log files.** Loki indexes labels (`service`, `level`, `container`, etc.) and stores the rest as compressed text. You query like Prometheus: `{service="backend", level="ERROR"}`. Cheap to run, fast to search.
+2. **Container-native.** Promtail reads logs straight from the Docker socket — there's nothing to install inside your application containers, and it picks up new services automatically.
+3. **One dashboard for backend and browser.** Grafana Faro pushes browser errors, performance traces, and console logs into the same Loki stream as your backend. When a user reports a bug, you can pivot from their browser error to the backend request that triggered it without leaving the page.
+4. **Polyglot-friendly.** Promtail doesn't care what language your service is written in. As long as it logs to stdout, you're done. Optionally, applications can push structured JSON directly to Loki's HTTP API for richer labels.
+
+## How it compares to alternatives
+
+A pragmatic look at where this stack sits in the market:
+
+| Stack | Strengths | Weaknesses |
+|---|---|---|
+| **Loki + Grafana** (this post) | Cheap to run, label-based, fits next to Prometheus, browser-side telemetry via Faro, no JVM, no per-log pricing. | Full-text search is slower than indexed alternatives; not great if you query unindexed fields constantly. |
+| **ELK / OpenSearch** | Best-in-class full-text search and analytics. Mature ecosystem. | Memory-hungry, JVM-based, complex to operate, schema-heavy. Overkill for most teams under ~100 GB/day. |
+| **Datadog / New Relic / Honeycomb** | Hosted, polished, alerts and traces built-in, no ops burden. | Per-log pricing escalates fast. Vendor lock-in. Often the line item engineering is asked to cut first. |
+| **CloudWatch / Cloud Logging / Azure Monitor** | Zero-setup if you're all-in on the cloud. | Each cloud has its own query language; cross-cloud or on-prem is awkward; querying gets expensive. |
+| **Plain `docker logs` + `journalctl`** | Already there. | Not a real answer past one box. |
+
+Loki's sweet spot is "I want central logs, I don't have a logging team, and I'd like the bill to look like a few EC2 instances." If you're already running Grafana for metrics, this is the path of least resistance.
+
+## Architecture
+
+```text
+┌─────────────┐         ┌──────────────┐
+│  Backend    │ stdout  │              │
+│  container  │────────▶│   Promtail   │──┐
+└─────────────┘         │ (Docker SD)  │  │
+                        └──────────────┘  │
+┌─────────────┐                           │       ┌────────┐
+│  Backend    │ HTTP push                 ├──────▶│  Loki  │◀──┐
+│  app        │───────────────────────────┘       └────────┘   │
+└─────────────┘                                       ▲        │
+                                                      │        │
+┌─────────────┐         ┌──────────────┐              │        │
+│  Browser    │ HTTPS   │    Alloy     │──────────────┘        │
+│  (Faro SDK) │────────▶│ (Faro recv)  │                       │
+└─────────────┘         └──────────────┘                       │
+                                                          ┌────┴─────┐
+                                                          │ Grafana  │
+                                                          │  (UI)    │
+                                                          └──────────┘
+```
+
+Three log sources, one storage engine, one UI.
+
+## Docker Compose: the whole stack
+
+Add this block to your `compose.yml`. The host ports (`3001`, `3100`, `12347`) are arbitrary — change them if they collide with anything else.
+
+```yaml
+services:
+  loki:
+    image: grafana/loki:3.4.2
+    restart: unless-stopped
+    command: -config.file=/etc/loki/loki-config.yml
+    volumes:
+      - ./monitoring/loki/loki-config.yml:/etc/loki/loki-config.yml:ro
+      - loki-data:/loki
+    ports:
+      - "3100:3100"
+    healthcheck:
+      test: ["CMD-SHELL", "wget --quiet --tries=1 --output-document=- http://localhost:3100/ready | grep -q ready"]
+      interval: 10s
+      retries: 5
+      start_period: 20s
+      timeout: 5s
+
+  promtail:
+    image: grafana/promtail:3.4.2
+    restart: unless-stopped
+    command: -config.file=/etc/promtail/promtail-config.yml
+    volumes:
+      - ./monitoring/promtail/promtail-config.yml:/etc/promtail/promtail-config.yml:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+    depends_on:
+      loki:
+        condition: service_healthy
+
+  alloy:
+    image: grafana/alloy:v1.8.1
+    restart: unless-stopped
+    command: run /etc/alloy/config.alloy
+    volumes:
+      - ./monitoring/alloy/config.alloy:/etc/alloy/config.alloy:ro
+    ports:
+      - "12347:12347"
+    depends_on:
+      loki:
+        condition: service_healthy
+
+  grafana:
+    image: grafana/grafana:11.5.2
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - grafana-data:/var/lib/grafana
+    ports:
+      - "3001:3000"
+    depends_on:
+      loki:
+        condition: service_healthy
+
+volumes:
+  loki-data:
+  grafana-data:
+```
+
+A few things to notice:
+
+- **Healthcheck on Loki** — Promtail, Alloy, and Grafana all wait for it. This avoids the classic boot-loop where shipping starts before storage is ready.
+- **Read-only config mounts** — every config file is mounted with `:ro`. You change config on the host, then `docker compose restart <service>`.
+- **Persistent volumes** for Loki chunks and Grafana state. Anonymous viewer access in Grafana is convenient for dev — turn it off in production.
+
+## Loki config
+
+`monitoring/loki/loki-config.yml`:
+
+```yaml
+auth_enabled: false
+
+server:
+  http_listen_port: 3100
+
+common:
+  path_prefix: /loki
+  storage:
+    filesystem:
+      chunks_directory: /loki/chunks
+      rules_directory: /loki/rules
+  replication_factor: 1
+  ring:
+    kvstore:
+      store: inmemory
+
+schema_config:
+  configs:
+    - from: "2024-01-01"
+      store: tsdb
+      object_store: filesystem
+      schema: v13
+      index:
+        prefix: index_
+        period: 24h
+
+limits_config:
+  retention_period: 168h
+
+compactor:
+  working_directory: /loki/compactor
+  delete_request_store: filesystem
+  retention_enabled: true
+```
+
+Key choices:
+
+- **TSDB schema v13** with a 24-hour index period — current best-practice for single-binary Loki.
+- **Filesystem object storage** — simplest possible setup. For production, swap in S3/GCS/Azure Blob via the `object_store` field. The schema doesn't change.
+- **168-hour retention (7 days)** enforced by the compactor. Bump to whatever fits your disk budget.
+- **`auth_enabled: false`** — fine inside a private Compose network. Front it with a reverse-proxy auth layer if you expose it.
+
+## Promtail config
+
+`monitoring/promtail/promtail-config.yml`:
+
+```yaml
+server:
+  http_listen_port: 9080
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+  - job_name: docker
+    docker_sd_configs:
+      - host: unix:///var/run/docker.sock
+        refresh_interval: 5s
+    relabel_configs:
+      - source_labels: ["__meta_docker_container_name"]
+        regex: "/(.*)"
+        target_label: "container"
+      - source_labels: ["__meta_docker_container_label_com_docker_compose_service"]
+        target_label: "service"
+      - source_labels: ["__meta_docker_container_label_com_docker_compose_project"]
+        target_label: "project"
+    pipeline_stages:
+      - json:
+          expressions:
+            level: level
+            logger: logger
+      - labels:
+          level:
+          logger:
+```
+
+What this does:
+
+1. **`docker_sd_configs`** discovers every running container via the Docker socket and refreshes the list every 5 seconds. New containers appear automatically.
+2. **`relabel_configs`** turns Docker metadata into Loki labels. After this, every log line is tagged with `container`, `service`, and `project`.
+3. **`pipeline_stages`** parses each line as JSON and promotes the `level` and `logger` fields to labels. That's what makes `{service="backend", level="ERROR"}` work without `| json` parsing in every query.
+
+If your application logs plain text instead of JSON, the JSON pipeline stage silently passes the line through — you just lose the `level` and `logger` labels.
+
+### A word on label cardinality
+
+This is the single most important Loki concept and the easiest way to ruin your install. **Labels are an index — every unique combination of label values creates a new stream**, and Loki's performance falls off a cliff once you have hundreds of thousands of streams.
+
+Good labels are low-cardinality and predictable: `service`, `env`, `level`, `region`, `tenant`, `logger`. Bad labels are unbounded: `user_id`, `request_id`, `trace_id`, `path` (with IDs in it), `error_message`. Those belong _inside_ the log line, not as labels — you can still grep them with `|=` or extract them at query time with `| json`.
+
+Rule of thumb: if you can't list the possible values of a label on a sticky note, it shouldn't be a label.
+
+## Grafana provisioning
+
+Grafana auto-loads any datasource or dashboard files mounted under `/etc/grafana/provisioning/` at startup. No clicking through the UI to wire things up.
+
+`monitoring/grafana/provisioning/datasources/datasource.yml`:
+
+```yaml
+apiVersion: 1
+
+datasources:
+  - name: Loki
+    type: loki
+    uid: loki
+    access: proxy
+    url: http://loki:3100
+    isDefault: true
+    editable: false
+    jsonData:
+      maxLines: 1000
+```
+
+`monitoring/grafana/provisioning/dashboards/dashboard.yml`:
+
+```yaml
+apiVersion: 1
+
+providers:
+  - name: Default
+    orgId: 1
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 10
+    options:
+      path: /etc/grafana/provisioning/dashboards
+      foldersFromFilesStructure: false
+```
+
+Drop any dashboard JSON file alongside `dashboard.yml` and Grafana will pick it up. A simple starter dashboard with two stat panels (total logs and error count, scoped by a `service` template variable) looks like this:
+
+```json
+{
+  "uid": "logs-overview",
+  "title": "Logs Overview",
+  "tags": ["logs", "loki"],
+  "time": { "from": "now-1h", "to": "now" },
+  "refresh": "10s",
+  "schemaVersion": 39,
+  "templating": {
+    "list": [
+      {
+        "name": "service",
+        "label": "Service",
+        "type": "query",
+        "datasource": { "type": "loki", "uid": "loki" },
+        "query": "label_values(service)",
+        "includeAll": true,
+        "multi": true,
+        "allValue": ".+",
+        "refresh": 2
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 10,
+      "type": "stat",
+      "title": "Total Logs",
+      "gridPos": { "h": 3, "w": 6, "x": 0, "y": 0 },
+      "datasource": { "type": "loki", "uid": "loki" },
+      "targets": [
+        { "expr": "sum(count_over_time({service=~\"$service\"} [$__range]))", "refId": "A" }
+      ]
+    },
+    {
+      "id": 11,
+      "type": "stat",
+      "title": "Errors",
+      "gridPos": { "h": 3, "w": 6, "x": 6, "y": 0 },
+      "datasource": { "type": "loki", "uid": "loki" },
+      "targets": [
+        {
+          "expr": "sum(count_over_time({service=~\"$service\"} | detected_level = `error` [$__range]))",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "type": "logs",
+      "title": "Logs",
+      "gridPos": { "h": 18, "w": 24, "x": 0, "y": 3 },
+      "datasource": { "type": "loki", "uid": "loki" },
+      "targets": [{ "expr": "{service=~\"$service\"}", "refId": "A" }]
+    }
+  ]
+}
+```
+
+Open `http://localhost:3001` and the dashboard is already there.
+
+## Backend: emit structured JSON logs
+
+The Promtail pipeline above expects JSON with `level` and `logger` fields. Every modern logger has a JSON formatter — pick the one for your stack.
+
+**Python (FastAPI / any stdlib `logging` user):**
+
+```python
+# core/logging_config.py
+import json
+import logging
+import sys
+import urllib.request
+
+from pythonjsonlogger.json import JsonFormatter
+
+
+class LokiHandler(logging.Handler):
+    """Pushes log records directly to Loki's HTTP API."""
+
+    def __init__(self, url: str, labels: dict[str, str] | None = None) -> None:
+        super().__init__()
+        self.url = url
+        self.labels = labels or {}
+
+    def emit(self, record: logging.LogRecord) -> None:
+        try:
+            log_entry = self.format(record)
+            payload = {
+                "streams": [
+                    {
+                        "stream": self.labels,
+                        "values": [[str(int(record.created * 1e9)), log_entry]],
+                    }
+                ]
+            }
+            req = urllib.request.Request(
+                self.url,
+                data=json.dumps(payload).encode(),
+                headers={"Content-Type": "application/json"},
+                method="POST",
+            )
+            urllib.request.urlopen(req, timeout=2)
+        except Exception:
+            # Never let a logging failure take down the request path.
+            pass
+
+
+def setup_logging(log_level: str = "INFO", loki_url: str | None = None) -> None:
+    formatter = JsonFormatter(
+        fmt="%(asctime)s %(levelname)s %(name)s %(message)s",
+        rename_fields={"levelname": "level", "name": "logger", "asctime": "timestamp"},
+        datefmt="%Y-%m-%dT%H:%M:%S",
+    )
+
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setFormatter(formatter)
+
+    root = logging.getLogger()
+    root.handlers.clear()
+    root.addHandler(handler)
+    root.setLevel(log_level.upper())
+
+    if loki_url:
+        loki_handler = LokiHandler(
+            url=f"{loki_url}/loki/api/v1/push",
+            labels={"service": "backend", "project": "my-app"},
+        )
+        loki_handler.setFormatter(formatter)
+        root.addHandler(loki_handler)
+
+    # Suppress noisy loggers
+    for name in ("uvicorn.access", "httpx", "httpcore"):
+        logging.getLogger(name).setLevel(logging.WARNING)
+```
+
+Call `setup_logging(log_level=settings.LOG_LEVEL, loki_url=settings.LOKI_URL)` once at process startup.
+
+Two paths feed Loki:
+
+- **Stdout JSON** is scraped by Promtail (always on, no app config needed).
+- **Direct HTTP push** to `LOKI_URL` is optional. It gives you control over labels (you can add `env`, `region`, `tenant`, etc.) without needing to thread them through Docker labels.
+
+For other languages, the shape is the same — emit JSON with `level` and `logger`, and optionally POST to `/loki/api/v1/push` with the [Loki push API payload](https://grafana.com/docs/loki/latest/reference/loki-http-api/#ingest-logs):
+
+```http
+POST /loki/api/v1/push
+Content-Type: application/json
+
+{
+  "streams": [
+    {
+      "stream": { "service": "backend", "env": "prod" },
+      "values": [
+        ["<unix_nanoseconds>", "<log_line>"]
+      ]
+    }
+  ]
+}
+```
+
+Concrete examples for the other big runtimes:
+
+**Node.js (pino + pino-loki):**
+
+```ts
+// logger.ts
+import pino from "pino"
+
+const targets: pino.TransportTargetOptions[] = [
+  { target: "pino/file", options: { destination: 1 }, level: "info" }, // stdout
+]
+
+if (process.env.LOKI_URL) {
+  targets.push({
+    target: "pino-loki",
+    level: "info",
+    options: {
+      host: process.env.LOKI_URL,
+      labels: { service: "backend", env: process.env.NODE_ENV ?? "dev" },
+      batching: true,
+      interval: 5,
+    },
+  })
+}
+
+export const logger = pino({
+  level: process.env.LOG_LEVEL ?? "info",
+  formatters: {
+    level: (label) => ({ level: label.toUpperCase() }),
+  },
+  timestamp: pino.stdTimeFunctions.isoTime,
+  transport: { targets },
+})
+```
+
+**Go (stdlib `slog` for stdout, `loki-client-go` for direct push):**
+
+```go
+package logging
+
+import (
+    "log/slog"
+    "os"
+
+    "github.com/grafana/loki-client-go/loki"
+    "github.com/prometheus/common/model"
+)
+
+func Setup() (*slog.Logger, *loki.Client, error) {
+    handler := slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo})
+    logger := slog.New(handler)
+
+    lokiURL := os.Getenv("LOKI_URL")
+    if lokiURL == "" {
+        return logger, nil, nil
+    }
+
+    cfg, err := loki.NewDefaultConfig(lokiURL + "/loki/api/v1/push")
+    if err != nil {
+        return logger, nil, err
+    }
+    cfg.ExternalLabels = loki.LabelSet{LabelSet: model.LabelSet{
+        "service": "backend",
+        "env":     model.LabelValue(os.Getenv("APP_ENV")),
+    }}
+    client, err := loki.New(cfg)
+    return logger, client, err
+}
+```
+
+`loki-client-go` handles batching, retries, and backpressure — don't hand-roll an HTTP client unless you really must. To send a record, call `client.Handle(labels, time.Now(), line)`. The wire format is the same `streams`/`values` payload shown above.
+
+**.NET (Serilog with the Loki sink):**
+
+```csharp
+// Program.cs
+using Serilog;
+using Serilog.Formatting.Json;
+using Serilog.Sinks.Grafana.Loki;
+
+var lokiUrl = builder.Configuration["LOKI_URL"];
+
+var loggerConfig = new LoggerConfiguration()
+    .Enrich.FromLogContext()
+    .MinimumLevel.Information()
+    .WriteTo.Console(new JsonFormatter());
+
+if (!string.IsNullOrEmpty(lokiUrl))
+{
+    loggerConfig = loggerConfig.WriteTo.GrafanaLoki(
+        lokiUrl,
+        labels: new[]
+        {
+            new LokiLabel { Key = "service", Value = "backend" },
+            new LokiLabel { Key = "env",     Value = builder.Environment.EnvironmentName },
+        },
+        textFormatter: new JsonFormatter());
+}
+
+Log.Logger = loggerConfig.CreateLogger();
+builder.Host.UseSerilog();
+```
+
+**Rust (tracing + tracing-loki):**
+
+```rust
+use tracing_subscriber::prelude::*;
+
+let stdout_layer = tracing_subscriber::fmt::layer().json();
+
+let mut registry = tracing_subscriber::registry().with(stdout_layer);
+
+if let Ok(loki_url) = std::env::var("LOKI_URL") {
+    let (loki_layer, task) = tracing_loki::builder()
+        .label("service", "backend")?
+        .label("env", std::env::var("APP_ENV").unwrap_or_else(|_| "dev".into()))?
+        .build_url(loki_url.parse()?)?;
+    tokio::spawn(task);
+    registry.with(loki_layer).init();
+} else {
+    registry.init();
+}
+```
+
+The decision to push directly vs. rely on stdout scraping comes down to one question: do you need labels that Promtail can't see? If yes, push directly. If you only care about per-container labels, stdout is enough.
+
+### Backend trace correlation
+
+If the frontend is sending `traceparent` headers (Faro's `TracingInstrumentation` does this automatically when configured with `propagateTraceHeaderCorsUrls`), have your backend pull the trace ID off the request and stamp it into every log line. You then click a browser error in Grafana and jump straight to the matching backend logs.
+
+The minimum useful version, in any language, is middleware that:
+
+1. Reads `traceparent` from the incoming request (or generates one if missing).
+2. Stores it in a context-local variable for the lifetime of the request.
+3. Adds a logging filter / processor that injects the trace ID into every record.
+
+Python (FastAPI) example using `contextvars`:
+
+```python
+import logging
+from contextvars import ContextVar
+from uuid import uuid4
+
+from fastapi import Request
+
+trace_id_var: ContextVar[str] = ContextVar("trace_id", default="-")
+
+
+class TraceIdFilter(logging.Filter):
+    def filter(self, record: logging.LogRecord) -> bool:
+        record.trace_id = trace_id_var.get()
+        return True
+
+
+async def trace_middleware(request: Request, call_next):
+    traceparent = request.headers.get("traceparent")
+    # traceparent format: 00-<trace-id>-<span-id>-<flags>
+    trace_id = traceparent.split("-")[1] if traceparent else uuid4().hex
+    token = trace_id_var.set(trace_id)
+    try:
+        response = await call_next(request)
+        response.headers["x-trace-id"] = trace_id
+        return response
+    finally:
+        trace_id_var.reset(token)
+```
+
+Update `JsonFormatter` to include `%(trace_id)s` and attach the filter to the root logger. Now `{service="backend"} | json | trace_id="abc123..."` joins a browser session to its server-side requests.
+
+The same pattern works in any runtime — `AsyncLocalStorage` in Node, `context.Context` in Go, `IHttpContextAccessor`/`Activity` in .NET, `tracing::Span` in Rust.
+
+## Frontend: browser telemetry with Faro and Alloy
+
+Backend logs only tell half the story. Half the time, the user's browser knew something was wrong before any request reached the server (a failed asset load, a JS exception, a slow render). Grafana Faro is a small browser SDK that captures errors, performance traces, and console output and ships them to an Alloy receiver, which writes them into the same Loki you're already running.
+
+`monitoring/alloy/config.alloy`:
+
+```hcl
+faro.receiver "default" {
+  server {
+    listen_address = "0.0.0.0"
+    listen_port = 12347
+    cors_allowed_origins = ["http://localhost:5173"]
+  }
+
+  output {
+    logs = [loki.write.default.receiver]
+  }
+}
+
+loki.write "default" {
+  endpoint {
+    url = "http://loki:3100/loki/api/v1/push"
+  }
+
+  external_labels = {
+    service = "frontend",
+  }
+}
+```
+
+`cors_allowed_origins` must match the origin your frontend is served from — your dev server, your staging URL, your production URL. Browsers won't send the telemetry otherwise.
+
+The frontend setup is a few lines (this example is React/Vite, but Faro works with any framework):
+
+```ts
+// shared/lib/faro.ts
+import {
+  faro,
+  getWebInstrumentations,
+  initializeFaro,
+} from "@grafana/faro-web-sdk"
+import { TracingInstrumentation } from "@grafana/faro-web-tracing"
+
+export function setupFaro() {
+  const faroUrl = import.meta.env.VITE_FARO_URL
+  if (!faroUrl) return
+
+  initializeFaro({
+    url: faroUrl,
+    paused: true,
+    app: {
+      name: "my-app-frontend",
+      version: "1.0.0",
+      environment: import.meta.env.MODE,
+    },
+    instrumentations: [
+      ...getWebInstrumentations({ captureConsole: true }),
+      new TracingInstrumentation({
+        instrumentationOptions: {
+          propagateTraceHeaderCorsUrls: [/\/api\//],
+        },
+      }),
+    ],
+  })
+}
+
+export function unpauseFaro() {
+  faro.unpause()
+}
+
+export function pauseFaro() {
+  faro.pause()
+}
+```
+
+Two patterns worth noting here:
+
+- **`paused: true` on init**, then `unpauseFaro()` after the user has consented. Faro queues events while paused, so you don't lose anything that happens during the consent flow. On logout or revoked consent, call `pauseFaro()` again.
+- **`propagateTraceHeaderCorsUrls`** injects a `traceparent` header on `fetch` calls to your API. If your backend reads it (any OpenTelemetry-compatible server will), you can correlate a browser session with the exact backend requests it caused.
+
+Wire `setupFaro()` into your app entry point:
+
+```ts
+// router.tsx (or main.tsx, App.tsx, whatever your entry is)
+if (typeof window !== "undefined") {
+  setupFaro()
+}
+```
+
+The `typeof window !== "undefined"` guard matters if you SSR — Faro is browser-only.
+
+## Querying logs with LogQL
+
+LogQL is to Loki what PromQL is to Prometheus. The basics:
+
+**Everything from one service:**
+
+```logql
+{service="backend"}
+```
+
+**Errors only:**
+
+```logql
+{service="backend"} | json | level="ERROR"
+```
+
+**Frontend browser errors:**
+
+```logql
+{service="frontend"} | json | level="error"
+```
+
+**Filter by a specific module:**
+
+```logql
+{service="backend"} | json | logger="app.features.files.router"
+```
+
+**Tail a single container:**
+
+```logql
+{container="my-app-backend-1"}
+```
+
+**Search across the whole project:**
+
+```logql
+{project="my-app"}
+```
+
+**Count errors per minute, by service:**
+
+```logql
+sum by (service) (
+  rate({project="my-app"} | json | level="ERROR" [1m])
+)
+```
+
+That last one is a metric query — drop it into a time-series panel in Grafana for an error-rate dashboard.
+
+A few more LogQL patterns worth keeping in your back pocket:
+
+**Lines containing a substring (no JSON parse):**
+
+```logql
+{service="backend"} |= "OutOfMemory"
+```
+
+**Exclude noisy logs:**
+
+```logql
+{service="backend"} != "healthcheck"
+```
+
+**Regex match:**
+
+```logql
+{service="backend"} |~ "(?i)timeout|deadline exceeded"
+```
+
+**Top loggers by error volume:**
+
+```logql
+topk(10,
+  sum by (logger) (
+    count_over_time({service="backend"} | json | level="ERROR" [1h])
+  )
+)
+```
+
+**95th-percentile request duration (when you log a `duration_ms` field):**
+
+```logql
+quantile_over_time(0.95,
+  {service="backend"} | json | unwrap duration_ms [5m]
+) by (route)
+```
+
+## Alerting
+
+Once logs flow through Grafana, alerts are a few clicks away. The mental model: any LogQL query that returns a number (rate, count, quantile) can drive an alert.
+
+A useful starter alert — _fire when the backend produces more than 10 errors in 5 minutes_ — is just this expression in a Grafana alert rule:
+
+```logql
+sum(count_over_time({service="backend"} | json | level="ERROR" [5m])) > 10
+```
+
+Provision alerts the same way you provision dashboards, in `monitoring/grafana/provisioning/alerting/alerts.yml`:
+
+```yaml
+apiVersion: 1
+
+groups:
+  - orgId: 1
+    name: backend-errors
+    folder: Logs
+    interval: 1m
+    rules:
+      - uid: backend-error-burst
+        title: Backend error burst
+        condition: A
+        data:
+          - refId: A
+            relativeTimeRange: { from: 300, to: 0 }
+            datasourceUid: loki
+            model:
+              expr: 'sum(count_over_time({service="backend"} | json | level="ERROR" [5m]))'
+              refId: A
+        noDataState: OK
+        execErrState: Error
+        for: 2m
+        annotations:
+          summary: "Backend produced {{ $values.A }} errors in the last 5 minutes"
+        labels:
+          severity: warning
+```
+
+Pair it with a contact point (Slack, PagerDuty, email, webhook) under `provisioning/alerting/contact-points.yml`. Grafana renders the alert state in the same UI as your dashboards — no separate alerting infrastructure needed.
+
+Common starter alerts worth defining:
+
+- **Error rate spike** — `count_over_time(... level="ERROR" [5m]) > N`
+- **Service silence** — `count_over_time({service="backend"} [5m]) == 0` (caught me more than once when a deploy broke the JSON formatter)
+- **Specific exception class** — `count_over_time({service="backend"} |= "DatabaseConnectionError" [10m]) > 0`
+- **Frontend JS errors** — `count_over_time({service="frontend"} | json | level="error" [10m]) > 50`
+
+## Sensitive data: redact at the source
+
+The cheapest log-leak prevention is _never sending the secret in the first place_. A few rules that pay for themselves:
+
+1. **Don't log request/response bodies by default.** Log the route, method, status, and duration. Body logging should be opt-in per endpoint.
+2. **Never log `Authorization`, `Cookie`, `Set-Cookie`, or any header containing `token`/`key`/`secret`.** Allowlist the headers you log; don't blocklist.
+3. **Strip query strings or scrub known-sensitive params.** `?password=...` shows up in surprisingly many access logs.
+4. **Add a redaction filter in the logger itself**, not at query time. Once a secret reaches Loki, you can't fully un-leak it without deleting chunks.
+
+A minimal Python redaction filter:
+
+```python
+import logging
+import re
+
+REDACT_PATTERNS = [
+    (re.compile(r'("password"\s*:\s*)"[^"]*"'), r'\1"***"'),
+    (re.compile(r'(authorization":\s*)"Bearer [^"]+"', re.I), r'\1"Bearer ***"'),
+    (re.compile(r'\b(\d[ -]*?){13,19}\b'), "***-card-***"),  # naive PAN match
+]
+
+
+class RedactFilter(logging.Filter):
+    def filter(self, record: logging.LogRecord) -> bool:
+        msg = record.getMessage()
+        for pattern, replacement in REDACT_PATTERNS:
+            msg = pattern.sub(replacement, msg)
+        record.msg = msg
+        record.args = ()
+        return True
+```
+
+Attach it once on the root logger and you've cut off the most common accidents. Same idea translates to any logger that supports filters/processors (`pino` hooks, `slog` middleware, Serilog enrichers, `tracing` layers).
+
+## Kubernetes variant
+
+Compose is convenient, but the same stack runs unchanged on Kubernetes — the only thing that changes is _how_ logs reach Promtail. Two options:
+
+**Option A: Helm charts.** The Grafana team publishes everything you need:
+
+```bash
+helm repo add grafana https://grafana.github.io/helm-charts
+helm repo update
+
+# Loki, single-binary mode (fine up to ~50 GB/day)
+helm install loki grafana/loki -n observability --create-namespace \
+  --set deploymentMode=SingleBinary \
+  --set loki.commonConfig.replication_factor=1 \
+  --set loki.storage.type=filesystem
+
+# Promtail as a DaemonSet (one pod per node, reads /var/log)
+helm install promtail grafana/promtail -n observability \
+  --set "config.clients[0].url=http://loki:3100/loki/api/v1/push"
+
+# Grafana
+helm install grafana grafana/grafana -n observability \
+  --set adminPassword=admin
+```
+
+The Promtail chart auto-discovers Kubernetes pods via the API server and labels each line with `namespace`, `pod`, `container`, and `app` — the K8s equivalents of the Compose labels above. No socket mounting required.
+
+**Option B: Grafana Alloy as the agent.** Alloy can replace Promtail and a metrics agent in one binary. Same idea, broader scope, slightly more config. Worth it if you also want metrics scraping or OTLP receivers.
+
+For browser telemetry, Alloy and the Faro receiver run unchanged — expose the receiver as a `Service` of type `ClusterIP` and route to it through your ingress.
+
+Provisioning Grafana datasources/dashboards on Kubernetes is the same, just delivered via `ConfigMap`s mounted into `/etc/grafana/provisioning/`.
+
+## Day-two operations
+
+A few things you'll want to know once it's running:
+
+**Restart after config edits.** Configs are mounted read-only, so editing on the host and restarting picks up changes:
+
+```bash
+docker compose restart loki promtail alloy grafana
+```
+
+**Wipe the data volumes** when you've made a mess in dev:
+
+```bash
+docker compose down
+docker volume rm my-app_loki-data my-app_grafana-data
+docker compose up -d
+```
+
+**Verify the stack:**
+
+1. `docker compose up -d` — wait for all services to report healthy.
+2. Open `http://localhost:3001` — Grafana should load with Loki already configured.
+3. Go to Explore → Loki → run `{project="my-app"}`. Container logs should be flowing.
+4. If Faro is enabled, load the frontend, then run `{service="frontend"}` to confirm browser telemetry is arriving.
+
+**Production hardening checklist:**
+
+- Move `object_store` to S3/GCS/Azure Blob.
+- Switch Grafana off `admin/admin` and disable anonymous access.
+- Put Grafana and Loki behind your reverse proxy with auth.
+- Update `cors_allowed_origins` in the Alloy config to your production frontend origin.
+- Bump `retention_period` to match your audit/compliance needs and size your storage accordingly.
+- Add a basic alert rule in Grafana on the error-rate query above.
+- Restrict `LOKI_URL` so only your backend network can push — or sit Loki behind an authenticated proxy and use `Authorization` headers in the Loki client.
+
+## Sizing and cost
+
+Rough numbers from real-world deployments to set expectations:
+
+- **Compressed log volume on disk** — Loki typically compresses structured JSON to 5–10× smaller than raw. A service emitting 1 GB/day uncompressed lands around 100–200 MB on disk after compression.
+- **Memory** — single-binary Loki is comfortable in 1–2 GB RAM up to a few hundred GB/day of ingest. Past that, look at the scalable deployment mode.
+- **Storage** — for a small product (5 services, 50k requests/day, INFO level), a 20 GB volume holds 30+ days of logs. For a busier system, plan ~5–10 GB per active GB/day of ingest, times your retention window.
+- **Loki + Promtail + Grafana on a single 2 vCPU / 4 GB host** comfortably handles a few microservices and a frontend. The whole stack adds up to < $30/month on a typical VPS.
+
+Compare that to a hosted log vendor at $0.50–$2.50 per GB ingested and the math becomes obvious quickly.
+
+## Troubleshooting
+
+The five things that go wrong, in roughly the order they go wrong:
+
+**1. "I can see the dashboard but no logs are showing up."**
+
+Check Promtail can reach Loki: `docker compose logs promtail` should show no `connection refused`. Then check that Promtail is actually scraping containers — its `/targets` endpoint at `http://localhost:9080/targets` lists active jobs. If targets is empty, the Docker socket mount is wrong.
+
+**2. "Frontend errors aren't reaching Loki."**
+
+Open the browser devtools network tab and look for requests to your Faro URL. If they're failing with CORS, your origin doesn't match `cors_allowed_origins` in `config.alloy`. If they succeed with `2xx` but you can't find them, you're querying the wrong service label — `{service="frontend"}` is set by Alloy's `external_labels`, not by Faro itself.
+
+**3. "Queries are slow / `too many streams` errors."**
+
+Almost always label cardinality. Run `logcli labels` (or use Grafana's "Active series" inspector) to see which labels have the most values. The usual culprits are `request_id`, `user_id`, or a `path` label with IDs in it. Move them to log fields and re-deploy.
+
+**4. "Promtail keeps OOMing."**
+
+Add a `pipeline_stages` line for `drop` to discard noisy containers you don't need (Postgres health pings, sidecars, etc.), and bump the container's memory limit. The default Promtail container is fine up to ~100 containers per host.
+
+**5. "Loki returns `entry too far behind` when pushing direct logs."**
+
+Loki rejects entries older than ~10 minutes by default to keep its in-memory window bounded. If you're batching aggressively from an application, send more often. If you genuinely need to backfill, raise `reject_old_samples_max_age` under `limits_config`.
+
+A useful smoke-test command — push a hand-crafted line to Loki and immediately query for it — to isolate ingest vs. query problems:
+
+```bash
+# push
+curl -s -H "Content-Type: application/json" \
+  -X POST http://localhost:3100/loki/api/v1/push \
+  --data-raw "$(jq -nc --arg ts "$(date +%s%N)" \
+    '{streams:[{stream:{service:"smoketest"},values:[[$ts,"hello loki"]]}]}')"
+
+# query
+curl -s "http://localhost:3100/loki/api/v1/query_range" \
+  --data-urlencode 'query={service="smoketest"}' | jq
+```
+
+If the push succeeds and the query returns the line, your Loki is healthy and the problem is upstream (Promtail, Alloy, or your application).
+
+## What you get
+
+After about an hour of setup you have:
+
+- Every backend log line, structured and queryable, from every container.
+- Every browser error and page-load trace from every user session.
+- A single dashboard URL to send to anyone debugging an incident.
+- Browser-to-backend trace correlation via `traceparent` — no full OpenTelemetry rollout required.
+- Zero per-log fees.
+
+The reason this stack works for "any project, any technology" is that the contract between your application and Loki is just a JSON line over HTTP, or anything-on-stdout that Promtail can scrape. Swap the language, swap the framework, swap the orchestrator — the rest of the stack doesn't move.
