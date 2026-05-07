@@ -17,3 +17,6 @@ todos.json
 .playwright-mcp
 .content-collections
 .vercel
+video/cache
+video/out
+video/.env
