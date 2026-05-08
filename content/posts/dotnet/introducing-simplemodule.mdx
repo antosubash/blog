@@ -1,0 +1,222 @@
+---
+title: 'Introducing SimpleModule: A Modular Monolith Framework for .NET 10'
+excerpt: 'Meet SimpleModule, an experimental .NET 10 framework that uses Roslyn source generators to build modular monoliths with compile-time module discovery, full-stack type safety, and Inertia.js-powered React UIs.'
+date: '2026-05-08'
+tags:
+  - dotnet
+  - simplemodule
+  - modular-monolith
+  - roslyn
+  - inertia
+  - react
+  - aspnetcore
+---
+
+<TOCInline toc={props.toc} asDisclosure />
+
+## Introduction
+
+Modular monoliths have become a popular middle ground between the complexity of distributed microservices and the rigidity of a traditional monolith. They give you clear module boundaries, isolated data ownership, and decoupled communication, all while keeping deployment simple.
+
+[SimpleModule](https://github.com/antosubash/SimpleModule) is an experimental .NET 10 framework I have been working on that takes this idea further. Instead of relying on runtime reflection, it uses Roslyn source generators to discover modules, endpoints, and DTOs at compile time, and it ships with a React + Inertia.js front-end that stays type-safe with the backend.
+
+This post is a quick tour of what SimpleModule is, why it exists, and how the pieces fit together.
+
+## Why Another Framework?
+
+Most modular monolith setups in .NET share a few recurring problems:
+
+- **Manual wiring.** Every new module needs to be registered in `Program.cs`, endpoints mapped, options bound, and DI services configured.
+- **Runtime reflection.** Frameworks scan assemblies on startup, which adds latency, hides errors until runtime, and complicates AOT scenarios.
+- **Frontend / backend drift.** DTOs are duplicated across C# and TypeScript, and they slowly fall out of sync.
+- **Leaky module boundaries.** Without strong contracts, modules end up reaching directly into each other's internals.
+
+SimpleModule tries to solve these by leaning hard on the compiler.
+
+## Core Ideas
+
+### 1. Compile-time Module Discovery
+
+The heart of SimpleModule is an `IIncrementalGenerator`. At build time it scans referenced assemblies and looks for:
+
+- Classes decorated with `[Module]`
+- Implementations of `IEndpoint`
+- Types decorated with `[Dto]`
+
+From that, the generator emits:
+
+- An `AddModules()` extension that registers every module
+- Endpoint mapping code
+- A `JsonSerializerContext` for source-generated serialization
+- TypeScript type definitions for the React side
+
+The result is zero runtime reflection for module wiring and immediate feedback in the IDE when something is misconfigured.
+
+### 2. Module Isolation
+
+Each module is a self-contained slice of the application:
+
+- Its own implementation project
+- A separate `.Contracts` project that other modules depend on
+- An EF Core `DbContext` scoped to that module
+- A dedicated React page bundle
+
+Storage is isolated using either a separate schema (PostgreSQL / SQL Server) or a table prefix (SQLite). Modules never share `DbContext`s, and they never reference each other's internal types.
+
+### 3. Communication via Contracts and Events
+
+Cross-module interaction goes through one of two channels:
+
+- **Contract interfaces** in the `.Contracts` project for synchronous calls
+- **`IEventBus`** with `PublishAsync<T>()` and `IEventHandler<T>` for asynchronous, decoupled messaging
+
+This keeps modules pluggable: as long as the contract is stable, the implementation can change freely.
+
+### 4. Full-Stack Type Safety
+
+Decorate a C# record with `[Dto]`:
+
+```csharp
+[Dto]
+public record ProductDto(Guid Id, string Name, decimal Price);
+```
+
+The source generator emits a matching TypeScript interface that React components import directly. No hand-written types, no `any`, no drift between client and server.
+
+### 5. Inertia.js for the Frontend
+
+SimpleModule uses [Inertia.js](https://inertiajs.com/) as the bridge between ASP.NET Core and React. Endpoints look like this:
+
+```csharp
+public class ProductsIndex : IEndpoint
+{
+    public void Map(IEndpointRouteBuilder app) =>
+        app.MapGet("/products", async (IProductService products) =>
+            Inertia.Render("Products/Index", new
+            {
+                items = await products.GetAllAsync()
+            }));
+}
+```
+
+The first request returns a static HTML shell with JSON props. Subsequent navigations are handled client-side, with React 19 hydrating on top.
+
+## Technology Stack
+
+**Backend**
+
+- ASP.NET Core (.NET 10)
+- Entity Framework Core
+- Roslyn source generators
+- OpenIddict for auth
+- .NET Aspire for orchestration
+- OpenTelemetry for observability
+
+**Frontend**
+
+- React 19 + TypeScript
+- Inertia.js
+- Vite
+- Tailwind CSS + Radix UI
+
+**Database**
+
+- SQLite, PostgreSQL, and SQL Server
+
+**Testing**
+
+- xUnit.v3, FluentAssertions, NSubstitute, Bogus
+- Playwright for end-to-end tests
+
+## Repository Layout
+
+The repo is organized into a handful of top-level folders:
+
+- `framework/` — core infrastructure and the source generator
+- `modules/` — feature modules
+- `packages/` — shared client libraries and UI components
+- `template/` — a reference host application
+- `cli/` — the `sm` scaffolding tool
+- `tests/` — unit, integration, and end-to-end tests
+
+Out of the box, SimpleModule ships with modules that cover most of what a real application needs:
+
+- **Users**, **OpenIddict**, **Permissions** — identity and authorization
+- **Tenants** — multi-tenancy
+- **Settings**, **FeatureFlags**, **Localization** — configuration concerns
+- **Email**, **FileStorage**, **BackgroundJobs** — common infrastructure
+- **AuditLogs**, **RateLimiting** — cross-cutting policies
+- **Admin**, **Dashboard** — admin UI
+
+You can pick the ones you want and drop the rest.
+
+## Getting Started
+
+You will need the .NET 10 SDK and a recent Node.js LTS.
+
+Clone the repo and run the AppHost with .NET Aspire (PostgreSQL is provisioned automatically):
+
+```bash
+git clone https://github.com/antosubash/SimpleModule.git
+cd SimpleModule
+
+dotnet build
+npm install
+
+dotnet run --project SimpleModule.AppHost
+```
+
+If you would rather skip Aspire and PostgreSQL, the SQLite-only host works standalone:
+
+```bash
+dotnet run --project template/SimpleModule.Host
+```
+
+The app will be available at `https://localhost:5001`.
+
+For a Docker-based setup with PostgreSQL 16:
+
+```bash
+docker compose up
+```
+
+## Development Workflow
+
+During development, run:
+
+```bash
+npm run dev
+```
+
+This starts the .NET backend together with Vite watchers for every module. Editing any `.tsx` file triggers an instant rebuild, with unminified output and source maps for easier debugging.
+
+## The `sm` CLI
+
+SimpleModule includes a small CLI to handle scaffolding:
+
+```bash
+sm new MyApp           # create a new solution
+sm add module Orders   # scaffold a new module
+sm doctor              # validate project structure (and optionally fix issues)
+```
+
+`sm doctor` is particularly handy when you forget to register a project or your folder layout drifts from the conventions the source generator expects.
+
+## What's Next
+
+This is just an introduction. In follow-up posts I plan to dig into:
+
+- Building a module from scratch with the source generator
+- How `[Dto]` and the TypeScript bridge actually work
+- Patterns for inter-module communication with `IEventBus`
+- Multi-tenancy and authorization with OpenIddict
+- Migrating from `EnsureCreated` to per-module EF Core migrations
+
+If you want to follow along, the code lives at [github.com/antosubash/SimpleModule](https://github.com/antosubash/SimpleModule). Issues and ideas are very welcome.
+
+## Resources
+
+- [SimpleModule on GitHub](https://github.com/antosubash/SimpleModule)
+- [Inertia.js documentation](https://inertiajs.com/)
+- [.NET Aspire](https://learn.microsoft.com/dotnet/aspire/)
+- [Roslyn source generators](https://learn.microsoft.com/dotnet/csharp/roslyn-sdk/source-generators-overview)
