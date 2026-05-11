@@ -1,0 +1,270 @@
+---
+title: 'A Claude Code Skill for Verifying a Feature End-to-End Before Opening a PR'
+excerpt: 'How to encode a gated "prove it works, then PR it" pipeline as a Claude Code skill — start the app, drive the feature in a real browser, run local CI, and only then push the branch and open the pull request.'
+date: '2026-05-11'
+tags:
+  - claude-code
+  - agent-skills
+  - ai-workflows
+  - ci
+  - playwright
+  - developer-productivity
+---
+
+<TOCInline toc={props.toc} asDisclosure />
+
+## The gap between "it compiles" and "it works"
+
+Most teams already have a CI checklist they run locally before pushing: a formatter, a build, unit tests, maybe an integration suite. What that checklist usually does *not* cover is the question every reviewer silently asks: **did you actually open the app and use the feature?**
+
+When an AI agent writes the code, the gap widens. The diff looks reasonable, the build is green, and the temptation to push and let the reviewer figure out the rest is real. A few weeks of that and your PRs start carrying a quiet tax — small regressions, missing wiring, console errors no one sees until staging.
+
+A Claude Code [skill](https://docs.claude.com/en/docs/claude-code/skills) is a good place to encode the discipline you'd apply yourself. This post walks through a pattern I've been using: a `verify-feature` skill that runs a gated pipeline — boot the app, drive the feature in a browser, run local CI, then (and only then) open the PR. Each stage must pass before the next runs; if any fails, the skill stops and reports instead of papering over it.
+
+The full source for the version I run lives at [SimpleModule/.claude/skills/verify-feature/SKILL.md](https://github.com/antosubash/SimpleModule/blob/main/.claude/skills/verify-feature/SKILL.md). The version below is generalized so you can drop it into any web stack.
+
+## The shape of the skill
+
+A skill is just a Markdown file under `.claude/skills/<name>/SKILL.md` with a small frontmatter block. The frontmatter is what Claude reads to decide when to invoke it.
+
+```markdown
+---
+name: verify-feature
+description: End-to-end verification of a feature implementation before opening a PR.
+  Starts the dev server, drives the feature in a real browser, runs every local CI
+  step, and only then opens a pull request. Use when the user asks to "verify the
+  feature", "test and ship", "run e2e + CI + PR", or any variation that means
+  "prove it works, then PR it".
+allowed-tools: Bash, Read, Edit, Write
+---
+```
+
+Two things matter here:
+
+- **The description is a trigger.** Claude matches the user's intent against this text, so list the phrases you actually say out loud. "Test and ship", "verify and PR", "run the full check" — whatever your team's shorthand is.
+- **`allowed-tools` is a safety rail.** This skill writes files, runs shell commands, and pushes to a remote. It does not need network fetches or notebook editing. Keep the list tight. If you want to be stricter still, scope `Bash` to specific binaries (e.g. `Bash(playwright-cli:*)`, `Bash(gh:*)`) — Claude Code's permission syntax supports per-command allowlists.
+
+The body of the file is the playbook. Claude reads it top-to-bottom each time the skill runs.
+
+## The pipeline, stage by stage
+
+### Stage 1 — Start the application
+
+Before the feature can be exercised, the dev server has to be up. Two things tend to go wrong here:
+
+1. The port is already held by a stale process from a previous run.
+2. The server takes longer than the skill expects to become ready, and the next stage races it.
+
+Both are easy to handle in shell. Adjust the port for your stack:
+
+```bash
+# Free the port if something is bound to it.
+PORT=3000  # or 5001, 8000, whatever your app uses
+PORT_PIDS=$(lsof -ti tcp:$PORT 2>/dev/null || true)
+if [ -n "$PORT_PIDS" ]; then
+  echo "Port $PORT occupied by PID(s): $PORT_PIDS — killing"
+  kill -9 $PORT_PIDS
+  sleep 1
+fi
+
+# Start the server in the background.
+npm run dev   # or: dotnet run --project ./src/Web
+              #     uv run uvicorn app:app
+              #     bundle exec rails s
+```
+
+The skill instructs Claude to invoke the long-running command with `run_in_background: true` and to keep the shell ID, so it can stop the server cleanly later.
+
+Then poll for readiness instead of sleeping a fixed amount of time. The loop below caps the wait at 90 seconds (45 iterations × 2s):
+
+```bash
+for i in $(seq 1 45); do
+  # Drop -k if your dev server uses plain HTTP; keep it for self-signed HTTPS.
+  if curl -s -o /dev/null -w "%{http_code}" http://localhost:$PORT/ \
+      | grep -qE '^(200|302|401)$'; then
+    echo "App is up"; break
+  fi
+  sleep 2
+done
+```
+
+If readiness times out, the skill reads the background shell's output, surfaces the error, and exits. No point continuing to the browser test if the app never started.
+
+> **A note on killing processes.** Blindly `kill -9`ing whatever holds a port is fine on a dev machine you control — it is not fine on a shared box or CI runner. The skill is told to confirm with the user before killing an unfamiliar process.
+
+### Stage 2 — Exercise the feature in a real browser
+
+This is the stage that catches the regressions CI doesn't: missing wiring, broken navigation, a button that 500s on click, a form that silently fails validation. The point is not to write a comprehensive end-to-end test — that's what your e2e suite is for. The point is to **prove this specific feature works** before asking a human to review it.
+
+The skill drives the browser through [`playwright-cli`](https://www.npmjs.com/package/@playwright/cli) — a shell-friendly wrapper around Playwright that fits naturally into a Claude Code skill, since every step is just a bash command.
+
+First, make sure the binary is available. If it isn't, install it; don't ask the user, just install:
+
+```bash
+if ! command -v playwright-cli >/dev/null 2>&1; then
+  echo "playwright-cli not found — installing @playwright/cli globally"
+  npm install -g @playwright/cli
+  playwright-cli install chromium    # download the browser binary
+fi
+```
+
+If you'd rather not install globally, the skill can fall back to `npx -y @playwright/cli` everywhere — same commands, no global state.
+
+Then the verification itself is a short script:
+
+```bash
+playwright-cli open http://localhost:$PORT/<route>
+playwright-cli snapshot                     # confirm the page rendered
+# drive the feature: click an element by ref, fill a field, submit
+playwright-cli click e5
+playwright-cli fill e7 "test@example.com"
+playwright-cli press Enter
+playwright-cli snapshot                     # confirm post-interaction state
+playwright-cli console                      # check for client errors
+playwright-cli close
+```
+
+The element refs (`e5`, `e7`) come from the accessibility snapshot — `playwright-cli snapshot` prints the DOM tree with refs that subsequent commands target. This is the part that makes the tool work well in a skill: the agent doesn't need to write selectors, it just reads the snapshot and points at the element it wants.
+
+The skill tells Claude what counts as a pass:
+
+> **Assertions to make from the snapshots and console:**
+>
+> 1. The expected route is in the URL.
+> 2. Key UI affordances from the feature are present in the snapshot.
+> 3. After exercising the feature, the resulting state is correct.
+> 4. The console returns no `error`-level entries related to the feature.
+>
+> If any assertion fails, stop and report. Do not proceed to CI.
+
+The interesting part is what's *not* in that list. The skill does not try to enumerate every possible failure mode — it just asserts the four invariants that matter, and trusts Claude to apply them to the feature in front of it. Listing more rules pushes the skill toward brittle, feature-specific checks; listing fewer makes it sloppy.
+
+### Stage 3 — Stop the server
+
+A small but important stage. CI's `build` step will fight the running dev server for file locks, watcher handles, and the port itself — the symptoms are slow and confusing (a phantom rebuild loop, a test that times out, a build that succeeds on retry). Stop the server before CI runs and the whole class of problems goes away.
+
+```bash
+PORT_PIDS=$(lsof -ti tcp:$PORT 2>/dev/null || true)
+[ -n "$PORT_PIDS" ] && kill -9 $PORT_PIDS
+```
+
+If your harness exposes a way to terminate the background shell by ID (Claude Code does), call that as well so the harness stops tracking it.
+
+### Stage 4 — Run local CI
+
+This is your existing CI checklist, run sequentially with a hard stop on the first failure. Skip the optional stuff (long-running smoke suites, perf benchmarks) — the goal is fast feedback before the PR, not a duplicate of the cloud pipeline.
+
+```bash
+npm run lint           # or: ruff check . / biome ci .
+npm run typecheck      # or: tsc --noEmit / mypy . / dotnet build
+npm test               # or: pytest -q / dotnet test --no-build
+npm run build          # production build
+npm run test:smoke     # a small subset of e2e
+```
+
+At the end, print a results table. This is the single most useful artifact the skill produces — a reviewer can glance at it in the PR description and know what was actually run.
+
+```text
+| Step              | Status |
+|-------------------|--------|
+| Lint & Format     | pass   |
+| Type Check        | pass   |
+| Unit Tests        | pass   |
+| Production Build  | pass   |
+| E2E Smoke         | pass   |
+```
+
+If any step fails, the skill surfaces the relevant error output, suggests a fix, and exits. The PR step does not run.
+
+### Stage 5 — Open the PR
+
+Only reached when every previous stage passed.
+
+```bash
+# 1. Confirm there are commits ahead of main.
+git log --oneline main..HEAD
+
+# 2. Push the branch.
+git push -u origin HEAD
+
+# 3. Open the PR with a HEREDOC body. Note the unquoted EOF — $PORT expands
+#    inside the body. Use <<'EOF' (quoted) if you want everything literal.
+gh pr create --title "<concise, under 70 chars>" --body "$(cat <<EOF
+## Summary
+- <what changed>
+- <why>
+
+## Verification
+- Manually exercised <feature> at http://localhost:$PORT/<route>
+- All local CI steps passed (lint, typecheck, tests, build, smoke)
+
+## Test plan
+- [ ] CI green on PR
+- [ ] Reviewer spot-checks <area>
+EOF
+)"
+```
+
+The PR body is templated, but the **Verification** block is the part worth keeping fresh. It tells the reviewer what was actually tested locally — not "I ran the tests", but "I navigated to `/products/new`, submitted a valid form, and confirmed the new row appeared on the index page". That kind of specificity moves reviews faster.
+
+## The hard rules
+
+Every non-trivial skill needs a short "do not do this" section at the end. It is the cheapest insurance you can buy against an agent making a creative-but-wrong decision under pressure.
+
+```markdown
+## Hard rules
+
+- **Stop on first failure.** Do not paper over a broken stage to get to the PR.
+- **The PR step is gated.** If stages 1–4 didn't all pass, surface the failure and exit.
+- **Never** force-push, push to `main`, or use `--no-verify`.
+- **Never** add AI attribution to commits or PR bodies (project convention).
+```
+
+These rules exist because Claude, like any capable assistant, will try to be helpful when it gets stuck. "The lint step failed, but the test suite passed, so I went ahead and opened the PR with a note" is a perfectly reasonable thing for an eager agent to do. It is also exactly what this skill is designed to prevent.
+
+## Adapting it to your stack
+
+The skill in [SimpleModule](https://github.com/antosubash/SimpleModule/blob/main/.claude/skills/verify-feature/SKILL.md) is wired for .NET 10 + Inertia.js + React, and it uses a `playwright-cli` skill that ships in the same repo. To adapt it:
+
+1. **Replace stage 1's start command** with whatever boots your app (`npm run dev`, `dotnet run`, `uv run …`).
+2. **Replace stage 1's port and health check** with the port your app listens on and a path that returns quickly.
+3. **Replace stage 2's route and assertions** with the specific page and behavior your feature adds. The `playwright-cli` commands stay the same; only the URL, the refs you click, and the strings you assert on change.
+4. **Replace stage 4's CI script** with your project's actual local-CI checklist. If you already have a `Makefile`, `justfile`, or `package.json` script that runs the whole thing, the skill can simply invoke `make ci` and be done with it.
+5. **Tweak the PR template** to match your repo's PR description format.
+
+The stage *boundaries* are the part worth keeping intact. A version that pushes through failures to be more flexible is the same as not having the skill at all.
+
+## When to invoke it
+
+This skill is not a substitute for unit tests or for CI in the cloud. It is a *pre-PR* check — the thing you run right before you'd otherwise type `git push` and `gh pr create` yourself.
+
+Good moments to invoke it:
+
+- You finished a feature and the code is committed locally.
+- An agent finished a feature and you want a quick gate before reviewing the diff.
+- You're cleaning up a long-running branch and want a final sanity pass.
+
+Bad moments to invoke it:
+
+- Mid-implementation, before the feature is committed. The skill assumes a clean, ahead-of-`main` state.
+- For docs-only or comment-only changes. There's nothing to verify in a browser.
+- On `main`. The skill refuses to push to `main` — but it's worth not getting there in the first place.
+
+## Why a skill at all?
+
+You could write all of this as a shell script and call it from `package.json`. For a single project, that's probably fine.
+
+Putting it in `.claude/skills/` buys you three things a script doesn't:
+
+1. **Discoverability for the agent.** When you tell Claude "verify the feature and ship it," it picks up the skill from the description and follows it. No "which script was that again?" lookup.
+2. **Structured stop conditions.** A shell script either runs to completion or exits non-zero. A skill can stop, summarize what passed and failed, suggest a fix, and let you decide what to do next — all in the same conversation.
+3. **Versioned, reviewable workflow.** The skill lives in the repo. Changes go through PR. New team members get the same pre-PR check the rest of the team uses, automatically.
+
+The cost is small: one Markdown file, mostly prose. The upside is that your "did you actually try it?" discipline becomes a thing the team enforces by default rather than a thing each person remembers to do on a good day.
+
+## Resources
+
+- [Skill source on GitHub](https://github.com/antosubash/SimpleModule/blob/main/.claude/skills/verify-feature/SKILL.md)
+- [Claude Code skills documentation](https://docs.claude.com/en/docs/claude-code/skills)
+- [`@playwright/cli` on npm](https://www.npmjs.com/package/@playwright/cli) — the `playwright-cli` binary used in stage 2
+- [GitHub CLI (`gh`) — creating pull requests](https://cli.github.com/manual/gh_pr_create)
