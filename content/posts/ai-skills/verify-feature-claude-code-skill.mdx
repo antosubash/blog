@@ -48,26 +48,45 @@ The body of the file is the playbook. Claude reads it top-to-bottom each time th
 
 ## The pipeline, stage by stage
 
-### Stage 0 — Commit pending changes
+### Stage 0 — Prepare the branch
 
-The pipeline assumes a clean working tree. If files are still uncommitted when the skill starts, the PR at the end will be missing them — and stage 4's "production build" tells you nothing about the version you actually meant to ship.
+Before any code runs, get the branch into a state where the rest of the pipeline can succeed. Three things must be true:
 
-The skill resolves this up front: stage and commit anything pending, then move on.
+1. **You're not on `main`,** and the tools the skill needs are installed and authenticated.
+2. **Every file you mean to ship is committed.** Otherwise the PR at the end is missing files, and stage 4's "production build" tells you nothing about the version you actually meant to ship.
+3. **The branch isn't lagging `main`.** A branch that hasn't seen recent upstream commits builds locally, then breaks the moment it lands.
 
 ```bash
+# 1. Pre-flight
+[ "$(git rev-parse --abbrev-ref HEAD)" != "main" ] || { echo "On main; abort"; exit 1; }
+for cmd in gh playwright-cli; do
+  command -v $cmd >/dev/null 2>&1 || { echo "$cmd not found"; exit 1; }
+done
+gh auth status >/dev/null 2>&1 || { echo "gh not authenticated — run 'gh auth login'"; exit 1; }
+
+# 2. Commit pending changes
 if [ -n "$(git status --porcelain)" ]; then
   git add -A
   git commit -m "<message inferred from the diff>"
 fi
+
+# 3. Sync with main by rebasing on top of it
+git fetch origin main
+git rebase origin/main || {
+  git rebase --abort
+  echo "Rebase onto main hit conflicts; resolve manually and re-run"
+  exit 1
+}
 ```
 
-A few things to keep honest here:
+A few things to keep honest:
 
-- **Inspect before committing.** Run `git status` and `git diff` first (the index is still empty at this point, so `git diff --cached` would show nothing). If the working tree contains files that obviously shouldn't ship (`.env`, scratch notes, large binaries), stop and ask the user — *don't* commit them just to keep the pipeline moving.
-- **One commit, descriptive message.** Squash the pending changes into a single commit whose message follows the repo's existing style (read `git log` first). This is the commit that will appear in the PR.
-- **Never amend.** If a previous commit on the branch already exists, create a new commit on top — amending rewrites history the user may have already pushed.
+- **Inspect before committing.** Run `git status` and `git diff` first (the index is still empty at this point, so `git diff --cached` would show nothing). If the working tree contains files that obviously shouldn't ship (`.env`, scratch notes, large binaries), stop and ask the user — don't commit them just to keep the pipeline moving.
+- **One commit, descriptive message.** Squash the pending changes into a single commit whose message follows the repo's existing style (read `git log` first).
+- **Rebase, then abort on conflict.** Replaying the branch's commits on top of main keeps history linear and surfaces drift immediately. If the rebase hits conflicts, `git rebase --abort` puts things back; the skill stops and asks the user to resolve. Letting an agent auto-resolve merge conflicts is a classic way to lose work. Teams that prefer merge commits can swap `git rebase origin/main` for `git merge origin/main` — the conflict-stop rule applies either way.
+- **Never amend.** If commits already exist on the branch, create a new one on top — amending rewrites history that may already be pushed.
 
-If the working tree is already clean, this stage is a no-op and the skill drops straight into stage 1.
+If the working tree is clean and the branch is already up-to-date with `main`, the only real work this stage does is the preflight check — the rest is a no-op.
 
 ### Stage 1 — Start the application
 
@@ -142,10 +161,14 @@ playwright-cli fill e7 "test@example.com"
 playwright-cli press Enter
 playwright-cli snapshot                     # confirm post-interaction state
 playwright-cli console                      # check for client errors
+mkdir -p .verify
+playwright-cli screenshot --filename=.verify/verify-feature.png
 playwright-cli close-all
 ```
 
 The element refs (`e5`, `e7`) come from the accessibility snapshot — `playwright-cli snapshot` prints the DOM tree with refs that subsequent commands target. The agent doesn't need to write selectors; it reads the snapshot and points at the element it wants. (Refs are not stable across renders, so don't hard-code them — see the [troubleshooting section](#troubleshooting).)
+
+The screenshot at the end becomes the visual evidence for the PR. Stage 5 commits it to the branch and embeds the raw URL in the PR body, so the reviewer sees what the agent saw without re-running anything.
 
 The skill tells Claude what counts as a pass:
 
@@ -155,10 +178,13 @@ The skill tells Claude what counts as a pass:
 > 2. Key UI affordances from the feature are present in the snapshot.
 > 3. After exercising the feature, the resulting state is correct.
 > 4. The console returns no `error`-level entries related to the feature.
+> 5. If the feature has a side effect (DB row, queue entry, external write), that side effect actually happened.
 >
 > If any assertion fails, stop and report. Do not proceed to CI.
 
-The interesting part is what's *not* in that list. The skill does not try to enumerate every possible failure mode — it just asserts the four invariants that matter, and trusts Claude to apply them to the feature in front of it. Listing more rules pushes the skill toward brittle, feature-specific checks; listing fewer makes it sloppy.
+Assertion 5 is the one most agent-written features miss. The UI looks right, the redirect fires, the console is clean — but the form never persisted anything. A `curl http://localhost:$PORT/api/<resource> | jq` or a one-liner `psql -c` check is usually enough to catch it.
+
+The interesting part is what's *not* in that list. The skill does not try to enumerate every possible failure mode — it just asserts the invariants that matter, and trusts Claude to apply them to the feature in front of it. Listing more rules pushes the skill toward brittle, feature-specific checks; listing fewer makes it sloppy.
 
 ### Stage 3 — Stop the server
 
@@ -205,11 +231,19 @@ Only reached when every previous stage passed.
 # 1. Confirm there are commits ahead of main.
 git log --oneline main..HEAD
 
-# 2. Push the branch.
+# 2. Commit the verification screenshot from stage 2 and push.
+git add .verify/verify-feature.png
+git commit -m "Verification screenshot for <feature>"
 git push -u origin HEAD
 
-# 3. Open the PR with a HEREDOC body. Note the unquoted EOF — $PORT expands
-#    inside the body. Use <<'EOF' (quoted) if you want everything literal.
+# 3. Build the raw URL for the screenshot. raw.githubusercontent.com serves
+#    blob content directly, which is what GitHub's markdown renderer expects.
+REPO=$(gh repo view --json owner,name -q '.owner.login + "/" + .name')
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+SHOT="https://raw.githubusercontent.com/${REPO}/${BRANCH}/.verify/verify-feature.png"
+
+# 4. Open the PR with a HEREDOC body. Note the unquoted EOF — $PORT and $SHOT
+#    expand inside the body. Use <<'EOF' (quoted) if you want everything literal.
 gh pr create --title "<concise, under 70 chars>" --body "$(cat <<EOF
 ## Summary
 - <what changed>
@@ -218,6 +252,8 @@ gh pr create --title "<concise, under 70 chars>" --body "$(cat <<EOF
 ## Verification
 - Manually exercised <feature> at http://localhost:$PORT/<route>
 - All local CI steps passed (lint, typecheck, tests, build, smoke)
+
+![verification](${SHOT})
 
 ## Test plan
 - [ ] CI green on PR
@@ -235,11 +271,16 @@ Concrete picture, end to end. The feature is *"add a `/products/new` page that c
 The user says **"verify and ship the new product feature"**. The skill's description matches, Claude picks it up, and walks the stages:
 
 ```text
-Stage 0 — Commit pending changes
-  $ git status --porcelain     # → 3 modified, 1 new file
-  $ git diff                   # (inspected; no secrets, no junk)
+Stage 0 — Prepare the branch
+  $ git rev-parse --abbrev-ref HEAD       # → feature/products-new
+  $ command -v gh playwright-cli           # → both present
+  $ gh auth status                         # → authenticated
+  $ git status --porcelain                 # → 3 modified, 1 new file
+  $ git diff                               # (inspected; no secrets, no junk)
   $ git add -A
   $ git commit -m "Add /products/new page and POST handler"
+  $ git fetch origin main
+  $ git rebase origin/main                 # → main unchanged, replay is a no-op
 
 Stage 1 — Start the app
   $ lsof -ti tcp:3000     # → empty, port is free
@@ -258,8 +299,11 @@ Stage 2 — Drive the feature
     → row "Test widget — $12.50" present
   $ playwright-cli console
     → no error-level entries
+  $ curl -s http://localhost:3000/api/products | jq '.[-1].name'
+    → "Test widget"                        # side effect confirmed
+  $ playwright-cli screenshot --filename=.verify/verify-feature.png
   $ playwright-cli close-all
-  Assertions: 4/4 pass.
+  Assertions: 5/5 pass.
 
 Stage 3 — Stop the server
   Killing PID on tcp:3000 and shell dev-1.
@@ -275,8 +319,11 @@ Stage 4 — Local CI
 
 Stage 5 — Open the PR
   $ git log --oneline main..HEAD     # → 2 commits ahead
+  $ git add .verify/verify-feature.png
+  $ git commit -m "Verification screenshot for products/new"
   $ git push -u origin HEAD
-  $ gh pr create …
+  $ gh repo view --json owner,name   # → acme/app
+  $ gh pr create … --body "<embeds raw screenshot URL>"
   Opened: https://github.com/acme/app/pull/482
 ```
 
@@ -305,7 +352,7 @@ A handful of failure modes show up often enough to be worth naming. The fixes ar
 
 **Snapshot refs change between runs.** `e5` today may be `e7` tomorrow — refs are assigned in DOM order and shift when the page re-renders. Never hard-code refs in the skill. The flow is always *snapshot → read refs → act → snapshot again*. If the agent insists on caching refs across snapshots, remind it in the skill body.
 
-**`gh pr create` fails with `not authenticated`.** The skill assumes `gh auth status` is green. If you're running on a fresh machine, the skill should detect this in stage 5 and stop with a clear "run `gh auth login` first" instead of silently failing. Add a pre-flight `gh auth status` check to stage 5 if your team hits this often.
+**`gh pr create` fails with `not authenticated`.** Stage 0's pre-flight checks `gh auth status` and should have caught this. If you reach stage 5 with no auth, the pre-flight was skipped or `gh auth` silently expired mid-run — run `gh auth login` and re-invoke the skill.
 
 **The dev server returns 200 before it's actually ready.** Some stacks serve a placeholder shell while the real bundle is still compiling. Stage 1 sees 200 and moves on, then stage 2's `playwright-cli snapshot` returns a blank page. Fix it by pointing the readiness check at a path that depends on the bundle (e.g. `/api/health` for a backend, or a specific route your app actually owns), not the root URL.
 
@@ -313,15 +360,19 @@ A handful of failure modes show up often enough to be worth naming. The fixes ar
 
 **The skill picks up the wrong intent.** If you find Claude triggering the skill on phrases that mean something else, tighten the `description` frontmatter. "Verify" alone is too broad — pair it with the action (`"verify the feature"`, `"verify and ship"`) and an explicit *not* list in the body if needed.
 
+**`git rebase origin/main` hits conflicts.** Stage 0's rebase replays the branch's commits on top of main. If main has changes that touch the same lines, the rebase pauses with conflicts; the skill runs `git rebase --abort` and stops. Resolve manually (`git rebase origin/main`, fix conflicts, `git rebase --continue`) and re-invoke the skill. An agent that auto-resolves conflicts is an agent that will eventually drop someone's code.
+
+**Screenshot URL 404s in the PR body.** The PR body links `raw.githubusercontent.com/<owner>/<repo>/<branch>/.verify/verify-feature.png`. If the URL renders broken, either the screenshot wasn't committed (`git ls-tree -r HEAD .verify/`) or wasn't pushed (`git log origin/<branch>..HEAD` should be empty when you open the PR). The skill's stage 5 commits and pushes the screenshot *before* `gh pr create` for exactly this reason — don't reorder those steps.
+
 ## Adapting it to your stack
 
 The skill in [SimpleModule](https://github.com/antosubash/SimpleModule/blob/main/.claude/skills/verify-feature/SKILL.md) is wired for .NET 10 + Inertia.js + React, and it uses a `playwright-cli` skill that ships in the same repo. To adapt it:
 
 1. **Replace stage 1's start command** with whatever boots your app (`npm run dev`, `dotnet run`, `uv run …`).
 2. **Replace stage 1's port and health check** with the port your app listens on and a path that returns quickly.
-3. **Replace stage 2's route and assertions** with the specific page and behavior your feature adds. The `playwright-cli` commands stay the same; only the URL, the refs you click, and the strings you assert on change.
+3. **Replace stage 2's route, assertions, and side-effect check** with the specific page, behavior, and API/DB call your feature touches. The `playwright-cli` commands stay the same; only the URL, the refs you click, and the strings you assert on change.
 4. **Replace stage 4's CI script** with your project's actual local-CI checklist. If you already have a `Makefile`, `justfile`, or `package.json` script that runs the whole thing, the skill can simply invoke `make ci` and be done with it.
-5. **Tweak the PR template** to match your repo's PR description format.
+5. **Tweak the PR template** to match your repo's PR description format. If you don't want screenshots in git history, swap the `.verify/` commit for a public-gist upload (`gh gist create --public` returns a URL) or drop the visual evidence entirely.
 
 The stage *boundaries* are the part worth keeping intact. A version that pushes through failures to be more flexible is the same as not having the skill at all.
 
@@ -403,27 +454,44 @@ From conversation context (do not ask unless missing):
 
 If route is unknown, grep the diff for the route registration of your framework.
 
-## Stage 0 — Commit pending changes
+## Stage 0 — Prepare the branch
 
-The pipeline assumes a clean working tree. If anything is uncommitted, the PR
-at the end will be missing those files. Commit before continuing.
+Three things must be true before verification starts.
 
 ```bash
-git status --porcelain
-# If non-empty:
-git diff                 # inspect unstaged changes
-git add -A
-git diff --cached        # confirm what is about to be committed
-git commit -m "<concise message inferred from the diff, matching repo style>"
+# 1. Pre-flight: not on main, tooling present, gh authenticated.
+[ "$(git rev-parse --abbrev-ref HEAD)" != "main" ] || { echo "On main; abort"; exit 1; }
+for cmd in gh playwright-cli; do
+  command -v $cmd >/dev/null 2>&1 || { echo "$cmd not found"; exit 1; }
+done
+gh auth status >/dev/null 2>&1 || { echo "gh not authenticated"; exit 1; }
+
+# 2. Commit pending changes.
+if [ -n "$(git status --porcelain)" ]; then
+  git diff               # inspect unstaged changes
+  git add -A
+  git diff --cached      # confirm what is about to be committed
+  git commit -m "<concise message inferred from the diff, matching repo style>"
+fi
+
+# 3. Sync with main by rebasing on top of it.
+git fetch origin main
+git rebase origin/main || {
+  git rebase --abort
+  echo "Rebase onto main hit conflicts; resolve manually and re-run"
+  exit 1
+}
 ```
 
-Rules for this stage:
+Rules:
 
 - Read `git log` first to match the repo's commit message style.
-- Inspect the diff before committing. If `.env`, credentials, large binaries,
-  or scratch files appear, **stop and ask the user** — do not stage them.
+- If `.env`, credentials, large binaries, or scratch files appear in the diff,
+  **stop and ask the user** — do not stage them.
 - Create a new commit; never `--amend` an existing one.
-- If the working tree is already clean, this stage is a no-op.
+- If the rebase hits conflicts, run `git rebase --abort` and ask the user.
+  Do not auto-resolve. Teams that prefer merge commits can swap
+  `git rebase origin/main` for `git merge origin/main`.
 
 ## Stage 1 — Start the application
 
@@ -465,15 +533,19 @@ playwright-cli fill eM "<value>"
 playwright-cli press Enter
 playwright-cli snapshot
 playwright-cli console
+mkdir -p .verify
+playwright-cli screenshot --filename=.verify/verify-feature.png
 playwright-cli close-all
 ```
 
-**Assertions to make from snapshots and console:**
+**Assertions to make from snapshots, console, and side effects:**
 
 1. The expected page route is in the URL.
 2. Key UI affordances from the feature are present in the snapshot.
 3. After exercising the feature, the resulting state is correct.
 4. `playwright-cli console` returns no `error`-level entries related to the feature.
+5. If the feature has a side effect (DB row, API write, queue entry), confirm
+   it actually happened — usually one `curl <BASE_URL>/api/...` or `psql -c`.
 
 If any assertion fails, stop and report. Do not proceed to CI.
 
@@ -515,16 +587,33 @@ If any step fails, surface the error, suggest a fix, and abort — do not open a
 Only reached when stages 1–4 all passed.
 
 ```bash
+# 1. Confirm there are commits ahead of main.
 git log --oneline main..HEAD   # must be non-empty
+
+# 2. Commit the screenshot from stage 2 and push.
+git add .verify/verify-feature.png
+git commit -m "Verification screenshot for <feature>"
 git push -u origin HEAD
-gh pr create --title "<concise title, <70 chars>" --body "$(cat <<'EOF'
+
+# 3. Build the raw URL for the screenshot. raw.githubusercontent.com serves
+#    binary blobs directly, which is what GitHub's markdown renderer expects.
+REPO=$(gh repo view --json owner,name -q '.owner.login + "/" + .name')
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+SHOT="https://raw.githubusercontent.com/${REPO}/${BRANCH}/.verify/verify-feature.png"
+
+# 4. Open the PR. Unquoted EOF so ${SHOT} expands; <BASE_URL>/<ROUTE> are
+#    placeholders that should already be substituted by the agent at this point.
+gh pr create --title "<concise title, <70 chars>" --body "$(cat <<EOF
 ## Summary
 - <what changed>
 - <why>
 
 ## Verification
 - Manually exercised <feature> at <BASE_URL>/<ROUTE> via playwright-cli
+- Confirmed side effect via <BASE_URL>/api/<resource>
 - All local CI steps passed (lint, typecheck, tests, build, smoke)
+
+![verification](${SHOT})
 
 ## Test plan
 - [ ] CI green on PR
