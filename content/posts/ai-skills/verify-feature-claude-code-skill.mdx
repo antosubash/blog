@@ -23,6 +23,8 @@ A Claude Code [skill](https://docs.claude.com/en/docs/claude-code/skills) is a g
 
 The reference implementation lives at [SimpleModule/.claude/skills/verify-feature/SKILL.md](https://github.com/antosubash/SimpleModule/blob/main/.claude/skills/verify-feature/SKILL.md). The version below is generalized for any web stack, and there's a [setup section at the end](#setup-for-ai-agents) with the full SKILL.md files ready to drop in — including for an agent you've handed this URL to.
 
+> **Update (May 2026):** The same workflow now ships as a user-level [`/vf` slash command](#from-skill-to-slash-command) that auto-detects the stack (JS/TS, Python, .NET), so you don't have to author or customize a SKILL.md per repo. The skill below is still the right read for *understanding* the pipeline — the slash command at the end is the right thing to *install* if you want it everywhere by default.
+
 ## The shape of the skill
 
 A skill is just a Markdown file under `.claude/skills/<name>/SKILL.md` with a small frontmatter block. The frontmatter is what Claude reads to decide when to invoke it.
@@ -404,6 +406,28 @@ Putting it in `.claude/skills/` buys you three things a script doesn't:
 
 The cost is small: one Markdown file, mostly prose. The upside is that your "did you actually try it?" discipline becomes a thing the team enforces by default rather than a thing each person remembers to do on a good day.
 
+## From skill to slash command
+
+After living with the project-local skill for a few weeks, the friction was the *setup tax*: every new repo needed its own SKILL.md, with the port, start command, and CI commands hard-coded. The pipeline itself never changed — only the placeholders did.
+
+So the workflow got promoted to a [user-level slash command](https://docs.claude.com/en/docs/claude-code/slash-commands) that lives once in `~/.claude/commands/vf.md` and runs anywhere. Invoke it with `/vf` (optionally with a feature description), and it auto-detects the rest:
+
+```text
+/vf add a /products/new page that creates a product and redirects
+```
+
+The five-stage gated pipeline is the same. What changed is what you no longer have to write down:
+
+- **Stack auto-detection.** Three first-class stacks — **JS/TS**, **Python**, **.NET** — detected from `package.json` + lockfile, `pyproject.toml` / `manage.py`, or `*.sln` / `*.csproj`. The framework (Next, Vite, Django, FastAPI, ASP.NET Core, …) determines the default port, start command, and CI commands. The command echoes what it detected so you can correct before stages run.
+- **Background workers.** Many features rely on a queue: emails, notifications, file processing, webhooks. The command detects `BackgroundService` / Hangfire / Celery / BullMQ / etc., and decides whether *this* feature needs the worker based on the diff and the description. If it does, Stage 1b starts the worker (after checking Redis/RabbitMQ is reachable) and Stage 2 asserts on the side effect.
+- **A new Stage 2b/2c.** When an e2e suite already exists (Playwright / `pytest-playwright` / `Microsoft.Playwright.NUnit`), the smoke check in 2a is followed by *authoring or extending a durable spec* in 2b and running just that spec in 2c — the full suite still runs in Stage 4. When no e2e suite exists, the smoke check IS the verification; the command never scaffolds one as a side effect.
+- **Every Bash call has an explicit timeout.** A class-based table sets the budget: 10s for quick local checks (`git status`, `lsof`), 60s for network ops (`git fetch`, `git push`, `gh pr create`), 300s for builds/unit tests, 600s for the full e2e suite. A command that exceeds its budget stops the stage — `/vf` does not retry with a higher value, because the stall itself is the signal. The Bash tool's silent 2-minute default is the failure mode this is designed to prevent: a hung `git push` or a flaky test that never completes shouldn't burn 2 minutes of wall-clock per call with no useful diagnostic at the end.
+- **Flags for the awkward cases.** `--port`, `--route`, `--start`, `--health`, `--base`, plus opt-outs (`--no-pr`, `--no-rebase`, `--skip-browser`, `--no-worker`, `--no-e2e`) for repos that don't fit the defaults.
+
+For a single project, the same file works at `.claude/commands/vf.md` in the repo instead of `~/.claude/commands/`.
+
+**Skill or slash command?** The skill in `.claude/skills/` is the right choice when you want the pipeline *committed to the repo* — every clone of the project gets the same pre-PR check, reviewed through PRs like any other code. The slash command is the right choice when you want it *everywhere by default* without per-repo setup. They're not mutually exclusive: a repo can ship a project-specific SKILL.md that wraps `/vf` with a few project-specific assertions on top.
+
 ## Setup for AI agents
 
 If a teammate handed you this URL with "set this up in our repo," this section is for you. Follow it top to bottom and you'll end with two skills installed and a working `verify-feature` workflow.
@@ -673,5 +697,6 @@ Now the skill is part of the repo: every clone gets the same pre-PR check.
 
 - [Skill source on GitHub](https://github.com/antosubash/SimpleModule/blob/main/.claude/skills/verify-feature/SKILL.md)
 - [Claude Code skills documentation](https://docs.claude.com/en/docs/claude-code/skills)
+- [Claude Code slash commands documentation](https://docs.claude.com/en/docs/claude-code/slash-commands)
 - [`@playwright/cli` on npm](https://www.npmjs.com/package/@playwright/cli) — the `playwright-cli` binary used in stage 2
 - [GitHub CLI (`gh`) — creating pull requests](https://cli.github.com/manual/gh_pr_create)
