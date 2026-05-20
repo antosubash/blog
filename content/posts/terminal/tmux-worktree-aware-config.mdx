@@ -11,6 +11,32 @@ tags:
 
 <TOCInline toc={props.toc} asDisclosure />
 
+A tmux setup for working in git worktrees: bindings to spawn, open, and tear down worktree windows, plus a status bar with live system stats. Everything is plain POSIX shell — no plugins beyond `resurrect`/`continuum`.
+
+## Why
+
+Switching branches with `git checkout` rewrites the working tree under your feet. Open files in another pane suddenly belong to a different branch, your dev server is serving the wrong code, and the diff you were reviewing has moved. Worktrees give each branch its own directory; the bindings below make spawning and tearing them down a single keypress, so the overhead doesn't beat the benefit.
+
+The default status bar shows session name and clock. Load, memory, network rate, and whether your runaway Claude process is still chewing CPU are not there. A 5-second refresh of `/proc` covers all of it in one line.
+
+## Getting started
+
+```bash
+git clone https://github.com/antosubash/dotfiles ~/dotfiles
+ln -sf ~/dotfiles/tmux/.tmux.conf ~/.tmux.conf
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+tmux source-file ~/.tmux.conf
+# Inside tmux: prefix + I  (installs the plugins listed in the config)
+```
+
+Then in any git repo:
+
+- `prefix + g` — type a branch, opens a window in `<repo>/.worktrees/<branch>`
+- `prefix + G` — type a PR number, opens a window in `<repo>/.worktrees/pr-<num>-<head>`
+- `prefix + X` — force-remove the worktree and close the window
+
+The rest of this post is what each piece does and why.
+
 ## Overview
 
 Three tmux bindings plus a status bar fed by two shell scripts. Full config in [antosubash/dotfiles](https://github.com/antosubash/dotfiles).
@@ -146,15 +172,3 @@ set -g @continuum-restore 'on'
 ```
 
 `prefix + r` reloads. The `X` binding is wired to a script *path*, so editing the script never needs a reload. tmux-resurrect + tmux-continuum together survive a reboot — same sessions, windows, panes, and scrollback after power-off.
-
-## Install
-
-```bash
-git clone https://github.com/antosubash/dotfiles ~/dotfiles
-ln -sf ~/dotfiles/tmux/.tmux.conf ~/.tmux.conf
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-tmux source-file ~/.tmux.conf
-# Inside tmux: prefix + I  (installs the plugins listed in the config)
-```
-
-Then `prefix + g` to spawn a worktree window, `prefix + G` for a PR worktree, `prefix + X` to force-remove.
