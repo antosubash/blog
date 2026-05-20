@@ -1,34 +1,19 @@
 ---
-title: 'A worktree-aware tmux config with a live system status bar'
-excerpt: 'Bind prefix+g to spawn a window in a git worktree, prefix+X to force-remove the worktree (orphan directories included), and turn the bottom bar into a 5-second-refreshing system monitor — all in ~100 lines of tmux.conf plus a few short shell scripts.'
+title: 'A worktree-aware tmux config with a live status bar'
+excerpt: 'Tmux bindings for git worktree windows (prefix+g, prefix+G), a force-remove kill that handles orphan directories (prefix+X), and a /proc-backed status bar.'
 date: '2026-05-20'
 tags:
   - tmux
   - terminal
   - git
   - git-worktree
-  - developer-productivity
 ---
 
 <TOCInline toc={props.toc} asDisclosure />
 
-## Why bother
+## Overview
 
-If you spend most of your day in tmux, two things start to grate:
-
-1. **Branch switching tears your workspace apart.** `git checkout other-branch` rewrites the working tree under your feet. Open files in another pane suddenly belong to a different branch, your dev server is serving the wrong code, and the diff you were reviewing has moved. The tmux fix is usually "open a new window in a new clone" — fine for one repo, painful for ten.
-2. **The default status bar tells you almost nothing.** Session name and clock are useful; the load average, free memory, network rate, and whether your runaway Claude process is still hammering the CPU are not there.
-
-Both are easy to fix in tmux without plugins. This post walks through the config I run on every machine — a tmux setup where:
-
-- **`prefix + g`** prompts for a branch name, creates (or reuses) a git worktree at `<repo>/.worktrees/<branch>`, and opens a window in it.
-- **`prefix + G`** does the same for a GitHub PR number, fetching the head ref via `gh`.
-- **`prefix + X`** confirms then force-removes the worktree before killing the window — and handles the orphan-directory case where git's metadata has gone missing but the working tree is still on disk.
-- **The bottom status bar** runs a tiny shell script every five seconds to show CPU, memory, disk, network rate, temperature, claude process count, load, and uptime.
-
-The full config and scripts live in [`antosubash/dotfiles`](https://github.com/antosubash/dotfiles/tree/main). The pieces below are reproduced in full.
-
-## The setup at a glance
+Three tmux bindings plus a status bar fed by two shell scripts. Full config in [antosubash/dotfiles](https://github.com/antosubash/dotfiles).
 
 ```
 ~/dotfiles/
@@ -40,436 +25,136 @@ The full config and scripts live in [`antosubash/dotfiles`](https://github.com/a
     └── tmux-worktree-count.sh     # status-right worktree count
 ```
 
-The tmux config is the contract; the scripts are the implementation. Each script is `set -eu`-friendly POSIX shell.
+The convention is **one main checkout, every other branch under `<main>/.worktrees/<name>`**. From inside any worktree, `git rev-parse --git-common-dir` gives `<main>/.git`; its parent is the main checkout.
 
-## Worktree windows: `prefix + g`
+## Worktree window: prefix + g
 
-A git worktree is a second working directory attached to the same `.git` directory. Two branches checked out at once, sharing one set of objects. The relevant CLI is:
-
-```bash
-git worktree add <path> <branch>     # create
-git worktree list                    # see them all
-git worktree remove <path>           # cleanly remove (refuses if dirty)
-```
-
-The convention I follow is **one main checkout, every other branch under `<main>/.worktrees/<name>`**. That keeps everything inside the same repo directory in the file manager, and `.worktrees/` can be added to `.gitignore`-style tooling once and forgotten.
-
-The tmux binding:
+Bind the key:
 
 ```tmux
 bind g run-shell "~/dotfiles/scripts/tmux-worktree-window.sh prompt '#{pane_current_path}'"
 ```
 
-`#{pane_current_path}` is tmux's format string for the current pane's working directory. The script uses it to figure out which repo the user is in, then prompts for a branch name:
+The script prompts for a branch and resolves it in priority order: reuse existing dir, check out local branch, create tracking branch from `origin`, or create a brand-new branch.
 
 ```sh
-# scripts/tmux-worktree-window.sh (excerpt)
-main_toplevel() {
-    common_dir=$(git -C "$1" rev-parse --path-format=absolute --git-common-dir 2>/dev/null) || return 1
-    dirname "$common_dir"
-}
-
-issue_prompt() {
-    pane_path="$1"
-    label="$2"
-    subcmd="$3"
-
-    if ! main_toplevel "$pane_path" >/dev/null 2>&1; then
-        tmux display-message "not a git repo"
-        return 0
-    fi
-
-    script_dir=$(cd "$(dirname "$0")" && pwd)
-    script_abs="$script_dir/${0##*/}"
-
-    quoted_path=$(sq_escape "$pane_path")
-    inner="$script_abs $subcmd '$quoted_path' \"%%\""
-    quoted_inner=$(sq_escape "$inner")
-
-    tmux command-prompt -p "$label" "run-shell '$quoted_inner'"
-}
+if [ -d "$worktree_path" ]; then
+    return 0
+elif git -C "$repo_path" show-ref --verify --quiet "refs/heads/$branch"; then
+    git -C "$repo_path" worktree add "$worktree_path" "$branch"
+elif git -C "$repo_path" show-ref --verify --quiet "refs/remotes/origin/$branch"; then
+    git -C "$repo_path" worktree add -b "$branch" "$worktree_path" "origin/$branch"
+else
+    git -C "$repo_path" worktree add -b "$branch" "$worktree_path"
+fi
 ```
 
-Two things here are worth pulling out:
-
-- **`git rev-parse --git-common-dir`** is the right way to find the main repo from any worktree. `--show-toplevel` gives you the *current* worktree's path; `--git-common-dir` gives you `<main>/.git`, whose parent is the main checkout. The same one-liner reappears in the kill script and the count script.
-- **The `%%` placeholder** is tmux's substitution for what the user typed at the command prompt. The pane path is baked into the run-shell template before the prompt appears, so the spawn step knows which repo to target even if the user navigates away mid-prompt. Single quotes around it survive shell expansion; outer escaping is handled by a small `sq_escape` helper.
-
-The spawn step then resolves the branch in priority order:
-
-```sh
-ensure_worktree() {
-    repo_path="$1"
-    branch="$2"
-    worktree_path="$3"
-
-    if [ -d "$worktree_path" ]; then
-        return 0
-    fi
-
-    if git -C "$repo_path" show-ref --verify --quiet "refs/heads/$branch"; then
-        git -C "$repo_path" worktree add "$worktree_path" "$branch" >/dev/null
-    elif git -C "$repo_path" show-ref --verify --quiet "refs/remotes/origin/$branch"; then
-        git -C "$repo_path" worktree add -b "$branch" "$worktree_path" "origin/$branch" >/dev/null
-    else
-        git -C "$repo_path" worktree add -b "$branch" "$worktree_path" >/dev/null
-    fi
-}
-```
-
-In English:
-
-1. **If the directory already exists**, reuse it. Press `prefix + g`, type `feat-x`, get the existing worktree window — no duplicate.
-2. **If the branch exists locally**, check it out into the worktree.
-3. **If the branch exists on `origin`**, create a local branch tracking it.
-4. **Otherwise**, create a brand-new branch from `HEAD`.
-
-The end of `cmd_spawn` is the only line that touches tmux:
+Open the window:
 
 ```sh
 tmux new-window -n "$sanitized" -c "$worktree_path"
 ```
 
-`new-window -c <path>` sets the new window's working directory. The shell that boots inside lands in the worktree, the prompt updates, and you're typing in the right place without `cd`.
+## PR window: prefix + G
 
-## PR worktrees: `prefix + G`
-
-Same plumbing, different input. `prefix + G` prompts for a PR number, looks up the head ref via `gh`, fetches it into a local branch named `pr-<num>-<head-ref>`, and opens a window in `<repo>/.worktrees/pr-<num>-<head-ref>`:
-
-```sh
-gh_pr_head_ref() {
-    pr_num="$1"
-    repo_path="$2"
-    (cd "$repo_path" && gh pr view "$pr_num" --json headRefName --jq .headRefName 2>&1)
-}
-
-ensure_pr_worktree() {
-    repo_path="$1"; pr_num="$2"; branch="$3"; worktree_path="$4"
-
-    [ -d "$worktree_path" ] && return 0
-
-    if ! git -C "$repo_path" show-ref --verify --quiet "refs/heads/$branch"; then
-        git -C "$repo_path" fetch origin "refs/pull/$pr_num/head:refs/heads/$branch" >/dev/null
-    fi
-    git -C "$repo_path" worktree add "$worktree_path" "$branch" >/dev/null
-}
+```tmux
+bind G run-shell "~/dotfiles/scripts/tmux-worktree-window.sh prompt-pr '#{pane_current_path}'"
 ```
 
-`refs/pull/<num>/head` is GitHub's read-only ref for the PR's tip commit. Fetching it into a local branch means you get a clean, named branch to work from — no detached HEAD, no surprise rebases. Review the PR, make a suggestion as a real commit, push the branch back to the contributor's fork (or to your own as a counter-PR), kill the window with `prefix + X`, done.
+Prompts for a PR number, fetches its head via `gh`, opens a window in `<repo>/.worktrees/pr-<num>-<head>`.
 
-## Worktree-aware kill: `prefix + X`
+```sh
+git -C "$repo_path" fetch origin "refs/pull/$pr_num/head:refs/heads/$branch"
+git -C "$repo_path" worktree add "$worktree_path" "$branch"
+```
 
-This is the binding that turns the setup from "neat" into worth-keeping, because cleaning up worktrees by hand is the thing that makes people give up on them.
+## Worktree-aware kill: prefix + X
 
 ```tmux
 bind X run-shell "~/dotfiles/scripts/tmux-worktree-kill.sh prompt '#{pane_current_path}' '#{window_id}'"
 ```
 
-The flow:
+If the window's cwd is a registered worktree, prompt and on `y` run `git worktree remove --force` + `tmux kill-window`. Otherwise fall back to a plain `kill-window` confirm.
 
-1. **Detect**: is the current window's working directory inside a `.worktrees/<name>` directory, and is that a git-registered worktree?
-2. **If yes**: prompt `force-remove worktree <path> and kill window? (y/n)`. On `y`, run `git worktree remove --force` and `tmux kill-window`.
-3. **If no**: fall back to the plain `kill-window #N? (y/n)` confirm so the binding is safe to use everywhere.
+`--force` is non-negotiable. Without it, dirty worktrees refuse to remove and the binding silently becomes a lie.
 
-The detection step uses `--show-toplevel` and `--git-common-dir` — if they're equal, you're in the main checkout; if they differ, you're in a linked worktree.
+### Orphan directories
 
-```sh
-cmd_prompt() {
-    pane_path="${1:-}"
-    window_id="${2:-}"
-
-    toplevel=$(git -C "$pane_path" rev-parse --show-toplevel 2>/dev/null)
-    main_top=$(main_toplevel "$pane_path" 2>/dev/null)
-
-    if [ -z "$toplevel" ] || [ -z "$main_top" ] || [ "$toplevel" = "$main_top" ]; then
-        # Orphan check goes here — see below.
-        tmux confirm-before -p "kill-window #${window_id}? (y/n)" "kill-window -t '$window_id'"
-        return 0
-    fi
-
-    script_dir=$(cd "$(dirname "$0")" && pwd)
-    script_abs="$script_dir/${0##*/}"
-    q_main=$(sq_escape "$main_top")
-    q_top=$(sq_escape "$toplevel")
-    q_win=$(sq_escape "$window_id")
-    inner="$script_abs remove '$q_main' '$q_top' '$q_win'"
-    quoted_inner=$(sq_escape "$inner")
-
-    tmux confirm-before -p "force-remove worktree $toplevel and kill window? (y/n)" "run-shell '$quoted_inner'"
-}
-```
-
-`--force` matters. The earlier version of this script ran `git worktree remove` without it, and refused to delete dirty worktrees. The behaviour that produced — "I pressed X, got a confirm, said yes, and now I have a window I can't close" — is the exact thing the binding is supposed to fix. If you've already confirmed the prompt, you've made the destructive choice; don't second-guess.
-
-### The orphan-directory trap
-
-There's a state worth knowing about because it bites people who use worktrees heavily: the **orphan directory**. Run `git worktree prune` (or wipe `.git/worktrees/<name>` by hand, or hit it via a buggy cleanup script) and you can end up with a working-tree directory on disk whose git metadata is gone. From the directory's point of view:
-
-```bash
-$ git -C ~/Repos/foo/.worktrees/bar status
-fatal: not a git repository: /home/anto/Repos/foo/.git/worktrees/bar
-```
-
-`git rev-parse` returns nothing, so the detection above would fall through to the plain kill-window confirm. You'd press y, the window would die, and the orphan directory would stay on disk forever — looking from the outside like force-remove wasn't working at all.
-
-The fix is to detect the orphan from the path convention, not from git:
+A worktree dir whose `.git/worktrees/<name>` metadata has been pruned no longer looks like a worktree to git, so it would slip through the detection above. Detect it from the path convention instead:
 
 ```sh
 orphan_worktree_paths() {
     p="$1"
-    case "$p" in
-        */.worktrees/*) ;;
-        *) return 1 ;;
-    esac
+    case "$p" in */.worktrees/*) ;; *) return 1 ;; esac
     main="${p%/.worktrees/*}"
-    rest="${p#"$main"/.worktrees/}"
-    name="${rest%%/*}"
-    [ -n "$main" ] && [ -n "$name" ] || return 1
+    name="${p#"$main"/.worktrees/}"; name="${name%%/*}"
+    [ -n "$name" ] || return 1
     git -C "$main" rev-parse --is-inside-work-tree >/dev/null 2>&1 || return 1
     printf '%s %s\n' "$main" "$main/.worktrees/$name"
 }
 ```
 
-We only treat a directory as an orphan worktree when **all three** of these hold:
-
-- The path matches `<something>/.worktrees/<name>[/sub...]`.
-- The inferred `<something>` is itself a working git repo.
-- Git couldn't tell us about the worktree directly.
-
-That's narrow enough that we won't accidentally `rm -rf` a path that happens to have `.worktrees` in its name. And it's specific enough that `cmd_prompt` can offer the same force-remove confirm for orphans:
+Remove tries git first, falls back to `rm -rf` if the directory survives:
 
 ```sh
-if [ -z "$toplevel" ] || [ -z "$main_top" ] || [ "$toplevel" = "$main_top" ]; then
-    if orphan=$(orphan_worktree_paths "$pane_path"); then
-        main_top=${orphan%% *}
-        toplevel=${orphan#* }
-    else
-        tmux confirm-before -p "kill-window #${window_id}? (y/n)" "kill-window -t '$window_id'"
-        return 0
-    fi
+err=$(git -C "$main_top" worktree remove --force "$worktree_path" 2>&1)
+if [ -e "$worktree_path" ]; then
+    rm -rf -- "$worktree_path" || { tmux display-message "remove failed: $err"; return; }
+    git -C "$main_top" worktree prune >/dev/null 2>&1 || true
 fi
+tmux kill-window -t "$window_id"
 ```
 
-The remove step then tries git first and falls back to `rm -rf` if anything remains:
-
-```sh
-cmd_remove() {
-    main_top="${1:-}"; worktree_path="${2:-}"; window_id="${3:-}"
-
-    err=$(git -C "$main_top" worktree remove --force "$worktree_path" 2>&1)
-    if [ -e "$worktree_path" ]; then
-        if ! rm_err=$(rm -rf -- "$worktree_path" 2>&1); then
-            tmux display-message "worktree remove failed: ${err:-$rm_err}"
-            return 0
-        fi
-        git -C "$main_top" worktree prune >/dev/null 2>&1 || true
-    fi
-    tmux kill-window -t "$window_id"
-}
-```
-
-Three things this does that matter:
-
-- **Captures git's error but doesn't immediately surface it.** A "not a working tree" complaint from git on an orphan is expected — the next step nukes the directory anyway.
-- **Only errors if both git *and* `rm` failed.** Otherwise the window closes and the worktree (or its corpse) is gone.
-- **Runs `git worktree prune` after a successful `rm -rf`** so any stray registry entry that pointed at the directory we just deleted gets cleaned up too.
-
-## The bottom status bar
-
-The default status bar reads `[0] 0:zsh* %1 host`. Useful, but you can pack a lot more into the same line without it becoming noisy.
+## Status bar
 
 ```tmux
 set -g status-interval 5
-set -g status-position bottom
-set -g status-justify left
-set -g status-bg colour235
-set -g status-fg colour250
-set -g status-left-length 40
-set -g status-right-length 180
-set -g status-left  "#[fg=colour39,bold] [#S] #[default]"
 set -g status-right "#[fg=colour215]#(~/dotfiles/scripts/tmux-resource-usage.sh) #(~/dotfiles/scripts/tmux-worktree-count.sh '#{pane_current_path}')w:#{session_windows} #[fg=colour245]%Y-%m-%d %H:%M #[fg=colour39,bold]#H "
-setw -g window-status-format         " #I:#W "
-setw -g window-status-current-format "#[fg=colour15,bg=colour39,bold] #I:#W "
-setw -g window-status-separator ""
 ```
 
-A rendered line looks roughly like this:
+Rendered:
 
 ```
- [system]   1:zsh  2:nvim  3:claude          CPU 7% MEM 12.3/31.2G / 64% ↓120K↑12K T 48° L 1.42 cc:2 up 3d wt:3 w:5 2026-05-20 14:32 work-laptop
+[system]   1:zsh  2:nvim  3:claude       CPU 7% MEM 12.3/31.2G / 64% ↓120K↑12K T 48° L 1.42 cc:2 up 3d wt:3 w:5 2026-05-20 14:32 work-laptop
 ```
 
-The interesting bit is `#(...)` — tmux runs the shell command and substitutes the trimmed stdout. Two scripts feed the right side.
+### tmux-resource-usage.sh
 
-### `tmux-resource-usage.sh`
+Reads `/proc` directly. Previous samples are persisted to a `$USER`-keyed state file so CPU% and network rate can be calculated as deltas. CPU uses `(busy_delta / total_delta) * 100` — the naive "100 − idle%" drifts under iowait/steal. The rate denominator is `/proc/uptime`, monotonic and immune to wall-clock skew. Memory reads `MemAvailable`, not `MemFree` (otherwise a healthy box looks seconds from OOM because of page-cache use).
 
-The status bar refreshes every five seconds, so the script has to be **fast** (well under 100 ms) and **stateful** (CPU% and network rate need a delta). It reads everything from `/proc` directly — no `top`, no `vmstat`, no shelling out to other tools.
+Conditional pieces: `T <temp>°` only if `/sys/class/thermal/thermal_zone0/temp` is readable; `cc:N` only when `pgrep -c claude` is non-zero. They disappear cleanly when absent.
+
+### tmux-worktree-count.sh
 
 ```sh
-state="${TMPDIR:-/tmp}/tmux-resource-usage.${USER:-$(id -u)}"
-
-# /proc/stat fields: user nice system idle iowait irq softirq steal ...
-read -r _ u n s i io irq sirq st _ < /proc/stat
-cpu_total=$((u + n + s + i + io + irq + sirq + st))
-cpu_idle=$((i + io))
-
-read -r uptime_s _ < /proc/uptime
-ut=${uptime_s%.*}
-
-net=$(awk '$1 ~ /:$/ {
-    iface = $1; sub(/:$/, "", iface)
-    if (iface == "lo") next
-    rx += $2; tx += $10
-} END { printf "%d %d", rx+0, tx+0 }' /proc/net/dev)
-rx_now=${net% *}
-tx_now=${net#* }
-
-prev_total=0; prev_idle=0; prev_rx=0; prev_tx=0; prev_ut=0
-if [ -r "$state" ]; then
-    read -r prev_total prev_idle prev_rx prev_tx prev_ut < "$state" || :
-fi
-
-diff_total=$((cpu_total - prev_total))
-diff_idle=$((cpu_idle - prev_idle))
-if [ "$diff_total" -gt 0 ]; then
-    cpu=$(( (diff_total - diff_idle) * 100 / diff_total ))
-else
-    cpu=0
-fi
-
-dt=$((ut - prev_ut))
-if [ "$dt" -gt 0 ]; then
-    rx_rate=$(( (rx_now - prev_rx) / dt ))
-    tx_rate=$(( (tx_now - prev_tx) / dt ))
-else
-    rx_rate=0; tx_rate=0
-fi
-
-printf '%s %s %s %s %s\n' "$cpu_total" "$cpu_idle" "$rx_now" "$tx_now" "$ut" > "$state"
-```
-
-A handful of details that took two or three iterations to get right:
-
-- **Use `/proc/uptime` as the network-rate denominator.** It's monotonic, can't go backwards across DST or wall-clock skew, and means the script never needs `date` for timing.
-- **State file keyed by `$USER`.** Multiple users on the same box (or a containerized workflow) don't fight over `/tmp/tmux-resource-usage.state`.
-- **One `awk` pass over `/proc/net/dev`**, summing every non-loopback interface. Don't try to "pick the active interface" — VPNs, bridges, and docker veth pairs make that a losing game. RX/TX totals across everything are what you want on a status bar.
-- **CPU% sample math**: `(busy_delta / total_delta) * 100`. The naive "100 - idle%" version drifts when iowait/steal swing fast.
-
-The rest is presentation:
-
-```sh
-disk=$(df -P / | awk 'NR==2 {sub(/%/,"",$5); print $5}')
-mem=$(awk '/^MemTotal:/ {t=$2} /^MemAvailable:/ {a=$2}
-           END {printf "%.1f/%.1fG", (t-a)/1048576, t/1048576}' /proc/meminfo)
-read -r load _ < /proc/loadavg
-
-temp=""
-if [ -r /sys/class/thermal/thermal_zone0/temp ]; then
-    read -r t < /sys/class/thermal/thermal_zone0/temp
-    temp=$((t / 1000))
-fi
-
-cc=$(pgrep -c claude 2>/dev/null || true)
-
-days=$((ut / 86400))
-if [ "$days" -gt 0 ]; then
-    up_h="${days}d"
-else
-    up_h="$((ut / 3600))h"
-fi
-```
-
-`MemAvailable` (not `MemFree`) is the field you want — it accounts for reclaimable page cache. Plain `MemFree` makes a healthy Linux box look like it's seconds from OOM, because the kernel happily caches files until memory is genuinely needed.
-
-`pgrep -c claude` is the one piece of personal preference in there. I run several Claude Code sessions across worktrees, and `cc:2` on the status bar is a low-effort answer to "is anything still chewing"; it disappears when no `claude` processes are running.
-
-The output is assembled into a single line:
-
-```sh
-out=$(printf 'CPU %d%% MEM %s / %d%% ↓%s↑%s' "$cpu" "$mem" "$disk" "$rx_s" "$tx_s")
-[ -n "$temp" ] && out="$out T ${temp}°"
-out="$out L $load"
-[ "$cc" -gt 0 ] && out="$out cc:${cc}"
-out="$out up $up_h"
-printf '%s' "$out"
-```
-
-Two output discipline tricks:
-
-- **No trailing newline** (`printf '%s'`, not `echo`). tmux trims the captured stdout, but the explicit form is one less thing to think about.
-- **Conditional pieces** (`T`, `cc:`) only appear when they have data. On a VM with no thermal zone, the temperature just vanishes from the line — the layout doesn't break.
-
-### `tmux-worktree-count.sh`
-
-When you have a session per repo, knowing how many worktrees are open in the current repo turns out to be useful — it's a fast way to spot the one you forgot to clean up.
-
-```sh
-dir="${1:-$PWD}"
-common=$(git -C "$dir" rev-parse --git-common-dir 2>/dev/null) || exit 0
-case "$common" in
-    /*) ;;
-    *)  common="$dir/$common" ;;
-esac
-
+common=$(git -C "${1:-$PWD}" rev-parse --git-common-dir 2>/dev/null) || exit 0
 n=1
-if [ -d "$common/worktrees" ]; then
-    for entry in "$common/worktrees"/*/; do
-        [ -e "$entry" ] || break
-        n=$((n + 1))
-    done
-fi
-
+[ -d "$common/worktrees" ] && for e in "$common/worktrees"/*/; do [ -e "$e" ] && n=$((n+1)); done
 [ "$n" -gt 1 ] && printf 'wt:%d ' "$n"
 ```
 
-Two things to call out:
+Counts entries under `<common>/worktrees/` directly — `git worktree list` would re-read every linked HEAD on each refresh. Silent when only the main checkout is present.
 
-- **Counts entries under `<common>/worktrees/` directly.** Parsing `git worktree list` would re-read every linked HEAD on each status refresh — much more I/O than counting directory entries.
-- **Silent when `n == 1`.** A repo with only the main checkout doesn't need to say `wt:1`. The status bar disappears the indicator entirely when it would be noise.
-
-## Reload, save, restore
-
-Three more lines worth knowing about, all in the tmux config:
+## Reload and persistence
 
 ```tmux
 bind r source-file ~/.tmux.conf \; display-message "tmux.conf reloaded"
-
 set -g @plugin 'tmux-plugins/tmux-resurrect'
 set -g @plugin 'tmux-plugins/tmux-continuum'
 set -g @resurrect-capture-pane-contents 'on'
 set -g @continuum-restore 'on'
-set -g @continuum-save-interval '15'
 ```
 
-- **`prefix + r`** picks up config edits in the running tmux server. The X binding, in particular, is wired to a *script path*, not the script's contents — so editing the script never needs a reload, but adding a new binding does.
-- **tmux-resurrect** (`prefix + Ctrl-s` to save, `prefix + Ctrl-r` to restore) and **tmux-continuum** together survive a reboot. With `@resurrect-capture-pane-contents 'on'` and `@continuum-restore 'on'`, the next time tmux starts after a power-off you walk back into the same sessions, windows, panes, and the last 50,000 lines of each pane's history.
+`prefix + r` reloads. The `X` binding is wired to a script *path*, so editing the script never needs a reload. tmux-resurrect + tmux-continuum together survive a reboot — same sessions, windows, panes, and scrollback after power-off.
 
-## What this doesn't do
-
-A few things on purpose:
-
-- **No prompt for branch deletion.** `prefix + X` removes the worktree; the branch ref stays. Killing branches is a different question with different undo semantics, and I'd rather do it explicitly with `git branch -D` than have a tmux binding do it for me.
-- **No PR merge / close from tmux.** `prefix + G` lets you check out a PR in a worktree; landing or closing it goes through normal `gh` commands. The binding's job is to put you in the right directory.
-- **No pretty fonts.** The status bar is plain ASCII (`↓` and `↑` are the only non-ASCII), so it renders the same over SSH from anything that supports a recent locale. If you want Nerd Font icons, swap them in — the structure doesn't care.
-
-## Pulling it all in
-
-If you want to lift this whole setup as-is:
+## Install
 
 ```bash
 git clone https://github.com/antosubash/dotfiles ~/dotfiles
 ln -sf ~/dotfiles/tmux/.tmux.conf ~/.tmux.conf
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-
-tmux source-file ~/.tmux.conf      # or: prefix + r if tmux is already running
-# Inside tmux, press: prefix + I    (capital I — installs the plugins listed in the config)
+tmux source-file ~/.tmux.conf
+# Inside tmux: prefix + I  (installs the plugins listed in the config)
 ```
 
-Then in any git repo:
-
-- `prefix + g`, type a branch name → window opens in `<repo>/.worktrees/<branch>`.
-- `prefix + G`, type a PR number → window opens in `<repo>/.worktrees/pr-<num>-<head>`.
-- `prefix + X` on a worktree window → confirm, force-remove, window closes.
-- Glance at the bottom right of any screen → CPU/MEM/disk/network/temp/load/uptime, worktree count for the current repo, and how many `claude` processes are alive.
-
-Tweak colours, change the prefix to `C-a` if you're a screen veteran, swap the worktree convention from `.worktrees/<name>` to `../worktrees/<repo>-<name>` if you prefer them siblings of the main checkout — the scripts only depend on `--git-common-dir`, so the rest is presentation.
+Then `prefix + g` to spawn a worktree window, `prefix + G` for a PR worktree, `prefix + X` to force-remove.
