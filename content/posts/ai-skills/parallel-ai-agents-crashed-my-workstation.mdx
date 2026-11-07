@@ -14,7 +14,7 @@ tags:
 
 <TOCInline toc={props.toc} asDisclosure />
 
-I run a lot of coding agents at once: ten or so Claude Code sessions in one terminal, plus Codex jobs and a background issue worker, on a workstation with 24 cores and 60 GiB of RAM. In under three weeks it crashed twice, and two slower problems ate memory and broke the browser. None of the agents did anything wrong on its own. The problem was what they did together, and what they left behind.
+I run a lot of coding agents at once: ten or so Claude Code sessions in one terminal, plus Codex jobs and a background issue worker, on a workstation with 24 cores and 60 GiB of RAM. In under three weeks it crashed on two consecutive days, and two slower problems ate memory and broke the browser. None of the agents did anything wrong on its own. The problem was what they did together, and what they left behind.
 
 Here's what ate the machine, how I found out, and the five guardrails that have kept it up since.
 
@@ -36,7 +36,7 @@ Two things to understand here:
 
 ## The fix that made it worse
 
-My first reaction was to switch off oomd's pressure kill for my user (`ManagedOOMMemoryPressure=auto` in a `user@.service` drop-in). The reasoning sounded fine: a VM running parallel work can be busy, and oomd kills *everything* in the scope, while the kernel's OOM killer only kills one process.
+My first reaction was to switch off oomd's pressure kill for my user (`ManagedOOMMemoryPressure=auto` in a `user@.service` drop-in). The reasoning sounded fine: a machine running parallel work can be busy, and oomd kills *everything* in the scope, while the kernel's OOM killer only kills one process.
 
 About an hour later the session crashed again, and it was worse. With oomd out of the way, RAM (60 GB) and swap (8 GB) filled completely. The kernel OOM killer then started picking processes: first a Chrome renderer, then my user's D-Bus. Losing D-Bus took the whole GNOME session down and logged me out.
 
@@ -74,7 +74,7 @@ The cause was `pytest -n auto`. In pytest-xdist 3.8.0, `auto` starts one worker 
 
 ## Orphaned Celery workers
 
-This one didn't crash anything at once. It just kept 26 GiB busy for days. A memory check found **54 Celery processes**: the same three workers, started six separate times by an agent's QA runs and never stopped. Their launching shells were gone, so they had been re-parented to `systemd --user`, and nothing would ever stop them. Each set also ran its own scheduler (Celery beat), so periodic tasks fired six times over.
+The next problem was slower. It didn't crash anything at once, but it kept 26 GiB busy for days. A memory check found **54 Celery processes**: the same three workers, started six separate times by an agent's QA runs and never stopped. Their launching shells were gone, so they had been re-parented to `systemd --user`, and nothing would ever stop them. Each set also ran its own scheduler (Celery beat), so periodic tasks fired six times over.
 
 A memory profile of the workers showed no leak. Memory rose once while models loaded, then stayed flat. The bug was in the launch. The QA step tracked one PID and one port. Background workers have no port, and their children aren't in the PID file. So every QA iteration started a fresh set. Stopping the 54 freed about 10 GiB of available memory.
 
@@ -110,7 +110,7 @@ stack.sh stop  <tag> [timeout-seconds]    # TERM every tagged process, KILL left
 stack.sh status <tag>
 ```
 
-The core is two pieces. Start each process with the tag in its environment, and find the stack again by grepping every process's environment for it:
+The core is three steps. Start each process with the tag in its environment, find the stack again by grepping every process's environment for it, and stop whatever is tagged:
 
 ```bash
 # Simplified from stack.sh (Linux only; the real stop polls instead of sleeping)
@@ -199,8 +199,10 @@ Two catches. Kill a Codex broker together with its app-server: a broker left wit
 
 ## What I'd do first on a new machine
 
+Five steps. The first four prevent the crash; the last is for when it happens anyway.
+
 1. Set `PYTEST_XDIST_AUTO_NUM_WORKERS` (and the equivalent for any other parallel runner you use) machine-wide, before the first agent runs a suite.
 2. Put a headroom check and job caps in your global `CLAUDE.md`, and tell it to pass them on to subagents.
 3. Make every process an agent starts stoppable by tag, not by PID.
 4. Leave `systemd-oomd` on. Losing a terminal is better than losing the desktop.
-5. When it does go down, start with `journalctl -b -1` for oomd kills, then the kernel's OOM process table summed by name, then the per-unit memory peaks. Between them they tell you what, how many, and where.
+5. When it does go down, start with `journalctl -b -1` (`-b 0` if it didn't reboot) for oomd kills, then the kernel's OOM process table summed by name, then the per-unit memory peaks. Between them they tell you what, how many, and where.
