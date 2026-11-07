@@ -11,9 +11,7 @@ tags:
 
 <TOCInline toc={props.toc} asDisclosure />
 
-My workflow with Claude Code is simple: start a task, switch to something else, come back to a finished PR. In practice I kept coming back to a question.
-
-When I went through a few weeks of my own sessions, the pattern was clear. The time I spent wasn't on reviewing code. It was on the agent **stopping**:
+My workflow with Claude Code is simple: start a task, switch to something else, come back to a finished PR. In practice, the time I spent wasn't on reviewing code. It was on the agent **stopping**. I saw the same pattern across weeks of my own sessions:
 
 - Approving a design one section at a time — six turns for one billing spec.
 - "I can also update the tests if you want." → "go ahead".
@@ -21,11 +19,11 @@ When I went through a few weeks of my own sessions, the pattern was clear. The t
 - "The build is running, let me know when it finishes." → "is it done yet?"
 - Repos with nothing that told Claude how to start the app, so every session worked it out again, or asked.
 
-None of these are model failures. They're polite defaults. An assistant that checks in is safe when someone is watching. When you've walked away, every check-in costs a full round trip — often an hour of nothing happening.
+None of these are model failures. They're polite defaults. Checking in is safe when someone is watching. When you've walked away, every check-in costs a full round trip, often an hour of nothing happening.
 
-So I wrote the defaults down, the other way round.
+So I wrote the defaults down the other way round.
 
-## The rules
+## The CLAUDE.md rules
 
 This lives in `~/.claude/CLAUDE.md`, which Claude Code loads into every session in every repo:
 
@@ -64,7 +62,9 @@ I lose a round trip. Default to finishing.
 ## Design approval
 
 - Show a design **in one piece**: every section, every decision, and the
-  trade-offs you picked. Ask for **one** approval of the whole thing.
+  trade-offs you picked. Ask for **one** approval of the whole thing. Don't
+  present it section by section and stop after each one. This overrides the
+  section-by-section step in the superpowers brainstorming skill.
 - My approval of the design also approves writing the spec and plan and
   starting implementation. Only stop again if the implementation has to
   depart from the approved design in a way that matters.
@@ -82,19 +82,19 @@ I lose a round trip. Default to finishing.
 
 ## Why it's worded this way
 
-**It starts with the cost, not the rule.** "I lose a round trip" gives the model a reason it can apply to cases the list doesn't cover. A bare "don't ask questions" gets you either an agent that still asks, or one that guesses wildly about things that matter.
+**It starts with the cost, not the rule.** "I lose a round trip" gives the model a reason it can apply to cases the list doesn't cover. A bare "don't ask questions" gets you an agent that still asks, or one that guesses about things that matter.
 
-**"In-scope" is the important word.** "Do follow-ups" on its own leads to an agent refactoring half the repo. Tying it to the current task, and requiring it to be mentioned in the summary, keeps it reviewable.
+**"In-scope" is the important word.** "Do follow-ups" on its own leads to an agent refactoring half the repo. Tying it to the current task and requiring a mention in the summary keeps it reviewable.
 
-**The `!` prefix closes the loop.** Some steps really do need me — usually `sudo`. In Claude Code, a prompt starting with `!` runs as a shell command in the session, and the output lands in the conversation. So the agent gives me one line to paste, I paste it, and it carries on. No "tell me when it's done".
+**The `!` prefix closes the loop.** Some steps need me, usually `sudo`. In Claude Code, a prompt starting with `!` runs as a shell command in the session, and the output lands in the conversation. The agent gives me one line to paste, I paste it, and it carries on.
 
-**"End a turn only when" is the rule doing the most work.** The other rules say what to do. This one removes the excuse to stop. "Here's a checkpoint" sounds helpful, but when no one is reading, it's just a pause.
+**"End a turn only when" is the rule doing the most work.** The other rules say what to do. This one removes the excuse to stop. A checkpoint sounds helpful, but when no one is reading, it's a pause.
 
-**Questions come in one batch, each with a default.** Some decisions really are mine. Asking them all at once, with a recommended answer for each, turns five round trips into one — and often my answer is just "defaults are fine".
+**Questions come in one batch, each with a default.** Asking everything at once, with a recommended answer for each, turns five round trips into one. Often my answer is just "defaults are fine".
 
-**One design approval.** I use the [superpowers](https://github.com/obra/superpowers) brainstorming skill, which presents a design section by section and waits after each one. That's good for a live pairing session and bad for mine. The rule says so explicitly: user instructions override skills, so naming the step it replaces stops the two from fighting. Approving the design also approves the plan and the start of implementation, so the next stop is the PR.
+**One design approval.** The [superpowers](https://github.com/obra/superpowers) brainstorming skill (in its 6.x versions) presents a design section by section and waits after each one. That suits live pairing, not walking away. User instructions override skills, so naming the step it replaces stops the two from fighting. Approval also covers the plan and the start of implementation, so the next stop is the PR.
 
-**The safety rules stay.** More autonomy needs firmer limits, not looser ones. No pushing to `main`, no secrets in commits, confirm anything destructive or public. In return, the agent does everything else on a branch, where nothing is final until I merge it.
+**The safety rules stay.** More autonomy needs firmer limits, not looser ones. Inside them, the agent works on a branch, where nothing is final until I merge it.
 
 ## Making "run it yourself" possible
 
@@ -102,19 +102,19 @@ A rule that says "start the server" doesn't help when the agent doesn't know how
 
 ### /runbook: write down how to launch the app, once
 
-Every repo starts differently: Aspire, `docker compose`, `uv run`, three terminals with environment variables. Without notes, each session spends ten minutes rediscovering it, or asks me.
+Every repo starts differently: Aspire, `docker compose`, `uv run`, three terminals with environment variables. Without notes, each session rediscovers it or asks me.
 
-`/runbook` writes a `running-the-stack` skill into the repo. It only records commands it has **actually run**, plus a readiness check (the URL or log line that means "up"), how to stop everything, and the gotchas it hit on the way. No secrets — it names the env vars, not their values. The global `CLAUDE.md` points at it:
+`/runbook` writes a `running-the-stack` skill into the repo. It records only commands it has **actually run**, plus a readiness check (the URL or log line that means "up"), how to stop everything, and the gotchas it hit. It names env vars, not their values. The global `CLAUDE.md` points at it:
 
 ```markdown
 ## Repo conventions
 
-- If a repo has a `running-the-stack` skill, use it to start the app. If it
-  doesn't and you've just worked out how to run the app, run `/runbook` so
+- If a repo has a `running-the-stack` skill (or a launch section in its
+  CLAUDE.md), use it to start the app. If it doesn't and you've just worked out how to run the app, run `/runbook` so
   the next session doesn't have to work it out again.
 ```
 
-So the first session in a repo pays the cost of figuring it out, and every later one reuses it.
+The first session in a repo pays the cost; every later one reuses it.
 
 ### /feature: one checkpoint from idea to PR
 
@@ -127,13 +127,6 @@ So the first session in a repo pays the cost of figuring it out, and every later
 
 It saves its progress on disk, so a long run survives the conversation being summarized and can resume where it stopped.
 
-## Cutting what loads into every session
-
-The rules made sessions longer, so context started to matter. Two cheap fixes:
-
-- **Slimmer workflow skills.** `/qa`, `/vf`, `/ship` and `/optimize` loaded about 1,840 lines per `/ship` run. Rarely needed detail — agent prompt templates, report formats, per-stack detection — moved into reference files that each skill reads only at the step that needs it. That's about 815 lines now. A separate review against the old versions found no dropped rules.
-- **Fewer plugins by default.** Figma, Grafana and a handful of others are off globally and turned on per repo when it needs them.
-
 ## Did it work?
 
 I counted my prompts that were only a nudge — "yes", "go ahead", "continue", "proceed" — across about 500 sessions:
@@ -143,16 +136,16 @@ I counted my prompts that were only a nudge — "yes", "go ahead", "continue", "
 | Before the rules (late May – Oct 1) | 433 | 3,335 | 3.9% |
 | After the rules (Oct 2 – Nov 7) | 82 | 698 | 2.7% |
 
-That's a drop of about a third. It's not zero, and some of the remaining "yes" answers are the design approval I *want* to give. The bigger change doesn't show up in a count: when I come back, the work is either done or stopped on something only I can do — a `sudo` line, a login, a decision that changes what gets built.
+That's a drop of about a third. It's not zero, and some of the remaining "yes" answers are the design approval I *want* to give. The bigger change doesn't show in a count. When I come back, the work is either done or stopped on something only I can do: a `sudo` line, a login, a decision that changes what gets built.
 
 What I'd watch for if you copy this:
 
 - **Scope creep.** "Do follow-ups" works because of "in-scope" and "mention it in the summary". Leave those out and you'll get surprise refactors.
-- **Your machine.** An agent that runs things itself will happily start three dev servers, a browser and a test suite in parallel. Mine crashed my workstation that way, which is a post of its own.
+- **Your machine.** An agent that runs things itself will start three dev servers, a browser and a test suite in parallel. Mine crashed my workstation that way.
 - **Skills that disagree.** If a plugin skill has its own "stop and ask" step, name it in your rules. Otherwise the model has two instructions and picks one.
 
 ## Setup
 
 1. Put the rules above in `~/.claude/CLAUDE.md` (global) — or in a repo's `CLAUDE.md` if you want them in one project only. Edit the ground rules to match your own red lines.
-2. Start a new session and run `/memory` to confirm the file is loaded.
+2. Start a new session and run `/memory` to confirm the file loads.
 3. Give it a task you'd normally supervise, walk away, and see where it stops. Each place it stops without needing you is the next rule to write.
