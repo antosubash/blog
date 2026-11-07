@@ -12,7 +12,7 @@ function escapeHtml(input: string) {
 }
 
 export const sendContactEmail = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     (data: {
       name: string
       email: string
