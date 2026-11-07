@@ -147,7 +147,9 @@ function extractTocHeadings(
 ): Array<{ value: string; url: string; depth: number }> {
   const headingRegex = /^(#{2,4})\s+(.+)$/gm
   const headings: Array<{ value: string; url: string; depth: number }> = []
-  let match: RegExpExecArray | null = headingRegex.exec(content)
+  // Headings inside fenced code blocks (e.g. a quoted Markdown file) are not page sections.
+  const prose = content.replace(/^(`{3,}|~{3,})[^\n]*\n[\s\S]*?^\1[ \t]*$/gm, "")
+  let match: RegExpExecArray | null = headingRegex.exec(prose)
 
   while (match !== null) {
     const depth = match[1].length
@@ -157,7 +159,7 @@ function extractTocHeadings(
       .replace(/[^\w\s-]/g, "")
       .replace(/\s+/g, "-")}`
     headings.push({ value, url, depth })
-    match = headingRegex.exec(content)
+    match = headingRegex.exec(prose)
   }
 
   return headings
