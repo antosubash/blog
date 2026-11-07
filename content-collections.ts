@@ -148,7 +148,10 @@ function extractTocHeadings(
   const headingRegex = /^(#{2,4})\s+(.+)$/gm
   const headings: Array<{ value: string; url: string; depth: number }> = []
   // Headings inside fenced code blocks (e.g. a quoted Markdown file) are not page sections.
-  const prose = content.replace(/^(`{3,}|~{3,})[^\n]*\n[\s\S]*?^\1[ \t]*$/gm, "")
+  const prose = content.replace(
+    /^(`{3,}|~{3,})[^\n]*\n[\s\S]*?^\1[ \t]*$/gm,
+    ""
+  )
   let match: RegExpExecArray | null = headingRegex.exec(prose)
 
   while (match !== null) {
