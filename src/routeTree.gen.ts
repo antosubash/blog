@@ -10,15 +10,15 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as TagsIndexRouteImport } from './routes/tags/index'
-import { Route as SeriesIndexRouteImport } from './routes/series/index'
-import { Route as ProjectsIndexRouteImport } from './routes/projects/index'
-import { Route as PostsIndexRouteImport } from './routes/posts/index'
-import { Route as ContactIndexRouteImport } from './routes/contact/index'
-import { Route as ConsultingIndexRouteImport } from './routes/consulting/index'
 import { Route as AboutIndexRouteImport } from './routes/about/index'
-import { Route as TagsTagRouteImport } from './routes/tags/$tag'
+import { Route as ConsultingIndexRouteImport } from './routes/consulting/index'
+import { Route as ContactIndexRouteImport } from './routes/contact/index'
+import { Route as PostsIndexRouteImport } from './routes/posts/index'
 import { Route as PostsSplatRouteImport } from './routes/posts/$'
+import { Route as ProjectsIndexRouteImport } from './routes/projects/index'
+import { Route as SeriesIndexRouteImport } from './routes/series/index'
+import { Route as TagsIndexRouteImport } from './routes/tags/index'
+import { Route as TagsTagRouteImport } from './routes/tags/$tag'
 import { Route as PostsPagePageRouteImport } from './routes/posts/page/$page'
 
 const IndexRoute = IndexRouteImport.update({
@@ -26,29 +26,9 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TagsIndexRoute = TagsIndexRouteImport.update({
-  id: '/tags/',
-  path: '/tags/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SeriesIndexRoute = SeriesIndexRouteImport.update({
-  id: '/series/',
-  path: '/series/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
-  id: '/projects/',
-  path: '/projects/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PostsIndexRoute = PostsIndexRouteImport.update({
-  id: '/posts/',
-  path: '/posts/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactIndexRoute = ContactIndexRouteImport.update({
-  id: '/contact/',
-  path: '/contact/',
+const AboutIndexRoute = AboutIndexRouteImport.update({
+  id: '/about/',
+  path: '/about/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ConsultingIndexRoute = ConsultingIndexRouteImport.update({
@@ -56,19 +36,39 @@ const ConsultingIndexRoute = ConsultingIndexRouteImport.update({
   path: '/consulting/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AboutIndexRoute = AboutIndexRouteImport.update({
-  id: '/about/',
-  path: '/about/',
+const ContactIndexRoute = ContactIndexRouteImport.update({
+  id: '/contact/',
+  path: '/contact/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TagsTagRoute = TagsTagRouteImport.update({
-  id: '/tags/$tag',
-  path: '/tags/$tag',
+const PostsIndexRoute = PostsIndexRouteImport.update({
+  id: '/posts/',
+  path: '/posts/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PostsSplatRoute = PostsSplatRouteImport.update({
   id: '/posts/$',
   path: '/posts/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
+  id: '/projects/',
+  path: '/projects/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SeriesIndexRoute = SeriesIndexRouteImport.update({
+  id: '/series/',
+  path: '/series/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TagsIndexRoute = TagsIndexRouteImport.update({
+  id: '/tags/',
+  path: '/tags/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TagsTagRoute = TagsTagRouteImport.update({
+  id: '/tags/$tag',
+  path: '/tags/$tag',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PostsPagePageRoute = PostsPagePageRouteImport.update({
@@ -182,39 +182,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/tags/': {
-      id: '/tags/'
-      path: '/tags'
-      fullPath: '/tags/'
-      preLoaderRoute: typeof TagsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/series/': {
-      id: '/series/'
-      path: '/series'
-      fullPath: '/series/'
-      preLoaderRoute: typeof SeriesIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/projects/': {
-      id: '/projects/'
-      path: '/projects'
-      fullPath: '/projects/'
-      preLoaderRoute: typeof ProjectsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/posts/': {
-      id: '/posts/'
-      path: '/posts'
-      fullPath: '/posts/'
-      preLoaderRoute: typeof PostsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contact/': {
-      id: '/contact/'
-      path: '/contact'
-      fullPath: '/contact/'
-      preLoaderRoute: typeof ContactIndexRouteImport
+    '/about/': {
+      id: '/about/'
+      path: '/about'
+      fullPath: '/about/'
+      preLoaderRoute: typeof AboutIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/consulting/': {
@@ -224,18 +196,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConsultingIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/about/': {
-      id: '/about/'
-      path: '/about'
-      fullPath: '/about/'
-      preLoaderRoute: typeof AboutIndexRouteImport
+    '/contact/': {
+      id: '/contact/'
+      path: '/contact'
+      fullPath: '/contact/'
+      preLoaderRoute: typeof ContactIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/tags/$tag': {
-      id: '/tags/$tag'
-      path: '/tags/$tag'
-      fullPath: '/tags/$tag'
-      preLoaderRoute: typeof TagsTagRouteImport
+    '/posts/': {
+      id: '/posts/'
+      path: '/posts'
+      fullPath: '/posts/'
+      preLoaderRoute: typeof PostsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/posts/$': {
@@ -243,6 +215,34 @@ declare module '@tanstack/react-router' {
       path: '/posts/$'
       fullPath: '/posts/$'
       preLoaderRoute: typeof PostsSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projects/': {
+      id: '/projects/'
+      path: '/projects'
+      fullPath: '/projects/'
+      preLoaderRoute: typeof ProjectsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/series/': {
+      id: '/series/'
+      path: '/series'
+      fullPath: '/series/'
+      preLoaderRoute: typeof SeriesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tags/': {
+      id: '/tags/'
+      path: '/tags'
+      fullPath: '/tags/'
+      preLoaderRoute: typeof TagsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tags/$tag': {
+      id: '/tags/$tag'
+      path: '/tags/$tag'
+      fullPath: '/tags/$tag'
+      preLoaderRoute: typeof TagsTagRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/posts/page/$page': {

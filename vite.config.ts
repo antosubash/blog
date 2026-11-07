@@ -32,8 +32,9 @@ export default defineConfig(async ({ mode }) => ({
       build: {
         rollupOptions: {
           output: {
-            manualChunks: {
-              mermaid: ["mermaid"],
+            // Vite 8 bundles with Rolldown, which only accepts the function form
+            manualChunks(id: string) {
+              if (id.includes("/node_modules/mermaid/")) return "mermaid"
             },
           },
         },
