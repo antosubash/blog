@@ -8,6 +8,8 @@
       "node_modules",
       ".vercel",
       ".content-collections",
+      ".skill-state",
+      ".playwright-cli",
       "src/routeTree.gen.ts",
       "public/feed.xml",
       "public/search.json",
