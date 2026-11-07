@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img">
+  <title>An agent run that stops for permission five times, compared with one that runs straight to the PR</title>
+  <desc>Two tracks. The top track, labelled before, is broken by five pause stops with speech bubbles asking "go ahead?" and "is it up?" before it reaches the PR. The bottom track, labelled after, is one solid copper line with a single approval point, ending in a finished PR.</desc>
+  <defs>
+    <pattern id="dots" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.6" fill="#807a74" opacity="0.14"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" rx="24" fill="#1f1b17"/>
+  <rect width="1200" height="630" rx="24" fill="url(#dots)"/>
+
+  <!-- BEFORE -->
+  <text x="80" y="128" font-family="ui-monospace, 'SFMono-Regular', Menlo, monospace" font-size="26" fill="#807a74">before</text>
+  <line x1="120" y1="230" x2="1010" y2="230" stroke="#3d3832" stroke-width="4" stroke-dasharray="10 12" stroke-linecap="round"/>
+  <circle cx="120" cy="230" r="14" fill="#807a74"/>
+  <g fill="#2a2520" stroke="#3d3832" stroke-width="3">
+    <rect x="236" y="206" width="48" height="48" rx="12"/>
+    <rect x="380" y="206" width="48" height="48" rx="12"/>
+    <rect x="524" y="206" width="48" height="48" rx="12"/>
+    <rect x="668" y="206" width="48" height="48" rx="12"/>
+    <rect x="812" y="206" width="48" height="48" rx="12"/>
+  </g>
+  <g fill="#807a74">
+    <rect x="252" y="219" width="6" height="22" rx="2"/><rect x="263" y="219" width="6" height="22" rx="2"/>
+    <rect x="396" y="219" width="6" height="22" rx="2"/><rect x="407" y="219" width="6" height="22" rx="2"/>
+    <rect x="540" y="219" width="6" height="22" rx="2"/><rect x="551" y="219" width="6" height="22" rx="2"/>
+    <rect x="684" y="219" width="6" height="22" rx="2"/><rect x="695" y="219" width="6" height="22" rx="2"/>
+    <rect x="828" y="219" width="6" height="22" rx="2"/><rect x="839" y="219" width="6" height="22" rx="2"/>
+  </g>
+  <!-- speech bubbles -->
+  <g font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="26" fill="#807a74">
+    <path d="M330 128 h132 a14 14 0 0 1 14 14 v32 a14 14 0 0 1 -14 14 h-50 l-10 14 l-10 -14 h-72 a14 14 0 0 1 -14 -14 v-32 a14 14 0 0 1 14 -14z" fill="#2a2520" stroke="#3d3832" stroke-width="2"/>
+    <text x="396" y="167" text-anchor="middle">go ahead?</text>
+    <path d="M624 128 h118 a14 14 0 0 1 14 14 v32 a14 14 0 0 1 -14 14 h-38 l-10 14 l-10 -14 h-60 a14 14 0 0 1 -14 -14 v-32 a14 14 0 0 1 14 -14z" fill="#2a2520" stroke="#3d3832" stroke-width="2"/>
+    <text x="683" y="167" text-anchor="middle">is it up?</text>
+  </g>
+  <rect x="1010" y="200" width="110" height="60" rx="14" fill="#2a2520" stroke="#3d3832" stroke-width="3"/>
+  <text x="1065" y="240" text-anchor="middle" font-family="ui-monospace, 'SFMono-Regular', Menlo, monospace" font-size="28" fill="#807a74">PR</text>
+
+  <!-- divider -->
+  <line x1="80" y1="330" x2="1120" y2="330" stroke="#3d3832" stroke-width="2"/>
+
+  <!-- AFTER -->
+  <text x="80" y="398" font-family="ui-monospace, 'SFMono-Regular', Menlo, monospace" font-size="26" fill="#c07840">after</text>
+  <line x1="120" y1="480" x2="1010" y2="480" stroke="#c07840" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="120" cy="480" r="14" fill="#c07840"/>
+  <rect x="356" y="456" width="48" height="48" rx="6" transform="rotate(45 380 480)" fill="#1f1b17" stroke="#5fa8a0" stroke-width="4"/>
+  <path d="M368 481 l9 9 l17 -19" fill="none" stroke="#5fa8a0" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="380" y="560" text-anchor="middle" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="26" fill="#ede8e3">one approval</text>
+  <g fill="#c07840" opacity="0.55">
+    <path d="M560 470 l14 10 l-14 10z"/><path d="M700 470 l14 10 l-14 10z"/><path d="M840 470 l14 10 l-14 10z"/>
+  </g>
+  <rect x="1010" y="450" width="110" height="60" rx="14" fill="rgba(192,120,64,0.15)" stroke="#c07840" stroke-width="3"/>
+  <text x="1065" y="490" text-anchor="middle" font-family="ui-monospace, 'SFMono-Regular', Menlo, monospace" font-size="28" fill="#ede8e3">PR</text>
+  <circle cx="1120" cy="450" r="18" fill="#c07840"/>
+  <path d="M1111 450 l6 6 l11 -12" fill="none" stroke="#1f1b17" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
