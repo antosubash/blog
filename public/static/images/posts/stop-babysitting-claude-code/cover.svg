@@ -10,7 +10,7 @@
   <rect width="1200" height="630" rx="24" fill="url(#dots)"/>
 
   <!-- BEFORE -->
-  <text x="80" y="128" font-family="ui-monospace, 'SFMono-Regular', Menlo, monospace" font-size="26" fill="#807a74">before</text>
+  <text x="80" y="128" font-family="ui-monospace, 'SFMono-Regular', Menlo, monospace" font-size="32" font-weight="500" fill="#807a74">before</text>
   <line x1="120" y1="230" x2="1010" y2="230" stroke="#3d3832" stroke-width="4" stroke-dasharray="10 12" stroke-linecap="round"/>
   <circle cx="120" cy="230" r="14" fill="#807a74"/>
   <g fill="#2a2520" stroke="#3d3832" stroke-width="3">
@@ -28,30 +28,30 @@
     <rect x="828" y="219" width="6" height="22" rx="2"/><rect x="839" y="219" width="6" height="22" rx="2"/>
   </g>
   <!-- speech bubbles -->
-  <g font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="26" fill="#807a74">
-    <path d="M330 128 h132 a14 14 0 0 1 14 14 v32 a14 14 0 0 1 -14 14 h-50 l-10 14 l-10 -14 h-72 a14 14 0 0 1 -14 -14 v-32 a14 14 0 0 1 14 -14z" fill="#2a2520" stroke="#3d3832" stroke-width="2"/>
-    <text x="396" y="167" text-anchor="middle">go ahead?</text>
-    <path d="M624 128 h118 a14 14 0 0 1 14 14 v32 a14 14 0 0 1 -14 14 h-38 l-10 14 l-10 -14 h-60 a14 14 0 0 1 -14 -14 v-32 a14 14 0 0 1 14 -14z" fill="#2a2520" stroke="#3d3832" stroke-width="2"/>
-    <text x="683" y="167" text-anchor="middle">is it up?</text>
+  <g font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="32" font-weight="500" fill="#807a74">
+    <path d="M320 122 h168 a14 14 0 0 1 14 14 v26 a14 14 0 0 1 -14 14 h-74 l-10 14 l-10 -14 h-74 a14 14 0 0 1 -14 -14 v-26 a14 14 0 0 1 14 -14z" fill="#2a2520" stroke="#3d3832" stroke-width="2"/>
+    <text x="404" y="160" text-anchor="middle">go ahead?</text>
+    <path d="M618 122 h148 a14 14 0 0 1 14 14 v26 a14 14 0 0 1 -14 14 h-64 l-10 14 l-10 -14 h-64 a14 14 0 0 1 -14 -14 v-26 a14 14 0 0 1 14 -14z" fill="#2a2520" stroke="#3d3832" stroke-width="2"/>
+    <text x="692" y="160" text-anchor="middle">is it up?</text>
   </g>
   <rect x="1010" y="200" width="110" height="60" rx="14" fill="#2a2520" stroke="#3d3832" stroke-width="3"/>
-  <text x="1065" y="240" text-anchor="middle" font-family="ui-monospace, 'SFMono-Regular', Menlo, monospace" font-size="28" fill="#807a74">PR</text>
+  <text x="1065" y="240" text-anchor="middle" font-family="ui-monospace, 'SFMono-Regular', Menlo, monospace" font-size="34" fill="#807a74">PR</text>
 
   <!-- divider -->
   <line x1="80" y1="330" x2="1120" y2="330" stroke="#3d3832" stroke-width="2"/>
 
   <!-- AFTER -->
-  <text x="80" y="398" font-family="ui-monospace, 'SFMono-Regular', Menlo, monospace" font-size="26" fill="#c07840">after</text>
+  <text x="80" y="398" font-family="ui-monospace, 'SFMono-Regular', Menlo, monospace" font-size="32" fill="#c07840">after</text>
   <line x1="120" y1="480" x2="1010" y2="480" stroke="#c07840" stroke-width="6" stroke-linecap="round"/>
   <circle cx="120" cy="480" r="14" fill="#c07840"/>
   <rect x="356" y="456" width="48" height="48" rx="6" transform="rotate(45 380 480)" fill="#1f1b17" stroke="#5fa8a0" stroke-width="4"/>
   <path d="M368 481 l9 9 l17 -19" fill="none" stroke="#5fa8a0" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="380" y="560" text-anchor="middle" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="26" fill="#ede8e3">one approval</text>
+  <text x="380" y="560" text-anchor="middle" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="32" fill="#ede8e3">one approval</text>
   <g fill="#c07840" opacity="0.55">
     <path d="M560 470 l14 10 l-14 10z"/><path d="M700 470 l14 10 l-14 10z"/><path d="M840 470 l14 10 l-14 10z"/>
   </g>
   <rect x="1010" y="450" width="110" height="60" rx="14" fill="rgba(192,120,64,0.15)" stroke="#c07840" stroke-width="3"/>
-  <text x="1065" y="490" text-anchor="middle" font-family="ui-monospace, 'SFMono-Regular', Menlo, monospace" font-size="28" fill="#ede8e3">PR</text>
+  <text x="1065" y="490" text-anchor="middle" font-family="ui-monospace, 'SFMono-Regular', Menlo, monospace" font-size="34" fill="#ede8e3">PR</text>
   <circle cx="1120" cy="450" r="18" fill="#c07840"/>
   <path d="M1111 450 l6 6 l11 -12" fill="none" stroke="#1f1b17" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
