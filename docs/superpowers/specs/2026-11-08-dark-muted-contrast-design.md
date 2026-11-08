@@ -2,7 +2,7 @@
 
 ## Goal & scope
 
-Bring dark-theme muted text up to WCAG AA (at least 4.5:1) on every surface it sits on: `--background`, `--surface` and `--muted`. The light theme stays as it is, since it already passes at 5.47:1 or better. No other tokens change.
+Bring dark-theme muted text up to WCAG AA (at least 4.5:1) on the opaque surfaces it sits on: `--background`, `--surface` and `--muted`. The translucent `bg-accent-muted/50` tag chips also pass (4.17 → 4.90) but are not part of the test, because it would need alpha compositing. The light theme stays as it is, since it already passes at 5.47:1 or better. No other tokens change.
 
 ## Approach
 

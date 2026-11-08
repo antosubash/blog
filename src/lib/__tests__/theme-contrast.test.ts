@@ -11,6 +11,7 @@ const css = readFileSync(new URL("../../styles.css", import.meta.url), "utf8")
 
 function block(selector: string): Record<string, [number, number, number]> {
   const start = css.indexOf(`${selector} {`)
+  if (start === -1) throw new Error(`styles.css has no "${selector} {" block`)
   const body = css.slice(start, css.indexOf("}", start))
   const tokens: Record<string, [number, number, number]> = {}
   for (const m of body.matchAll(
