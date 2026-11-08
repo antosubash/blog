@@ -4,8 +4,8 @@ import { bundle } from "@remotion/bundler"
 import { renderMedia, selectComposition } from "@remotion/renderer"
 import type { RenderedStoryboard } from "../types"
 
-const OUT_DIR = path.resolve(process.cwd(), "video/out")
-const ENTRY = path.resolve(process.cwd(), "video/src/index.ts")
+const OUT_DIR = path.resolve(process.cwd(), "out")
+const ENTRY = path.resolve(process.cwd(), "src/index.ts")
 
 export async function renderStoryboardVideo(
   storyboard: RenderedStoryboard

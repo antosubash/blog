@@ -9,7 +9,7 @@ import {
   type Storyboard,
 } from "../types"
 
-const CACHE_DIR = path.resolve(process.cwd(), "video/cache")
+const CACHE_DIR = path.resolve(process.cwd(), "cache")
 
 // Padding around the narration so scene transitions don't clip the audio.
 const PRE_PAD_FRAMES = 12

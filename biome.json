@@ -10,7 +10,10 @@
       ".astro",
       "dist",
       ".skill-state",
-      ".playwright-cli"
+      ".playwright-cli",
+      "video/node_modules",
+      "video/cache",
+      "video/out"
     ]
   },
   "formatter": {
