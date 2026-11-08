@@ -11,6 +11,8 @@ Generates branded YouTube videos from MDX blog posts using:
 
 ```
 video/
+  package.json                   # Private pnpm workspace package (video)
+  tsconfig.json                  # Standalone video TypeScript config
   src/
     index.ts                     # Remotion registerRoot
     Root.tsx                     # Composition registry
@@ -58,7 +60,8 @@ No `ANTHROPIC_API_KEY` is required — storyboard generation goes through the Cl
 ## Usage
 
 ```sh
-# 1. Install deps (one-time)
+# Run these commands from the repo root.
+# 1. Install both the site and video workspace dependencies (one-time)
 pnpm install
 
 # 2. End-to-end for a single post
@@ -73,6 +76,24 @@ pnpm video:upload <slug>       # upload to YouTube + write videoId back
 # Iterate on the look in Remotion Studio (uses cached storyboard)
 pnpm video:studio
 ```
+
+The root `video:*` commands delegate to `pnpm --filter video run <step>` and
+forward arguments unchanged. Each step sets `VIDEO_STEP` as before. You can also
+run package commands directly, for example `pnpm --filter video run studio`.
+They execute from `video/`: content is read from `../content/posts`, the CLI loads
+`../.env`, and generated files stay in `video/cache` and `video/out`.
+
+For a site-only install (also used by Vercel), run:
+
+```sh
+pnpm install --frozen-lockfile --filter .
+pnpm build
+```
+
+This omits the video package and its dependencies. Run a full `pnpm install`
+before using video commands. Root `pnpm typecheck` checks the site; check video
+separately with `pnpm --filter video run typecheck`. Root `pnpm lint` checks both
+source trees once, excluding video dependencies and generated output.
 
 Force-regenerate a cached step:
 
