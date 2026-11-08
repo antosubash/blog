@@ -216,6 +216,9 @@ importers:
       hast-util-to-text:
         specifier: ^4.0.3
         version: 4.0.3
+      image-size:
+        specifier: ^2.1.0
+        version: 2.1.0
       lucide-react:
         specifier: ^0.577.0
         version: 0.577.0(react@19.3.1)
@@ -3329,6 +3332,11 @@ packages:
     engines: {node: ^10 || ^12 || >= 14}
     peerDependencies:
       postcss: ^8.1.0
+
+  image-size@2.1.0:
+    resolution: {integrity: sha512-6Dbisa46RsgeAh3TMSFL2i8+uIFG+/LRmz6Q2oscSJJvXo1sOw3EgNO4M8jPl1P+gR1atJLDPrpclX4IHz63sA==}
+    engines: {node: '>=18'}
+    hasBin: true
 
   import-fresh@3.3.1:
     resolution: {integrity: sha512-TR3KfrTZTYLPB6jUjfx6MF9WcWrHL9su5TObK4ZkYgBdWKPOFoSoQIdEuTuR82pmtxH2spWG9h6etwfr1pLBqQ==}
@@ -8158,6 +8166,8 @@ snapshots:
   icss-utils@5.1.0(postcss@8.5.32):
     dependencies:
       postcss: 8.5.32
+
+  image-size@2.1.0: {}
 
   import-fresh@3.3.1:
     dependencies:
