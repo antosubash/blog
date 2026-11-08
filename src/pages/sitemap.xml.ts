@@ -3,8 +3,8 @@ import { type Post, getAllPosts, isPublished } from "@/lib/posts"
 import { feedTagSlug } from "@/lib/tag-utils"
 import type { APIRoute } from "astro"
 
-// Routes that list posts take the newest post's date as their <lastmod>.
-const listRoutes = new Set(["", "/posts", "/tags", "/series"])
+// Routes that list posts take the newest listed post's date as their <lastmod>.
+const listRoutes = new Set(["", "/posts", "/tags"])
 const staticRoutes = [
   "",
   "/posts",
@@ -36,11 +36,19 @@ export const GET: APIRoute = async () => {
     }
   }
   const siteNewest = newest(posts)
+  // /series only changes when a post that belongs to a series does.
+  const seriesNewest = newest(posts.filter((p) => p.series))
+  const routeLastmod = (route: string) =>
+    route === "/series"
+      ? seriesNewest
+      : listRoutes.has(route)
+        ? siteNewest
+        : undefined
 
   const urls = [
     ...staticRoutes.map(
       (route) => `  <url>
-    <loc>${siteUrl}${route}</loc>${lastmod(listRoutes.has(route) ? siteNewest : undefined)}
+    <loc>${siteUrl}${route}</loc>${lastmod(routeLastmod(route))}
     <changefreq>${route === "" ? "daily" : "weekly"}</changefreq>
     <priority>${route === "" ? "1.0" : "0.7"}</priority>
   </url>`
