@@ -111,15 +111,26 @@ function internalPath(ref, from) {
   return url.pathname
 }
 
+// Remove <script>/<style>/<pre>/<code> blocks, repeating until nothing changes so
+// nested or overlapping blocks can't leave a fragment behind.
+function stripBlocks(html) {
+  let prev
+  do {
+    prev = html
+    html = html
+      .replace(/<(script|style)\b[\s\S]*?<\/\1\s*>/gi, "")
+      .replace(/<(pre|code)\b[\s\S]*?<\/\1\s*>/gi, "")
+  } while (html !== prev)
+  return html
+}
+
 // Attributes that carry URLs; content of <script>/<style>/<code>/<pre> is skipped.
 const attrRe = /\s(href|src|srcset|poster)\s*=\s*("([^"]*)"|'([^']*)')/gi
 let checked = 0
 const broken = new Map()
 for (const f of files.filter((x) => x.endsWith(".html"))) {
   const from = pageUrl(f)
-  const html = readFileSync(f, "utf8")
-    .replace(/<(script|style)\b[\s\S]*?<\/\1>/gi, "")
-    .replace(/<(pre|code)\b[\s\S]*?<\/\1>/gi, "")
+  const html = stripBlocks(readFileSync(f, "utf8"))
   for (const tag of html.match(/<[a-z][^>]*>/gi) ?? []) {
     if (/^<(meta)\b/i.test(tag)) continue
     for (const m of tag.matchAll(attrRe)) {
