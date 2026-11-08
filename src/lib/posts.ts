@@ -22,6 +22,7 @@ function toPost(entry: CollectionEntry<"posts">): Post {
     images: data.images ?? [],
     authors: data.authors ?? [],
     layout: data.layout ?? null,
+    canonicalUrl: data.canonicalUrl ?? null,
     readingTime: {
       text: rt.text,
       minutes: rt.minutes,

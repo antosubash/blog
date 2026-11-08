@@ -21,6 +21,7 @@ const { meta = defaultPageMeta } = Astro.props
     <title>{meta.title}</title>
     <meta name="theme-color" content="#1e2433" />
     <meta name="description" content={meta.description} />
+    {meta.canonical && <link rel="canonical" href={meta.canonical} />}
     {
       meta.tags.map((t) => (
         <meta name={t.name} property={t.property} content={t.content} />

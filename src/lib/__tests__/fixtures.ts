@@ -15,6 +15,7 @@ export function post(overrides: Partial<Post> & { slug: string }): Post {
     images: [],
     authors: [],
     layout: null,
+    canonicalUrl: null,
     readingTime: { text: "1 min read", minutes: 1, time: 60000, words: 200 },
     filePath: `content/posts/${overrides.slug}.mdx`,
     postUrl: `/posts/${overrides.slug}`,

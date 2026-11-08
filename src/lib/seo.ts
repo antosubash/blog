@@ -9,6 +9,7 @@ export interface MetaTag {
 export interface PageMeta {
   title: string
   description: string
+  canonical?: string
   tags: MetaTag[]
 }
 
@@ -55,6 +56,7 @@ export function genPostMetadata(post: {
   excerpt: string
   tags: string[]
   images: string[]
+  canonicalUrl: string | null
 }): PageMeta {
   const ogImage = post.images[0] || `/og/${post.slug}.png`
   const ogImageUrl = ogImage.startsWith("http")
@@ -63,6 +65,8 @@ export function genPostMetadata(post: {
   return {
     title: `${post.title} | ${siteMetadata.title}`,
     description: post.excerpt,
+    canonical:
+      post.canonicalUrl || `${siteMetadata.siteUrl}/posts/${post.slug}`,
     tags: [
       { name: "keywords", content: post.tags.join(", ") },
       { property: "og:title", content: post.title },

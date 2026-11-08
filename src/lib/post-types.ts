@@ -14,6 +14,7 @@ export interface Post {
   images: string[]
   authors: string[]
   layout: string | null
+  canonicalUrl: string | null
   readingTime: { text: string; minutes: number; time: number; words: number }
   filePath: string
   postUrl: string
