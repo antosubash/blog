@@ -1,0 +1,54 @@
+---
+import siteMetadata from "@/config/siteMetadata"
+import { ArrowUp, MessageCircle } from "lucide-react"
+
+const buttonClass =
+  "inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-surface text-muted-foreground shadow-sm transition-all duration-200 hover:text-accent hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70"
+---
+
+<div
+  class="fixed bottom-8 right-8 hidden flex-col gap-2 transition-opacity duration-200 pointer-events-none opacity-0 md:flex"
+  data-scroll-buttons
+>
+  {
+    siteMetadata.comments?.provider && (
+      <button
+        type="button"
+        aria-label="Scroll To Comment"
+        class={buttonClass}
+        data-scroll-comment
+      >
+        <MessageCircle className="h-[18px] w-[18px]" />
+      </button>
+    )
+  }
+  <button
+    type="button"
+    aria-label="Scroll To Top"
+    class={buttonClass}
+    data-scroll-top
+  >
+    <ArrowUp className="h-[18px] w-[18px]" />
+  </button>
+</div>
+
+<script>
+  const panel = document.querySelector<HTMLElement>("[data-scroll-buttons]")
+  const onScroll = () => {
+    const hidden = window.scrollY <= 50
+    panel?.classList.toggle("pointer-events-none", hidden)
+    panel?.classList.toggle("opacity-0", hidden)
+  }
+  window.addEventListener("scroll", onScroll, { passive: true })
+  onScroll()
+  for (const b of document.querySelectorAll("[data-scroll-top]")) {
+    b.addEventListener("click", () =>
+      window.scrollTo({ top: 0, behavior: "smooth" })
+    )
+  }
+  document
+    .querySelector("[data-scroll-comment]")
+    ?.addEventListener("click", () =>
+      document.getElementById("comment")?.scrollIntoView({ behavior: "smooth" })
+    )
+</script>

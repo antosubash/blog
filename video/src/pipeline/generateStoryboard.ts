@@ -4,7 +4,7 @@ import path from "node:path"
 import { type Storyboard, StoryboardSchema } from "../types"
 import type { LoadedPost } from "./loadPost"
 
-const CACHE_DIR = path.resolve(process.cwd(), "video/cache")
+const CACHE_DIR = path.resolve(process.cwd(), "cache")
 
 const SCHEMA_PROMPT = `You convert a technical blog post into a storyboard for a 6–10 minute YouTube video.
 

@@ -1,0 +1,11 @@
+---
+import type { HTMLAttributes } from "astro/types"
+
+type Props = HTMLAttributes<"img"> & { fill?: boolean }
+
+const { fill, style, ...rest } = Astro.props
+const fillStyle =
+  "object-fit: cover; width: 100%; height: 100%; position: absolute;"
+---
+
+<img loading="lazy" style={fill ? fillStyle : style} {...rest} />

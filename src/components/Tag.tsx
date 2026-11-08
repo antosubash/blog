@@ -1,5 +1,4 @@
 import { cn } from "@/lib/utils"
-import { Link } from "@tanstack/react-router"
 import { slug as createSlug } from "github-slugger"
 
 interface TagProps {
@@ -19,14 +18,13 @@ const Tag = ({ text, className, asLink = true }: TagProps) => {
 
   if (asLink) {
     return (
-      <Link
-        to="/tags/$tag"
-        params={{ tag: slug }}
+      <a
+        href={`/tags/${slug}`}
         className={base}
         aria-label={`View posts tagged ${text}`}
       >
         {text}
-      </Link>
+      </a>
     )
   }
 

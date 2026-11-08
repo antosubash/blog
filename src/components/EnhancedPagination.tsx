@@ -1,70 +1,72 @@
-import { Link, useLocation } from "@tanstack/react-router"
 import { ArrowLeft, ArrowRight, MoreHorizontal } from "lucide-react"
+import type { ReactNode } from "react"
 
 interface PaginationProps {
   totalPages: number
   currentPage: number
+  /** First path segment, e.g. "posts" -> /posts/ and /posts/page/2 */
+  basePath: string
   maxVisiblePages?: number
+  /** Client-side pagination (buttons) instead of page links. */
   onPageChange?: (page: number) => void
+}
+
+export function getVisiblePages(
+  currentPage: number,
+  totalPages: number,
+  maxVisiblePages = 5
+) {
+  const pages: (number | "...")[] = []
+  const halfVisible = Math.floor(maxVisiblePages / 2)
+
+  let start = Math.max(1, currentPage - halfVisible)
+  let end = Math.min(totalPages, currentPage + halfVisible)
+
+  if (end - start + 1 < maxVisiblePages) {
+    if (start === 1) {
+      end = Math.min(totalPages, start + maxVisiblePages - 1)
+    } else {
+      start = Math.max(1, end - maxVisiblePages + 1)
+    }
+  }
+
+  if (start > 1) {
+    pages.push(1)
+    if (start > 2) pages.push("...")
+  }
+  for (let i = start; i <= end; i++) pages.push(i)
+  if (end < totalPages) {
+    if (end < totalPages - 1) pages.push("...")
+    pages.push(totalPages)
+  }
+  return pages
 }
 
 export default function EnhancedPagination({
   totalPages,
   currentPage,
+  basePath,
   maxVisiblePages = 5,
   onPageChange,
 }: PaginationProps) {
-  const { pathname } = useLocation()
-  const basePath = pathname.split("/")[1]
-
   const prevPage = currentPage - 1 > 0
   const nextPage = currentPage + 1 <= totalPages
+  const visiblePages = getVisiblePages(currentPage, totalPages, maxVisiblePages)
 
-  const getVisiblePages = () => {
-    const pages: (number | string)[] = []
-    const halfVisible = Math.floor(maxVisiblePages / 2)
-
-    let start = Math.max(1, currentPage - halfVisible)
-    let end = Math.min(totalPages, currentPage + halfVisible)
-
-    if (end - start + 1 < maxVisiblePages) {
-      if (start === 1) {
-        end = Math.min(totalPages, start + maxVisiblePages - 1)
-      } else {
-        start = Math.max(1, end - maxVisiblePages + 1)
-      }
-    }
-
-    if (start > 1) {
-      pages.push(1)
-      if (start > 2) pages.push("...")
-    }
-
-    for (let i = start; i <= end; i++) pages.push(i)
-
-    if (end < totalPages) {
-      if (end < totalPages - 1) pages.push("...")
-      pages.push(totalPages)
-    }
-
-    return pages
-  }
-
-  const visiblePages = getVisiblePages()
-
-  const getPageUrl = (page: number) => {
-    if (page === 1) return `/${basePath}/`
-    return `/${basePath}/page/${page}`
-  }
+  const getPageUrl = (page: number) =>
+    page === 1 ? `/${basePath}/` : `/${basePath}/page/${page}`
 
   const navButtonBase =
     "inline-flex items-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70"
   const navButtonEnabled =
     "border-border bg-card text-foreground hover:bg-accent"
+  // First/Last when already there. Full muted colour: the old /50 tint failed
+  // WCAG contrast (2.2:1).
+  const edgeCurrent = "cursor-default text-muted-foreground"
+
   const navButtonDisabled =
     "cursor-not-allowed border-border/50 bg-muted text-muted-foreground"
 
-  // Client-side pagination button (no route navigation)
   const PageButton = ({
     page,
     children,
@@ -73,7 +75,7 @@ export default function EnhancedPagination({
     ...props
   }: {
     page: number
-    children: React.ReactNode
+    children: ReactNode
     className: string
     disabled?: boolean
     "aria-disabled"?: boolean
@@ -98,8 +100,8 @@ export default function EnhancedPagination({
       )
     }
     return (
-      <Link
-        to={disabled ? "#" : getPageUrl(page)}
+      <a
+        href={disabled ? "#" : getPageUrl(page)}
         className={className}
         aria-disabled={props["aria-disabled"]}
         aria-label={props["aria-label"]}
@@ -107,7 +109,7 @@ export default function EnhancedPagination({
         tabIndex={props.tabIndex}
       >
         {children}
-      </Link>
+      </a>
     )
   }
 
@@ -146,14 +148,11 @@ export default function EnhancedPagination({
                 </span>
               )
             }
-
-            const pageNum = page as number
-            const isCurrentPage = pageNum === currentPage
-
+            const isCurrentPage = page === currentPage
             return (
               <PageButton
-                key={pageNum}
-                page={pageNum}
+                key={page}
+                page={page}
                 className={`${navButtonBase} min-w-[42px] justify-center ${
                   isCurrentPage
                     ? "border-accent bg-accent text-primary-foreground"
@@ -161,7 +160,7 @@ export default function EnhancedPagination({
                 }`}
                 aria-current={isCurrentPage ? "page" : undefined}
               >
-                {pageNum}
+                {page}
               </PageButton>
             )
           })}
@@ -185,9 +184,10 @@ export default function EnhancedPagination({
           page={1}
           className={`font-medium transition-colors duration-150 ${
             currentPage === 1
-              ? "text-muted-foreground/50"
+              ? edgeCurrent
               : "text-muted-foreground hover:text-foreground"
           }`}
+          aria-current={currentPage === 1 ? "page" : undefined}
         >
           First
         </PageButton>
@@ -196,9 +196,10 @@ export default function EnhancedPagination({
           page={totalPages}
           className={`font-medium transition-colors duration-150 ${
             currentPage === totalPages
-              ? "text-muted-foreground/50"
+              ? edgeCurrent
               : "text-muted-foreground hover:text-foreground"
           }`}
+          aria-current={currentPage === totalPages ? "page" : undefined}
         >
           Last
         </PageButton>

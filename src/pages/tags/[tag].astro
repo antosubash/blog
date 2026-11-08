@@ -1,0 +1,32 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import EnhancedListLayout from "@/layouts/EnhancedListLayout"
+import { toListItem } from "@/lib/post-list"
+import { getAllPosts } from "@/lib/posts"
+import {
+  getPostsForTagPage,
+  getTagPageParams,
+  tagPageTitle,
+} from "@/lib/tag-utils"
+import type { GetStaticPaths } from "astro"
+
+export const getStaticPaths = (async () => {
+  const posts = await getAllPosts()
+  return getTagPageParams(posts).map((tag) => ({
+    params: { tag },
+    props: { posts: getPostsForTagPage(posts, tag).map(toListItem) },
+  }))
+}) satisfies GetStaticPaths
+
+const { tag } = Astro.params
+const { posts } = Astro.props
+---
+
+<BaseLayout>
+  <EnhancedListLayout
+    client:load
+    posts={posts}
+    title={tagPageTitle(tag)}
+    basePath="tags"
+  />
+</BaseLayout>

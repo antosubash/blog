@@ -2,7 +2,6 @@ import headerNavLinks from "@/config/headerNavLinks"
 import { Menu, X } from "lucide-react"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { createPortal } from "react-dom"
-import Link from "./Link"
 
 const MobileNav = () => {
   const [open, setOpen] = useState(false)
@@ -77,7 +76,10 @@ const MobileNav = () => {
       ref={panelRef}
       aria-modal="true"
       aria-label="Navigation menu"
-      className={`fixed inset-0 z-[100] md:hidden transition-opacity duration-200 ${
+      // A closed <dialog> is display:none; it was never opened before, so the
+      // menu could not show. Open it as a non-modal full-screen overlay.
+      open={open}
+      className={`fixed inset-0 z-[100] m-0 h-dvh max-h-none w-full max-w-none border-0 bg-transparent p-0 md:hidden transition-opacity duration-200 ${
         open ? "opacity-100" : "pointer-events-none opacity-0"
       }`}
     >
@@ -110,27 +112,21 @@ const MobileNav = () => {
               const cls =
                 "block text-2xl font-display font-semibold tracking-tight text-foreground/80 transition-colors duration-150 hover:text-accent py-2"
 
-              return link.track ? (
+              return (
                 <a
                   key={link.title}
                   href={link.href}
                   className={cls}
                   style={{ animationDelay: `${i * 50}ms` }}
-                  data-umami-event={`mobile_header_${link.title.toLowerCase()}`}
+                  data-umami-event={
+                    link.track
+                      ? `mobile_header_${link.title.toLowerCase()}`
+                      : undefined
+                  }
                   onClick={close}
                 >
                   {link.title}
                 </a>
-              ) : (
-                <Link
-                  key={link.title}
-                  href={link.href}
-                  className={cls}
-                  style={{ animationDelay: `${i * 50}ms` }}
-                  onClick={close}
-                >
-                  {link.title}
-                </Link>
               )
             })}
           </div>

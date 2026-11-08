@@ -2,26 +2,27 @@ import EnhancedPagination from "@/components/EnhancedPagination"
 import PostSearch from "@/components/PostSearch"
 import Tag from "@/components/Tag"
 import PostItem from "@/components/post-item"
-import type { Post } from "content-collections"
+import type { PostListItem } from "@/lib/post-types"
 import { useMemo, useState } from "react"
 
-interface PaginationProps {
-  totalPages: number
-  currentPage: number
-}
+/** /posts and /posts/page/N */
+export const POSTS_PER_PAGE = 8
+/** Lists paginated in the browser (tag pages) */
+const CLIENT_POSTS_PER_PAGE = 10
 
 interface EnhancedListLayoutProps {
-  posts: Post[]
+  posts: PostListItem[]
   title: string
-  initialDisplayPosts?: Post[]
-  pagination?: PaginationProps
+  /** Server pagination (/posts/page/N). Without it the list paginates in the browser. */
+  pagination?: { totalPages: number; currentPage: number }
+  basePath?: string
 }
 
 export default function EnhancedListLayout({
   posts,
   title,
-  initialDisplayPosts = [],
   pagination,
+  basePath = "posts",
 }: EnhancedListLayoutProps) {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedTags, setSelectedTags] = useState<string[]>([])
@@ -30,23 +31,22 @@ export default function EnhancedListLayout({
   const isClientPaginated = !pagination
 
   const updateSearchQuery = (query: string) => {
+    // PostSearch re-reports the (debounced) query after every render; only a
+    // real change may reset the page, or "Next" bounces back to page 1.
+    if (query === searchQuery) return
     setSearchQuery(query)
-    if (isClientPaginated) {
-      setClientPage(1)
-    }
+    if (isClientPaginated) setClientPage(1)
   }
 
   const updateSelectedTags = (tags: string[]) => {
     setSelectedTags(tags)
-    if (isClientPaginated) {
-      setClientPage(1)
-    }
+    if (isClientPaginated) setClientPage(1)
   }
 
   const availableTags = useMemo(() => {
     const allTags = new Set<string>()
     for (const post of posts) {
-      for (const tag of post.tags ?? []) {
+      for (const tag of post.tags) {
         if (tag) allTags.add(tag)
       }
     }
@@ -55,48 +55,30 @@ export default function EnhancedListLayout({
 
   const filteredPosts = useMemo(() => {
     let filtered = posts
-
     if (searchQuery) {
       const query = searchQuery.toLowerCase()
       filtered = filtered.filter(
         (post) =>
           post.title.toLowerCase().includes(query) ||
-          post.excerpt?.toLowerCase().includes(query) ||
-          post.tags?.some((tag: string) => tag?.toLowerCase().includes(query))
+          post.excerpt.toLowerCase().includes(query) ||
+          post.tags.some((tag) => tag?.toLowerCase().includes(query))
       )
     }
-
     if (selectedTags.length > 0) {
       filtered = filtered.filter((post) =>
-        selectedTags.every((tag) =>
-          post.tags?.filter((t: string) => t).includes(tag)
-        )
+        selectedTags.every((tag) => post.tags.filter(Boolean).includes(tag))
       )
     }
-
     return filtered
   }, [posts, searchQuery, selectedTags])
 
-  const POSTS_PER_PAGE = 10
   const currentPage = isClientPaginated
     ? clientPage
     : pagination?.currentPage || 1
-  const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE)
-
-  const startIndex = (currentPage - 1) * POSTS_PER_PAGE
-  const currentPagePosts = filteredPosts.slice(
-    startIndex,
-    startIndex + POSTS_PER_PAGE
-  )
-
-  const displayPosts =
-    initialDisplayPosts.length > 0 &&
-    currentPage === 1 &&
-    !searchQuery &&
-    selectedTags.length === 0
-      ? initialDisplayPosts
-      : currentPagePosts
-
+  const pageSize = isClientPaginated ? CLIENT_POSTS_PER_PAGE : POSTS_PER_PAGE
+  const totalPages = Math.ceil(filteredPosts.length / pageSize)
+  const startIndex = (currentPage - 1) * pageSize
+  const displayPosts = filteredPosts.slice(startIndex, startIndex + pageSize)
   const hasActiveFilters = searchQuery || selectedTags.length > 0
 
   return (
@@ -132,36 +114,18 @@ export default function EnhancedListLayout({
 
       {displayPosts.length > 0 ? (
         <div className="divide-y divide-border">
-          {displayPosts
-            .map((post) => {
-              if (!post.slug || !post.title || !post.date) return null
-
-              let safeReadingTime: string | undefined
-              if (typeof post.readingTime === "string") {
-                safeReadingTime = post.readingTime
-              } else if (
-                post.readingTime &&
-                typeof post.readingTime === "object" &&
-                "text" in post.readingTime
-              ) {
-                safeReadingTime = post.readingTime.text
-              }
-
-              return (
-                <PostItem
-                  key={post.path}
-                  slug={post.slug}
-                  date={post.date}
-                  title={post.title}
-                  summary={post.excerpt || ""}
-                  tags={post.tags || []}
-                  series={post.series ?? undefined}
-                  part={post.part ?? undefined}
-                  readingTime={safeReadingTime}
-                />
-              )
-            })
-            .filter(Boolean)}
+          {displayPosts.map((post) => (
+            <PostItem
+              key={post.slug}
+              slug={post.slug}
+              date={post.date}
+              title={post.title}
+              summary={post.excerpt}
+              tags={post.tags}
+              series={post.series ?? undefined}
+              part={post.part ?? undefined}
+            />
+          ))}
         </div>
       ) : (
         <div className="py-16 text-center">
@@ -184,6 +148,7 @@ export default function EnhancedListLayout({
           <EnhancedPagination
             currentPage={currentPage}
             totalPages={totalPages}
+            basePath={basePath}
             onPageChange={isClientPaginated ? setClientPage : undefined}
           />
         </div>

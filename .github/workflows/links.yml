@@ -1,0 +1,70 @@
+name: Links
+
+# Weekly external link check over the built site. Never runs on PRs: external sites
+# go down and rate-limit, so a failure opens (or updates) one issue instead.
+on:
+  schedule:
+    - cron: "23 5 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: links
+  cancel-in-progress: true
+
+jobs:
+  lychee:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      # pnpm version comes from package.json#packageManager (also used by Vercel).
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+
+      - name: Restore lychee cache
+        uses: actions/cache@v6
+        with:
+          path: .lycheecache
+          key: lychee-${{ github.run_id }}
+          restore-keys: lychee-
+
+      # Settings and excludes live in lychee.toml. The token avoids GitHub rate limits.
+      - name: Check external links
+        id: lychee
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --no-progress
+            --config lychee.toml
+            --root-dir ${{ github.workspace }}/dist
+            'dist/**/*.html'
+          output: lychee/out.md
+          fail: false
+
+      - name: Find the open link report
+        id: issue
+        if: steps.lychee.outputs.exit_code != 0
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          number=$(gh issue list --repo "$GITHUB_REPOSITORY" --state open \
+            --label link-check --json number --jq '.[0].number // empty')
+          echo "number=$number" >> "$GITHUB_OUTPUT"
+
+      - name: Open or update the link report
+        if: steps.lychee.outputs.exit_code != 0
+        uses: peter-evans/create-issue-from-file@v6
+        with:
+          title: Broken links report
+          content-filepath: lychee/out.md
+          issue-number: ${{ steps.issue.outputs.number }}
+          labels: link-check

@@ -1,0 +1,33 @@
+{
+  "name": "video",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "studio": "remotion studio src/index.ts",
+    "storyboard": "VIDEO_STEP=storyboard tsx src/cli/generate.ts",
+    "voice": "VIDEO_STEP=voice tsx src/cli/generate.ts",
+    "render": "VIDEO_STEP=render tsx src/cli/generate.ts",
+    "upload": "VIDEO_STEP=upload tsx src/cli/generate.ts",
+    "generate": "VIDEO_STEP=all tsx src/cli/generate.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@remotion/bundler": "^4.0.541",
+    "@remotion/cli": "^4.0.541",
+    "@remotion/renderer": "^4.0.541",
+    "dotenv": "^16.6.1",
+    "googleapis": "^144.0.0",
+    "gray-matter": "^4.0.3",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "remotion": "^4.0.541",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3"
+  }
+}

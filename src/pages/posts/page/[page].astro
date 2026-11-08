@@ -1,0 +1,33 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import EnhancedListLayout, {
+  POSTS_PER_PAGE,
+} from "@/layouts/EnhancedListLayout"
+import { toListItem } from "@/lib/post-list"
+import { getPublishedPosts } from "@/lib/posts"
+import type { GetStaticPaths, Page } from "astro"
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const posts = (await getPublishedPosts()).map(toListItem)
+  // Page 1 lives at /posts.
+  return paginate(posts, { pageSize: POSTS_PER_PAGE }).filter(
+    (p) => p.params.page !== "1"
+  )
+}) satisfies GetStaticPaths
+
+interface Props {
+  page: Page<ReturnType<typeof toListItem>>
+}
+
+const { page } = Astro.props
+const posts = (await getPublishedPosts()).map(toListItem)
+---
+
+<BaseLayout>
+  <EnhancedListLayout
+    client:load
+    posts={posts}
+    title="Blog"
+    pagination={{ currentPage: page.currentPage, totalPages: page.lastPage }}
+  />
+</BaseLayout>
