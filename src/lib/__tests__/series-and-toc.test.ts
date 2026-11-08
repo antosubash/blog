@@ -10,6 +10,7 @@ describe("series", () => {
     post({ slug: "p2", series: "S", part: 2, date: "2024-02-01T00:00:00Z" }),
     post({ slug: "p1", series: "S", part: 1, date: "2024-01-01T00:00:00Z" }),
     post({ slug: "hidden", series: "S", part: 3, isDraft: true }),
+    post({ slug: "draft", series: "S", part: 4, draft: true }),
     post({ slug: "solo" }),
   ]
 

@@ -21,11 +21,11 @@ export interface SeriesGroup {
   lastPost: SeriesPost
 }
 
-// Note: only `isDraft` hides a post from a series (not `draft`), as before.
+// Drafts (`draft` or `isDraft`) are left out; they have no page to link to.
 export function getAllSeries(posts: Post[]): SeriesGroup[] {
   const seriesMap = new Map<string, SeriesPost[]>()
   for (const post of posts) {
-    if (!post.series || post.isDraft) continue
+    if (!post.series || post.draft || post.isDraft) continue
     const list = seriesMap.get(post.series) ?? []
     list.push({
       slug: post.slug,
