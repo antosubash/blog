@@ -60,12 +60,26 @@ const jsonLd = {
   url: `${siteMetadata.siteUrl}/posts/${post.slug}`,
 }
 
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { name: "Home", item: siteMetadata.siteUrl },
+    { name: "Posts", item: `${siteMetadata.siteUrl}/posts` },
+    { name: post.title, item: `${siteMetadata.siteUrl}/posts/${post.slug}` },
+  ].map((crumb, i) => ({ "@type": "ListItem", position: i + 1, ...crumb })),
+}
 // Escape "<" so post text can never close the script element.
 const ldJson = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c")
 ---
 
 <BaseLayout meta={genPostMetadata(post)}>
   <script is:inline type="application/ld+json" set:html={ldJson(jsonLd)} />
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={ldJson(breadcrumbLd)}
+  />
   <PostSimple
     content={post}
     next={next ? { postUrl: next.postUrl, title: next.title } : undefined}

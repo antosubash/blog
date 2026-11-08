@@ -57,6 +57,8 @@ export function genPostMetadata(post: {
   tags: string[]
   images: string[]
   canonicalUrl: string | null
+  date: string
+  lastmod: string | null
 }): PageMeta {
   const ogImage = post.images[0] || `/og/${post.slug}.png`
   const ogImageUrl = ogImage.startsWith("http")
@@ -77,6 +79,14 @@ export function genPostMetadata(post: {
         property: "og:url",
         content: `${siteMetadata.siteUrl}/posts/${post.slug}`,
       },
+      { property: "article:published_time", content: post.date },
+      {
+        property: "article:modified_time",
+        content: post.lastmod || post.date,
+      },
+      ...post.tags
+        .filter(Boolean)
+        .map((tag) => ({ property: "article:tag", content: tag })),
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: post.title },
       { name: "twitter:description", content: post.excerpt },
