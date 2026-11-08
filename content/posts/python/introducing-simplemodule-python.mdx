@@ -46,7 +46,7 @@ A module declares itself through a Python entry point in its `pyproject.toml`. T
 site_lock = "site_lock.module:SiteLockModule"
 ```
 
-The entry point names a class with a `meta` and some hooks (abridged from `modules/site_lock/site_lock/module.py`):
+The entry point names a class with a `meta` and some hooks (abridged from `site_lock/module.py`):
 
 ```python
 class SiteLockModule(ModuleBase):
@@ -126,7 +126,7 @@ In the framework repo, `make gen-api-types` regenerates these files and CI fails
 
 A module's public surface is its `contracts/` package: DTOs and events. Other modules import from there and nowhere else. One rule is enforced by a diagnostic: framework packages can't import any module. Keeping one module out of another's internals is a convention for now, not a linter rule.
 
-For cross-module reactions there's an in-process event bus. An `Invoices` module can listen for orders without the orders module knowing about it (from `docs/framework/events.md`):
+For cross-module reactions there's an in-process event bus. An `Invoices` module can listen for orders without the orders module knowing about it (from the framework's events guide):
 
 ```python
 class InvoicesModule(ModuleBase):
