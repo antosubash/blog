@@ -1,0 +1,183 @@
+---
+title: 'Introducing SimpleModule for Python: A Modular Monolith on FastAPI, SQLModel and Inertia'
+excerpt: 'A tour of SimpleModule for Python: features as self-contained modules with their own tables, endpoints and React pages, shipped as one FastAPI and Inertia.js app.'
+date: '2026-11-08'
+series: 'SimpleModule for Python'
+part: 1
+tags:
+  - python
+  - fastapi
+  - simplemodule
+  - modular-monolith
+  - inertia
+  - react
+---
+
+![A host application with module blocks plugged into it, each holding a table, an endpoint and a page](https://raw.githubusercontent.com/antosubash/images/main/assets/posts/python/introducing-simplemodule-python/cover.png)
+
+<TOCInline toc={props.toc} asDisclosure />
+
+## The problem
+
+Most Python web apps I see go one of two ways. Either everything lives in one package and the boundaries blur within a year, or the team splits into services early and spends its time on API clients, contracts between services and deployments.
+
+I wanted the middle: features that live in their own packages with their own data, but ship as one app with one process and one database. [SimpleModule](https://github.com/antosubash/SimpleModule) did that for .NET. [simple_module_python](https://github.com/antosubash/simple_module_python) is the Python framework built on the same idea, and it's the one I now use for new apps.
+
+## The idea
+
+The README puts it in one line:
+
+> Each feature lives in its own self-contained module — its own SQLModel tables, FastAPI endpoints, React pages — but everything ships as one FastAPI + Inertia.js + React app.
+
+The stack:
+
+- **Backend:** Python 3.12, FastAPI, SQLModel (async SQLAlchemy plus Pydantic) and Alembic.
+- **Frontend:** Inertia.js, React and Tailwind CSS 4, served by Vite in development.
+- **Tooling:** uv workspaces, Ruff, ty, Biome and pytest.
+
+A module is a normal Python package. You can keep it in the app's repo or publish it to PyPI and install it like any other dependency. The host app finds it at boot.
+
+## How a module plugs in
+
+A module declares itself through a Python entry point in its `pyproject.toml`. This is the `site_lock` module, which puts a shared password in front of a site:
+
+```toml
+[project.entry-points.simple_module]
+site_lock = "site_lock.module:SiteLockModule"
+```
+
+The entry point names a class with a `meta` and some hooks (abridged from `modules/site_lock/site_lock/module.py`):
+
+```python
+class SiteLockModule(ModuleBase):
+    meta = ModuleMeta(
+        name=c.MODULE_NAME,
+        depends_on=[c.MODULE_AUTH],
+        optional_depends_on=[c.MODULE_SETTINGS],
+    )
+
+    def register_settings(self, app: FastAPI) -> None:
+        from site_lock.core.settings import SiteLockSettings
+        from site_lock.core.state import SiteLockState
+
+        preserve_across_sign_in(app, c.SESSION_KEY)
+        register_module_settings(
+            app, c.MODULE_PACKAGE, SiteLockSettings,
+            lambda s: SiteLockState(settings=s),
+        )
+
+    def register_middleware(self, app: FastAPI) -> None:
+        from site_lock.web.middleware import SiteLockMiddleware
+
+        app.add_middleware(SiteLockMiddleware)
+```
+
+At startup the framework loads every entry point in the `simple_module` group, sorts the modules by `depends_on`, and calls their hooks in that order. There's nothing to register in the host: adding the package as a dependency is enough. Hooks cover routes, settings, menu items, permissions, feature flags, event handlers, middleware, health checks, rate limits, and startup and shutdown.
+
+Outside development, discovery is strict. A broken entry point or a missing dependency stops the boot with an error instead of quietly skipping the module.
+
+## What a module owns
+
+A feature module usually has three parts: a table, some endpoints and a page.
+
+**Tables.** Each module gets its own SQLAlchemy `MetaData`, and table names carry the module's prefix. This is the model from the module template:
+
+```python
+Base = create_module_base("orders")
+
+class Order(Base, AuditMixin, table=True):
+    __tablename__ = "orders_order"
+    id: int | None = Field(default=None, primary_key=True)
+    name: str = Field(max_length=200)
+```
+
+**Endpoints.** Plain FastAPI routers. The module adds an API router and a view router, and every `/api` route declares the permission it needs:
+
+```python
+@router.get("/", response_model=list[ItemOut],
+    dependencies=[Depends(RequiresPermission(PERM_X_VIEW))])
+async def list_items(service: ItemService = Depends(get_item_service)) -> list[ItemOut]:
+    return await service.get_all()
+```
+
+**Pages.** View routes render React pages through Inertia. The server passes props, and Inertia renders the matching component, with no separate API client to write:
+
+```python
+async def browse(inertia: InertiaDep, service=Depends(get_item_service)) -> InertiaResponse:
+    items = await service.get_all()
+    return await inertia.render(PAGE_BROWSE, {"items": [i.model_dump(mode="json") for i in items]})
+```
+
+The page lives in the module's `pages/` folder. Its prop types come from the module's OpenAPI schema, generated into `api.generated.ts`:
+
+```tsx
+import type { components } from './api.generated';
+
+type Item = components['schemas']['ItemOut'];
+
+export default function Browse({ items }: { items: Item[] }) {
+  // ...
+}
+```
+
+If the Python model changes and nobody regenerates the types, CI fails.
+
+## How modules talk to each other
+
+A module's public surface is its `contracts/` package: DTOs and events. Other modules import from there and nowhere else. One rule is enforced by a diagnostic: framework packages can't import any module. Keeping one module out of another's internals is a convention for now, not a linter rule.
+
+For cross-module reactions there's an in-process event bus. An `Invoices` module can listen for orders without the orders module knowing about it (from `docs/framework/events.md`):
+
+```python
+class InvoicesModule(ModuleBase):
+    meta = ModuleMeta(name="Invoices", depends_on=["Orders"])
+
+    def register_event_handlers(self, bus: EventBus) -> None:
+        bus.subscribe(OrderPlaced, self._on_order_placed)
+```
+
+`publish` is in-process only: no persistence and no retries. When a handler must run even if the process crashes, use `publish_durable` and `subscribe_durable`. They go through an outbox in the `background_tasks` module, which runs on Celery and Redis. That gets its own post later in this series.
+
+## What comes in the box
+
+The framework repo ships 17 modules. The ones most apps start with:
+
+- `auth` and `users` for sign-in with email and password, OAuth and OIDC. `keycloak` and `oidc` are the alternative providers, and you pick one.
+- `permissions`, `settings` and `feature_flags`, each with an admin UI.
+- `tenants`, `audit_log`, `file_storage`, `mail` and `background_tasks`.
+- `dashboard`, `branding`, `api_tokens`, `sharing` and `site_lock`.
+
+Bigger features live in a separate repo, [smpy_modules](https://github.com/antosubash/smpy_modules), and install from PyPI: a page builder, news, records, billing with Stripe, and images.
+
+## Diagnostics instead of surprises
+
+Most of the framework's rules come with a diagnostic code, and `smpy doctor` reports them. Some examples:
+
+- **Missing page:** an Inertia view names a page file that doesn't exist.
+- **Ungated route:** an `/api` route has no permission check.
+- **Unmigrated table:** a module table isn't covered by any migration.
+- **Database behind:** the database is behind the latest migration. This one stops the app from booting in every environment.
+
+Migrations live in the host's Alembic setup, with a branch label per module, and `make migration` generates them against that module's head.
+
+## Pitfalls
+
+- **It's early.** Packages are at 0.0.44 and marked alpha. The changelog has behaviour changes between releases, so pin versions.
+- **Python 3.12 or later, plus Node** for the frontend build.
+- **The template's sample table has no migration.** `smpy doctor` flags this until you generate one.
+- **Postgres review.** Migrations generated against SQLite need a check before you run them on Postgres.
+- **Tenants share one database.** Multi-tenancy isolates rows with a mixin, not separate databases. If you need a database per tenant, this isn't the framework for it.
+
+## Try it
+
+You need uv and Node. Then:
+
+```bash
+uvx --from simple_module_cli smpy new my-app
+cd my-app
+make dev
+```
+
+`smpy new` asks which modules you want. The default `standard` preset gives you `auth`, `users`, `dashboard` and `permissions`. It then installs the Python and JavaScript dependencies and runs the migrations. `make dev` starts FastAPI on port 8000 and Vite next to it. SQLite is the default database, so nothing else has to run.
+
+The docs are at [docs.py.simplemodule.dev](https://docs.py.simplemodule.dev/). In the next part I'll build a module from scratch: a table, an endpoint, a React page, a permission and a migration.
