@@ -81,7 +81,7 @@ const components = {
   <script
     is:inline
     type="application/ld+json"
-    set:html={JSON.stringify(jsonLd)}
+    set:html={JSON.stringify(jsonLd).replace(/</g, "\\u003c")}
   />
   <PostSimple
     content={post}
