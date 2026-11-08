@@ -33,7 +33,7 @@ function buildFeed(
   })
 }
 
-/** The main feed carries each post's full HTML (`content:encoded`). */
+/** The main feed adds full HTML (`content:encoded`) for the posts in `content`. */
 export const feedResponse = (posts: Post[], content: Map<string, string>) =>
   buildFeed(posts, siteMetadata.title, "feed.xml", content)
 
