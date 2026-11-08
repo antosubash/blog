@@ -76,6 +76,8 @@ export function codeBlockChrome(): ShikiTransformer {
           className: cx(
             "flex items-center justify-between bg-surface px-4 py-2"
           ),
+          // Lets the feed drop the header (see toFeedHtml).
+          dataCodeHeader: "",
         },
         [
           el(
