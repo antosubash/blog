@@ -1,12 +1,17 @@
 {
-  "extends": "../tsconfig.json",
-  "include": ["src/**/*.ts", "src/**/*.tsx", "remotion.config.ts"],
   "compilerOptions": {
-    "verbatimModuleSyntax": false,
-    "allowImportingTsExtensions": false,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "types": ["node"],
-    "paths": {}
-  }
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "types": ["node"]
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", "remotion.config.ts"],
+  "exclude": ["node_modules", "out", "cache"]
 }

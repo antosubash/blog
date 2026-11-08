@@ -1,0 +1,17 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "astro",
+  "redirects": [
+    {
+      "source": "/tags/Llama",
+      "destination": "/tags/llama",
+      "permanent": true
+    },
+    {
+      "source": "/tags/Llama/feed.xml",
+      "destination": "/tags/llama/feed.xml",
+      "permanent": true
+    }
+  ],
+  "installCommand": "pnpm install --frozen-lockfile --filter ."
+}

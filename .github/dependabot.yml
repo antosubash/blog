@@ -1,0 +1,41 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    # Groups carry minor and patch updates only; each major version bump
+    # arrives as its own PR so it can be migrated and reviewed on its own.
+    groups:
+      astro:
+        update-types: [minor, patch]
+        patterns:
+          - "astro"
+          - "@astrojs/*"
+      react:
+        update-types: [minor, patch]
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
+      tooling:
+        update-types: [minor, patch]
+        dependency-type: development
+      everything-else:
+        update-types: [minor, patch]
+        patterns:
+          - "*"
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 3
+    groups:
+      actions:
+        patterns:
+          - "*"

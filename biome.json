@@ -7,14 +7,14 @@
     "ignore": [
       "node_modules",
       ".vercel",
-      ".content-collections",
+      ".astro",
+      "dist",
       ".skill-state",
       ".playwright-cli",
-      "src/routeTree.gen.ts",
-      "public/feed.xml",
-      "public/search.json",
-      "public/sitemap.xml",
-      "public/tags/**"
+      ".lighthouseci",
+      "video/node_modules",
+      "video/cache",
+      "video/out"
     ]
   },
   "formatter": {

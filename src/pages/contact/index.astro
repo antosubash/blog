@@ -1,0 +1,138 @@
+---
+import siteMetadata from "@/config/siteMetadata"
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import { genPageMetadata } from "@/lib/seo"
+import { Github, Linkedin, Mail, MapPin, Phone, Twitter } from "lucide-react"
+
+const meta = genPageMetadata({ title: "Contact" })
+---
+
+<BaseLayout meta={meta}>
+  <section class="mx-auto max-w-4xl px-5 sm:px-6">
+        <div class="divide-y divide-border">
+          <div class="space-y-2 pb-8 pt-12 sm:pt-16 md:space-y-5">
+            <h1 class="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+              Contact
+            </h1>
+            <p class="text-lg leading-7 text-muted-foreground">
+              Get in touch with me for collaborations, questions, or just to say
+              hello!
+            </p>
+          </div>
+          <div class="py-12 lg:py-16">
+            <div class="grid gap-8 lg:grid-cols-2">
+              <!-- Contact Information -->
+              <div class="space-y-6">
+                <div>
+                  <h2 class="mb-4 text-2xl font-semibold text-foreground">
+                    Let's Connect
+                  </h2>
+                  <p class="mb-6 text-muted-foreground">
+                    I'm always open to discussing new projects, creative ideas,
+                    or opportunities to be part of your visions.
+                  </p>
+                </div>
+
+                <div class="space-y-4">
+                  <div class="flex items-center space-x-3">
+                    <Mail className="h-5 w-5 text-accent" />
+                    <div>
+                      <p class="font-medium text-foreground">Email</p>
+                      <a
+                        href={`mailto:${siteMetadata.email}`}
+                        class="text-accent hover:underline"
+                      >
+                        {siteMetadata.email}
+                      </a>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center space-x-3">
+                    <MapPin className="h-5 w-5 text-accent" />
+                    <div>
+                      <p class="font-medium text-foreground">Location</p>
+                      <p class="text-muted-foreground">
+                        Remote / Worldwide
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center space-x-3">
+                    <Phone className="h-5 w-5 text-accent" />
+                    <div>
+                      <p class="font-medium text-foreground">
+                        Availability
+                      </p>
+                      <p class="text-muted-foreground">
+                        Open to new opportunities
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pt-4">
+                  <h3 class="mb-3 text-lg font-semibold text-foreground">
+                    Follow Me
+                  </h3>
+                  <div class="flex space-x-4">
+                    {siteMetadata.github && (
+                      <a
+                        href={siteMetadata.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="rounded-sm text-muted-foreground transition-colors hover:text-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70"
+                        aria-label="GitHub"
+                      >
+                        <Github className="h-6 w-6" />
+                      </a>
+                    )}
+                    {siteMetadata.twitter && (
+                      <a
+                        href={siteMetadata.twitter}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="rounded-sm text-muted-foreground transition-colors hover:text-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70"
+                        aria-label="Twitter"
+                      >
+                        <Twitter className="h-6 w-6" />
+                      </a>
+                    )}
+                    {siteMetadata.linkedin && (
+                      <a
+                        href={siteMetadata.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="rounded-sm text-muted-foreground transition-colors hover:text-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70"
+                        aria-label="LinkedIn"
+                      >
+                        <Linkedin className="h-6 w-6" />
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Email -->
+              <div class="space-y-6">
+                <div>
+                  <h2 class="mb-4 text-2xl font-semibold text-foreground">
+                    Write to Me
+                  </h2>
+                  <p class="mb-6 text-muted-foreground">
+                    The best way to reach me is email. Tell me a bit about what
+                    you're working on and I'll get back to you.
+                  </p>
+                </div>
+                <a
+                  href={`mailto:${siteMetadata.email}`}
+                  class="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-3 font-medium text-primary-foreground transition-colors duration-150 hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70"
+                >
+                  <Mail className="h-5 w-5" />
+                  {siteMetadata.email}
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+</BaseLayout>

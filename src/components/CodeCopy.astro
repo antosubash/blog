@@ -1,0 +1,25 @@
+<script>
+  // Copy buttons in the code block header (markup from src/lib/markdown/code-block.ts).
+  document.addEventListener("click", async (event) => {
+    const button = (event.target as Element | null)?.closest<HTMLButtonElement>(
+      "[data-copy-code]"
+    )
+    const code = button?.closest(".code-block")?.querySelector("pre code")
+    if (!button || !code) return
+    try {
+      await navigator.clipboard.writeText(code.textContent ?? "")
+    } catch {
+      return // Clipboard API may be unavailable in some contexts
+    }
+    const idle = button.querySelector(".copy-idle")
+    const done = button.querySelector(".copy-done")
+    idle?.classList.add("hidden")
+    done?.classList.replace("hidden", "inline-flex")
+    button.setAttribute("aria-label", "Copied")
+    setTimeout(() => {
+      idle?.classList.remove("hidden")
+      done?.classList.replace("inline-flex", "hidden")
+      button.setAttribute("aria-label", "Copy code")
+    }, 2000)
+  })
+</script>

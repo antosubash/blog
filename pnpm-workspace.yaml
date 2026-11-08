@@ -1,3 +1,5 @@
+packages: ["video"]
+
 onlyBuiltDependencies:
   - "@biomejs/biome"
   - esbuild

@@ -1,0 +1,28 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import EnhancedListLayout, {
+  POSTS_PER_PAGE,
+} from "@/layouts/EnhancedListLayout"
+import { toListItem } from "@/lib/post-list"
+import { getPublishedPosts } from "@/lib/posts"
+import { genPageMetadata } from "@/lib/seo"
+
+const posts = (await getPublishedPosts()).map(toListItem)
+const meta = genPageMetadata({
+  title: "Blog",
+  description:
+    "Explore articles on web development, microservices, .NET, React, Docker, Kubernetes, and modern software development practices.",
+})
+---
+
+<BaseLayout meta={meta}>
+  <EnhancedListLayout
+    client:load
+    posts={posts}
+    title="Blog"
+    pagination={{
+      currentPage: 1,
+      totalPages: Math.ceil(posts.length / POSTS_PER_PAGE),
+    }}
+  />
+</BaseLayout>

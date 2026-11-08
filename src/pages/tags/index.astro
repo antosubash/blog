@@ -1,0 +1,45 @@
+---
+import Tag from "@/components/Tag"
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import { getAllPosts } from "@/lib/posts"
+import { genPageMetadata } from "@/lib/seo"
+import { getTagsWithCount } from "@/lib/tag-utils"
+import { slug } from "github-slugger"
+
+const tagsWithCount = getTagsWithCount(await getAllPosts())
+const meta = genPageMetadata({
+  title: "Tags",
+  description: "Things I blog about",
+})
+---
+
+<BaseLayout meta={meta}>
+  <div class="mx-auto max-w-4xl px-5 sm:px-6">
+    <div class="pb-8 pt-12 sm:pt-16">
+      <h1
+        class="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl"
+      >
+        Tags
+      </h1>
+    </div>
+    <div>
+      <div class="flex flex-wrap">
+        {tagsWithCount.length === 0 && "No tags found."}
+        {
+          tagsWithCount.map((t) => (
+            <div class="mb-2 mr-5 mt-2">
+              {/* No whitespace between the tag and its count, as before */}
+              <Tag text={t.tag} /><a
+                href={`/tags/${slug(t.tag)}`}
+                class="-ml-2 text-sm font-semibold uppercase text-muted-foreground"
+                aria-label={`View posts tagged ${t.tag}`}
+              >
+                {` (${t.count})`}
+              </a>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</BaseLayout>
