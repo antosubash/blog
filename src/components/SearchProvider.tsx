@@ -1,4 +1,3 @@
-import { useNavigate } from "@tanstack/react-router"
 import { Command } from "cmdk"
 import { FileText, Search, Tag, X } from "lucide-react"
 import { useCallback, useEffect, useState } from "react"
@@ -14,7 +13,6 @@ export default function SearchProvider() {
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState("")
   const [items, setItems] = useState<SearchItem[]>([])
-  const navigate = useNavigate()
 
   useEffect(() => {
     if (open && items.length === 0) {
@@ -36,14 +34,11 @@ export default function SearchProvider() {
     return () => document.removeEventListener("keydown", down)
   }, [])
 
-  const handleSelect = useCallback(
-    (slug: string) => {
-      setOpen(false)
-      setQuery("")
-      navigate({ to: "/posts/$", params: { _splat: slug } })
-    },
-    [navigate]
-  )
+  const handleSelect = useCallback((slug: string) => {
+    setOpen(false)
+    setQuery("")
+    window.location.assign(`/posts/${slug}`)
+  }, [])
 
   return (
     <Command.Dialog

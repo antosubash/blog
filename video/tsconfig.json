@@ -8,5 +8,6 @@
     "noUnusedParameters": false,
     "types": ["node"],
     "paths": {}
-  }
+  },
+  "exclude": ["out", "cache"]
 }

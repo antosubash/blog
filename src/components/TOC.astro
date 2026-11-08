@@ -1,0 +1,161 @@
+---
+import { type TocItem, groupToc } from "@/lib/toc"
+
+interface Props {
+  toc?: TocItem[]
+}
+
+const toc = Astro.props.toc ?? []
+const sections = groupToc(toc)
+---
+
+{
+  toc.length > 0 && (
+    <div
+      class="rounded-xl border border-border/60 bg-card/50 px-6 shadow-sm backdrop-blur-sm"
+      data-toc
+    >
+      <div class="mb-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-accent-muted/50">
+            <svg
+              aria-hidden="true"
+              class="h-4 w-4 text-accent"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 10h16M4 14h16M4 18h16"
+              />
+            </svg>
+          </div>
+          <h2 class="text-lg font-semibold text-foreground">
+            Table of Contents
+          </h2>
+        </div>
+        <button
+          type="button"
+          aria-label="Collapse table of contents"
+          class="flex h-8 w-8 items-center justify-center rounded-lg bg-surface hover:bg-surface"
+          data-toc-collapse
+        >
+          <svg
+            aria-hidden="true"
+            class="h-4 w-4 text-muted-foreground transition-transform duration-200"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <nav data-toc-body>
+        <ul class="list-none space-y-1">
+          {sections.map((section) => (
+            <li>
+              <div class="flex items-center">
+                <button
+                  type="button"
+                  aria-label={`Expand section ${section.value}`}
+                  data-label={section.value}
+                  class={`mr-2 flex h-5 w-5 items-center justify-center rounded transition-colors ${
+                    section.children.length > 0
+                      ? "text-muted-foreground hover:text-foreground"
+                      : "invisible"
+                  }`}
+                  disabled={section.children.length === 0}
+                  data-toc-section
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="h-3 w-3 transition-transform duration-200"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </button>
+                <a
+                  href={section.url}
+                  class="flex-1 rounded-lg px-3 py-2 text-sm font-medium text-foreground transition-all duration-200 hover:bg-accent-muted/30 hover:text-accent"
+                >
+                  {section.value}
+                </a>
+              </div>
+
+              {section.children.length > 0 && (
+                <ul
+                  class="ml-6 mt-1 space-y-0.5 border-l-2 border-border pl-4"
+                  hidden
+                >
+                  {section.children.map((child) => (
+                    <li>
+                      <a
+                        href={child.url}
+                        class={`block rounded-md px-3 py-1.5 text-sm transition-all duration-200 hover:bg-accent-muted/30 hover:text-accent ${
+                          child.depth === 3
+                            ? "text-muted-foreground"
+                            : "ml-3 text-muted-foreground"
+                        }`}
+                        style={`padding-left: ${(child.depth - 2) * 16 + 12}px`}
+                      >
+                        {child.value}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+  )
+}
+
+<script>
+  for (const toc of document.querySelectorAll<HTMLElement>("[data-toc]")) {
+    const body = toc.querySelector<HTMLElement>("[data-toc-body]")
+    const collapse = toc.querySelector<HTMLButtonElement>("[data-toc-collapse]")
+    collapse?.addEventListener("click", () => {
+      if (!body) return
+      body.hidden = !body.hidden
+      collapse.firstElementChild?.classList.toggle("rotate-180", body.hidden)
+      collapse.setAttribute(
+        "aria-label",
+        body.hidden ? "Expand table of contents" : "Collapse table of contents"
+      )
+    })
+    for (const button of toc.querySelectorAll<HTMLButtonElement>(
+      "[data-toc-section]"
+    )) {
+      button.addEventListener("click", () => {
+        const list = button.closest("li")?.querySelector<HTMLElement>("ul")
+        if (!list) return
+        list.hidden = !list.hidden
+        button.firstElementChild?.classList.toggle("rotate-90", !list.hidden)
+        button.setAttribute(
+          "aria-label",
+          `${list.hidden ? "Expand" : "Collapse"} section ${button.dataset.label}`
+        )
+      })
+    }
+  }
+</script>

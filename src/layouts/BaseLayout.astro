@@ -1,0 +1,64 @@
+---
+import "@/styles.css"
+import Analytics from "@/components/Analytics.astro"
+import Footer from "@/components/Footer.astro"
+import Header from "@/components/Header.astro"
+import SearchProvider from "@/components/SearchProvider"
+import { type PageMeta, defaultPageMeta } from "@/lib/seo"
+
+interface Props {
+  meta?: PageMeta
+}
+
+const { meta = defaultPageMeta } = Astro.props
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{meta.title}</title>
+    <meta name="theme-color" content="#1e2433" />
+    <meta name="description" content={meta.description} />
+    {
+      meta.tags.map((t) => (
+        <meta name={t.name} property={t.property} content={t.content} />
+      ))
+    }
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="RSS Feed"
+      href="/feed.xml"
+    />
+    <link rel="icon" href="/static/favicons/favicon.ico" />
+    <link
+      rel="apple-touch-icon"
+      sizes="76x76"
+      href="/static/favicons/apple-touch-icon.png"
+    />
+    <script is:inline>
+      // Apply the stored theme (or the OS preference) before first paint.
+      try {
+        const theme = localStorage.getItem("theme") || "system"
+        const isDark =
+          theme === "dark" ||
+          (theme === "system" &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches)
+        document.documentElement.classList.toggle("dark", isDark)
+      } catch (e) {}
+    </script>
+  </head>
+  <body class="bg-background text-foreground antialiased">
+    <div class="flex min-h-dvh flex-col">
+      <Header />
+      <main class="mb-auto flex-1">
+        <slot />
+      </main>
+      <Footer />
+    </div>
+    <SearchProvider client:idle />
+    <Analytics />
+  </body>
+</html>

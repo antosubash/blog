@@ -1,0 +1,175 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import { genPageMetadata } from "@/lib/seo"
+
+const meta = genPageMetadata({ title: "Consulting Services" })
+const services = [
+  {
+    title: "Application Development",
+    description:
+      "From conceptualization to execution, I help you build robust ABP applications from scratch, ensuring scalability, efficiency, and adherence to industry best practices.",
+    features: [
+      "Full-stack development",
+      "Microservices architecture",
+      "Cloud-native solutions",
+      "Performance optimization",
+    ],
+  },
+  {
+    title: "Customization & Optimization",
+    description:
+      "Transform your existing ABP application with expert guidance to enhance performance, functionality, and alignment with your evolving business requirements.",
+    features: [
+      "Performance tuning",
+      "Feature enhancements",
+      "Code refactoring",
+      "Integration services",
+    ],
+  },
+  {
+    title: "Problem Solving & Troubleshooting",
+    description:
+      "Expert technical support to identify and resolve complex issues efficiently, minimizing downtime and maximizing productivity across your ABP projects.",
+    features: [
+      "Debugging & diagnostics",
+      "Root cause analysis",
+      "Performance bottlenecks",
+      "Security audits",
+    ],
+  },
+  {
+    title: "Training & Knowledge Transfer",
+    description:
+      "Empower your team with comprehensive training sessions and knowledge transfer initiatives tailored to your organizational needs and technical requirements.",
+    features: [
+      "Team workshops",
+      "Best practices training",
+      "Architecture guidance",
+      "Code reviews",
+    ],
+  },
+]
+
+const technologies = [
+  "ABP Framework",
+  ".NET Core",
+  "React/Next.js",
+  "Docker & Kubernetes",
+  "Azure Cloud",
+  "Microservices",
+  "Identity & Security",
+  "API Development",
+]
+---
+
+<BaseLayout meta={meta}>
+
+    <div class="mx-auto max-w-4xl px-5 sm:px-6">
+      <div class="pb-8 pt-12 sm:pt-16">
+        <h1 class="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+          Consulting Services
+        </h1>
+        <p class="mt-3 max-w-2xl text-lg text-muted-foreground">
+          Transform your ABP projects with professional guidance and technical
+          expertise.
+        </p>
+        <div class="mt-6 flex flex-wrap gap-4">
+          <a
+            href="mailto:antosubash@outlook.com"
+            class="inline-flex items-center text-sm font-medium text-accent transition-colors duration-150 hover:text-accent-hover"
+          >
+            Get in touch &rarr;
+          </a>
+          <a
+            href="https://abp.io/expert/antosubash"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center text-sm font-medium text-muted-foreground transition-colors duration-150 hover:text-foreground"
+          >
+            ABP Expert Profile &rarr;
+          </a>
+        </div>
+      </div>
+
+      {/* Services */}
+      <div class="divide-y divide-border">
+        {services.map((service) => (
+          <div class="py-8">
+            <h2 class="font-display text-xl font-semibold text-foreground">
+              {service.title}
+            </h2>
+            <p class="mt-2 text-muted-foreground">{service.description}</p>
+            <ul class="mt-4 grid grid-cols-2 gap-2">
+              {service.features.map((feature) => (
+                <li
+                  class="flex items-center gap-2 text-sm text-muted-foreground"
+                >
+                  <span class="text-accent">✓</span>
+                  {feature}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+
+      {/* Technologies */}
+      <div class="border-t border-border py-12">
+        <h2 class="font-display text-xl font-semibold text-foreground">
+          Technologies & Expertise
+        </h2>
+        <div class="mt-4 flex flex-wrap gap-2">
+          {technologies.map((tech) => (
+            <span
+              class="rounded-md bg-accent-muted/50 px-3 py-1 text-sm text-muted-foreground"
+            >
+              {tech}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Process */}
+      <div class="border-t border-border py-12">
+        <h2 class="font-display text-xl font-semibold text-foreground">
+          How We Work Together
+        </h2>
+        <div class="mt-6 grid gap-6 sm:grid-cols-2 md:grid-cols-4">
+          {[
+            {
+              step: "01",
+              title: "Discovery",
+              description: "Understanding your requirements and project scope",
+            },
+            {
+              step: "02",
+              title: "Planning",
+              description: "Creating a detailed roadmap and timeline",
+            },
+            {
+              step: "03",
+              title: "Execution",
+              description: "Implementing solutions with regular updates",
+            },
+            {
+              step: "04",
+              title: "Delivery",
+              description: "Handing over with documentation and support",
+            },
+          ].map((process) => (
+            <div>
+              <span class="text-sm font-medium text-accent">
+                {process.step}
+              </span>
+              <h3 class="mt-1 font-semibold text-foreground">
+                {process.title}
+              </h3>
+              <p class="mt-1 text-sm text-muted-foreground">
+                {process.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+</BaseLayout>

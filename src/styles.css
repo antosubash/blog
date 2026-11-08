@@ -182,120 +182,31 @@
   --code-line-number: oklch(0.62 0.01 240);
 }
 
-/* Token styles */
-.token.comment,
-.token.prolog,
-.token.doctype,
-.token.cdata {
-  color: var(--code-comment);
-  font-style: italic;
+/* Shiki "css-variables" theme, mapped onto the palette above */
+.astro-code {
+  --astro-code-foreground: var(--foreground);
+  --astro-code-background: var(--background);
+  --astro-code-token-comment: var(--code-comment);
+  --astro-code-token-keyword: var(--code-keyword);
+  --astro-code-token-string: var(--code-string);
+  --astro-code-token-string-expression: var(--code-string);
+  --astro-code-token-function: var(--code-function);
+  --astro-code-token-constant: var(--code-number);
+  --astro-code-token-parameter: var(--code-variable);
+  --astro-code-token-punctuation: var(--code-punctuation);
+  --astro-code-token-link: var(--code-string);
+  --astro-code-token-inserted: var(--code-inserted);
+  --astro-code-token-deleted: var(--code-deleted);
+  --astro-code-token-changed: var(--code-changed);
 }
-
-.token.keyword,
-.token.control,
-.token.directive,
-.token.important {
-  color: var(--code-keyword);
-}
-
-.token.string,
-.token.char,
-.token.template-string,
-.token.url {
-  color: var(--code-string);
-}
-
-.token.function {
-  color: var(--code-function);
-}
-
-.token.number,
-.token.boolean,
-.token.constant,
-.token.symbol {
-  color: var(--code-number);
-}
-
-.token.operator,
-.token.arrow {
-  color: var(--code-operator);
-}
-
-.token.class-name,
-.token.builtin,
-.token.namespace {
-  color: var(--code-class);
-}
-
-.token.variable {
-  color: var(--code-variable);
-}
-
-.token.punctuation {
-  color: var(--code-punctuation);
-}
-
-.token.property,
-.token.attr-name {
-  color: var(--code-attr-name);
-}
-
-.token.attr-value,
-.token.selector {
-  color: var(--code-attr-value);
-}
-
-.token.tag {
-  color: var(--code-tag);
-}
-
-.token.inserted {
-  color: var(--code-inserted);
-}
-.token.deleted {
-  color: var(--code-deleted);
-  text-decoration: line-through;
-}
-.token.changed {
-  color: var(--code-changed);
-}
-
-.token.regex {
-  color: var(--code-string);
-}
-.token.entity {
-  color: var(--code-operator);
-  cursor: help;
-}
-.token.atrule {
-  color: var(--code-keyword);
-}
-
-/* Line highlighting from rehype-prism-plus */
-.code-highlight {
+/* Size lines by the code's own line-height, as the old Prism markup did */
+.astro-code code {
+  display: block;
   float: left;
   min-width: 100%;
 }
-.code-line {
-  display: block;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  margin-left: -1rem;
-  margin-right: -1rem;
-  border-left: 2px solid transparent;
-}
-.code-line.highlight-line {
-  background: var(--code-line-highlight);
-  border-left-color: var(--code-operator);
-}
-.code-line.line-number::before {
-  content: attr(line);
-  display: inline-block;
-  width: 1.5rem;
-  margin-right: 1rem;
-  text-align: right;
-  color: var(--code-line-number);
-  user-select: none;
+.astro-code span[style*="--astro-code-token-comment"] {
+  font-style: italic;
 }
 
 /* Inline code in prose */
