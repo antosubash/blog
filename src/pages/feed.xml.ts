@@ -6,7 +6,7 @@ import type { APIRoute } from "astro"
 
 // Feed readers poll /feed.xml often, so only the newest posts carry their full
 // HTML; every item keeps the excerpt as its description.
-const FULL_CONTENT_POSTS = 10
+const FULL_CONTENT_POSTS = 5
 
 export const GET: APIRoute = async () => {
   const posts = await getPublishedPosts() // newest first
