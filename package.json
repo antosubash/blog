@@ -2,6 +2,9 @@
   "name": "start-app",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": "24.x"
+  },
   "scripts": {
     "dev": "vite dev --port 3000",
     "build": "vite build && npx tsx scripts/postbuild.ts",
@@ -78,5 +81,6 @@
     "typescript": "^5.9.3",
     "vite": "^8.3.6",
     "vitest": "^4.1.12"
-  }
+  },
+  "packageManager": "pnpm@12.8.1"
 }
