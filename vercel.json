@@ -12,5 +12,6 @@
       "destination": "/tags/llama/feed.xml",
       "permanent": true
     }
-  ]
+  ],
+  "installCommand": "pnpm install --frozen-lockfile --filter ."
 }

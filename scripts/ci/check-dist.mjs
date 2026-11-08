@@ -111,16 +111,39 @@ function internalPath(ref, from) {
   return url.pathname
 }
 
-// Attributes that carry URLs; content of <script>/<style>/<code>/<pre> is skipped.
+// Opening tags outside <script>/<style>/<pre>/<code>: walk every tag once and skip
+// those inside a skipped element instead of stripping text with a regex.
+const SKIP = new Set(["script", "style", "pre", "code"])
+function tagsOutsideSkipped(html) {
+  const out = []
+  let skipping = null
+  let depth = 0
+  for (const m of html.matchAll(/<(\/?)([a-zA-Z][a-zA-Z0-9-]*)\b[^>]*>/g)) {
+    const [tag, closing, rawName] = m
+    const name = rawName.toLowerCase()
+    if (skipping) {
+      if (name === skipping) depth += closing ? -1 : 1
+      if (depth === 0) skipping = null
+      continue
+    }
+    if (closing) continue
+    if (SKIP.has(name) && !tag.endsWith("/>")) {
+      skipping = name
+      depth = 1
+      continue
+    }
+    out.push(tag)
+  }
+  return out
+}
+
+// Attributes that carry URLs.
 const attrRe = /\s(href|src|srcset|poster)\s*=\s*("([^"]*)"|'([^']*)')/gi
 let checked = 0
 const broken = new Map()
 for (const f of files.filter((x) => x.endsWith(".html"))) {
   const from = pageUrl(f)
-  const html = readFileSync(f, "utf8")
-    .replace(/<(script|style)\b[\s\S]*?<\/\1>/gi, "")
-    .replace(/<(pre|code)\b[\s\S]*?<\/\1>/gi, "")
-  for (const tag of html.match(/<[a-z][^>]*>/gi) ?? []) {
+  for (const tag of tagsOutsideSkipped(readFileSync(f, "utf8"))) {
     if (/^<(meta)\b/i.test(tag)) continue
     for (const m of tag.matchAll(attrRe)) {
       const value = (m[3] ?? m[4]).replace(/&amp;/g, "&")

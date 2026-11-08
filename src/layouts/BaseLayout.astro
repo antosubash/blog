@@ -12,9 +12,11 @@ import geistLatin from "@fontsource-variable/geist/files/geist-latin-wght-normal
 
 interface Props {
   meta?: PageMeta
+  /** Preload the Fraunces display font; off for pages that don't show it (404). */
+  preloadDisplayFont?: boolean
 }
 
-const { meta = defaultPageMeta } = Astro.props
+const { meta = defaultPageMeta, preloadDisplayFont = true } = Astro.props
 ---
 
 <!doctype html>
@@ -24,7 +26,11 @@ const { meta = defaultPageMeta } = Astro.props
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{meta.title}</title>
     <link rel="preload" href={geistLatin} as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href={frauncesLatin} as="font" type="font/woff2" crossorigin />
+    {
+      preloadDisplayFont && (
+        <link rel="preload" href={frauncesLatin} as="font" type="font/woff2" crossorigin />
+      )
+    }
     <meta name="theme-color" content="#1e2433" />
     <meta name="description" content={meta.description} />
     {meta.canonical && <link rel="canonical" href={meta.canonical} />}

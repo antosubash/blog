@@ -20,12 +20,8 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      # pnpm 12 is what the lockfile was written with. Not pinned via
-      # "packageManager": pnpm 12 would then add a packageManagerDependencies
-      # document to pnpm-lock.yaml that older pnpm (Vercel) cannot read.
+      # pnpm version comes from package.json#packageManager (also used by Vercel).
       - uses: pnpm/action-setup@v6
-        with:
-          version: 12.8.1
 
       - uses: actions/setup-node@v7
         with:

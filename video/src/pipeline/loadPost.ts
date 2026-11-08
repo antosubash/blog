@@ -3,7 +3,7 @@ import path from "node:path"
 import matter from "gray-matter"
 import { SITE_URL } from "../config"
 
-const POSTS_DIR = path.resolve(process.cwd(), "content/posts")
+const POSTS_DIR = path.resolve(process.cwd(), "../content/posts")
 
 export type LoadedPost = {
   slug: string

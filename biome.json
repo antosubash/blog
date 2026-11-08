@@ -11,7 +11,10 @@
       "dist",
       ".skill-state",
       ".playwright-cli",
-      ".lighthouseci"
+      ".lighthouseci",
+      "video/node_modules",
+      "video/cache",
+      "video/out"
     ]
   },
   "formatter": {

@@ -1,4 +1,4 @@
-import "dotenv/config"
+import { config } from "dotenv"
 import { PRIVACY_VALUES, type Privacy, STEP_VALUES, type Step } from "../config"
 import { loadOrGenerateStoryboard } from "../pipeline/generateStoryboard"
 import { loadPost } from "../pipeline/loadPost"
@@ -7,6 +7,9 @@ import { synthesizeStoryboard } from "../pipeline/synthesizeVoice"
 import { uploadToYouTube } from "../pipeline/uploadYouTube"
 import { writeBackVideoId } from "../pipeline/writeBackVideoId"
 import { FPS, totalDurationFrames } from "../types"
+
+// Package scripts run from video/; keep loading the repo-root environment.
+config({ path: "../.env" })
 
 const dieWithUsage = (message: string): never => {
   console.error(message)
