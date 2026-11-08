@@ -19,7 +19,8 @@
     "video:render": "VIDEO_STEP=render tsx video/src/cli/generate.ts",
     "video:upload": "VIDEO_STEP=upload tsx video/src/cli/generate.ts",
     "video:generate": "VIDEO_STEP=all tsx video/src/cli/generate.ts",
-    "check": "astro check"
+    "check": "astro check",
+    "check:dist": "node scripts/ci/check-dist.mjs dist content/posts"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.6",
