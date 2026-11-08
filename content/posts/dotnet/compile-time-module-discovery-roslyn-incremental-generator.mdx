@@ -1,0 +1,473 @@
+---
+title: 'Compile-Time Module Discovery: Writing a Roslyn IIncrementalGenerator That Scales'
+excerpt: 'A practical, end-to-end walkthrough of building a Roslyn IIncrementalGenerator that discovers modules across referenced assemblies and emits registration code, AOT-friendly JSON serializer contexts, and TypeScript interfaces — without reflection.'
+date: '2026-05-08'
+tags:
+  - dotnet
+  - roslyn
+  - source-generators
+  - incremental-generator
+  - aot
+  - typescript
+---
+
+<TOCInline toc={props.toc} asDisclosure />
+
+## Introduction
+
+Most modular .NET frameworks pay a tax at startup: they scan assemblies with reflection, find things tagged `[Module]` or implementing `IPlugin`, and wire them up. It works, but you trade trim-safety, AOT compatibility, and a chunk of cold-start time for the convenience.
+
+Source generators flip the trade. Instead of scanning at runtime, you scan at compile time and emit the registration code directly into the consuming assembly. The cost moves to the build, the runtime becomes an unsurprising sequence of `services.AddX()` calls, and the IL trimmer can keep up.
+
+This post is the third part of a series on [SimpleModule](https://github.com/antosubash/SimpleModule) — a modular monolith framework for .NET 10 — and it focuses entirely on the generator: `framework/SimpleModule.Generator`. Specifically, we'll walk through how to build a Roslyn `IIncrementalGenerator` that:
+
+- Scans referenced assemblies for `[Module]`, `IEndpoint`, and `[Dto]` types.
+- Emits an `AddModules()` extension method and `MapModuleEndpoints()` mapping.
+- Generates `JsonSerializerContext` partials for AOT-friendly serialization.
+- Emits TypeScript interfaces that mirror the C# DTOs.
+
+The previous posts in this series covered [the framework's architecture](https://github.com/antosubash/blog/issues/123) and [the Inertia.js bridge](https://github.com/antosubash/blog/issues/124) — read them if the surface area (`[Module]`, `IEndpoint`, `[Dto]`) feels unfamiliar. Otherwise, the generator stands on its own.
+
+## ISourceGenerator vs IIncrementalGenerator
+
+If you Google "Roslyn source generator," you'll find articles split roughly 70/30 between `ISourceGenerator` (the v1 API) and `IIncrementalGenerator` (the v2 API). They look superficially similar, but the difference matters once your generator runs on every keystroke inside an IDE.
+
+| | `ISourceGenerator` (v1) | `IIncrementalGenerator` (v2) |
+|---|---|---|
+| Re-execution model | Re-runs end-to-end on every compilation | Re-runs only the pipeline stages whose inputs changed |
+| Caching | None — you build it yourself | Built in, keyed on equatable inputs |
+| IDE responsiveness | Degrades with project size | Stays usable on large solutions |
+| API surface | `Initialize` + `Execute` | A pipeline of `Select`/`Where`/`Combine`/`Collect` |
+
+The win is not theoretical. On a solution with ~30 modules and a few hundred DTOs, an `ISourceGenerator` reruns its full type walk on every single keystroke; an `IIncrementalGenerator` reruns only the syntax-level extraction for the file you just edited and reuses cached results for everything else. The difference between Visual Studio feeling snappy and feeling broken is exactly here.
+
+The whole game with the incremental API is **equatable inputs**: every value flowing through the pipeline must implement value equality, so Roslyn can cache the next stage's output keyed on the previous stage's hash. The moment you let an `ISymbol` or `Compilation` leak into a pipeline value, caching collapses.
+
+## Setting up the netstandard2.0 generator project
+
+Source generators are analyzers, and analyzers must target `netstandard2.0`. This sounds restrictive, but it's the only target Roslyn loads — you can still use the latest C# language version, you just can't depend on newer BCL types.
+
+Here's the project file we use in `SimpleModule.Generator`:
+
+```xml
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <IsRoslynComponent>true</IsRoslynComponent>
+    <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+    <DevelopmentDependency>true</DevelopmentDependency>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.11.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0"
+                      PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="$(OutputPath)\$(AssemblyName).dll"
+          Pack="true"
+          PackagePath="analyzers/dotnet/cs"
+          Visible="false" />
+    <None Include="AnalyzerReleases.Shipped.md" Pack="true" PackagePath="" />
+    <None Include="AnalyzerReleases.Unshipped.md" Pack="true" PackagePath="" />
+  </ItemGroup>
+</Project>
+```
+
+A few things worth calling out:
+
+- `IsRoslynComponent` makes Visual Studio treat the project as a generator — you'll get the "Debug" entry point in launch profiles.
+- `EnforceExtendedAnalyzerRules` turns on analyzer-specific diagnostics like `RS1035` (don't read files at generation time) and `RS1036` (don't use blocking I/O). If they fire, listen to them.
+- `IncludeBuildOutput=false` and the explicit `<None>` packing into `analyzers/dotnet/cs` is the canonical way to ship a generator as a NuGet package without dragging your dependencies into the consumer.
+- `IsExternalInit.cs` (a one-line shim for the `init` keyword) is a small file you'll want, since `netstandard2.0` doesn't ship it.
+
+A consuming project then references the generator with the analyzer flags:
+
+```xml
+<ProjectReference Include="..\SimpleModule.Generator\SimpleModule.Generator.csproj"
+                  OutputItemType="Analyzer"
+                  ReferenceOutputAssembly="false" />
+```
+
+`OutputItemType="Analyzer"` is what tells the C# compiler to load it as a generator instead of a normal library reference.
+
+## The pipeline: ForAttributeWithMetadataName, CompilationProvider, Combine
+
+The shape of any incremental generator is the same:
+
+```csharp
+[Generator]
+public sealed class ModuleDiscovererGenerator : IIncrementalGenerator
+{
+    public void Initialize(IncrementalGeneratorInitializationContext context)
+    {
+        // 1. Build pipelines that extract equatable data models.
+        // 2. Combine them.
+        // 3. RegisterSourceOutput at the end to actually emit code.
+    }
+}
+```
+
+The three pipeline primitives that do 90% of the work:
+
+### `ForAttributeWithMetadataName` — fast attribute lookup
+
+When you want every type tagged with `[Module]`, the naïve approach is to walk every `ClassDeclarationSyntax` and check its attribute list. This works but is slow, because Roslyn invokes your predicate for every syntax node in every file.
+
+`ForAttributeWithMetadataName` is the built-in fast path. Roslyn maintains an internal index of attribute usages by metadata name and only invokes you for nodes that actually carry the attribute:
+
+```csharp
+var moduleTypes = context.SyntaxProvider.ForAttributeWithMetadataName(
+    fullyQualifiedMetadataName: "SimpleModule.Core.ModuleAttribute",
+    predicate: static (node, _) => node is ClassDeclarationSyntax,
+    transform: static (ctx, ct) => ExtractModule(ctx, ct))
+    .Where(static m => m is not null)
+    .Select(static (m, _) => m!.Value);
+```
+
+A few rules of thumb that the compiler-team docs phrase more politely than I will:
+
+- The predicate must be `static` and pure. Don't capture state.
+- The transform is where you do semantic work — `ctx.SemanticModel`, `ctx.TargetSymbol`, etc.
+- The transform's return type **must** be equatable. Use a `record struct` or a `record` with structural equality, never an `INamedTypeSymbol`.
+
+### `CompilationProvider` — for the global picture
+
+Some questions can only be answered against the whole `Compilation` — like "what is every referenced assembly's `[Module]`-tagged type?" That's where `CompilationProvider` comes in:
+
+```csharp
+var referencedModules = context.CompilationProvider
+    .Select(static (compilation, ct) =>
+        ScanReferencedAssemblies(compilation, ct));
+```
+
+The catch: anything you return here flows into the rest of the pipeline, and `Compilation` is *not* equatable. So you flatten — extract the data you need into your own equatable shape and return that:
+
+```csharp
+private static EquatableArray<ModuleInfo> ScanReferencedAssemblies(
+    Compilation compilation, CancellationToken ct)
+{
+    var moduleAttribute = compilation.GetTypeByMetadataName(
+        "SimpleModule.Core.ModuleAttribute");
+    if (moduleAttribute is null) return EquatableArray<ModuleInfo>.Empty;
+
+    var results = new List<ModuleInfo>();
+    foreach (var reference in compilation.References)
+    {
+        ct.ThrowIfCancellationRequested();
+        if (compilation.GetAssemblyOrModuleSymbol(reference) is not IAssemblySymbol asm)
+            continue;
+
+        VisitNamespace(asm.GlobalNamespace, moduleAttribute, results, ct);
+    }
+    return new EquatableArray<ModuleInfo>(results.ToArray());
+}
+```
+
+`EquatableArray<T>` is a small wrapper most generator projects roll themselves; it's an `ImmutableArray<T>` with structural equality. Andrew Lock's [Source Generators series](https://andrewlock.net/series/creating-a-source-generator/) has a good drop-in implementation if you don't want to write your own.
+
+### `Combine` — bringing pipelines together
+
+Once you have a pipeline of in-project module declarations and another of referenced-assembly modules, you `Combine` them and feed the result to `RegisterSourceOutput`:
+
+```csharp
+var allModules = moduleTypes.Collect().Combine(referencedModules);
+
+context.RegisterSourceOutput(allModules, static (spc, source) =>
+{
+    var (local, referenced) = source;
+    var data = new GeneratorModel(local, referenced);
+    if (data.Modules.Length == 0) return;
+
+    foreach (var emitter in Emitters.All)
+    {
+        emitter.Emit(spc, data);
+    }
+});
+```
+
+Two important details:
+
+- `RegisterSourceOutput` runs *only* when its input changes. That's the entire incremental promise. Your job is to make sure the input is equatable so caching works.
+- The early-out (`if (data.Modules.Length == 0) return;`) matters more than it looks. In a freshly created consumer project that doesn't yet reference any modules, you don't want to emit empty partials — they'll race against user-typed code in unhelpful ways.
+
+## Emitting partial classes and extension methods
+
+The mechanical emission step takes the equatable model and writes C# to the compilation. The trick is keeping it boring — string-based `IndentedTextWriter` is fine, and arguably better than fancier alternatives because the diff in `obj/Generated/` is readable when something goes wrong.
+
+A minimal emitter for `AddModules()`:
+
+```csharp
+internal static class AddModulesEmitter
+{
+    public static void Emit(SourceProductionContext spc, GeneratorModel data)
+    {
+        using var writer = new StringWriter();
+        using var w = new IndentedTextWriter(writer, "    ");
+
+        w.WriteLine("// <auto-generated/>");
+        w.WriteLine("#nullable enable");
+        w.WriteLine("using Microsoft.Extensions.DependencyInjection;");
+        w.WriteLine();
+        w.WriteLine("namespace SimpleModule;");
+        w.WriteLine();
+        w.WriteLine("public static class GeneratedModuleRegistration");
+        w.WriteLine("{");
+        w.Indent++;
+        w.WriteLine("public static IServiceCollection AddModules(this IServiceCollection services)");
+        w.WriteLine("{");
+        w.Indent++;
+        foreach (var m in data.Modules)
+        {
+            w.WriteLine($"services.AddSingleton<global::{m.FullName}>();");
+            w.WriteLine($"global::{m.FullName}.Register(services);");
+        }
+        w.WriteLine("return services;");
+        w.Indent--;
+        w.WriteLine("}");
+        w.Indent--;
+        w.WriteLine("}");
+
+        spc.AddSource("GeneratedModuleRegistration.g.cs",
+            SourceText.From(writer.ToString(), Encoding.UTF8));
+    }
+}
+```
+
+Things that trip people up:
+
+- Always emit `// <auto-generated/>` at the top. Roslyn analyzers and some style rules respect it; without it your generated file shows up in `dotnet format` runs.
+- `global::` prefixes aren't paranoia — they're necessary. A user can declare a type with the same name in their own namespace and your generated file will silently bind to the wrong one.
+- File names passed to `AddSource` must be unique per generator. The `.g.cs` suffix is convention, not requirement, but it makes things obvious in the IDE.
+- Don't emit `partial` extension methods unless you genuinely want users to extend them. `static class GeneratedModuleRegistration` is simpler and avoids accidental coupling.
+
+## Generating JSON serializer contexts for AOT
+
+`System.Text.Json`'s source-generated `JsonSerializerContext` is the supported way to get reflection-free, AOT-friendly JSON. The pattern is:
+
+```csharp
+[JsonSerializable(typeof(ProductDto))]
+[JsonSerializable(typeof(ProductDto[]))]
+internal partial class ProductsModuleJsonContext : JsonSerializerContext { }
+```
+
+You write one of these per module. Doing it by hand is tedious and easy to forget when a new DTO lands. So the generator does it:
+
+```csharp
+internal static class JsonContextEmitter
+{
+    public static void Emit(SourceProductionContext spc, GeneratorModel data)
+    {
+        foreach (var module in data.Modules)
+        {
+            var dtos = module.Dtos;
+            if (dtos.Length == 0) continue;
+
+            var sb = new StringBuilder();
+            sb.AppendLine("// <auto-generated/>");
+            sb.AppendLine("using System.Text.Json.Serialization;");
+            sb.AppendLine();
+            sb.AppendLine($"namespace {module.Namespace};");
+            sb.AppendLine();
+            foreach (var dto in dtos)
+            {
+                sb.AppendLine($"[JsonSerializable(typeof(global::{dto.FullName}))]");
+                sb.AppendLine($"[JsonSerializable(typeof(global::{dto.FullName}[]))]");
+            }
+            sb.AppendLine($"internal partial class {module.Name}JsonContext : JsonSerializerContext {{ }}");
+
+            spc.AddSource(
+                $"{module.Name}JsonContext.g.cs",
+                SourceText.From(sb.ToString(), Encoding.UTF8));
+        }
+    }
+}
+```
+
+The `JsonSerializerContext` itself is *also* a source generator — `System.Text.Json.SourceGeneration`. Generators can't directly invoke each other, but Roslyn runs them all and feeds outputs back through the compilation. So your generator emits the partial `JsonContext` class, the JSON generator picks it up next pass, and the consumer ends up with fully reflection-free serialization. Two generators, no coordination required, just pipeline composition.
+
+A subtle gotcha: if a DTO contains a property whose type lives in a third assembly, the JSON generator still needs to *see* that type, which means it needs to be `public`. Make sure your DTO accessibility lines up before you blame the generator.
+
+## Emitting TypeScript files alongside C#
+
+This is the part that surprises people. Source generators are supposed to emit C# code that the compiler picks up — and that's exactly what `AddSource` does. But for the TypeScript bridge, we want to write a `.ts` file to disk so Vite can pick it up.
+
+Roslyn doesn't give us a "write file" API directly, on purpose — generators are sandboxed and the analyzer rules (`RS1035`) explicitly forbid file I/O at generation time. The supported workaround is to emit the TypeScript content as an `AdditionalText` artifact, and let MSBuild copy it where you want it. In practice, the cleanest approach is:
+
+1. Have the generator emit a C# file containing the TypeScript content as a string constant inside an attribute (or a `[GeneratedTypeScript]` marker).
+2. Add an MSBuild task in the consumer's `.targets` file that reads those constants from the compiled assembly and writes them as `.ts` files into the frontend's source tree.
+
+This sounds Rube-Goldbergian but it's the correct pattern. The generator stays sandboxed, the file-write is an explicit build step the user opts into, and incremental builds keep working because MSBuild handles the file dependency tracking.
+
+A simplified shape:
+
+```csharp
+internal static class TypeScriptEmitter
+{
+    public static void Emit(SourceProductionContext spc, GeneratorModel data)
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine("// <auto-generated/>");
+        sb.AppendLine("namespace SimpleModule.Generated;");
+        sb.AppendLine();
+        sb.AppendLine("internal static class GeneratedTypeScript");
+        sb.AppendLine("{");
+        foreach (var module in data.Modules)
+        {
+            var ts = BuildModuleTypeScript(module);
+            sb.AppendLine($"    public const string {module.Name} = @\"{ts.Replace("\"", "\"\"")}\";");
+        }
+        sb.AppendLine("}");
+
+        spc.AddSource("GeneratedTypeScript.g.cs",
+            SourceText.From(sb.ToString(), Encoding.UTF8));
+    }
+}
+```
+
+The `BuildModuleTypeScript` helper translates each `[Dto]` to a TypeScript `interface` — `string` → `string`, `int`/`long` → `number`, `Guid` → `string`, `DateTime` → `string`, nullables get a trailing `?`, arrays get `[]`. Don't try to be clever about complex types; if your generator can't translate something cleanly, emit `unknown` and a `// TODO` and surface a diagnostic to the developer.
+
+The MSBuild side is a `<Target>` that runs after `Build` and `dotnet exec`s a tiny tool that reflects on the constants and writes the files. The tool itself is normal .NET 10 code — only the generator is locked to `netstandard2.0`.
+
+## Debugging generators
+
+The single biggest quality-of-life improvement for generator development is being able to attach a debugger to your generator while it runs against a real consumer project.
+
+The trick has two parts:
+
+### 1. A `launchSettings.json` for the generator project
+
+```json
+{
+  "profiles": {
+    "Debug Generator": {
+      "commandName": "DebugRoslynComponent",
+      "targetProject": "..\\..\\SimpleModule.Web\\SimpleModule.Web.csproj"
+    }
+  }
+}
+```
+
+`commandName: "DebugRoslynComponent"` is the magic — it tells Visual Studio (and Rider) to launch a Roslyn host that loads your generator and runs it against the target project, with the debugger attached. F5 in the generator project, breakpoints in `Initialize`, and you can step through the pipeline as it processes the consumer's code.
+
+### 2. The `Debugger.Launch()` fallback for `dotnet build`
+
+When debugging via CLI, drop this at the top of `Initialize`:
+
+```csharp
+public void Initialize(IncrementalGeneratorInitializationContext context)
+{
+#if DEBUG
+    if (!System.Diagnostics.Debugger.IsAttached &&
+        Environment.GetEnvironmentVariable("DEBUG_GENERATOR") == "1")
+    {
+        System.Diagnostics.Debugger.Launch();
+    }
+#endif
+    // ... pipeline setup ...
+}
+```
+
+Then `DEBUG_GENERATOR=1 dotnet build` pops a "select a debugger" dialog. Hacky but reliable, and indispensable when CI builds produce different generator output than local builds (which happens more than you'd think because of `Compilation.References` ordering).
+
+A few related tips:
+
+- Set `<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>` and `<CompilerGeneratedFilesOutputPath>obj/Generated</CompilerGeneratedFilesOutputPath>` in the consumer to dump the generated files to disk after a build. Reading the actual emitted source beats guessing every time.
+- If your generator throws, the build error you'll see is `CS8785: Generator 'X' failed to generate source. It will not contribute to the output and compilation errors may occur as a result.` That's it — no stack trace. Always wrap risky pipeline transforms in a `try/catch` that calls `ReportDiagnostic` with the exception message, or you'll be staring at "compilation failed" with no clue why.
+- Source generators run in the *compiler's* process (or the IDE's), so a `Console.WriteLine` won't show up anywhere useful. Use diagnostics.
+
+## Testing generators with Microsoft.CodeAnalysis.Testing
+
+`Microsoft.CodeAnalysis.CSharp.SourceGenerators.Testing.XUnit` (and its NUnit/MSTest siblings) gives you a high-level harness for asserting on generator output. The basic shape:
+
+```csharp
+using Microsoft.CodeAnalysis.CSharp.Testing;
+using Microsoft.CodeAnalysis.Testing;
+
+public class ModuleDiscovererGeneratorTests
+{
+    [Fact]
+    public async Task EmitsAddModules_ForSingleModule()
+    {
+        var input = """
+            using SimpleModule.Core;
+
+            namespace MyApp;
+
+            [Module]
+            public partial class HelloModule
+            {
+                public static void Register(IServiceCollection services) { }
+            }
+            """;
+
+        var expected = """
+            // <auto-generated/>
+            #nullable enable
+            using Microsoft.Extensions.DependencyInjection;
+
+            namespace SimpleModule;
+
+            public static class GeneratedModuleRegistration
+            {
+                public static IServiceCollection AddModules(this IServiceCollection services)
+                {
+                    services.AddSingleton<global::MyApp.HelloModule>();
+                    global::MyApp.HelloModule.Register(services);
+                    return services;
+                }
+            }
+            """;
+
+        await new CSharpSourceGeneratorTest<ModuleDiscovererGenerator, XUnitVerifier>
+        {
+            TestState =
+            {
+                Sources = { input },
+                GeneratedSources =
+                {
+                    (typeof(ModuleDiscovererGenerator),
+                     "GeneratedModuleRegistration.g.cs",
+                     expected)
+                },
+            },
+            ReferenceAssemblies = ReferenceAssemblies.Net.Net90,
+        }.RunAsync();
+    }
+}
+```
+
+Two patterns I've found worth standardizing on:
+
+- **Snapshot-style tests over hand-written expecteds.** [Verify.SourceGenerators](https://github.com/VerifyTests/Verify) plugs into the same test harness and writes the generated output to `*.received.txt`/`*.verified.txt` files. When the generator's output legitimately changes you `mv` the received file over the verified file. Reviewing diffs in PRs becomes trivial.
+- **Round-trip compilation tests.** It's easy to emit code that *looks* right but doesn't actually compile. Your test should at minimum assert `RunAsync()` doesn't surface diagnostics; even better, compile the combined input + generated output and run the resulting assembly.
+
+## A few production lessons
+
+A grab bag of things that bit us in `SimpleModule.Generator` and are worth saving you the bruises:
+
+- **Cancellation is not optional.** Every transform must accept and respect a `CancellationToken`. The IDE cancels generators aggressively as the user types, and an uncancellable generator will pin a CPU core and make Visual Studio unhappy.
+- **Avoid `LINQ.OrderBy` over symbols.** `INamedTypeSymbol` doesn't implement a stable `IComparable` and ordering by `ToDisplayString()` is what you actually want. Otherwise generated output flips between builds and your snapshot tests catch fire.
+- **Don't read `MSBuildProperty(...)` for things that change between IDE and CLI.** If you must, expose them as `IsValueOptional = true` and degrade gracefully. We had a bug where IDE builds picked up `<RootNamespace>` but CLI builds didn't, because of a subtle difference in how the IDE sets `globalconfig` files.
+- **Emit one diagnostic per problem.** When a `[Module]` class is missing a `Register` method, surface a `Diagnostic` with a stable ID (`SM001`, `SM002`, ...) and a code-fix-friendly location. Users will thank you.
+
+## Conclusion
+
+A well-built `IIncrementalGenerator` doesn't feel like magic — it feels like the build is doing what reflection used to do at startup, except you can read it and the linker can trim it. The pipeline primitives are simple in isolation; the discipline is keeping every value flowing through them equatable, every transform pure, every `RegisterSourceOutput` cheap.
+
+The code in `framework/SimpleModule.Generator` is the working version of everything in this post. Treat it as a reference more than a library: most projects don't need to discover modules across assemblies, but most projects could benefit from generating their `JsonSerializerContext`, their TypeScript types, or their endpoint mappings. The pieces compose.
+
+## Resources
+
+- [SimpleModule on GitHub](https://github.com/antosubash/SimpleModule) — the framework this post derives from.
+- [Roslyn IIncrementalGenerator design document](https://github.com/dotnet/roslyn/blob/main/docs/features/incremental-generators.md) — the canonical spec.
+- [Andrew Lock — Creating a source generator](https://andrewlock.net/series/creating-a-source-generator/) — the best long-form walkthrough on the topic.
+- [System.Text.Json source generation](https://learn.microsoft.com/dotnet/standard/serialization/system-text-json/source-generation) — the `JsonSerializerContext` partial pattern.
+- [Microsoft.CodeAnalysis.Testing](https://github.com/dotnet/roslyn-sdk/tree/main/src/Microsoft.CodeAnalysis.Testing) — generator test harness.
+- [Verify.SourceGenerators](https://github.com/VerifyTests/Verify) — snapshot testing for generators.
