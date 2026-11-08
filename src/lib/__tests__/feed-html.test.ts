@@ -29,11 +29,11 @@ describe("toFeedHtml", () => {
     )
   })
 
-  it("keeps the Mermaid source but not the loading placeholder", () => {
+  it("keeps a diagram's source as code and drops its SVG", () => {
     const html = toFeedHtml(
-      '<div class="mermaid-diagram" data-mermaid=""><div class="mermaid-loading"><p>Rendering diagram...</p></div><pre hidden data-mermaid-source>graph TD\n  A--&gt;B</pre></div>',
+      '<figure class="diagram"><svg viewBox="0 0 10 10"><g><text>A</text></g></svg><pre hidden data-mermaid-source>graph TD\n  A--&gt;B</pre></figure>',
       url
     )
-    expect(html).toBe("<div><pre>graph TD\n  A--&gt;B</pre></div>")
+    expect(html).toBe("<figure><pre>graph TD\n  A--&gt;B</pre></figure>")
   })
 })

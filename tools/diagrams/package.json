@@ -1,0 +1,8 @@
+{
+  "name": "diagrams",
+  "private": true,
+  "description": "Renders the blog's Mermaid blocks to SVG (pnpm diagrams). Not installed on Vercel.",
+  "devDependencies": {
+    "@mermaid-js/mermaid-cli": "12.2.0"
+  }
+}

@@ -232,3 +232,99 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* Mermaid diagrams, pre-rendered to SVG by `pnpm diagrams` (scripts/render-diagrams.mjs).
+   Mermaid's own styles are stripped, so every colour comes from the theme tokens and
+   follows the light/dark toggle without JavaScript. */
+.diagram {
+  display: flex;
+  justify-content: center;
+}
+.diagram svg {
+  max-width: 100%;
+  height: auto;
+  font-family: "Geist Variable", Geist, ui-sans-serif, system-ui, sans-serif;
+  font-size: 15px;
+}
+.diagram .node rect,
+.diagram .node polygon,
+.diagram .node circle,
+.diagram .node ellipse,
+.diagram .node path {
+  fill: var(--accent-muted);
+  stroke: var(--accent);
+  stroke-width: 1.5px;
+}
+.diagram .node rect.label-container {
+  rx: 6px;
+  ry: 6px;
+}
+.diagram .cluster rect {
+  fill: var(--muted);
+  stroke: var(--border);
+  stroke-width: 1px;
+  rx: 8px;
+  ry: 8px;
+}
+.diagram text,
+.diagram tspan {
+  fill: var(--foreground);
+}
+.diagram .label text,
+.diagram .edgeLabel text {
+  text-anchor: middle;
+}
+.diagram .label rect,
+.diagram .label .background {
+  fill: none;
+  stroke: none;
+}
+.diagram .edgeLabel rect,
+.diagram .edgeLabel .background,
+.diagram .labelBkg {
+  fill: var(--card);
+  stroke: none;
+}
+.diagram .flowchart-link,
+.diagram .edgePath .path,
+.diagram .messageLine0,
+.diagram .messageLine1,
+.diagram .relation {
+  fill: none;
+  stroke: var(--muted-foreground);
+  stroke-width: 1.5px;
+}
+.diagram .arrowMarkerPath,
+.diagram marker path {
+  fill: var(--muted-foreground);
+  stroke: var(--muted-foreground);
+}
+/* Sequence diagrams */
+.diagram rect.actor {
+  fill: var(--accent-muted);
+  stroke: var(--accent);
+  stroke-width: 1.5px;
+}
+.diagram text.actor,
+.diagram .loopText,
+.diagram .labelText {
+  text-anchor: middle;
+}
+.diagram .actor-line {
+  stroke: var(--border);
+  stroke-width: 1.5px;
+}
+.diagram .messageLine1 {
+  stroke-dasharray: 4 3;
+}
+.diagram rect.note,
+.diagram .labelBox,
+.diagram [class^="activation"] {
+  fill: var(--muted);
+  stroke: var(--border);
+}
+.diagram .loopLine {
+  stroke: var(--border);
+  stroke-dasharray: 4 3;
+  fill: none;
+}

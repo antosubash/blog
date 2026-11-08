@@ -1,8 +1,12 @@
-import type { Element, Root } from "hast"
+import { mkdtempSync, writeFileSync } from "node:fs"
+import { tmpdir } from "node:os"
+import { join } from "node:path"
+import type { Root } from "hast"
 import { toHtml } from "hast-util-to-html"
 import { codeToHast } from "shiki"
 import { describe, expect, it } from "vitest"
 import { codeBlockChrome } from "../markdown/code-block"
+import { diagramHash } from "../markdown/diagram-hash.mjs"
 import { rehypeMermaid } from "../markdown/mermaid"
 
 describe("code block chrome", () => {
@@ -32,24 +36,45 @@ describe("code block chrome", () => {
 })
 
 describe("rehypeMermaid", () => {
-  it("replaces mermaid fences with a diagram card holding the source", () => {
-    const code: Element = {
-      type: "element",
-      tagName: "code",
-      properties: { className: ["language-mermaid"] },
-      children: [{ type: "text", value: "graph TD\n  A-->B\n" }],
-    }
-    const tree: Root = {
-      type: "root",
-      children: [
-        { type: "element", tagName: "pre", properties: {}, children: [code] },
-      ],
-    }
-    rehypeMermaid()(tree)
+  const mermaidTree = (source: string): Root => ({
+    type: "root",
+    children: [
+      {
+        type: "element",
+        tagName: "pre",
+        properties: {},
+        children: [
+          {
+            type: "element",
+            tagName: "code",
+            properties: { className: ["language-mermaid"] },
+            children: [{ type: "text", value: source }],
+          },
+        ],
+      },
+    ],
+  })
+
+  it("replaces a mermaid fence with its pre-rendered SVG and keeps the source", () => {
+    const dir = mkdtempSync(join(tmpdir(), "diagrams-"))
+    writeFileSync(
+      join(dir, `${diagramHash("graph TD\n  A-->B")}.svg`),
+      '<svg viewBox="0 0 10 10" class="diagram-svg"><g class="node"><rect/></g></svg>\n'
+    )
+    const tree = mermaidTree("graph TD\n  A-->B\n")
+    rehypeMermaid({ dir })(tree)
     const html = toHtml(tree)
-    expect(html).toContain("data-mermaid")
+    expect(html).toContain('<figure class="diagram')
+    expect(html).toContain('<svg viewBox="0 0 10 10" class="diagram-svg">')
     expect(html).toContain(
       '<pre hidden data-mermaid-source="">graph TD\n  A-->B</pre>'
     )
+  })
+
+  it("fails the build when a diagram has not been rendered", () => {
+    const dir = mkdtempSync(join(tmpdir(), "diagrams-"))
+    expect(() =>
+      rehypeMermaid({ dir })(mermaidTree("graph LR\n  X-->Y"))
+    ).toThrow(/pnpm diagrams/)
   })
 })

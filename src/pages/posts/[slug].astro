@@ -1,7 +1,6 @@
 ---
 import { getCollection, getEntry, render } from "astro:content"
 import CodeCopy from "@/components/CodeCopy.astro"
-import Mermaid from "@/components/Mermaid.astro"
 import PostTags from "@/components/PostTags.astro"
 import RelatedPosts from "@/components/RelatedPosts.astro"
 import TOC from "@/components/TOC.astro"
@@ -125,5 +124,4 @@ const ldJson = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c")
     <RelatedPosts posts={relatedPosts} />
   </PostSimple>
   <CodeCopy />
-  <Mermaid />
 </BaseLayout>
