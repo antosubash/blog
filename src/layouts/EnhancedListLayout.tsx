@@ -5,7 +5,10 @@ import PostItem from "@/components/post-item"
 import type { PostListItem } from "@/lib/post-types"
 import { useMemo, useState } from "react"
 
-export const POSTS_PER_PAGE = 10
+/** /posts and /posts/page/N */
+export const POSTS_PER_PAGE = 8
+/** Lists paginated in the browser (tag pages) */
+const CLIENT_POSTS_PER_PAGE = 10
 
 interface EnhancedListLayoutProps {
   posts: PostListItem[]
@@ -72,12 +75,10 @@ export default function EnhancedListLayout({
   const currentPage = isClientPaginated
     ? clientPage
     : pagination?.currentPage || 1
-  const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE)
-  const startIndex = (currentPage - 1) * POSTS_PER_PAGE
-  const displayPosts = filteredPosts.slice(
-    startIndex,
-    startIndex + POSTS_PER_PAGE
-  )
+  const pageSize = isClientPaginated ? CLIENT_POSTS_PER_PAGE : POSTS_PER_PAGE
+  const totalPages = Math.ceil(filteredPosts.length / pageSize)
+  const startIndex = (currentPage - 1) * pageSize
+  const displayPosts = filteredPosts.slice(startIndex, startIndex + pageSize)
   const hasActiveFilters = searchQuery || selectedTags.length > 0
 
   return (

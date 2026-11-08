@@ -39,8 +39,10 @@ const { Content, headings } = await render(entry)
 const toc = headingsToToc(headings)
 const relatedPosts = getRelatedPosts(await getAllPosts(), post.slug)
 
+// As before: `authors` defaults to [], so the JSON-LD author list is empty
+// unless a post names its authors.
 const authorDetails = await Promise.all(
-  (post.authors.length ? post.authors : ["default"]).map(
+  post.authors.map(
     async (id) =>
       (await getEntry("authors", id))?.data ?? { name: "Default Author" }
   )
