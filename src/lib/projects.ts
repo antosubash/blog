@@ -27,14 +27,15 @@ export function relatedPosts(
     })
     .filter(Boolean)
     .join("|")
+  if (!targets) return []
   // The name must end the path segment: "." only ends it when not followed by a
   // word character, so a sentence-ending "...abp-react." still matches.
   const link = new RegExp(
-    `github\\.com/(?:${targets})(?:\\.git)?(?![\\w-]|\\.\\w)`,
+    `(?<![\\w-])github\\.com/(?:${targets})(?:\\.git)?(?![\\w-]|\\.\\w)`,
     "i"
   )
   const published = posts.filter(({ post }) => isPublished(post))
-  const first = pinned.flatMap((slug) =>
+  const first = [...new Set(pinned)].flatMap((slug) =>
     published.filter(({ post }) => post.slug === slug).map(({ post }) => post)
   )
   const rest = published

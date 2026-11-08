@@ -67,4 +67,17 @@ describe("relatedPosts", () => {
     ]).map((p) => p.slug)
     expect(slugs).toEqual(["old", "new", "sub-path"])
   })
+
+  it("ignores lookalike hosts, duplicate pins and an empty repo list", () => {
+    const lookalike = [
+      entry("evil", "https://notgithub.com/antosubash/abp-react"),
+    ]
+    expect(relatedPosts(["antosubash/abp-react"], lookalike)).toEqual([])
+    const slugs = relatedPosts(["antosubash/abp-react"], posts, 3, [
+      "old",
+      "old",
+    ]).map((p) => p.slug)
+    expect(slugs).toEqual(["old", "new", "sub-path"])
+    expect(relatedPosts([], posts, 3, ["old"])).toEqual([])
+  })
 })

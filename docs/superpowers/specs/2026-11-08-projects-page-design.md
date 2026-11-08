@@ -56,12 +56,12 @@ export const sampleProjects: Sample[]     // Pick<Project, "slug" | "title" | "t
 - `getRepoStats(fullName)` calls `GET https://api.github.com/repos/{owner}/{repo}` with a 5 s timeout, using `GITHUB_TOKEN` when it's set. It returns `{ stars, language, pushedAt }` or `null`.
 - Results are memoised per build; one build makes about 16 requests.
 - **Any failure** (network, rate limit, 404) returns `null` and logs one warning. The card then renders without stats, and the **build never fails** because of GitHub.
-- CI passes `GITHUB_TOKEN` through to the build step. On Vercel the token is optional: about 16 unauthenticated calls per build fit within GitHub's 60-per-hour anonymous limit, and adding the env var makes it robust.
+- CI (`ci.yml`) and the link check (`links.yml`) pass `GITHUB_TOKEN` through to the build step. On Vercel the token is optional: about 16 unauthenticated calls per build fit within GitHub's 60-per-hour anonymous limit, and adding the env var makes it robust.
 - For multi-repo projects, the card shows each repo's stars next to its own link.
 
 ### Related posts (`src/lib/projects.ts`)
 
-- `relatedPosts(repos, posts, limit, pinned)` returns the project's pinned posts first (in the order given; unknown slugs and drafts are skipped), then published posts whose body links to `github.com/antosubash/<repo>`. Matching is case-insensitive, covers the repo names and aliases, and allows a trailing `.git`; the name must end the URL path segment, so `abp-react` doesn't match `abp-react-tanstack`.
+- `relatedPosts(repos, posts, limit, pinned)` returns the project's pinned posts first (in the order given; unknown slugs and drafts are skipped), then published posts whose body links to `github.com/<owner>/<repo>`. The owner comes from each `owner/name` repo entry; a bare alias takes the owner of the first `owner/name` entry. Matching is case-insensitive, covers the repo names and aliases, and allows a trailing `.git`; the name must end the URL path segment (a sentence-ending period still counts), so `abp-react` doesn't match `abp-react-tanstack`.
 - Matches are sorted newest first. The whole list is capped at 3 on featured cards and 1 on samples.
 
 ### Page (`src/pages/projects/index.astro`)
