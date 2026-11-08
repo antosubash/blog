@@ -106,4 +106,39 @@ describe("rehypeImageAttrs", () => {
       decoding: "async",
     })
   })
+
+  it("leaves a malformed URL escape alone instead of throwing", () => {
+    const bad = img("/static/images/100%.png")
+    expect(() => run([bad])).not.toThrow()
+    expect(bad.properties.width).toBeUndefined()
+  })
+
+  it("adds no dimensions to srcset images or images inside <picture>", () => {
+    const withSrcset = img("/static/images/a.png", {
+      srcSet: "/static/images/a.png 1x",
+    })
+    const inPicture = img("/static/images/a.png")
+    run([
+      withSrcset,
+      {
+        type: "element",
+        tagName: "picture",
+        properties: {},
+        children: [inPicture],
+      },
+    ])
+    expect(withSrcset.properties.width).toBeUndefined()
+    expect(inPicture.properties.width).toBeUndefined()
+    expect(inPicture.properties.loading).toBe("lazy")
+  })
+
+  it("leaves JSX <img> with a spread untouched", () => {
+    const node = jsxImg("/static/images/a.png")
+    node.attributes.push({
+      type: "mdxJsxExpressionAttribute",
+      value: "...props",
+    } as never)
+    run([node])
+    expect(node.attributes).toHaveLength(2)
+  })
 })

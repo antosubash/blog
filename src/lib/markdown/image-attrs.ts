@@ -22,7 +22,12 @@ export type ImageAttrsOptions = {
 const sizes = new Map<string, Size | null>()
 
 function readSize(publicDir: string, src: string): Size | null {
-  const path = join(publicDir, decodeURI(src.split(/[?#]/)[0]))
+  let path: string
+  try {
+    path = join(publicDir, decodeURI(src.split(/[?#]/)[0]))
+  } catch {
+    return null // malformed escape such as "100%.png": leave the tag alone
+  }
   if (!sizes.has(path)) {
     let size: Size | null = null
     try {
@@ -45,18 +50,24 @@ const isLocal = (src: unknown): src is string =>
  * `decoding="async"`. The first image in the body is the likely LCP element and
  * gets `fetchpriority="high"` and eager loading; every later one is lazy.
  * Attributes already set in the source win; a source width or height keeps
- * both dimensions out.
+ * both dimensions out. Images with a srcset or inside <picture> get no
+ * dimensions (the file on disk is only the fallback candidate), and JSX
+ * <img> with a spread ({...props}) is left alone so the spread keeps control.
  */
 export function rehypeImageAttrs(options: ImageAttrsOptions = {}) {
   const publicDir = resolve(options.publicDir ?? "public")
   return (tree: Root) => {
     let first = true
-    visit(tree, (node) => {
+    visit(tree, (node, _index, parent) => {
       if (node.type === "element" && (node as Element).tagName === "img") {
         const el = node as Element
         const src = el.properties.src
         if (!isLocal(src)) return
-        const size = readSize(publicDir, src)
+        const responsive =
+          el.properties.srcSet != null ||
+          (parent?.type === "element" &&
+            (parent as Element).tagName === "picture")
+        const size = responsive ? null : readSize(publicDir, src)
         const add: Record<string, string | number> = {
           decoding: "async",
           loading: first ? "eager" : "lazy",
@@ -82,7 +93,16 @@ export function rehypeImageAttrs(options: ImageAttrsOptions = {}) {
           )
         const src = attr("src")?.value
         if (!isLocal(src)) return
-        const size = readSize(publicDir, src)
+        if (jsx.attributes.some((a) => a.type === "mdxJsxExpressionAttribute"))
+          return
+        const parentName = (parent as unknown as JsxImg | undefined)?.name
+        const responsive =
+          !!attr("srcSet") ||
+          !!attr("srcset") ||
+          parentName === "picture" ||
+          (parent?.type === "element" &&
+            (parent as Element).tagName === "picture")
+        const size = responsive ? null : readSize(publicDir, src)
         const add: Record<string, string> = {
           decoding: "async",
           loading: first ? "eager" : "lazy",
