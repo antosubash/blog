@@ -1,21 +1,31 @@
-# TanStack Start + shadcn/ui
+# blog.antosubash.com
 
-This is a template for a new TanStack Start project with React, TypeScript, and shadcn/ui.
+Personal blog, built with [Astro](https://astro.build) as a fully static site.
 
-## Adding components
+## Commands
 
-To add components to your app, run the following command:
+| Command          | What it does                                            |
+| ---------------- | ------------------------------------------------------- |
+| `pnpm dev`       | Dev server on http://localhost:3000                     |
+| `pnpm build`     | Static build into `dist/`                               |
+| `pnpm preview`   | Serve `dist/` on http://localhost:3000                  |
+| `pnpm lint`      | Biome lint + format check (`pnpm format` to fix)        |
+| `pnpm typecheck` | `astro check` plus the Remotion `video/` project        |
+| `pnpm test`      | Vitest unit tests                                       |
 
-```bash
-npx shadcn@latest add button
-```
+## Layout
 
-This will place the ui components in the `components` directory.
+- `content/posts/**/*.mdx`: posts. The URL is `/posts/<file name>`; folders are only
+  for organising. Frontmatter schema: `src/content.config.ts`.
+- `src/pages/`: routes. Besides the pages, `feed.xml`, `tags/<tag>/feed.xml`,
+  `sitemap.xml`, `search.json` and `og/<slug>.png` are static endpoints generated at
+  build time (nothing is written into `public/`).
+- `src/components/`: `.astro` components for static UI; React (`.tsx`) only for the
+  interactive islands (search palette, mobile nav, post list filters).
+- `src/lib/markdown/`: the code block header (Shiki transformer) and Mermaid plugin.
+- `video/`: Remotion pipeline that turns a post into a YouTube video (see its README).
 
-## Using components
+## Deploying
 
-To use the components in your app, import them as follows:
-
-```tsx
-import { Button } from "@/components/ui/button";
-```
+Vercel builds it as a static Astro site (`vercel.json`). The `Dockerfile` builds the
+site and serves `dist/` with nginx on port 3000.
