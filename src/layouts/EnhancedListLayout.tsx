@@ -28,6 +28,9 @@ export default function EnhancedListLayout({
   const isClientPaginated = !pagination
 
   const updateSearchQuery = (query: string) => {
+    // PostSearch re-reports the (debounced) query after every render; only a
+    // real change may reset the page, or "Next" bounces back to page 1.
+    if (query === searchQuery) return
     setSearchQuery(query)
     if (isClientPaginated) setClientPage(1)
   }
