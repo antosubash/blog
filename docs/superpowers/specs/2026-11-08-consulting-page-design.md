@@ -37,6 +37,7 @@ type PracticeArea = {
   helpWith: string[]    // 3–4 concrete things ("Migrating a layered app to modules")
   tags: string[]        // post tags that count as proof, e.g. ["abp"]
   projects?: string[]   // featuredProjects slugs, linked as /projects#slug
+  links?: { label: string; href: string }[]  // extra external links
 }
 type Engagement = { title: string; summary: string; youGet: string[] }
 export const practiceAreas: PracticeArea[]
@@ -45,7 +46,7 @@ export const engagements: Engagement[]
 
 **Practice areas** (drafted from a private profile of recent work; review the wording in the PR):
 
-1. **Modular monoliths (Python & .NET)**: one deployable app built from self-contained modules, without the microservice tax. Covers SimpleModule for Python (FastAPI, SQLModel, Inertia, React) and for .NET, multi-tenancy, background jobs and outbox, and migrating a tangled app to modules. Tags: `module`, `python`. Projects: simplemodule.
+1. **Modular monoliths (Python & .NET)**: one deployable app built from self-contained modules, without the microservice tax. Covers SimpleModule for Python (FastAPI, SQLModel, Inertia, React) and for .NET, multi-tenancy, background jobs and outbox, and migrating a tangled app to modules. Tags: `modular-monolith`, `simplemodule` (not `module`, which also tags unrelated ABP module tutorials). Projects: simplemodule.
 2. **ABP Framework & .NET**: new ABP apps and modules, upgrades, microservices, OpenIddict identity, and React or Next.js frontends that replace the Angular UI. Tags: `abp`, `microservice`, `identity-server`. Projects: abp-react, abp-microservice, abp-single-layer-template. Also linked: the ABP Expert profile.
 3. **Geospatial & scientific data platforms**: web platforms for collecting, validating and serving geodata. Covers PostGIS, vector tiles (Martin), image and raster pipelines, map UIs and citizen-science surveys. No matching posts yet, so this card shows its bullets only. Clients are not named.
 4. **Applied AI & computer vision**: image classification and VLM pipelines (vLLM, ViT ensembles), plus local LLMs in .NET with Ollama, Semantic Kernel, Microsoft.Extensions.AI and Agent Framework. Tags: `ollama`, `llm`.
@@ -63,7 +64,7 @@ export const engagements: Engagement[]
 - **Per practice area:**
   - "N posts" counts published posts with any of the area's tags.
   - The area lists its 3 newest matching posts as links.
-  - It shows a "See the project" link for each project slug.
+  - It ends with a "See:" line linking each project slug to `/projects#slug`, plus any extra `links` (the ABP card links the ABP Expert profile).
   - A new pure helper, `postsForTags(posts, tags, limit)` in `src/lib/consulting.ts`, returns `{count, posts}`. It reuses `isPublished` and `byDateDesc`.
 - **Proof strip under the hero:** total published posts, the number of series (`getAllSeries`), and the number of open-source projects (featured plus samples). For example: "91 posts · 6 series · 14 open-source projects", with each part linking to /posts, /series and /projects.
 - **No GitHub API calls.** That keeps the page independent of rate limits.

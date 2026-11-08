@@ -24,6 +24,13 @@ const projectTitles = new Map(featuredProjects.map((p) => [p.slug, p.title]))
 const areas = practiceAreas.map((area) => ({
   ...area,
   proof: postsForTags(posts, area.tags),
+  links: [
+    ...(area.projects ?? []).map((slug) => ({
+      label: projectTitles.get(slug) ?? slug,
+      href: `/projects#${slug}`,
+    })),
+    ...(area.links ?? []),
+  ],
 }))
 const proofStrip = [
   { label: `${posts.length} posts`, href: "/posts" },
@@ -92,14 +99,14 @@ const secondaryButton =
       >
         {
           proofStrip.map((item, i) => (
-            <li class="flex items-center gap-3">
-              {i > 0 && <span aria-hidden="true">·</span>}
+            <li class="whitespace-nowrap">
               <a
                 href={item.href}
                 class="underline decoration-border underline-offset-4 transition-colors duration-150 hover:text-accent hover:decoration-accent"
               >
                 {item.label}
               </a>
+              {i < proofStrip.length - 1 && <span aria-hidden="true"> ·</span>}
             </li>
           ))
         }
@@ -161,17 +168,18 @@ const secondaryButton =
                 </div>
               )}
 
-              {(area.projects?.length ?? 0) > 0 && (
+              {area.links.length > 0 && (
                 <p class="mt-auto pt-4 text-sm">
-                  <span class="text-muted-foreground">Projects: </span>
-                  {area.projects?.map((slug, i) => (
+                  <span class="text-muted-foreground">See: </span>
+                  {area.links.map((link, i) => (
                     <>
                       {i > 0 && ", "}
                       <a
-                        href={`/projects#${slug}`}
+                        href={link.href}
+                        {...linkAttrs(link.href)}
                         class="text-accent transition-colors duration-150 hover:text-accent-hover"
                       >
-                        {projectTitles.get(slug)}
+                        {link.label}
                       </a>
                     </>
                   ))}
@@ -261,7 +269,7 @@ const secondaryButton =
           class="select-all font-mono text-accent transition-colors duration-150 hover:text-accent-hover"
           >{siteMetadata.email}</a
         >
-        and I'll reply within a few working days.
+        with what you're working on.
       </p>
       <div class="mt-5 flex flex-wrap gap-3">
         <a href={mailto} class={primaryButton}>Email me</a>

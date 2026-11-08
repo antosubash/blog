@@ -12,6 +12,8 @@ export type PracticeArea = {
   /** Post tags that count as proof for this area. */
   tags: string[]
   projects?: string[]
+  /** Extra external links shown with the projects. */
+  links?: { label: string; href: string }[]
 }
 
 export type Engagement = { title: string; summary: string; youGet: string[] }
@@ -30,7 +32,7 @@ export const practiceAreas: PracticeArea[] = [
       "Multi-tenancy, background jobs and a reliable outbox",
       "Adopting SimpleModule for Python or .NET",
     ],
-    tags: ["modular-monolith", "simplemodule", "module"],
+    tags: ["modular-monolith", "simplemodule"],
     projects: ["simplemodule"],
   },
   {
@@ -46,6 +48,7 @@ export const practiceAreas: PracticeArea[] = [
     ],
     tags: ["abp", "microservice", "identity-server"],
     projects: ["abp-react", "abp-microservice", "abp-single-layer-template"],
+    links: [{ label: "ABP Expert profile", href: abpExpertUrl }],
   },
   {
     slug: "geospatial",
@@ -130,6 +133,9 @@ export const engagements: Engagement[] = [
     title: "Ongoing support",
     summary:
       "A monthly arrangement for code reviews, upgrades and the questions that come up along the way.",
-    youGet: ["A set number of hours each month", "Priority answers by email"],
+    youGet: [
+      "A monthly block of hours, agreed up front",
+      "Reviews and answers by email",
+    ],
   },
 ]

@@ -14,8 +14,8 @@ Design: `docs/superpowers/specs/2026-11-08-consulting-page-design.md`.
      - an empty tag list returns 0.
    - Done when `pnpm test` is green.
 2. **Data** (independent)
-   - Files: `src/config/consultingData.ts`, `src/lib/__tests__/consultingData.test.ts`.
-   - Write this test first: every `projects` slug exists in `featuredProjects`, and slugs are unique.
+   - Files: `src/config/consultingData.ts`; its test lives in `src/lib/__tests__/consulting.test.ts` beside the helper test.
+   - Write this test first: every `projects` slug exists in `featuredProjects`, slugs are unique and entries are non-empty.
    - Done when the tests are green.
 3. **Page** (depends on 1 and 2)
    - File: `src/pages/consulting/index.astro`, rewritten per the design: hero with the proof strip, six area cards, engagements, how it starts, and a closing CTA.
