@@ -11,3 +11,4 @@ video/cache
 video/out
 video/.env
 .lycheecache
+.lighthouseci

@@ -10,7 +10,8 @@
       ".astro",
       "dist",
       ".skill-state",
-      ".playwright-cli"
+      ".playwright-cli",
+      ".lighthouseci"
     ]
   },
   "formatter": {

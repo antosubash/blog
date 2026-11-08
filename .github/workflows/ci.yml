@@ -46,3 +46,32 @@ jobs:
           name: dist
           path: dist
           retention-days: 3
+
+  lighthouse:
+    name: Lighthouse
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+
+      - uses: actions/download-artifact@v8
+        with:
+          name: dist
+          path: dist
+
+      # Serves dist/ statically and asserts the scores in lighthouserc.json
+      # (performance, accessibility, best practices, SEO >= 0.95).
+      - name: Run Lighthouse CI
+        run: npx --yes @lhci/cli@0.16.0 autorun
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: lighthouse-reports
+          path: .lighthouseci/reports
+          retention-days: 7
