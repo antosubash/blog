@@ -48,7 +48,7 @@ export const sampleProjects: Sample[]     // Pick<Project, "slug" | "title" | "t
   - **ABP React:** `abp-react` and `abp-react-tanstack`.
   - **ABP Microservice:** `abp-microservice`.
   - **ABP single-layer template:** `abp-single-layer-template`.
-  - **Live demos are not linked.** app.simplemodule.dev, abpreact.antosubash.com, abp-tanstack.antosubash.com and abp.antosubash.com were down on 2026-11-08, so they sit in a comment at the top of `projectsData.ts` to add back when they answer.
+  - **Live demos are not linked.** abpreact.antosubash.com, abp-tanstack.antosubash.com and abp.antosubash.com were down on 2026-11-08, so they sit in a comment at the top of `projectsData.ts` to add back when they answer.
 - **Samples:** about 10 public, non-archived repos that have posts: Todos, Tasky, nextjs-oidc-sample, microk8s-hetzner-deployment, docker_stack, agent-framework-ollama, sematic-kernal-with-ollama, OllamaExtensionsAI, ModernApiDocs and LargeFileUploadSample.
 
 ### GitHub stats (`src/lib/github.ts`)
