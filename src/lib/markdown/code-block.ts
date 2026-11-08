@@ -1,6 +1,10 @@
 import type { Element, ElementContent } from "hast"
 import type { ShikiTransformer } from "shiki"
 
+/** Class list of the code block header; the feed uses it to drop the header. */
+export const CODE_HEADER_CLASS =
+  "flex items-center justify-between bg-surface px-4 py-2"
+
 /** hast wants class lists as arrays */
 const cx = (classes: string) => classes.split(" ")
 
@@ -73,11 +77,7 @@ export function codeBlockChrome(): ShikiTransformer {
       const header = el(
         "div",
         {
-          className: cx(
-            "flex items-center justify-between bg-surface px-4 py-2"
-          ),
-          // Lets the feed drop the header (see toFeedHtml).
-          dataCodeHeader: "",
+          className: cx(CODE_HEADER_CLASS),
         },
         [
           el(

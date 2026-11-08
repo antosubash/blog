@@ -18,7 +18,7 @@ describe("toFeedHtml", () => {
     const html = toFeedHtml(
       [
         '<h2 id="intro"><a href="#intro" aria-hidden="true" tabindex="-1"><span class="icon icon-link"></span></a>Intro</h2>',
-        '<div class="code-block"><div class="flex" data-code-header=""><span>ts</span><button type="button" data-copy-code=""><svg><path d="M1"></path></svg><span>Copy</span></button></div>',
+        '<div class="code-block"><div class="flex items-center justify-between bg-surface px-4 py-2"><span>ts</span><button type="button" data-copy-code=""><svg><path d="M1"></path></svg><span>Copy</span></button></div>',
         '<pre class="astro-code" style="color:red"><code><span class="line">const a = 1</span></code></pre></div>',
         "<script>alert(1)</script>",
       ].join(""),

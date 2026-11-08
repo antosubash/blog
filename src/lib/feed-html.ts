@@ -1,4 +1,5 @@
 import sanitizeHtml from "sanitize-html"
+import { CODE_HEADER_CLASS } from "./markdown/code-block"
 
 const absolute = (value: string | undefined, base: string) => {
   if (!value) return value
@@ -19,7 +20,7 @@ const hasClass = (attribs: Record<string, string>, name: string) =>
  * (the diagram source stays as a code block).
  */
 const isChrome = (tagName: string, attribs: Record<string, string>) =>
-  "data-code-header" in attribs ||
+  attribs.class === CODE_HEADER_CLASS ||
   (tagName === "a" && attribs["aria-hidden"] === "true") ||
   hasClass(attribs, "mermaid-loading")
 
