@@ -10,8 +10,6 @@
  *   ABP React TanStack https://abp-tanstack.antosubash.com
  *   ABP single layer  https://abp.antosubash.com
  */
-export type ProjectLink = { label: string; href: string }
-
 export type Project = {
   /** Anchor id on the page. */
   slug: string
@@ -24,7 +22,7 @@ export type Project = {
   aliases?: string[]
   /** Post slugs to list first; posts linking to the repos fill the rest. */
   posts?: string[]
-  links?: ProjectLink[]
+  links?: { label: string; href: string }[]
   tags: string[]
 }
 
@@ -74,87 +72,73 @@ export const featuredProjects: Project[] = [
   },
 ]
 
-export const sampleProjects: Project[] = [
+/** Samples render as a compact list: name, tagline, stats and one post. */
+export type Sample = Pick<
+  Project,
+  "slug" | "title" | "tagline" | "repos" | "posts"
+>
+
+export const sampleProjects: Sample[] = [
   {
     slug: "agent-framework-ollama",
     title: "agent-framework-ollama",
     tagline: "Microsoft Agent Framework agents running on a local Ollama model",
-    description: "",
     repos: ["antosubash/agent-framework-ollama"],
-    tags: [],
   },
   {
     slug: "ollama-extensions-ai",
     title: "OllamaExtensionsAI",
     tagline: "Ollama with Microsoft.Extensions.AI and function calling",
-    description: "",
     repos: ["antosubash/OllamaExtensionsAI"],
-    tags: [],
   },
   {
     slug: "semantic-kernel-ollama",
     title: "sematic-kernal-with-ollama",
     tagline: "Semantic Kernel connected to a local Ollama model",
-    description: "",
     repos: ["antosubash/sematic-kernal-with-ollama"],
-    tags: [],
   },
   {
     slug: "modern-api-docs",
     title: "ModernApiDocs",
     tagline: ".NET OpenAPI documents rendered with Scalar",
-    description: "",
     repos: ["antosubash/ModernApiDocs"],
-    tags: [],
   },
   {
     slug: "nextjs-oidc-sample",
     title: "nextjs-oidc-sample",
     tagline: "OpenID Connect login in Next.js with openid-client",
-    description: "",
     repos: ["antosubash/nextjs-oidc-sample"],
-    tags: [],
   },
   {
     slug: "large-file-upload",
     title: "LargeFileUploadSample",
     tagline: "Resumable large file uploads with tus, .NET and React",
-    description: "",
     repos: ["antosubash/LargeFileUploadSample"],
-    tags: [],
   },
   {
     slug: "todos",
     title: "Todos",
     tagline: "The sample ABP app used across the getting-started posts",
-    description: "",
     repos: ["antosubash/Todos"],
     posts: ["abp-getting-started-p1"],
-    tags: [],
   },
   {
     slug: "tasky",
     title: "Tasky",
     tagline: "The microservice app built in the ABP microservice series",
-    description: "",
     repos: ["antosubash/Tasky"],
-    tags: [],
   },
   {
     slug: "microk8s-hetzner",
     title: "microk8s-hetzner-deployment",
     tagline: "Setting up a MicroK8s dev server on Hetzner",
-    description: "",
     repos: ["antosubash/microk8s-hetzner-deployment"],
-    tags: [],
   },
   {
     slug: "docker-stack",
     title: "docker_stack",
     tagline: "Docker Compose stacks for a local development machine",
-    description: "",
     repos: ["antosubash/docker_stack"],
     posts: ["docker-swarm-localhost"],
-    tags: [],
   },
 ]
