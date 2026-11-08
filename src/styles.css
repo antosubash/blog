@@ -90,6 +90,9 @@
   }
   html {
     @apply font-sans scroll-smooth;
+    /* Anchor targets (#sections, TOC links, /projects#card) land below the
+       sticky header (76px on phones, 84px from sm up) instead of under it. */
+    scroll-padding-top: 6rem;
   }
   @media (hover: hover) {
     html {
