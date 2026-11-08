@@ -5,7 +5,12 @@ import type { Post } from "./post-types"
 const siteDescription =
   "Full-stack developer passionate about web technologies, microservices, and modern software development."
 
-function buildFeed(posts: Post[], title: string, feedPath: string) {
+function buildFeed(
+  posts: Post[],
+  title: string,
+  feedPath: string,
+  content?: Map<string, string>
+) {
   return rss({
     title,
     description: siteDescription,
@@ -23,12 +28,15 @@ function buildFeed(posts: Post[], title: string, feedPath: string) {
       link: post.postUrl,
       pubDate: new Date(post.date),
       description: post.excerpt,
+      content: content?.get(post.slug),
     })),
   })
 }
 
-export const feedResponse = (posts: Post[]) =>
-  buildFeed(posts, siteMetadata.title, "feed.xml")
+/** The main feed adds full HTML (`content:encoded`) for the posts in `content`. */
+export const feedResponse = (posts: Post[], content: Map<string, string>) =>
+  buildFeed(posts, siteMetadata.title, "feed.xml", content)
 
+/** Tag feeds stay excerpt-only. */
 export const tagFeedResponse = (tag: string, posts: Post[]) =>
   buildFeed(posts, `${siteMetadata.title} - ${tag}`, `tags/${tag}/feed.xml`)

@@ -1,18 +1,15 @@
 ---
 import { getCollection, getEntry, render } from "astro:content"
 import CodeCopy from "@/components/CodeCopy.astro"
-import Image from "@/components/Image.astro"
-import Link from "@/components/Link.astro"
 import Mermaid from "@/components/Mermaid.astro"
-import Parts from "@/components/Parts.astro"
 import PostTags from "@/components/PostTags.astro"
 import RelatedPosts from "@/components/RelatedPosts.astro"
 import TOC from "@/components/TOC.astro"
-import TableWrapper from "@/components/TableWrapper.astro"
 import YoutubeVideo from "@/components/YoutubeVideo.astro"
 import siteMetadata from "@/config/siteMetadata"
 import BaseLayout from "@/layouts/BaseLayout.astro"
 import PostSimple from "@/layouts/PostSimple.astro"
+import { mdxComponents } from "@/lib/mdx-components"
 import { getAllPosts, getPublishedPosts } from "@/lib/posts"
 import { genPostMetadata } from "@/lib/seo"
 import { getRelatedPosts } from "@/lib/tag-utils"
@@ -63,25 +60,25 @@ const jsonLd = {
   url: `${siteMetadata.siteUrl}/posts/${post.slug}`,
 }
 
-// MDX tags used in posts. `<Content />` gets no props, so `props.toc`,
-// `props.videoId` and `props.slug` are undefined inside posts and those tags
-// render nothing, as on the previous site; the video and TOC are rendered
-// above the post body instead.
-const components = {
-  a: Link,
-  table: TableWrapper,
-  Image,
-  TOCInline: TOC,
-  YoutubeVideo,
-  Parts,
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { name: "Home", item: siteMetadata.siteUrl },
+    { name: "Posts", item: `${siteMetadata.siteUrl}/posts` },
+    { name: post.title, item: `${siteMetadata.siteUrl}/posts/${post.slug}` },
+  ].map((crumb, i) => ({ "@type": "ListItem", position: i + 1, ...crumb })),
 }
+// Escape "<" so post text can never close the script element.
+const ldJson = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c")
 ---
 
 <BaseLayout meta={genPostMetadata(post)}>
+  <script is:inline type="application/ld+json" set:html={ldJson(jsonLd)} />
   <script
     is:inline
     type="application/ld+json"
-    set:html={JSON.stringify(jsonLd).replace(/</g, "\\u003c")}
+    set:html={ldJson(breadcrumbLd)}
   />
   <PostSimple
     content={post}
@@ -121,7 +118,7 @@ const components = {
       }
 
       <div class="prose prose-lg max-w-none dark:prose-invert">
-        <Content components={components} />
+        <Content components={mdxComponents} />
       </div>
     </div>
 
