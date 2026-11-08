@@ -24,6 +24,9 @@ import {
 } from "node:fs"
 import { tmpdir } from "node:os"
 import { join, resolve } from "node:path"
+import { fromHtml } from "hast-util-from-html"
+import { toHtml } from "hast-util-to-html"
+import { SKIP, visit } from "unist-util-visit"
 import { diagramHash } from "../src/lib/markdown/diagram-hash.mjs"
 
 const ROOT = resolve(import.meta.dirname, "..")
@@ -154,39 +157,67 @@ for (const f of unused) {
 console.log(`diagrams: ${blocks.size} in posts, ${rendered} rendered`)
 
 /**
- * Makes Mermaid's SVG themeable by the site: drops its <style> block and inline
- * colours (src/styles.css styles .diagram instead, from the light/dark tokens),
+ * Makes Mermaid's SVG themeable by the site (on the parsed tree, not with regexes):
+ * drops its <style> element and inline styles (src/styles.css styles .diagram instead, from the light/dark tokens),
  * gives it a fixed size from its viewBox, and prefixes every id with the hash so
  * two diagrams on one page can't collide.
  */
-function clean(svg, hash) {
+function clean(svgText, hash) {
   const prefix = `d${hash}-`
-  let s = svg
-    .replace(/<\?xml[^>]*>\s*/, "")
-    .replace(/<style[\s\S]*?<\/style>/g, "")
-    .replace(/\sstyle="[^"]*"/g, "")
-    .replace(/\sdata-points="[^"]*"/g, "")
-  // Mermaid always emits shadow filters and a gradient; drop them when nothing uses them.
-  for (const tag of ["filter", "linearGradient"]) {
-    s = s.replace(
-      new RegExp(`<${tag}\\b[^>]*id="([^"]+)"[\\s\\S]*?<\\/${tag}>`, "g"),
-      (whole, id) => (s.includes(`url(#${id})`) ? whole : "")
-    )
-  }
-  s = s.replace(/<defs>\s*<\/defs>/g, "")
-  const ids = new Set([...s.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]))
-  for (const id of ids) {
-    const esc = id.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
-    s = s
-      .replace(new RegExp(`\\sid="${esc}"`, "g"), ` id="${prefix}${id}"`)
-      .replace(new RegExp(`url\\(#${esc}\\)`, "g"), `url(#${prefix}${id})`)
-      .replace(new RegExp(`href="#${esc}"`, "g"), `href="#${prefix}${id}"`)
-  }
-  const [, , , w, h] =
-    s.match(/viewBox="([-\d.]+) ([-\d.]+) ([\d.]+) ([\d.]+)"/) ?? []
-  s = s.replace(/<svg\b([^>]*)>/, (_, attrs) => {
-    const kept = attrs.replace(/\s(width|height|class)="[^"]*"/g, "")
-    return `<svg${kept} class="diagram-svg" width="${Math.ceil(w)}" height="${Math.ceil(h)}">`
+  const svg = fromHtml(svgText, { fragment: true, space: "svg" }).children.find(
+    (n) => n.type === "element" && n.tagName === "svg"
+  )
+  if (!svg) throw new Error("mmdc produced no <svg>")
+  const removeWhere = (test) =>
+    visit(svg, "element", (node, index, parent) => {
+      if (parent && index !== undefined && test(node)) {
+        parent.children.splice(index, 1)
+        return [SKIP, index]
+      }
+    })
+
+  // Mermaid's own styling and data blobs; the site styles .diagram instead.
+  removeWhere((node) => node.tagName === "style")
+  visit(svg, "element", (node) => {
+    node.properties.style = undefined
+    node.properties.dataPoints = undefined
   })
-  return `${s.trim()}\n`
+  // Mermaid always emits shadow filters and a gradient; drop the ones nothing uses.
+  const used = JSON.stringify(svg)
+  removeWhere(
+    (node) =>
+      (node.tagName === "filter" || node.tagName === "linearGradient") &&
+      !used.includes(`url(#${node.properties.id})`)
+  )
+  removeWhere((node) => node.tagName === "defs" && node.children.length === 0)
+
+  // Prefix every id (and its references) so two diagrams on a page can't collide.
+  const ids = new Set()
+  visit(svg, "element", (node) => {
+    if (typeof node.properties.id === "string") ids.add(node.properties.id)
+  })
+  visit(svg, "element", (node) => {
+    for (const [key, value] of Object.entries(node.properties)) {
+      if (typeof value !== "string") continue
+      if (key === "id") {
+        node.properties.id = prefix + value
+        continue
+      }
+      let next = value.replace(/url\(#([^)]+)\)/g, (m, id) =>
+        ids.has(id) ? `url(#${prefix}${id})` : m
+      )
+      if ((key === "href" || key === "xLinkHref") && ids.has(next.slice(1))) {
+        next = `#${prefix}${next.slice(1)}`
+      }
+      node.properties[key] = next
+    }
+  })
+
+  const [, , w, h] = String(svg.properties.viewBox)
+    .split(/[\s,]+/)
+    .map(Number)
+  svg.properties.className = ["diagram-svg"]
+  svg.properties.width = Math.ceil(w)
+  svg.properties.height = Math.ceil(h)
+  return `${toHtml(svg, { space: "svg" })}\n`
 }
