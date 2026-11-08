@@ -10,24 +10,20 @@ const absolute = (value: string | undefined, base: string) => {
   }
 }
 
-const hasClass = (attribs: Record<string, string>, name: string) =>
-  (attribs.class ?? "").split(/\s+/).includes(name)
-
 /**
  * Site chrome that means nothing in a feed reader: the code block header
  * (language label + copy button), heading self-links added by
- * rehype-autolink-headings, and the Mermaid "Rendering diagram..." placeholder
- * (the diagram source stays as a code block).
+ * rehype-autolink-headings. Inline SVG (pre-rendered Mermaid diagrams) is
+ * dropped as a non-text tag; the diagram's hidden source <pre> stays as code.
  */
 const isChrome = (tagName: string, attribs: Record<string, string>) =>
   attribs.class === CODE_HEADER_CLASS ||
-  (tagName === "a" && attribs["aria-hidden"] === "true") ||
-  hasClass(attribs, "mermaid-loading")
+  (tagName === "a" && attribs["aria-hidden"] === "true")
 
 /**
  * Turns a post's rendered HTML into feed-safe HTML for `content:encoded`:
  * no scripts, styles, classes or site chrome (code block headers and copy
- * buttons, heading anchor icons, the Mermaid loading placeholder), and every
+ * buttons, heading anchor icons, inline SVG), and every
  * link and image URL absolute against the post URL.
  */
 export function toFeedHtml(html: string, postUrl: string): string {

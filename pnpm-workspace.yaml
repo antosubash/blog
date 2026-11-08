@@ -1,4 +1,4 @@
-packages: ["video"]
+packages: ["video", "tools/diagrams"]
 
 onlyBuiltDependencies:
   - "@biomejs/biome"
@@ -6,6 +6,9 @@ onlyBuiltDependencies:
 allowBuilds:
   "@biomejs/biome": true
   esbuild: true
+  # Only used by tools/diagrams; its postinstall downloads a Chrome. The render
+  # script uses the system Chrome instead (CHROME_PATH to override).
+  puppeteer: false
 # Security overrides for transitive dependencies (see the PR for each advisory).
 overrides:
   toml: ^5.0.1
