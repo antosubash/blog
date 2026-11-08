@@ -1,0 +1,71 @@
+---
+import PostItem from "@/components/post-item"
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import { getPublishedPosts } from "@/lib/posts"
+import { genPageMetadata } from "@/lib/seo"
+import { ArrowRight } from "lucide-react"
+
+const MAX_DISPLAY = 8
+const sortedPosts = await getPublishedPosts()
+const recentPosts = sortedPosts.slice(0, MAX_DISPLAY)
+const meta = genPageMetadata({
+  title: "Home",
+  description:
+    "Software engineer sharing what I learn — from cloud infrastructure to frontend frameworks and everything in between.",
+})
+---
+
+<BaseLayout meta={meta}>
+  <div class="mx-auto max-w-4xl px-5 sm:px-6">
+    <div class="pb-10 pt-14 sm:pb-12 sm:pt-20">
+      <h1
+        class="font-display text-4xl font-semibold tracking-tight text-foreground sm:text-5xl"
+      >
+        Hey, I'm Anto<span class="text-accent">.</span>
+      </h1>
+      <p
+        class="mt-4 max-w-lg text-base leading-relaxed text-muted-foreground sm:text-lg"
+      >
+        Full-stack engineer writing about cloud infrastructure, frontend
+        frameworks, .NET, and the things I learn along the way.
+      </p>
+    </div>
+
+    {
+      recentPosts.length > 0 && (
+        <div>
+          <h2 class="mb-6 text-xs font-semibold tracking-widest uppercase text-muted-foreground">
+            Recent Writing
+          </h2>
+          <div class="space-y-1">
+            {recentPosts.map((post) => (
+              <PostItem
+                slug={post.slug}
+                date={post.date}
+                title={post.title}
+                summary={post.excerpt}
+                tags={post.tags}
+                series={post.series ?? undefined}
+                part={post.part ?? undefined}
+              />
+            ))}
+          </div>
+        </div>
+      )
+    }
+
+    {
+      sortedPosts.length > MAX_DISPLAY && (
+        <div class="py-10">
+          <a
+            href="/posts"
+            class="inline-flex items-center gap-2 text-sm font-medium text-accent transition-colors duration-150 hover:text-accent-hover"
+          >
+            View all posts
+            <ArrowRight className="h-4 w-4" />
+          </a>
+        </div>
+      )
+    }
+  </div>
+</BaseLayout>

@@ -1,0 +1,112 @@
+---
+import MobileNav from "@/components/MobileNav"
+import headerNavLinks from "@/config/headerNavLinks"
+import siteMetadata from "@/config/siteMetadata"
+import { Moon, Rss, Search, Sun } from "lucide-react"
+
+const navLinks = headerNavLinks.filter((link) => link.href !== "/")
+const path = Astro.url.pathname.replace(/\/$/, "")
+const linkClass =
+  "relative rounded-sm text-sm font-medium text-muted-foreground transition-colors duration-150 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-accent after:transition-all after:duration-200 hover:after:w-full"
+const iconButton =
+  "inline-flex h-11 w-11 items-center justify-center rounded-lg text-muted-foreground transition-colors duration-150 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70"
+const isActive = (href: string) => path === href || path.startsWith(`${href}/`)
+---
+
+<header
+  id="site-header"
+  class="sticky top-0 z-50 transition-colors duration-200 bg-transparent"
+>
+  <div class="mx-auto max-w-4xl px-5 sm:px-6">
+    <div class="flex items-center justify-between py-4 sm:py-5">
+      <a href="/" aria-label={siteMetadata.headerTitle}>
+        <span class="text-lg font-semibold text-foreground">
+          {siteMetadata.headerTitle}<span class="text-accent">.</span>
+        </span>
+      </a>
+      <nav class="hidden items-center gap-6 md:flex">
+        {
+          navLinks.map((link) =>
+            link.track ? (
+              <a
+                href={link.href}
+                class={linkClass}
+                data-umami-event={`header_${link.title.toLowerCase()}`}
+              >
+                {link.title}
+              </a>
+            ) : (
+              <a
+                href={link.href}
+                class={linkClass}
+                aria-current={isActive(link.href) ? "page" : undefined}
+              >
+                {link.title}
+              </a>
+            )
+          )
+        }
+      </nav>
+      <div class="flex items-center gap-1">
+        <a href="/feed.xml" aria-label="RSS Feed" class={iconButton}>
+          <Rss className="h-[18px] w-[18px]" />
+        </a>
+        <button
+          type="button"
+          aria-label="Search (Ctrl+K)"
+          class={iconButton}
+          data-open-search
+        >
+          <Search className="h-[18px] w-[18px]" />
+        </button>
+        <button
+          type="button"
+          aria-label="Toggle Dark Mode"
+          class={iconButton}
+          data-theme-toggle
+        >
+          <Sun className="hidden h-[18px] w-[18px] dark:block" />
+          <Moon className="h-[18px] w-[18px] dark:hidden" />
+        </button>
+        <MobileNav client:idle />
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  const header = document.getElementById("site-header")
+  const onScroll = () => {
+    const scrolled = window.scrollY > 50
+    header?.classList.toggle("bg-background/90", scrolled)
+    header?.classList.toggle("backdrop-blur-md", scrolled)
+    header?.classList.toggle("bg-transparent", !scrolled)
+  }
+  window.addEventListener("scroll", onScroll, { passive: true })
+  onScroll()
+
+  // The search palette island listens for Ctrl/Cmd+K.
+  document.querySelector("[data-open-search]")?.addEventListener("click", () => {
+    document.dispatchEvent(
+      new KeyboardEvent("keydown", { key: "k", ctrlKey: true })
+    )
+  })
+
+  const media = window.matchMedia("(prefers-color-scheme: dark)")
+  const apply = (dark: boolean) =>
+    document.documentElement.classList.toggle("dark", dark)
+  document.querySelector("[data-theme-toggle]")?.addEventListener("click", () => {
+    const dark = !document.documentElement.classList.contains("dark")
+    try {
+      localStorage.setItem("theme", dark ? "dark" : "light")
+    } catch {}
+    apply(dark)
+  })
+  media.addEventListener("change", () => {
+    let theme = "system"
+    try {
+      theme = localStorage.getItem("theme") || "system"
+    } catch {}
+    if (theme === "system") apply(media.matches)
+  })
+</script>

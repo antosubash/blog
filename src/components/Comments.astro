@@ -1,0 +1,41 @@
+---
+interface Props {
+  slug: string
+}
+
+const { slug } = Astro.props
+---
+
+<div class="pt-8" id={`comments-${slug}`} data-comments></div>
+
+<script>
+  // utterances, themed to match the site and re-themed on toggle.
+  const themeName = () =>
+    document.documentElement.classList.contains("dark")
+      ? "photon-dark"
+      : "github-light"
+
+  for (const node of document.querySelectorAll<HTMLElement>("[data-comments]")) {
+    const script = document.createElement("script")
+    script.src = "https://utteranc.es/client.js"
+    script.async = true
+    script.setAttribute("repo", "antosubash/blog-comments")
+    script.setAttribute("issue-term", "pathname")
+    script.setAttribute("label", "comment :speech_balloon:")
+    script.setAttribute("theme", themeName())
+    script.setAttribute("crossorigin", "anonymous")
+    node.appendChild(script)
+
+    new MutationObserver(() => {
+      node
+        .querySelector<HTMLIFrameElement>(".utterances-frame")
+        ?.contentWindow?.postMessage(
+          { type: "set-theme", theme: themeName() },
+          "https://utteranc.es"
+        )
+    }).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    })
+  }
+</script>

@@ -1,5 +1,4 @@
 import Tag from "@/components/Tag"
-import { Link } from "@tanstack/react-router"
 import { format, parseISO } from "date-fns"
 
 interface PostItemProps {
@@ -23,7 +22,7 @@ const PostItem = ({
   part,
 }: PostItemProps) => {
   return (
-    <Link to="/posts/$" params={{ _splat: slug }} className="group block">
+    <a href={`/posts/${slug}`} className="group block">
       <article className="-mx-3 rounded-lg px-3 py-4 transition-colors duration-150 hover:bg-surface sm:-mx-4 sm:px-4 sm:py-5">
         <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
           <h2 className="font-display text-lg font-semibold leading-snug tracking-tight text-foreground transition-colors duration-150 group-hover:text-accent sm:text-xl">
@@ -58,7 +57,7 @@ const PostItem = ({
           )}
         </div>
       </article>
-    </Link>
+    </a>
   )
 }
 

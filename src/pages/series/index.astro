@@ -1,0 +1,89 @@
+---
+import Tag from "@/components/Tag"
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import { getAllPosts } from "@/lib/posts"
+import { genPageMetadata } from "@/lib/seo"
+import { getAllSeries } from "@/lib/series-utils"
+import { format, parseISO } from "date-fns"
+
+const seriesGroups = getAllSeries(await getAllPosts())
+const meta = genPageMetadata({
+  title: "Series",
+  description:
+    "Explore comprehensive guides and tutorials organized in series.",
+})
+---
+
+<BaseLayout meta={meta}>
+  <div class="mx-auto max-w-4xl px-5 sm:px-6">
+    <div class="pb-8 pt-12 sm:pt-16">
+      <h1
+        class="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl"
+      >
+        Blog Series
+      </h1>
+      <p class="mt-3 max-w-2xl text-lg text-muted-foreground">
+        Comprehensive guides and tutorials organized in series.
+      </p>
+      <p class="mt-2 text-sm text-muted-foreground">
+        {seriesGroups.length} series available
+      </p>
+    </div>
+
+    <div class="grid gap-6 sm:grid-cols-2">
+      {
+        seriesGroups.map((series) => (
+          <a
+            href={`/posts/${series.posts[0].slug}`}
+            class="group block rounded-lg border border-border bg-surface p-6 transition-colors duration-150 hover:border-accent/50"
+          >
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-muted-foreground">
+                {series.totalParts} parts
+              </span>
+              <time
+                datetime={series.latestDate}
+                class="text-sm text-muted-foreground"
+              >
+                {format(parseISO(series.latestDate), "MMM d, yyyy")}
+              </time>
+            </div>
+
+            <h2 class="mt-3 font-display text-xl font-semibold text-foreground transition-colors duration-150 group-hover:text-accent">
+              {series.name}
+            </h2>
+
+            <div class="mt-4 space-y-1.5">
+              {series.posts.slice(0, 3).map((post) => (
+                <div class="flex items-baseline gap-2 text-sm">
+                  <span class="font-medium text-accent">{post.part}.</span>
+                  <span class="line-clamp-1 text-muted-foreground">
+                    {post.title}
+                  </span>
+                </div>
+              ))}
+              {series.posts.length > 3 && (
+                <p class="text-sm text-muted-foreground">
+                  +{series.posts.length - 3} more parts
+                </p>
+              )}
+            </div>
+
+            {series.tags.length > 0 && (
+              <div class="mt-4 flex flex-wrap gap-2">
+                {series.tags.slice(0, 4).map((tag) => (
+                  <Tag text={tag} asLink={false} />
+                ))}
+                {series.tags.length > 4 && (
+                  <span class="text-xs text-muted-foreground">
+                    +{series.tags.length - 4}
+                  </span>
+                )}
+              </div>
+            )}
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</BaseLayout>

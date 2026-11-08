@@ -1,0 +1,36 @@
+---
+import Link from "@/components/Link.astro"
+import siteMetadata from "@/config/siteMetadata"
+
+const links = [
+  { href: siteMetadata.github, label: "GitHub" },
+  { href: siteMetadata.youtube, label: "YouTube" },
+  { href: siteMetadata.linkedin, label: "LinkedIn" },
+  { href: "/feed.xml", label: "RSS" },
+]
+---
+
+<footer class="border-t border-border">
+  <div class="mx-auto max-w-4xl px-5 py-8 sm:px-6">
+    <div
+      class="flex flex-col items-center justify-between gap-4 sm:flex-row"
+    >
+      <span class="text-sm text-muted-foreground">
+        &copy; {new Date().getFullYear()}
+        {siteMetadata.author}
+      </span>
+      <nav class="flex items-center gap-4">
+        {
+          links.map(({ href, label }) => (
+            <Link
+              href={href}
+              class="text-sm text-muted-foreground transition-colors duration-150 hover:text-accent"
+            >
+              {label}
+            </Link>
+          ))
+        }
+      </nav>
+    </div>
+  </div>
+</footer>

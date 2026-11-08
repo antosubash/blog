@@ -1,0 +1,22 @@
+---
+interface Props {
+  videoId?: string | null
+}
+
+const { videoId } = Astro.props
+---
+
+{
+  videoId && (
+    <div class="relative h-0 w-full pb-[56.25%]">
+      <iframe
+        class="absolute left-0 top-0 h-full w-full rounded-lg"
+        src={`https://www.youtube.com/embed/${videoId}`}
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      />
+    </div>
+  )
+}

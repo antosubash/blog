@@ -1,0 +1,32 @@
+---
+import siteMetadata from "@/config/siteMetadata"
+
+// Only hardcoded/env-var values, no user input.
+const gaId = siteMetadata.analytics.googleAnalytics.googleAnalyticsId
+const umamiId = siteMetadata.analytics.umamiAnalytics.umamiWebsiteId
+const umamiSrc = siteMetadata.analytics.umamiAnalytics.src
+const gaScript = gaId
+  ? `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', ${JSON.stringify(gaId)});`
+  : null
+---
+
+{
+  gaId && (
+    <>
+      <script
+        is:inline
+        async
+        src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+      />
+      <script is:inline set:html={gaScript} />
+    </>
+  )
+}
+{
+  umamiId && umamiSrc && (
+    <script is:inline async defer data-website-id={umamiId} src={umamiSrc} />
+  )
+}

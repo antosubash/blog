@@ -1,0 +1,105 @@
+---
+import Comments from "@/components/Comments.astro"
+import Link from "@/components/Link.astro"
+import ScrollButtons from "@/components/ScrollButtons.astro"
+import siteMetadata from "@/config/siteMetadata"
+import { formatDate } from "@/lib/content-utils"
+import type { Post } from "@/lib/post-types"
+import { getReadingTimeDisplay } from "@/lib/reading-time"
+
+interface Props {
+  content: Post
+  next?: { postUrl: string; title: string }
+  prev?: { postUrl: string; title: string }
+}
+
+const { content, next, prev } = Astro.props
+const { filePath, slug, date, title, readingTime } = content
+const readingTimeDisplay = getReadingTimeDisplay(readingTime)
+const editUrl = `${siteMetadata.siteRepo}/blob/main/${filePath}`
+---
+
+<section class="mx-auto max-w-4xl px-5 sm:px-6">
+  <ScrollButtons />
+  <article>
+    <div>
+      <header class="pt-10">
+        <div class="space-y-1 border-b border-border pb-6 text-center">
+          <dl>
+            <div>
+              <dt class="sr-only">Published on</dt>
+              <dd class="text-base font-medium leading-6 text-muted-foreground">
+                <time datetime={date}>{formatDate(date, siteMetadata.locale)}</time>
+              </dd>
+            </div>
+          </dl>
+          <div class="pb-1">
+            <h1
+              class="font-display text-3xl font-semibold leading-tight tracking-tight text-foreground sm:text-4xl md:text-5xl"
+            >
+              {title}
+            </h1>
+          </div>
+          <div
+            class="flex items-center justify-center gap-2 pt-3 text-base font-medium leading-6"
+          >
+            <span class={readingTimeDisplay.color}>{readingTimeDisplay.icon}</span>
+            <span class="text-muted-foreground">{readingTimeDisplay.text}</span>
+          </div>
+        </div>
+      </header>
+      <div class="grid-rows-[auto_1fr] divide-y divide-border pb-8">
+        <div class="divide-y divide-border xl:col-span-3 xl:row-span-2 xl:pb-0">
+          <div class="prose max-w-none pb-8 pt-10 dark:prose-invert">
+            <slot />
+          </div>
+        </div>
+        <div class="pb-6 pt-6 text-sm text-muted-foreground">
+          <Link href={editUrl}>View on GitHub</Link>
+        </div>
+        {
+          siteMetadata.comments && (
+            <div
+              class="pb-6 pt-6 text-center text-muted-foreground"
+              id="comment"
+            >
+              <Comments slug={slug} />
+            </div>
+          )
+        }
+        <footer>
+          <div
+            class="flex flex-col text-sm font-medium sm:flex-row sm:justify-between sm:text-base"
+          >
+            {
+              prev?.postUrl && (
+                <div class="pt-4 xl:pt-8">
+                  <a
+                    href={prev.postUrl}
+                    class="text-accent transition-colors duration-150 hover:text-accent-hover"
+                    aria-label={`Previous post: ${prev.title}`}
+                  >
+                    &larr; {prev.title}
+                  </a>
+                </div>
+              )
+            }
+            {
+              next?.postUrl && (
+                <div class="pt-4 xl:pt-8">
+                  <a
+                    href={next.postUrl}
+                    class="text-accent transition-colors duration-150 hover:text-accent-hover"
+                    aria-label={`Next post: ${next.title}`}
+                  >
+                    {next.title} &rarr;
+                  </a>
+                </div>
+              )
+            }
+          </div>
+        </footer>
+      </div>
+    </div>
+  </article>
+</section>
