@@ -1,175 +1,282 @@
 ---
+import {
+  abpExpertUrl,
+  engagements,
+  practiceAreas,
+} from "@/config/consultingData"
+import { featuredProjects, sampleProjects } from "@/config/projectsData"
+import siteMetadata from "@/config/siteMetadata"
 import BaseLayout from "@/layouts/BaseLayout.astro"
+import { postsForTags } from "@/lib/consulting"
+import { linkAttrs } from "@/lib/link"
+import { getPublishedPosts } from "@/lib/posts"
 import { genPageMetadata } from "@/lib/seo"
+import { getAllSeries } from "@/lib/series-utils"
 
-const meta = genPageMetadata({ title: "Consulting Services" })
-const services = [
+const meta = genPageMetadata({
+  title: "Consulting",
+  description:
+    "Hire Anto Subash for modular monoliths in Python and .NET, ABP Framework, geospatial data platforms, applied AI and computer vision, AI-assisted engineering, and cloud deployment.",
+})
+
+const posts = await getPublishedPosts()
+const projectTitles = new Map(featuredProjects.map((p) => [p.slug, p.title]))
+const areas = practiceAreas.map((area) => ({
+  ...area,
+  proof: postsForTags(posts, area.tags),
+  links: [
+    ...(area.projects ?? []).map((slug) => ({
+      label: projectTitles.get(slug) ?? slug,
+      href: `/projects#${slug}`,
+    })),
+    ...(area.links ?? []),
+  ],
+}))
+const proofStrip = [
+  { label: `${posts.length} posts`, href: "/posts" },
+  { label: `${getAllSeries(posts).length} series`, href: "/series" },
   {
-    title: "Application Development",
+    label: `${featuredProjects.length + sampleProjects.length} open-source projects`,
+    href: "/projects",
+  },
+]
+const steps = [
+  {
+    title: "Email me",
     description:
-      "From conceptualization to execution, I help you build robust ABP applications from scratch, ensuring scalability, efficiency, and adherence to industry best practices.",
-    features: [
-      "Full-stack development",
-      "Microservices architecture",
-      "Cloud-native solutions",
-      "Performance optimization",
-    ],
+      "Tell me what you're building or what's stuck. A few paragraphs is plenty.",
   },
   {
-    title: "Customization & Optimization",
+    title: "Scoping call",
     description:
-      "Transform your existing ABP application with expert guidance to enhance performance, functionality, and alignment with your evolving business requirements.",
-    features: [
-      "Performance tuning",
-      "Feature enhancements",
-      "Code refactoring",
-      "Integration services",
-    ],
+      "A 30-minute call to understand the problem and whether I'm the right fit.",
   },
   {
-    title: "Problem Solving & Troubleshooting",
+    title: "Written proposal",
     description:
-      "Expert technical support to identify and resolve complex issues efficiently, minimizing downtime and maximizing productivity across your ABP projects.",
-    features: [
-      "Debugging & diagnostics",
-      "Root cause analysis",
-      "Performance bottlenecks",
-      "Security audits",
-    ],
-  },
-  {
-    title: "Training & Knowledge Transfer",
-    description:
-      "Empower your team with comprehensive training sessions and knowledge transfer initiatives tailored to your organizational needs and technical requirements.",
-    features: [
-      "Team workshops",
-      "Best practices training",
-      "Architecture guidance",
-      "Code reviews",
-    ],
+      "A short proposal with the scope, the engagement type and a timeline.",
   },
 ]
 
-const technologies = [
-  "ABP Framework",
-  ".NET Core",
-  "React/Next.js",
-  "Docker & Kubernetes",
-  "Azure Cloud",
-  "Microservices",
-  "Identity & Security",
-  "API Development",
-]
+const mailto = `mailto:${siteMetadata.email}`
+const external = linkAttrs(abpExpertUrl)
+const primaryButton =
+  "inline-flex items-center rounded-md bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition-colors duration-150 hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+const secondaryButton =
+  "inline-flex items-center rounded-md border border-border px-4 py-2 text-sm font-medium text-foreground transition-colors duration-150 hover:border-accent/50 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70"
 ---
 
 <BaseLayout meta={meta}>
-
-    <div class="mx-auto max-w-4xl px-5 sm:px-6">
-      <div class="pb-8 pt-12 sm:pt-16">
-        <h1 class="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-          Consulting Services
-        </h1>
-        <p class="mt-3 max-w-2xl text-lg text-muted-foreground">
-          Transform your ABP projects with professional guidance and technical
-          expertise.
-        </p>
-        <div class="mt-6 flex flex-wrap gap-4">
-          <a
-            href="mailto:antosubash@outlook.com"
-            class="inline-flex items-center text-sm font-medium text-accent transition-colors duration-150 hover:text-accent-hover"
-          >
-            Get in touch &rarr;
-          </a>
-          <a
-            href="https://abp.io/expert/antosubash"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center text-sm font-medium text-muted-foreground transition-colors duration-150 hover:text-foreground"
-          >
-            ABP Expert Profile &rarr;
-          </a>
-        </div>
+  <div class="mx-auto max-w-4xl px-5 sm:px-6">
+    <section class="pb-10 pt-12 sm:pt-16">
+      <p
+        class="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+      >
+        Consulting
+      </p>
+      <h1
+        class="mt-2 text-balance font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl"
+      >
+        I build modular platforms in .NET and Python, for data-heavy and
+        AI-heavy work
+      </h1>
+      <p class="mt-4 max-w-2xl text-lg text-muted-foreground">
+        Architecture, hands-on development and team training, from a developer
+        who writes about all of it here and maintains the frameworks behind it.
+      </p>
+      <div class="mt-6 flex flex-wrap items-center gap-3">
+        <a href={mailto} class={primaryButton}>Email me</a>
+        <a href={abpExpertUrl} {...external} class={secondaryButton}>
+          ABP Expert profile
+        </a>
+        <span class="select-all font-mono text-sm text-muted-foreground">
+          {siteMetadata.email}
+        </span>
       </div>
+      <ul
+        class="mt-8 flex flex-wrap gap-x-3 gap-y-1 text-sm text-muted-foreground"
+        aria-label="Proof"
+      >
+        {
+          proofStrip.map((item, i) => (
+            <li class="whitespace-nowrap">
+              <a
+                href={item.href}
+                class="underline decoration-border underline-offset-4 transition-colors duration-150 hover:text-accent hover:decoration-accent"
+              >
+                {item.label}
+              </a>
+              {i < proofStrip.length - 1 && <span aria-hidden="true"> ·</span>}
+            </li>
+          ))
+        }
+      </ul>
+    </section>
 
-      {/* Services */}
-      <div class="divide-y divide-border">
-        {services.map((service) => (
-          <div class="py-8">
-            <h2 class="font-display text-xl font-semibold text-foreground">
-              {service.title}
-            </h2>
-            <p class="mt-2 text-muted-foreground">{service.description}</p>
-            <ul class="mt-4 grid grid-cols-2 gap-2">
-              {service.features.map((feature) => (
-                <li
-                  class="flex items-center gap-2 text-sm text-muted-foreground"
-                >
-                  <span class="text-accent">✓</span>
-                  {feature}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-
-      {/* Technologies */}
-      <div class="border-t border-border py-12">
-        <h2 class="font-display text-xl font-semibold text-foreground">
-          Technologies & Expertise
-        </h2>
-        <div class="mt-4 flex flex-wrap gap-2">
-          {technologies.map((tech) => (
-            <span
-              class="rounded-md bg-accent-muted/50 px-3 py-1 text-sm text-muted-foreground"
+    <section aria-labelledby="areas-heading" class="border-t border-border py-12">
+      <h2
+        id="areas-heading"
+        class="font-display text-2xl font-semibold tracking-tight text-foreground"
+      >
+        What I work on
+      </h2>
+      <div class="mt-6 grid gap-6 sm:grid-cols-2">
+        {
+          areas.map((area) => (
+            <article
+              id={area.slug}
+              class="flex flex-col rounded-lg border border-border bg-surface p-6"
             >
-              {tech}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* Process */}
-      <div class="border-t border-border py-12">
-        <h2 class="font-display text-xl font-semibold text-foreground">
-          How We Work Together
-        </h2>
-        <div class="mt-6 grid gap-6 sm:grid-cols-2 md:grid-cols-4">
-          {[
-            {
-              step: "01",
-              title: "Discovery",
-              description: "Understanding your requirements and project scope",
-            },
-            {
-              step: "02",
-              title: "Planning",
-              description: "Creating a detailed roadmap and timeline",
-            },
-            {
-              step: "03",
-              title: "Execution",
-              description: "Implementing solutions with regular updates",
-            },
-            {
-              step: "04",
-              title: "Delivery",
-              description: "Handing over with documentation and support",
-            },
-          ].map((process) => (
-            <div>
-              <span class="text-sm font-medium text-accent">
-                {process.step}
-              </span>
-              <h3 class="mt-1 font-semibold text-foreground">
-                {process.title}
+              <h3 class="font-display text-lg font-semibold text-foreground">
+                {area.title}
               </h3>
-              <p class="mt-1 text-sm text-muted-foreground">
-                {process.description}
+              <p class="mt-2 text-sm leading-6 text-muted-foreground">
+                {area.summary}
               </p>
-            </div>
-          ))}
-        </div>
+              <p class="mt-4 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                I can help with
+              </p>
+              <ul class="mt-2 space-y-1.5">
+                {area.helpWith.map((item) => (
+                  <li class="flex gap-2 text-sm text-foreground">
+                    <span class="text-accent" aria-hidden="true">
+                      ✓
+                    </span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+
+              {area.proof.count > 0 && (
+                <div class="mt-4">
+                  <p class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    {area.proof.count} {area.proof.count === 1 ? "post" : "posts"}{" "}
+                    on this
+                  </p>
+                  <ul class="mt-1.5 space-y-1">
+                    {area.proof.posts.map((post) => (
+                      <li class="text-sm">
+                        <a
+                          href={post.postUrl}
+                          class="line-clamp-2 text-foreground transition-colors duration-150 hover:text-accent"
+                        >
+                          {post.title}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {area.links.length > 0 && (
+                <p class="mt-auto pt-4 text-sm">
+                  <span class="text-muted-foreground">See: </span>
+                  {area.links.map((link, i) => (
+                    <>
+                      {i > 0 && ", "}
+                      <a
+                        href={link.href}
+                        {...linkAttrs(link.href)}
+                        class="text-accent transition-colors duration-150 hover:text-accent-hover"
+                      >
+                        {link.label}
+                      </a>
+                    </>
+                  ))}
+                </p>
+              )}
+            </article>
+          ))
+        }
       </div>
-    </div>
+    </section>
+
+    <section
+      aria-labelledby="engagements-heading"
+      class="border-t border-border py-12"
+    >
+      <h2
+        id="engagements-heading"
+        class="font-display text-2xl font-semibold tracking-tight text-foreground"
+      >
+        Ways to work together
+      </h2>
+      <p class="mt-2 text-muted-foreground">
+        Pricing depends on the scope, so we agree it after the scoping call.
+      </p>
+      <ul class="mt-4 divide-y divide-border">
+        {
+          engagements.map((e) => (
+            <li class="grid gap-2 py-5 sm:grid-cols-[1fr_16rem] sm:gap-6">
+              <div class="min-w-0">
+                <h3 class="font-semibold text-foreground">{e.title}</h3>
+                <p class="mt-1 text-sm text-muted-foreground">{e.summary}</p>
+              </div>
+              <ul class="space-y-1 text-sm text-muted-foreground">
+                {e.youGet.map((item) => (
+                  <li class="flex gap-2">
+                    <span class="text-accent" aria-hidden="true">
+                      →
+                    </span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section aria-labelledby="start-heading" class="border-t border-border py-12">
+      <h2
+        id="start-heading"
+        class="font-display text-2xl font-semibold tracking-tight text-foreground"
+      >
+        How it starts
+      </h2>
+      <ol class="mt-6 grid gap-6 sm:grid-cols-3">
+        {
+          steps.map((step, i) => (
+            <li>
+              <span class="font-mono text-sm font-medium text-accent">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <h3 class="mt-1 font-semibold text-foreground">{step.title}</h3>
+              <p class="mt-1 text-sm text-muted-foreground">
+                {step.description}
+              </p>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section
+      aria-labelledby="cta-heading"
+      class="mb-12 rounded-lg border border-border bg-surface p-6 sm:p-8"
+    >
+      <h2
+        id="cta-heading"
+        class="font-display text-xl font-semibold text-foreground"
+      >
+        Have a project in mind?
+      </h2>
+      <p class="mt-2 text-muted-foreground">
+        Write to
+        <a
+          href={mailto}
+          class="select-all font-mono text-accent transition-colors duration-150 hover:text-accent-hover"
+          >{siteMetadata.email}</a
+        >
+        with what you're working on.
+      </p>
+      <div class="mt-5 flex flex-wrap gap-3">
+        <a href={mailto} class={primaryButton}>Email me</a>
+        <a href={abpExpertUrl} {...external} class={secondaryButton}>
+          ABP Expert profile
+        </a>
+      </div>
+    </section>
+  </div>
 </BaseLayout>
