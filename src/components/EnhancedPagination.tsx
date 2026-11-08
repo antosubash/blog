@@ -60,6 +60,10 @@ export default function EnhancedPagination({
     "inline-flex items-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70"
   const navButtonEnabled =
     "border-border bg-card text-foreground hover:bg-accent"
+  // First/Last when already there. Full muted colour: the old /50 tint failed
+  // WCAG contrast (2.2:1).
+  const edgeCurrent = "cursor-default text-muted-foreground"
+
   const navButtonDisabled =
     "cursor-not-allowed border-border/50 bg-muted text-muted-foreground"
 
@@ -180,9 +184,10 @@ export default function EnhancedPagination({
           page={1}
           className={`font-medium transition-colors duration-150 ${
             currentPage === 1
-              ? "text-muted-foreground/50"
+              ? edgeCurrent
               : "text-muted-foreground hover:text-foreground"
           }`}
+          aria-current={currentPage === 1 ? "page" : undefined}
         >
           First
         </PageButton>
@@ -191,9 +196,10 @@ export default function EnhancedPagination({
           page={totalPages}
           className={`font-medium transition-colors duration-150 ${
             currentPage === totalPages
-              ? "text-muted-foreground/50"
+              ? edgeCurrent
               : "text-muted-foreground hover:text-foreground"
           }`}
+          aria-current={currentPage === totalPages ? "page" : undefined}
         >
           Last
         </PageButton>
