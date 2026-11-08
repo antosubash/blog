@@ -1,5 +1,6 @@
 ---
 import { getCollection } from "astro:content"
+import Tag from "@/components/Tag"
 import {
   type Project,
   featuredProjects,
@@ -97,8 +98,8 @@ const button =
 
               <ul class="mt-4 flex flex-wrap gap-1.5" aria-label="Technologies">
                 {project.tags.map((tag) => (
-                  <li class="rounded-md bg-accent-muted/50 px-2 py-0.5 text-xs font-medium text-muted-foreground">
-                    {tag}
+                  <li>
+                    <Tag text={tag} asLink={false} />
                   </li>
                 ))}
               </ul>

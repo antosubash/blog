@@ -49,7 +49,8 @@ async function load(
     const body = (await res.json()) as Record<string, unknown>
     if (
       typeof body.stargazers_count !== "number" ||
-      typeof body.pushed_at !== "string"
+      typeof body.pushed_at !== "string" ||
+      Number.isNaN(Date.parse(body.pushed_at))
     ) {
       throw new Error("unexpected response")
     }

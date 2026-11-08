@@ -18,6 +18,13 @@ describe("relatedPosts", () => {
     entry("tanstack", "https://github.com/antosubash/abp-react-tanstack", {
       date: "2026-05-01T00:00:00.000Z",
     }),
+    entry(
+      "prose-end",
+      "Code lives at https://github.com/antosubash/abp-react.",
+      {
+        date: "2023-01-01T00:00:00.000Z",
+      }
+    ),
     entry("draft", "https://github.com/antosubash/abp-react", { draft: true }),
     entry("unrelated", "https://github.com/someone/abp-react"),
     entry(
@@ -33,7 +40,7 @@ describe("relatedPosts", () => {
     const slugs = relatedPosts(["antosubash/abp-react", "AbpReact"], posts).map(
       (p) => p.slug
     )
-    expect(slugs).toEqual(["new", "sub-path", "old"])
+    expect(slugs).toEqual(["new", "sub-path", "prose-end"])
   })
 
   it("does not match a longer repo name that starts with the same prefix", () => {

@@ -26,7 +26,7 @@ Rejected alternatives:
 ### Data (`src/config/projectsData.ts`)
 
 ```ts
-type ProjectLink = { label: string; href: string }   // e.g. "Live demo", "Docs", "Python port"
+type ProjectLink = { label: string; href: string }   // e.g. "Python docs"
 type Project = {
   slug: string             // anchor id, e.g. "simplemodule"
   title: string
@@ -34,19 +34,21 @@ type Project = {
   description: string      // 1–3 sentences, drawn from the repo README and the posts
   repos: string[]          // "antosubash/SimpleModule"; the first is the primary repo
   aliases?: string[]       // old repo names still linked from posts ("AbpReact", "AbpMicroservice")
-  links?: ProjectLink[]    // homepages, demos, docs
+  posts?: string[]         // post slugs to list first; posts linking to the repos fill the rest
+  links?: ProjectLink[]    // docs (live demos are left out while they're down, see below)
   tags: string[]           // tech: ".NET", "React", "ABP", "Inertia.js"…
 }
 export const featuredProjects: Project[]
-export const sampleProjects: Project[]   // same shape; rendered compactly
+export const sampleProjects: Sample[]     // Pick<Project, "slug" | "title" | "tagline" | "repos" | "posts">; rendered compactly
 ```
 
 - Every repo URL uses the current repo name. The two existing links point at old names (`AbpReact`, `AbpMicroservice`) and only work through GitHub redirects.
 - **Featured projects:**
-  - **SimpleModule:** `SimpleModule` and `simple_module_python`, plus app.simplemodule.dev and docs.py.simplemodule.dev.
-  - **ABP React:** `abp-react` and `abp-react-tanstack`, plus both live demos.
+  - **SimpleModule:** `SimpleModule` and `simple_module_python`, plus the Python docs (docs.py.simplemodule.dev) and a pinned post.
+  - **ABP React:** `abp-react` and `abp-react-tanstack`.
   - **ABP Microservice:** `abp-microservice`.
-  - **ABP single-layer template:** `abp-single-layer-template`, plus abp.antosubash.com.
+  - **ABP single-layer template:** `abp-single-layer-template`.
+  - **Live demos are not linked.** app.simplemodule.dev, abpreact.antosubash.com, abp-tanstack.antosubash.com and abp.antosubash.com were down on 2026-11-08, so they sit in a comment at the top of `projectsData.ts` to add back when they answer.
 - **Samples:** about 10 public, non-archived repos that have posts: Todos, Tasky, nextjs-oidc-sample, microk8s-hetzner-deployment, docker_stack, agent-framework-ollama, sematic-kernal-with-ollama, OllamaExtensionsAI, ModernApiDocs and LargeFileUploadSample.
 
 ### GitHub stats (`src/lib/github.ts`)
@@ -59,20 +61,20 @@ export const sampleProjects: Project[]   // same shape; rendered compactly
 
 ### Related posts (`src/lib/projects.ts`)
 
-- `relatedPosts(project, posts)` finds published posts whose body links to `github.com/antosubash/<repo>`. Matching is case-insensitive, covers the repo names and aliases, and allows a trailing `/`, `.git` or `#`.
-- Results are sorted newest first and capped at 3 on featured cards and 1 on samples.
+- `relatedPosts(repos, posts, limit, pinned)` returns the project's pinned posts first (in the order given; unknown slugs and drafts are skipped), then published posts whose body links to `github.com/antosubash/<repo>`. Matching is case-insensitive, covers the repo names and aliases, and allows a trailing `.git`; the name must end the URL path segment, so `abp-react` doesn't match `abp-react-tanstack`.
+- Matches are sorted newest first. The whole list is capped at 3 on featured cards and 1 on samples.
 
 ### Page (`src/pages/projects/index.astro`)
 
 - **Header:** title "Projects", a short intro, and a meta description that names the projects.
-- **Featured:** a 2-column grid on desktop, 1 column on mobile, using the site's existing `bg-card`, `border-border` and `rounded-lg` card styles. Each card has:
+- **Featured:** a 2-column grid on desktop, 1 column on mobile, using the site's existing `bg-surface`, `border-border` and `rounded-lg` card styles (as on `/series`). Each card has:
   - the title and tagline;
   - the description;
-  - tag chips;
-  - a stats row (`★ 196 · TypeScript · updated Oct 2026`);
-  - link buttons (Repo, Live demo, Docs…);
+  - tag chips (the `Tag` component, not linked);
+  - one row per repo: its name linked, then its stats (`★ 196 · TypeScript · updated Oct 2026`);
+  - buttons: GitHub (primary repo) plus any extra `links` such as Python docs;
   - a "Read more" list of up to 3 related posts.
-- **Samples:** a compact divided list. Each row shows the repo name (linked), a one-line description, the language, the stars, and its blog post.
+- **Samples:** a compact divided list. Each row shows the repo name (linked), its stats (stars, language, last push month), a one-line description, and its blog post.
 - External links open in a new tab (`rel="noopener noreferrer"`). Internal post links are normal links.
 - **No client JavaScript.** It works in light and dark mode, and on mobile at 390 px with no horizontal scroll.
 

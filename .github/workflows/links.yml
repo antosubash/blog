@@ -29,6 +29,8 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
+        env:
+          GITHUB_TOKEN: ${{ github.token }} # /projects repo stats (see ci.yml)
 
       - name: Restore lychee cache
         uses: actions/cache@v6
