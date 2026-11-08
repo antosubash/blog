@@ -5,6 +5,7 @@ import tailwindcss from "@tailwindcss/vite"
 import { defineConfig } from "astro/config"
 import rehypeAutolinkHeadings from "rehype-autolink-headings"
 import { codeBlockChrome } from "./src/lib/markdown/code-block"
+import { rehypeImageAttrs } from "./src/lib/markdown/image-attrs"
 import { rehypeMermaid } from "./src/lib/markdown/mermaid"
 
 export default defineConfig({
@@ -23,6 +24,8 @@ export default defineConfig({
         rehypeHeadingIds,
         rehypeAutolinkHeadings,
         rehypeMermaid,
+        // Size + loading hints for local images (first one is the LCP candidate).
+        rehypeImageAttrs,
       ],
     }),
     syntaxHighlight: { type: "shiki", excludeLangs: ["mermaid", "math"] },

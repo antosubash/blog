@@ -34,6 +34,7 @@
     "date-fns": "^4.4.0",
     "github-slugger": "^2.0.0",
     "hast-util-to-text": "^4.0.3",
+    "image-size": "^2.1.0",
     "lucide-react": "^0.577.0",
     "mermaid": "^11.17.2",
     "react": "^19.3.1",
