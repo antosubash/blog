@@ -1,4 +1,3 @@
-import ContactForm from "@/components/ContactForm"
 import SectionContainer from "@/components/SectionContainer"
 import siteMetadata from "@/config/siteMetadata"
 import { genPageMetadata } from "@/lib/seo"
@@ -117,18 +116,24 @@ function ContactPage() {
                 </div>
               </div>
 
-              {/* Contact Form */}
+              {/* Email */}
               <div className="space-y-6">
                 <div>
                   <h2 className="mb-4 text-2xl font-semibold text-foreground">
-                    Send a Message
+                    Write to Me
                   </h2>
                   <p className="mb-6 text-muted-foreground">
-                    Fill out the form below and I'll get back to you as soon as
-                    possible.
+                    The best way to reach me is email. Tell me a bit about what
+                    you're working on and I'll get back to you.
                   </p>
                 </div>
-                <ContactForm />
+                <a
+                  href={`mailto:${siteMetadata.email}`}
+                  className="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-3 font-medium text-primary-foreground transition-colors duration-150 hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70"
+                >
+                  <Mail className="h-5 w-5" />
+                  {siteMetadata.email}
+                </a>
               </div>
             </div>
           </div>
