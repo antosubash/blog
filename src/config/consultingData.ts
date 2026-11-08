@@ -1,7 +1,8 @@
 /**
  * The /consulting page copy. The proof under each area (post count and newest
  * posts) is computed at build from `tags` (src/lib/consulting.ts); `projects`
- * are featuredProjects slugs, linked as /projects#slug.
+ * are featuredProjects slugs, linked as /projects#slug; `links` are extra
+ * links shown after them in the card's "See:" line.
  */
 export type PracticeArea = {
   /** Anchor id on the page. */

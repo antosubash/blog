@@ -57,7 +57,7 @@ export const engagements: Engagement[]
 - **Architecture review:** a fixed-scope look at an existing codebase, ending in a written report with prioritised fixes.
 - **Hands-on build:** I build or extend the feature, module or app together with your team.
 - **Team training:** workshops on ABP, modular architecture or AI tooling, using your own code.
-- **Ongoing support:** a monthly retainer for reviews, upgrades and questions.
+- **Ongoing support:** a monthly block of hours, agreed up front, for reviews, upgrades and questions.
 
 ### Proof (computed at build)
 
