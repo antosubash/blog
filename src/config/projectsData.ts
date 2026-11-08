@@ -5,7 +5,6 @@
  *
  * Demo sites left out while they're down (2026-11-08), add them back to `links`
  * when they answer again:
- *   SimpleModule      https://app.simplemodule.dev          (Cloudflare 521)
  *   ABP React         https://abpreact.antosubash.com       (dokploy host not answering)
  *   ABP React TanStack https://abp-tanstack.antosubash.com
  *   ABP single layer  https://abp.antosubash.com
@@ -30,15 +29,12 @@ export const featuredProjects: Project[] = [
   {
     slug: "simplemodule",
     title: "SimpleModule",
-    tagline: "A modular monolith framework for .NET 10, with a Python port",
+    tagline: "A modular monolith framework for Python",
     description:
-      "Roslyn source generators discover modules, endpoints and DTOs at compile time, so there's no reflection or manual registration. Each module owns its schema, contracts and React pages, and C# DTOs generate the TypeScript types the Inertia.js frontend uses. simple_module_python brings the same module model to FastAPI and SQLModel.",
-    repos: ["antosubash/SimpleModule", "antosubash/simple_module_python"],
-    posts: ["introducing-simplemodule"],
-    links: [
-      { label: "Python docs", href: "https://docs.py.simplemodule.dev/" },
-    ],
-    tags: [".NET 10", "Python", "React", "Inertia.js", "Modular monolith"],
+      "Each feature is a self-contained module with its own SQLModel tables, FastAPI endpoints and React pages, shipped as one FastAPI + Inertia.js app. smpy_modules holds the add-on modules, published to PyPI and discovered at boot through an entry point: a page builder, news, records, billing and images.",
+    repos: ["antosubash/simple_module_python", "antosubash/smpy_modules"],
+    links: [{ label: "Docs", href: "https://docs.py.simplemodule.dev/" }],
+    tags: ["Python", "FastAPI", "SQLModel", "React", "Inertia.js"],
   },
   {
     slug: "abp-react",

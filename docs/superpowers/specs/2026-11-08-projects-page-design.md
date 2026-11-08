@@ -5,7 +5,7 @@
 Make `/projects` show what Anto actually builds and maintains today, with enough context (what it is, how active it is, where to read about it) for a visitor to pick one up.
 
 In scope:
-- Four **featured** projects as cards: SimpleModule (.NET + Python), ABP React (+ TanStack), ABP Microservice, ABP single-layer template.
+- Four **featured** projects as cards: SimpleModule (the Python framework and its modules repo), ABP React (+ TanStack), ABP Microservice, ABP single-layer template.
 - A curated **Samples** list of about 10 smaller repos that each have at least one blog post.
 - **Live GitHub stats** (stars, primary language, last push), fetched at build time.
 - **Related posts** under each project, found automatically from the posts that link to its repo.
@@ -32,7 +32,7 @@ type Project = {
   title: string
   tagline: string          // one line under the title
   description: string      // 1–3 sentences, drawn from the repo README and the posts
-  repos: string[]          // "antosubash/SimpleModule"; the first is the primary repo
+  repos: string[]          // "antosubash/simple_module_python"; the first is the primary repo
   aliases?: string[]       // old repo names still linked from posts ("AbpReact", "AbpMicroservice")
   posts?: string[]         // post slugs to list first; posts linking to the repos fill the rest
   links?: ProjectLink[]    // docs (live demos are left out while they're down, see below)
@@ -44,7 +44,7 @@ export const sampleProjects: Sample[]     // Pick<Project, "slug" | "title" | "t
 
 - Every repo URL uses the current repo name. The two existing links point at old names (`AbpReact`, `AbpMicroservice`) and only work through GitHub redirects.
 - **Featured projects:**
-  - **SimpleModule:** `SimpleModule` and `simple_module_python`, plus the Python docs (docs.py.simplemodule.dev) and a pinned post.
+  - **SimpleModule:** `simple_module_python` and `smpy_modules` (Python only; the C# repo is left out at the owner's request), plus the docs at docs.py.simplemodule.dev. No pinned post: "Introducing SimpleModule" covers the C# framework.
   - **ABP React:** `abp-react` and `abp-react-tanstack`.
   - **ABP Microservice:** `abp-microservice`.
   - **ABP single-layer template:** `abp-single-layer-template`.
