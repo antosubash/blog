@@ -72,7 +72,7 @@ class SiteLockModule(ModuleBase):
         app.add_middleware(SiteLockMiddleware)
 ```
 
-At startup the framework loads every entry point in the `simple_module` group, sorts the modules by `depends_on`, and calls their hooks in that order. There's nothing to register in the host: adding the package as a dependency is enough. Hooks cover routes, settings, menu items, permissions, feature flags, event handlers, middleware, health checks, rate limits, and startup and shutdown.
+At startup the framework loads every entry point in the `simple_module` group. It sorts the modules by `depends_on` and calls their hooks in that order. There's nothing to register in the host: adding the package as a dependency is enough. Hooks cover routes, settings, menu items, permissions, feature flags, event handlers, middleware, health checks, rate limits, and startup and shutdown.
 
 Outside development, discovery is strict. A broken entry point or a missing dependency stops the boot with an error instead of quietly skipping the module.
 
@@ -80,7 +80,7 @@ Outside development, discovery is strict. A broken entry point or a missing depe
 
 A feature module usually has three parts: a table, some endpoints and a page.
 
-**Tables.** Each module gets its own SQLAlchemy `MetaData`, and table names carry the module's prefix. This is the model from the module template:
+**Tables.** Each module gets its own SQLAlchemy `MetaData`, and table names are prefixed with the module name. The prefix is a convention the scaffold follows, not something the framework enforces. This is the model from the module template, shortened (the template also has a description and an `is_active` field, and takes the names from constants):
 
 ```python
 Base = create_module_base("orders")
@@ -91,7 +91,7 @@ class Order(Base, AuditMixin, table=True):
     name: str = Field(max_length=200)
 ```
 
-**Endpoints.** Plain FastAPI routers. The module adds an API router and a view router, and every `/api` route declares the permission it needs:
+**Endpoints.** Plain FastAPI routers. The module adds an API router and a view router, and the template guards each `/api` route with a permission (abridged from the module template):
 
 ```python
 @router.get("/", response_model=list[ItemOut],
@@ -100,7 +100,7 @@ async def list_items(service: ItemService = Depends(get_item_service)) -> list[I
     return await service.get_all()
 ```
 
-**Pages.** View routes render React pages through Inertia. The server passes props, and Inertia renders the matching component, with no separate API client to write:
+**Pages.** View routes render React pages through Inertia. The server passes props, and Inertia renders the matching component, with no separate API client to write (abridged from the module template):
 
 ```python
 async def browse(inertia: InertiaDep, service=Depends(get_item_service)) -> InertiaResponse:
@@ -120,7 +120,7 @@ export default function Browse({ items }: { items: Item[] }) {
 }
 ```
 
-If the Python model changes and nobody regenerates the types, CI fails.
+In the framework repo, `make gen-api-types` regenerates these files and CI fails if the committed ones are stale.
 
 ## How modules talk to each other
 
@@ -149,7 +149,7 @@ The framework repo ships 17 modules. The ones most apps start with:
 
 Bigger features live in a separate repo, [smpy_modules](https://github.com/antosubash/smpy_modules), and install from PyPI: a page builder, news, records, billing with Stripe, and images.
 
-## Diagnostics instead of surprises
+## Catching mistakes with smpy doctor
 
 Most of the framework's rules come with a diagnostic code, and `smpy doctor` reports them. Some examples:
 
@@ -158,19 +158,18 @@ Most of the framework's rules come with a diagnostic code, and `smpy doctor` rep
 - **Unmigrated table:** a module table isn't covered by any migration.
 - **Database behind:** the database is behind the latest migration. This one stops the app from booting in every environment.
 
-Migrations live in the host's Alembic setup, with a branch label per module, and `make migration` generates them against that module's head.
+Migrations live in the host's Alembic setup, not in the module packages. A module's first revision should set a branch label named after the module. In the framework repo, `make migration LABEL=<label> msg="..."` generates a revision on that branch. In an app made by `smpy new`, it is `make migration msg="..."`.
 
 ## Pitfalls
 
 - **It's early.** Packages are at 0.0.44 and marked alpha. The changelog has behaviour changes between releases, so pin versions.
-- **Python 3.12 or later, plus Node** for the frontend build.
-- **The template's sample table has no migration.** `smpy doctor` flags this until you generate one.
-- **Postgres review.** Migrations generated against SQLite need a check before you run them on Postgres.
+- **A new module's sample table has no migration.** The module scaffolder doesn't create one, and `smpy doctor` flags it (SM011) until you generate one.
+- **Check migrations before Postgres.** Migrations generated against SQLite need a check before you run them on Postgres.
 - **Tenants share one database.** Multi-tenancy isolates rows with a mixin, not separate databases. If you need a database per tenant, this isn't the framework for it.
 
 ## Try it
 
-You need uv and Node. Then:
+You need Python 3.12 or later, uv and Node. Then:
 
 ```bash
 uvx --from simple_module_cli smpy new my-app
@@ -178,6 +177,6 @@ cd my-app
 make dev
 ```
 
-`smpy new` asks which modules you want. The default `standard` preset gives you `auth`, `users`, `dashboard` and `permissions`. It then installs the Python and JavaScript dependencies and runs the migrations. `make dev` starts FastAPI on port 8000 and Vite next to it. SQLite is the default database, so nothing else has to run.
+`smpy new` asks for the database (SQLite by default), whether to enable multi-tenancy, and which modules you want. The default `standard` preset gives you `users`, `dashboard` and `permissions`, plus `auth`, which they depend on. It then installs the Python and JavaScript dependencies, creates an initial migration and applies it. `make dev` starts FastAPI on port 8000 and Vite next to it. With SQLite, nothing else has to run.
 
 The docs are at [docs.py.simplemodule.dev](https://docs.py.simplemodule.dev/). In the next part I'll build a module from scratch: a table, an endpoint, a React page, a permission and a migration.
