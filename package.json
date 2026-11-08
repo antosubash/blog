@@ -2,6 +2,9 @@
   "name": "blog",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": "24.x"
+  },
   "scripts": {
     "dev": "astro dev --port 3000",
     "build": "astro build",
@@ -67,5 +70,6 @@
     "tsx": "^4.23.15",
     "typescript": "^5.9.3",
     "vitest": "^4.1.12"
-  }
+  },
+  "packageManager": "pnpm@12.8.1"
 }
