@@ -27,9 +27,11 @@ export function relatedPosts(
     })
     .filter(Boolean)
     .join("|")
+  // No usable repo (empty list, or only bare aliases with no owner to borrow).
   if (!targets) return []
-  // The name must end the path segment: "." only ends it when not followed by a
-  // word character, so a sentence-ending "...abp-react." still matches.
+  // The lookbehind keeps "notgithub.com/..." from matching. The lookahead makes
+  // the name end the path segment: "." only ends it when not followed by a word
+  // character, so a sentence-ending "...abp-react." still matches.
   const link = new RegExp(
     `(?<![\\w-])github\\.com/(?:${targets})(?:\\.git)?(?![\\w-]|\\.\\w)`,
     "i"

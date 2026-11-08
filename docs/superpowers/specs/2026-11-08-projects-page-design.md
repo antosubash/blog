@@ -61,7 +61,7 @@ export const sampleProjects: Sample[]     // Pick<Project, "slug" | "title" | "t
 
 ### Related posts (`src/lib/projects.ts`)
 
-- `relatedPosts(repos, posts, limit, pinned)` returns the project's pinned posts first (in the order given; unknown slugs and drafts are skipped), then published posts whose body links to `github.com/<owner>/<repo>`. The owner comes from each `owner/name` repo entry; a bare alias takes the owner of the first `owner/name` entry. Matching is case-insensitive, covers the repo names and aliases, and allows a trailing `.git`; the name must end the URL path segment (a sentence-ending period still counts), so `abp-react` doesn't match `abp-react-tanstack`.
+- `relatedPosts(repos, posts, limit, pinned)` returns the project's pinned posts first (in the order given; duplicate, unknown and draft slugs are skipped), then published posts whose body links to `github.com/<owner>/<repo>`. The owner comes from each `owner/name` repo entry; a bare alias takes the owner of the first `owner/name` entry. Matching is case-insensitive, covers the repo names and aliases, and allows a trailing `.git`; the name must end the URL path segment (a sentence-ending period still counts), so `abp-react` doesn't match `abp-react-tanstack`. `github.com` must not be the tail of a longer host (`notgithub.com` doesn't match). An empty repo list returns nothing, pins included.
 - Matches are sorted newest first. The whole list is capped at 3 on featured cards and 1 on samples.
 
 ### Page (`src/pages/projects/index.astro`)
