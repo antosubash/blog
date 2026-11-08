@@ -51,26 +51,26 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
-    "@biomejs/biome": "^1.9.4",
+    "@biomejs/biome": "^2.6.5",
     "@remotion/bundler": "^4.0.541",
     "@remotion/cli": "^4.0.541",
     "@remotion/renderer": "^4.0.541",
     "@resvg/resvg-js": "^2.6.2",
     "@types/hast": "^3.0.5",
-    "@types/node": "^22.20.5",
+    "@types/node": "^26.6.6",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
-    "dotenv": "^16.6.1",
+    "dotenv": "^18.0.9",
     "esbuild": "^0.28.2",
-    "googleapis": "^144.0.0",
+    "googleapis": "^189.0.0",
     "gray-matter": "^4.0.3",
     "hast-util-to-html": "^9.0.6",
     "remotion": "^4.0.541",
     "satori": "^0.63.2",
     "shiki": "^4.6.0",
     "tsx": "^4.23.15",
-    "typescript": "^5.9.3",
-    "vitest": "^4.1.12"
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.0"
   },
   "packageManager": "pnpm@12.8.1"
 }
