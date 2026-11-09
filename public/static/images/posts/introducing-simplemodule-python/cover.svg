@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img">
+  <title>A host application with module blocks plugged into it, each holding a table, an endpoint and a page</title>
+  <desc>A host application with module blocks plugged into it, each holding a table, an endpoint and a page</desc>
+  <defs>
+    <pattern id="dots" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="2" fill="#807a74" opacity="0.12"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" rx="24" fill="#1f1b17"/>
+  <rect width="1200" height="630" rx="24" fill="url(#dots)"/>
+
+  <!-- three modules -->
+  <g font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif" font-weight="600">
+    <!-- module 1 (muted) -->
+    <rect x="96" y="80" width="300" height="300" rx="16" fill="#2a2520" stroke="#3d3832" stroke-width="3"/>
+    <text x="246" y="140" text-anchor="middle" font-size="36" fill="#ede8e3">users</text>
+    <rect x="136" y="172" width="220" height="44" rx="10" fill="none" stroke="#807a74" stroke-width="2"/>
+    <rect x="136" y="232" width="220" height="44" rx="10" fill="none" stroke="#807a74" stroke-width="2"/>
+    <rect x="136" y="292" width="220" height="44" rx="10" fill="none" stroke="#807a74" stroke-width="2"/>
+
+    <!-- module 2 (accent) -->
+    <rect x="450" y="56" width="300" height="324" rx="16" fill="rgba(192,120,64,0.15)" stroke="#c07840" stroke-width="4"/>
+    <text x="600" y="120" text-anchor="middle" font-size="36" fill="#ede8e3">orders</text>
+    <rect x="490" y="150" width="220" height="56" rx="10" fill="#2a2520" stroke="#c07840" stroke-width="2"/>
+    <text x="600" y="190" text-anchor="middle" font-size="32" fill="#ede8e3" font-family="ui-monospace, 'SFMono-Regular', Menlo, monospace">table</text>
+    <rect x="490" y="222" width="220" height="56" rx="10" fill="#2a2520" stroke="#c07840" stroke-width="2"/>
+    <text x="600" y="262" text-anchor="middle" font-size="32" fill="#ede8e3" font-family="ui-monospace, 'SFMono-Regular', Menlo, monospace">api</text>
+    <rect x="490" y="294" width="220" height="56" rx="10" fill="#2a2520" stroke="#c07840" stroke-width="2"/>
+    <text x="600" y="334" text-anchor="middle" font-size="32" fill="#ede8e3" font-family="ui-monospace, 'SFMono-Regular', Menlo, monospace">page</text>
+
+    <!-- module 3 (muted) -->
+    <rect x="804" y="80" width="300" height="300" rx="16" fill="#2a2520" stroke="#3d3832" stroke-width="3"/>
+    <text x="954" y="140" text-anchor="middle" font-size="36" fill="#ede8e3">billing</text>
+    <rect x="844" y="172" width="220" height="44" rx="10" fill="none" stroke="#807a74" stroke-width="2"/>
+    <rect x="844" y="232" width="220" height="44" rx="10" fill="none" stroke="#807a74" stroke-width="2"/>
+    <rect x="844" y="292" width="220" height="44" rx="10" fill="none" stroke="#807a74" stroke-width="2"/>
+
+    <!-- connectors into host -->
+    <line x1="246" y1="380" x2="246" y2="452" stroke="#807a74" stroke-width="4" stroke-linecap="round"/>
+    <line x1="600" y1="380" x2="600" y2="452" stroke="#c07840" stroke-width="4" stroke-linecap="round"/>
+    <line x1="954" y1="380" x2="954" y2="452" stroke="#807a74" stroke-width="4" stroke-linecap="round"/>
+
+    <!-- host bar -->
+    <rect x="96" y="452" width="1008" height="104" rx="16" fill="#2a2520" stroke="#5fa8a0" stroke-width="3"/>
+    <text x="600" y="518" text-anchor="middle" font-size="36" fill="#ede8e3">one FastAPI + Inertia app</text>
+  </g>
+</svg>
