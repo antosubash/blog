@@ -21,9 +21,9 @@ The default status bar shows session name and clock. Load, memory, network rate,
 
 ## Getting started
 
+The config lives in my dotfiles, which are private, so this post shows the parts that matter and you copy them into your own setup. Put the bindings in `~/.tmux.conf` and the scripts in `~/dotfiles/scripts/` (or change the paths in the bindings). Then install the plugin manager and reload:
+
 ```bash
-git clone https://github.com/antosubash/dotfiles ~/dotfiles
-ln -sf ~/dotfiles/tmux/.tmux.conf ~/.tmux.conf
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 tmux source-file ~/.tmux.conf
 # Inside tmux: prefix + I  (installs the plugins listed in the config)
@@ -39,7 +39,7 @@ The rest of this post is what each piece does and why.
 
 ## Overview
 
-Three tmux bindings plus a status bar fed by two shell scripts. Full config in [antosubash/dotfiles](https://github.com/antosubash/dotfiles).
+Three tmux bindings plus a status bar fed by two shell scripts. The layout I use:
 
 ```
 ~/dotfiles/
@@ -177,4 +177,4 @@ set -g @continuum-restore 'on'
 
 About a hundred lines of `tmux.conf` and a few short shell scripts turn tmux into a worktree-native editor for branches: `prefix + g` to spawn, `prefix + G` to grab a PR, `prefix + X` to clean up — including the orphan-directory state that quietly defeats the naive version. The status bar gets a 5-second view into CPU, memory, network, temperature, load, claude processes, and the current repo's worktree count, all from `/proc` with no external tools.
 
-The whole setup is in [antosubash/dotfiles](https://github.com/antosubash/dotfiles) — clone it as-is or lift the pieces you want. The scripts only depend on `git rev-parse --git-common-dir`, so the `<repo>/.worktrees/<name>` convention is the easiest thing to change if you'd rather have worktrees sibling to the main checkout.
+Lift the pieces you want. The scripts only depend on `git rev-parse --git-common-dir`, so the `<repo>/.worktrees/<name>` convention is the easiest thing to change if you'd rather have worktrees sibling to the main checkout.
