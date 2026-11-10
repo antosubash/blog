@@ -81,7 +81,7 @@ yarn create next-app --typescript
 ## Add npm packages
 
 ```bash
-yarn add oidc-client-ts react-oidc-context @apollo/client
+yarn add oidc-client-ts react-oidc-context @apollo/client graphql
 ```
 
 ## Add .env file
@@ -118,7 +118,7 @@ const Login = () => {
       );
     }
 
-    return <button onClick={auth.signinRedirect}>Log in</button>;
+    return <button onClick={() => auth.signinRedirect()}>Log in</button>;
 }
 
 export default Login
@@ -260,4 +260,8 @@ Navigate to the NextJS project and run
 yarn // To install the npm packages
 yarn dev // To run the app
 ```
+
+## Versions used
+
+This was built with Orchard Core 1.1.0 (`OrchardCore.Application.Cms.Targets`), Next.js 12.0.4, React 17.0.2, `oidc-client-ts` 2.0.0-rc.1, `react-oidc-context` 2.0.0-beta.2, `@apollo/client` 3.4.17 and `graphql` 16.0.1. Newer versions may need changes: current `create-next-app` uses the App Router, while this post uses the Pages Router (`pages/_app.tsx`).
 
