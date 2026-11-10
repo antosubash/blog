@@ -1,0 +1,224 @@
+---
+title: 'Your First SimpleModule Module: a Table, an Endpoint and a React Page'
+excerpt: 'Build a bookmarks module in a fresh SimpleModule app, from scaffold to migration, validated API, React page and tests, with the rough edges I hit on the way.'
+date: '2026-11-10'
+series: 'SimpleModule'
+part: 2
+tags:
+  - python
+  - fastapi
+  - simplemodule
+  - modular-monolith
+  - inertia
+  - react
+---
+
+![A bookmarks module with its table, migration, API, page and test, plugged into a host app](https://raw.githubusercontent.com/antosubash/images/main/assets/posts/python/simplemodule-first-module/cover.png)
+
+<TOCInline toc={props.toc} asDisclosure />
+
+## What we're building
+
+[Part 1](/posts/introducing-simplemodule-python) covered what a SimpleModule module is. This part builds one: a `bookmarks` module with its own table, a REST API, a React page and tests. I ran every command below against a fresh app on SimpleModule 0.0.44, and the outputs are copied from that run.
+
+You need Python 3.12 or later, uv and Node.
+
+## Start from a fresh app
+
+```bash
+uvx --from simple_module_cli@latest smpy new bookshelf -y
+cd bookshelf
+```
+
+`-y` accepts the defaults: SQLite, no multi-tenancy, and the `standard` preset (`auth`, `users`, `dashboard` and `permissions`). It also installs the dependencies and applies an initial migration. The app ships a sample `hello` module under `modules/`.
+
+Keep the `@latest`. Without it, `uvx` runs any `smpy` you installed earlier with `uv tool install`, even an old one. Mine was 0.0.36, and it scaffolded a 0.0.36 app without a word ([#899](https://github.com/antosubash/simple_module_python/issues/899)).
+
+## Scaffold the module
+
+```bash
+uv run smpy create-module bookmarks --dest modules/bookmarks
+uv run smpy add ../modules/bookmarks --path host -y
+```
+
+`create-module` writes a complete CRUD module: a model, DTOs, a service, REST and Inertia endpoints, Browse, Create and Edit pages, an English locale file and tests. `smpy add` wires it into the host. The path is relative to `host/`, which is why it starts with `../`. It adds `simple_module_bookmarks` to `host/pyproject.toml` as a uv workspace source, then syncs:
+
+```toml
+[tool.uv.sources]
+simple_module_bookmarks = {workspace = true}
+```
+
+The scaffold's tests already pass at this point:
+
+```bash
+uv run pytest modules/bookmarks -q
+# 15 passed in 2.21s
+```
+
+The module's layout:
+
+```text
+modules/bookmarks/bookmarks/
+├── module.py            # entry point: menu, permissions, routes
+├── models.py            # the table
+├── contracts/schemas.py # DTOs other modules may import
+├── core/constants.py    # permission names, page keys, limits
+├── web/                 # service, deps, endpoints/{api,views}.py
+├── pages/               # Browse.tsx, Create.tsx, Edit.tsx
+└── locales/en.json
+```
+
+## Add a field to the model
+
+The scaffold's `Bookmark` has a `name`, a `description` and an `is_active` flag. A bookmark needs a URL. Add the limit to `core/constants.py`, where the scaffold keeps every limit and name:
+
+```python
+URL_MAX_LENGTH = 2000
+```
+
+Then add the column in `models.py`:
+
+```python
+Base = create_module_base("bookmarks")
+
+
+class Bookmark(Base, AuditMixin, table=True):
+    __tablename__ = TABLE_BOOKMARK  # "bookmarks_bookmark"
+
+    id: int | None = Field(default=None, primary_key=True)
+    name: str = Field(max_length=NAME_MAX_LENGTH)
+    url: str = Field(max_length=URL_MAX_LENGTH)
+    description: str | None = Field(default=None, max_length=DESCRIPTION_MAX_LENGTH)
+    is_active: bool = Field(default=True)
+```
+
+`AuditMixin` adds `created_at`, `updated_at`, `created_by` and `updated_by`. The table name carries the module prefix because every module shares one schema.
+
+## Validate the DTOs
+
+The DTOs in `contracts/schemas.py` are what the API accepts and returns. Add `url` to `BookmarkOut`, `BookmarkCreate` and `BookmarkUpdate`. A bookmark link ends up in an `href`, so only accept `http` and `https`. A `javascript:` URL would run when someone clicks it.
+
+My first try was `Field(regex=r"^https?://")`. SQLModel 0.0.48 accepts that argument and then ignores it on a DTO: `BookmarkCreate(url="javascript:1")` validated fine. Only the test below caught it. A `field_validator` works:
+
+```python
+def _http_url(value: str | None) -> str | None:
+    """Only http(s) links: a javascript: URL in an href runs on click."""
+    if value is not None and not value.startswith(("http://", "https://")):
+        raise ValueError("must start with http:// or https://")
+    return value
+
+
+class BookmarkCreate(SQLModel):
+    name: str = Field(min_length=1, max_length=NAME_MAX_LENGTH)
+    url: str = Field(max_length=URL_MAX_LENGTH)
+    description: str | None = Field(default=None, max_length=DESCRIPTION_MAX_LENGTH)
+
+    _check_url = field_validator("url")(_http_url)
+```
+
+`BookmarkUpdate` gets the same `url: str | None` field and validator. Also add `"url"` to the scaffold's `_reject_explicit_null` validator, so sending `null` can't hit the NOT NULL column.
+
+## Generate and apply the migration
+
+The scaffolder doesn't write a migration, and right now nothing warns you about that. The doctor check for an unmigrated table (SM011) exists but never runs ([#895](https://github.com/antosubash/simple_module_python/issues/895)). Generate the migration yourself:
+
+```bash
+make migration msg="add bookmarks"
+# Detected added table 'bookmarks_bookmark'
+# Generating host/migrations/versions/7c1bd4ff1670_add_bookmarks.py ...  done
+```
+
+Migrations live in the host, not in the module. Open the revision and check it creates the table you expect. Then give the module's first revision a branch label, so the module's migrations have a name you can target:
+
+```python
+branch_labels: str | Sequence[str] | None = ("bookmarks",)
+```
+
+```bash
+make migrate
+# Running upgrade 1188c2fa9a50 -> 7c1bd4ff1670, add bookmarks
+```
+
+The label is a name, not an isolation boundary. Downgrading `bookmarks@base` also rolls back whatever sits beneath it on the same chain.
+
+## The API and its permissions
+
+The scaffold already guards every route with a permission constant, so the endpoints need no changes:
+
+```python
+@router.post(
+    "/",
+    response_model=BookmarkOut,
+    status_code=201,
+    dependencies=[Depends(RequiresPermission(PERM_BOOKMARKS_CREATE))],
+)
+async def create_item(
+    data: BookmarkCreate,
+    service: BookmarkService = Depends(get_bookmark_service),
+) -> BookmarkOut:
+    return await service.create(data)
+```
+
+`module.py` registers the four permissions (`bookmarks.view`, `create`, `edit` and `delete`) as a group, so they show up in the role editor. It also adds a sidebar entry that only appears for accounts with `bookmarks.view`.
+
+## The React page
+
+The pages type their props from the module's OpenAPI schema. After changing the DTOs, regenerate `pages/api.generated.ts`:
+
+```bash
+uv run smpy openapi gen-types --module bookmarks
+# wrote modules/bookmarks/bookmarks/pages/api.generated.ts
+```
+
+`Item` in `Browse.tsx` now has a `url: string`. Render the name as a link:
+
+```tsx
+<a href={item.url} target="_blank" rel="noreferrer" className="underline">
+  {item.name}
+</a>
+```
+
+`Create.tsx` gets a `url: ''` entry in its `useForm` call and an `<input type="url">` next to the name field.
+
+One more change. The scaffolded pages don't set a layout, so they render without the sidebar and header, and once you click into the module there's no way back ([#897](https://github.com/antosubash/simple_module_python/issues/897)). The framework's own pages set an Inertia persistent layout. Do the same in `Browse.tsx`, `Create.tsx` and `Edit.tsx`:
+
+```tsx
+import { AuthenticatedLayout } from '@simple-module-py/ui/layouts/AuthenticatedLayout';
+
+// at the bottom of the file
+Browse.layout = [AuthenticatedLayout];
+```
+
+## Tests
+
+The scaffolded tests create bookmarks without a URL, so add `url="https://example.com"` to those calls. Then add the test that caught the ignored `regex`:
+
+```python
+async def test_create_rejects_non_http_url(authenticated_client: httpx.AsyncClient):
+    resp = await authenticated_client.post(API, json={"name": "Bad", "url": "javascript:alert(1)"})
+    assert resp.status_code == 422
+```
+
+`authenticated_client` comes from the `simple_module_test` pytest plugin. It's an `httpx` client with an admin session, against an app with every module's tables created.
+
+```bash
+uv run pytest modules/bookmarks -q
+# 16 passed in 2.35s
+```
+
+## Run it
+
+```bash
+make dev
+```
+
+This starts FastAPI on port 8000 and Vite on 5050. A fresh install redirects to `/setup`, which checks the database and asks for an administrator. Create one, sign in, and pick **Bookmarks** in the sidebar.
+
+## Pitfalls
+
+- **A fresh app fails its own `make lint`.** The revisions Alembic generates aren't ruff-clean ([#896](https://github.com/antosubash/simple_module_python/issues/896)). After each `make migration`, run `uv run ruff format host/migrations` and `uv run ruff check --fix host/migrations`.
+- **`make dev` prints a Vite dependency-scan error** about `vitest`. It comes from a test file shipped inside the `settings` package, and it's harmless ([#900](https://github.com/antosubash/simple_module_python/issues/900)).
+- **`smpy doctor` won't catch a missing migration yet** ([#895](https://github.com/antosubash/simple_module_python/issues/895)). Run `make migration` whenever you change `models.py`.
+- **SQLModel `Field(regex=...)` doesn't validate DTOs.** Use a `field_validator`, and write a test that sends the bad input.
+
+All four are filed upstream. Next in the series: how Inertia works with FastAPI, and what the server sends on each page visit.
