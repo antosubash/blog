@@ -96,9 +96,9 @@ class Bookmark(Base, AuditMixin, table=True):
 
 ## Validate the DTOs
 
-The DTOs in `contracts/schemas.py` are what the API accepts and returns. Add `url` to `BookmarkOut`, `BookmarkCreate` and `BookmarkUpdate`. A bookmark link ends up in an `href`, so only accept `http` and `https`. A `javascript:` URL would run when someone clicks it.
+The DTOs in `contracts/schemas.py` are what the API accepts and returns. Add `url` to `BookmarkOut`, `BookmarkCreate` and `BookmarkUpdate`. A bookmark link ends up in an `href`, so only accept `http` and `https`.
 
-My first try was `Field(regex=r"^https?://")`. SQLModel 0.0.48 accepts that argument and then ignores it on a DTO: `BookmarkCreate(url="javascript:1")` validated fine. Only the test below caught it. A `field_validator` works:
+My first try was `Field(regex=r"^https?://")`. SQLModel 0.0.48 accepts that argument and then ignores it on a DTO: `BookmarkCreate(url="javascript:1")` validated fine. Only the test in the Tests section caught it. A `field_validator` works:
 
 ```python
 def _http_url(value: str | None) -> str | None:
@@ -180,7 +180,7 @@ uv run smpy openapi gen-types --module bookmarks
 
 `Create.tsx` gets a `url: ''` entry in its `useForm` call and an `<input type="url">` next to the name field.
 
-One more change. The scaffolded pages don't set a layout, so they render without the sidebar and header, and once you click into the module there's no way back ([#897](https://github.com/antosubash/simple_module_python/issues/897)). The framework's own pages set an Inertia persistent layout. Do the same in `Browse.tsx`, `Create.tsx` and `Edit.tsx`:
+One more change. The scaffolded pages don't set a layout, so they render without the sidebar and header. Once you click into the module, the page has no menu to navigate away ([#897](https://github.com/antosubash/simple_module_python/issues/897)). The framework's own pages set an Inertia persistent layout. Do the same in `Browse.tsx`, `Create.tsx` and `Edit.tsx`:
 
 ```tsx
 import { AuthenticatedLayout } from '@simple-module-py/ui/layouts/AuthenticatedLayout';
@@ -206,19 +206,19 @@ uv run pytest modules/bookmarks -q
 # 16 passed in 2.35s
 ```
 
-## Run it
+## Run the app and open the page
 
 ```bash
 make dev
 ```
 
-This starts FastAPI on port 8000 and Vite on 5050. A fresh install redirects to `/setup`, which checks the database and asks for an administrator. Create one, sign in, and pick **Bookmarks** in the sidebar.
+This starts FastAPI on port 8000 and Vite on 5050. A fresh install redirects to `/setup`, which checks that the database migrations are applied and asks for an administrator. Create one, sign in, and pick **Bookmarks** in the sidebar.
 
 ## Pitfalls
 
 - **A fresh app fails its own `make lint`.** The revisions Alembic generates aren't ruff-clean ([#896](https://github.com/antosubash/simple_module_python/issues/896)). After each `make migration`, run `uv run ruff format host/migrations` and `uv run ruff check --fix host/migrations`.
 - **`make dev` prints a Vite dependency-scan error** about `vitest`. It comes from a test file shipped inside the `settings` package, and it's harmless ([#900](https://github.com/antosubash/simple_module_python/issues/900)).
 - **`smpy doctor` won't catch a missing migration yet** ([#895](https://github.com/antosubash/simple_module_python/issues/895)). Run `make migration` whenever you change `models.py`.
-- **SQLModel `Field(regex=...)` doesn't validate DTOs.** Use a `field_validator`, and write a test that sends the bad input.
+- **SQLModel `Field(regex=...)` doesn't validate DTOs.** Use a `field_validator`, and write a test that sends the bad input. I asked for a note in the docs ([#898](https://github.com/antosubash/simple_module_python/issues/898)).
 
 All four are filed upstream. Next in the series: how Inertia works with FastAPI, and what the server sends on each page visit.
