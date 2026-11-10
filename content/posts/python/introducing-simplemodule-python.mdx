@@ -2,6 +2,7 @@
 title: 'Introducing SimpleModule: A Modular Monolith Framework for Python, Built on FastAPI and Inertia'
 excerpt: 'A tour of SimpleModule, where each Python feature is a self-contained module with its own tables, endpoints and React pages, shipped as one FastAPI and Inertia app.'
 date: '2026-11-08'
+lastmod: '2026-11-10'
 series: 'SimpleModule'
 part: 1
 tags:
@@ -151,19 +152,19 @@ Bigger features live in a separate repo, [smpy_modules](https://github.com/antos
 
 ## Catching mistakes with smpy doctor
 
-Most of the framework's rules come with a diagnostic code, and `smpy doctor` (from the `smpy` CLI) reports them. Some examples:
+Most of the framework's rules come with a diagnostic code. `smpy doctor` (from the `smpy` CLI) runs the static checks, and a development boot runs them plus a few that need the built app. Some examples:
 
-- **Missing page:** an Inertia view names a page file that doesn't exist.
-- **Ungated route:** an `/api` route has no permission check.
-- **Unmigrated table:** a module table isn't covered by any migration.
-- **Database behind:** the database is behind the latest migration. This one stops the app from booting in every environment.
+- **Missing page:** an Inertia view names a page file that doesn't exist. `smpy doctor` reports it.
+- **Ungated route:** an `/api` route has no permission check. A development boot reports it.
+
+One check sits outside the diagnostics: if the database is behind the latest migration, the app refuses to boot. The exception is a never-migrated first run, which goes to the `/setup` wizard instead.
 
 Migrations live in the host's Alembic setup, not in the module packages. A module's first revision should set a branch label named after the module. In the framework repo, `make migration LABEL=<label> msg="..."` generates a revision on that branch. In an app made by `smpy new`, it is `make migration msg="..."`.
 
 ## Pitfalls
 
 - **It's early.** Packages are at 0.0.44 and marked alpha. The changelog has behaviour changes between releases, so pin versions.
-- **A new module's sample table has no migration.** The module scaffolder doesn't create one, and `smpy doctor` flags it (SM011) until you generate one.
+- **A new module's sample table has no migration.** The module scaffolder doesn't create one, and nothing warns you yet: the check for it (SM011) exists but doesn't run ([#895](https://github.com/antosubash/simple_module_python/issues/895)). Generate the migration yourself.
 - **Check migrations before Postgres.** Migrations generated against SQLite need a check before you run them on Postgres.
 - **Tenants share one database.** Multi-tenancy isolates rows with a mixin, not separate databases. If you need a database per tenant, this isn't the framework for it.
 
@@ -172,7 +173,7 @@ Migrations live in the host's Alembic setup, not in the module packages. A modul
 You need Python 3.12 or later, uv and Node. Then:
 
 ```bash
-uvx --from simple_module_cli smpy new my-app
+uvx --from simple_module_cli@latest smpy new my-app
 cd my-app
 make dev
 ```
