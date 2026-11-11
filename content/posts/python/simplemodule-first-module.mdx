@@ -41,7 +41,7 @@ uv run smpy create-module bookmarks --dest modules/bookmarks
 uv run smpy add ../modules/bookmarks --path host -y
 ```
 
-`create-module` writes a complete CRUD module: a model, DTOs, a service, REST and Inertia endpoints, Browse, Create and Edit pages, an English locale file and tests. `smpy add` wires it into the host. The path is relative to `host/`, which is why it starts with `../`. It adds `simple_module_bookmarks` to `host/pyproject.toml` as a uv workspace source, syncs, and prints the next step:
+`create-module` writes a complete CRUD module: a model, DTOs, a service, REST and Inertia endpoints, Browse, Create and Edit pages, an English locale file and tests. Skip the "Next steps" it prints. They're for a standalone package, and their `uv sync --extra dev` inside an app removes the app's other modules from the shared virtualenv ([#916](https://github.com/antosubash/simple_module_python/issues/916)). `smpy add` wires it into the host. The path is relative to `host/`, which is why it starts with `../`. It adds `simple_module_bookmarks` to `host/pyproject.toml` as a uv workspace source, syncs, and prints the next step:
 
 ```toml
 [tool.uv.sources]
@@ -104,7 +104,7 @@ class Bookmark(Base, AuditMixin, table=True):
 
 The DTOs in `contracts/schemas.py` are what the API accepts and returns. Add `url` to `BookmarkOut`, `BookmarkCreate` and `BookmarkUpdate`. A bookmark link ends up in an `href`, so only accept `http` and `https`.
 
-My first try was `Field(regex=r"^https?://")`. SQLModel 0.0.48 accepts that argument and then ignores it on a DTO: `BookmarkCreate(url="javascript:1")` validated fine. Only the test in the Tests section caught it. A `field_validator` works:
+My first try was `Field(regex=r"^https?://")`. SQLModel (0.0.48 and 0.0.49) accepts that argument and then ignores it on a DTO: `BookmarkCreate(url="javascript:1")` validated fine. Only the test in the Tests section caught it. A `field_validator` works:
 
 ```python
 def _http_url(value: str | None) -> str | None:
@@ -234,14 +234,20 @@ make dev
 
 This starts FastAPI on port 8000 and Vite on 5050. A fresh install redirects to `/setup`, which checks that the database migrations are applied and asks for an administrator. Create one, sign in, and pick **Bookmarks** in the sidebar.
 
+If `make dev` was already running when you added the module, restart it. The server reloads on its own, but it can't import a package installed after it started, and it logs `No module named 'bookmarks.module'` instead of saying so ([#915](https://github.com/antosubash/simple_module_python/issues/915)).
+
 ![The Bookmarks page inside the app shell, with one bookmark linking to the Astro docs](https://raw.githubusercontent.com/antosubash/images/main/assets/posts/python/simplemodule-first-module/bookmarks-page.png)
 
 ## Pitfalls
 
 - **SQLModel `Field(regex=...)` doesn't validate DTOs.** Use a `field_validator`, and write a test that sends the bad input. The [first-module guide](https://docs.py.simplemodule.dev/guide/first-module) now says so too ([#898](https://github.com/antosubash/simple_module_python/issues/898)).
 - **An old installed `smpy` scaffolds an old app.** Upgrade it with `uv tool upgrade simple_module_cli`, or keep using `uvx --from simple_module_cli@latest`.
-- **Autogenerate on SQLite misses expression indexes.** `make migration` prints a warning naming them (in a fresh app, `ix_users_user_email_lower`). Check those by hand on Postgres before you deploy there.
+- **Use `make install`, not a plain `uv sync`.** The app is a uv workspace whose root depends on nothing, so a plain `uv sync` at the root uninstalls the framework modules ([#916](https://github.com/antosubash/simple_module_python/issues/916)). `make install` runs `uv sync --all-packages`.
+- **The SQLite index warning is noise.** Every `make migration` warns that `ix_users_user_email_lower` isn't in the revision and points at a `make migrations-roundtrip-pg` target the app doesn't have. The initial migration already creates that index ([#917](https://github.com/antosubash/simple_module_python/issues/917)).
+- **The sidebar's Administration link is a 404.** The admin screens themselves work (for example `/admin/users/`); only the `/admin` overview page is missing from the scaffold ([#914](https://github.com/antosubash/simple_module_python/issues/914)).
 
 My first run of this walkthrough was on 0.0.44 and hit six rough edges. Doctor never flagged the missing migration, and a fresh app failed its own `make lint`. The scaffolded pages had no sidebar, and the docs disagreed with the CLI. `uvx` silently used an old tool, and `make dev` printed Vite errors. I filed them as [#895](https://github.com/antosubash/simple_module_python/issues/895)–[#900](https://github.com/antosubash/simple_module_python/issues/900), and 0.0.45 addresses all six. The run above is on 0.0.45.
+
+A second pass, following the [quickstart](https://docs.py.simplemodule.dev/guide/quickstart) to the letter, found six more. Besides the ones above, the scaffolded pages hardcode their English text and ignore the module's `en.json` ([#918](https://github.com/antosubash/simple_module_python/issues/918)), and a few quickstart steps don't match what a new app does ([#919](https://github.com/antosubash/simple_module_python/issues/919)). They're filed as [#914](https://github.com/antosubash/simple_module_python/issues/914)–[#919](https://github.com/antosubash/simple_module_python/issues/919).
 
 Next in the series: how Inertia works with FastAPI, and what the server sends on each page visit.
