@@ -242,6 +242,6 @@ This starts FastAPI on port 8000 and Vite on 5050. A fresh install redirects to 
 - **An old installed `smpy` scaffolds an old app.** Upgrade it with `uv tool upgrade simple_module_cli`, or keep using `uvx --from simple_module_cli@latest`.
 - **Autogenerate on SQLite misses expression indexes.** `make migration` prints a warning naming them (in a fresh app, `ix_users_user_email_lower`). Check those by hand on Postgres before you deploy there.
 
-My first run of this walkthrough was on 0.0.44 and hit six rough edges: doctor never flagged the missing migration, a fresh app failed its own `make lint`, the scaffolded pages had no sidebar, the docs disagreed with the CLI, `uvx` silently used an old tool, and `make dev` printed Vite errors. I filed them as [#895](https://github.com/antosubash/simple_module_python/issues/895)–[#900](https://github.com/antosubash/simple_module_python/issues/900), and 0.0.45 fixes all six. The run above is on 0.0.45.
+My first run of this walkthrough was on 0.0.44 and hit six rough edges. Doctor never flagged the missing migration, and a fresh app failed its own `make lint`. The scaffolded pages had no sidebar, and the docs disagreed with the CLI. `uvx` silently used an old tool, and `make dev` printed Vite errors. I filed them as [#895](https://github.com/antosubash/simple_module_python/issues/895)–[#900](https://github.com/antosubash/simple_module_python/issues/900), and 0.0.45 addresses all six. The run above is on 0.0.45.
 
 Next in the series: how Inertia works with FastAPI, and what the server sends on each page visit.
