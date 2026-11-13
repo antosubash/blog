@@ -165,7 +165,7 @@ Migrations live in the host's Alembic setup, not in the module packages. A modul
 
 ## Pitfalls
 
-- **It's early.** Packages are at 0.0.45 and marked alpha. The changelog has behaviour changes between releases, so pin versions.
+- **It's early.** Packages are at 0.0.46 and marked alpha. The changelog has behaviour changes between releases, so pin versions.
 - **A new module's sample table has no migration.** The module scaffolder doesn't create one. `smpy doctor` warns about it since 0.0.45 ([#895](https://github.com/antosubash/simple_module_python/issues/895)); run `make migration` after you scaffold a module.
 - **Check migrations before Postgres.** Migrations generated against SQLite need a check before you run them on Postgres.
 - **Tenants share one database.** Multi-tenancy isolates rows with a mixin, not separate databases. If you need a database per tenant, this isn't the framework for it.
