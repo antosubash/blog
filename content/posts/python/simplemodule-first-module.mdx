@@ -19,7 +19,7 @@ tags:
 
 ## What we're building
 
-[Part 1](/posts/introducing-simplemodule-python) covered what a SimpleModule module is. This part builds one: a `bookmarks` module with its own table, a REST API, a React page and tests. I ran every command below against a fresh app on SimpleModule 0.0.46, and the outputs are copied from that run.
+[Part 1](/posts/introducing-simplemodule-python) covered what a SimpleModule module is. This part builds one: a `bookmarks` module with its own table, a REST API, a React page and tests. I ran every command below against a fresh app on SimpleModule 0.0.47, and the outputs are copied from that run.
 
 You need Python 3.12 or later, uv and Node.
 
@@ -50,15 +50,22 @@ simple_module_bookmarks = {workspace = true}
 
 ```text
 simple_module_bookmarks ships database models — generate and apply the migration:
-  make migration msg="add simple_module_bookmarks"
+  make migration msg="add bookmarks"
   make migrate
+If `make dev` is running, restart it: modules are discovered at start-up.
+```
+
+Then run `make install`, as `create-module`'s own steps say. It links the module's pages and generates the typed i18n keys they use.
+
+```bash
+make install
 ```
 
 The scaffold's tests already pass at this point:
 
 ```bash
 uv run pytest modules/bookmarks -q
-# 15 passed in 1.66s
+# 15 passed in 1.50s
 ```
 
 The module's layout:
@@ -139,7 +146,7 @@ Generate it:
 ```bash
 make migration msg="add bookmarks"
 # Detected added table 'bookmarks_bookmark'
-# Generating host/migrations/versions/3d5d124a620b_add_bookmarks.py ...  done
+# Generating host/migrations/versions/6cf36d9619dc_add_bookmarks.py ...  done
 # Running post write hook 'ruff_imports' ...  done
 # Running post write hook 'ruff_format' ...  done
 ```
@@ -154,13 +161,13 @@ Until you apply it, doctor reports an error instead:
 
 ```bash
 uv run smpy doctor
-# ✗ SM010 [ERROR] migrations: Database is behind: missing heads '3d5d124a620b'
+# ✗ SM010 [ERROR] migrations: Database is behind: missing heads '6cf36d9619dc'
 
 make migrate
-# Running upgrade 26ced4d57da7 -> 3d5d124a620b, add bookmarks
+# Running upgrade bc6fd4803263 -> 6cf36d9619dc, add bookmarks
 ```
 
-Run doctor again and both findings are gone.
+Run doctor again and it prints nothing, which means no findings ([#947](https://github.com/antosubash/simple_module_python/issues/947)).
 
 The label is a name, not an isolation boundary. Downgrading `bookmarks@base` also rolls back whatever sits beneath it on the same chain.
 
@@ -192,6 +199,8 @@ The pages type their props from the module's OpenAPI schema. After changing the 
 uv run smpy openapi gen-types --module bookmarks
 # wrote modules/bookmarks/bookmarks/pages/api.generated.ts
 ```
+
+It also warns that no host settings were found in the database. That's expected in a new app, since nobody has changed a host setting yet ([#948](https://github.com/antosubash/simple_module_python/issues/948)).
 
 `Item` in `Browse.tsx` now has a `url: string`. Render the name as a link:
 
@@ -225,11 +234,13 @@ async def test_create_rejects_non_http_url(authenticated_client: httpx.AsyncClie
     assert resp.status_code == 422
 ```
 
+Adding `url` pushes one `post(...)` call past ruff's line limit, so run `uv run ruff format .` before `make lint`.
+
 `authenticated_client` comes from the `simple_module_test` pytest plugin. It's an `httpx` client with an admin session, against an app with every module's tables created.
 
 ```bash
 uv run pytest modules/bookmarks -q
-# 16 passed in 1.56s
+# 16 passed in 1.45s
 ```
 
 ## Run the app and open the page
@@ -240,7 +251,7 @@ make dev
 
 This starts FastAPI on port 8000 and Vite on 5050. A fresh install redirects to `/setup`, which checks that the database migrations are applied and asks for an administrator. Create one, sign in, and pick **Bookmarks** in the sidebar.
 
-If `make dev` was already running when you added the module, restart it: modules are discovered at start-up, and a reload can't import a package installed after the server started. Nothing tells you so yet; the page just 404s ([#931](https://github.com/antosubash/simple_module_python/issues/931)). Restart it after editing `en.json` too, since the reloader only watches Python files ([#930](https://github.com/antosubash/simple_module_python/issues/930)).
+If `make dev` was already running when you added the module, restart it: modules are discovered at start-up. Edits to `locales/en.json` reload on their own.
 
 ![The Bookmarks page inside the app shell, with one bookmark linking to the Astro docs](https://raw.githubusercontent.com/antosubash/images/main/assets/posts/python/simplemodule-first-module/bookmarks-page.png)
 
@@ -248,10 +259,8 @@ If `make dev` was already running when you added the module, restart it: modules
 
 - **SQLModel `Field(regex=...)` doesn't validate DTOs.** Use a `field_validator`, and write a test that sends the bad input. The [first-module guide](https://docs.py.simplemodule.dev/guide/first-module) now says so too ([#898](https://github.com/antosubash/simple_module_python/issues/898)).
 - **An old installed `smpy` scaffolds an old app.** Upgrade it with `uv tool upgrade simple_module_cli`, or keep using `uvx --from simple_module_cli@latest`.
-- **Use `make install`, not a plain `uv sync`.** A plain `uv sync` keeps the modules but uninstalls the app's own `smpy`, and `uv run smpy` then quietly runs any older `smpy` on your `PATH` ([#929](https://github.com/antosubash/simple_module_python/issues/929)). `make install` runs `uv sync --all-packages` and keeps it.
-- **The SQLite index warnings are noise.** `make migration` prints two SQLAlchemy warnings about `ix_users_user_email_lower`, and doctor adds an SM026 note about it. The initial migration already creates that index ([#933](https://github.com/antosubash/simple_module_python/issues/933)).
-- **Right after a release, `smpy new` can fail to resolve its own version.** uv's cached package index doesn't list it yet. `uv sync --all-packages --refresh` inside the new app fixes it ([#932](https://github.com/antosubash/simple_module_python/issues/932)).
+- **Run `make install` after adding a module to an app that has already run `make dev`.** Otherwise the new pages can crash with `keys.<module>` undefined: the dev servers start in parallel, and Vite can bundle the old i18n keys before the API writes the new ones ([#946](https://github.com/antosubash/simple_module_python/issues/946)).
 
-My first run of this walkthrough was on 0.0.44 and hit six rough edges, filed as [#895](https://github.com/antosubash/simple_module_python/issues/895)–[#900](https://github.com/antosubash/simple_module_python/issues/900) and fixed in 0.0.45. A second pass, following the [quickstart](https://docs.py.simplemodule.dev/guide/quickstart) to the letter, found six more ([#914](https://github.com/antosubash/simple_module_python/issues/914)–[#919](https://github.com/antosubash/simple_module_python/issues/919)), fixed in 0.0.46. Among them: the sidebar's Administration link was a 404, a plain `uv sync` uninstalled the modules, and the scaffolded pages ignored `en.json`. The run above is on 0.0.46, and the issues it still hit are [#929](https://github.com/antosubash/simple_module_python/issues/929)–[#933](https://github.com/antosubash/simple_module_python/issues/933).
+My first run of this walkthrough was on 0.0.44 and hit six rough edges, filed as [#895](https://github.com/antosubash/simple_module_python/issues/895)–[#900](https://github.com/antosubash/simple_module_python/issues/900) and fixed in 0.0.45. A second pass, following the [quickstart](https://docs.py.simplemodule.dev/guide/quickstart) to the letter, found six more ([#914](https://github.com/antosubash/simple_module_python/issues/914)–[#919](https://github.com/antosubash/simple_module_python/issues/919)), fixed in 0.0.46. Among them: the sidebar's Administration link was a 404, a plain `uv sync` uninstalled the modules, and the scaffolded pages ignored `en.json`. The rerun on 0.0.46 found five ([#929](https://github.com/antosubash/simple_module_python/issues/929)–[#933](https://github.com/antosubash/simple_module_python/issues/933)), fixed in 0.0.47. The run above is on 0.0.47, and the issues it still hit are [#946](https://github.com/antosubash/simple_module_python/issues/946)–[#948](https://github.com/antosubash/simple_module_python/issues/948).
 
 Next in the series: how Inertia works with FastAPI, and what the server sends on each page visit.
